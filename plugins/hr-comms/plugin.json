@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-hr-comms",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "The hr & internal comms plug-in from BizPlug. Main function: book a platform demo. It works from the business's own published profile, covering policies, benefits and who to contact, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "msg2ai"
@@ -28,7 +28,7 @@
         "test_cases": [
           {
             "prompt": "What can this plug-in do?",
-            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
             "shouldTrigger": true
           },
           {
