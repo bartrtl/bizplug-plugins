@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-electricians",
+  "version": "0.1.0",
+  "description": "The electricians plug-in from BizPlug. Main function: estimate and book an electrician. It works from the business's own published profile, covering services, licensing, EV chargers and quotes, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Electricians",
+        "shortDescription": "Estimate and book an electrician for electricians businesses.",
+        "longDescription": "The electricians plug-in from BizPlug. Main function: estimate and book an electrician. It works from the business's own published profile, covering services, licensing, EV chargers and quotes, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Estimate and book an electrician",
+          "Do you install EV chargers, and are you licensed?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/electricians",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Estimate and book an electrician",
+            "expect": "Calls get_service_estimate and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Do you install EV chargers, and are you licensed?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_electrician_visit only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

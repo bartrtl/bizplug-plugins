@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-healthcare",
+  "version": "0.1.0",
+  "description": "The healthcare & clinics plug-in from BizPlug. Main function: find and request appointments. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Healthcare & Clinics",
+        "shortDescription": "Find and request appointments for healthcare & clinics businesses.",
+        "longDescription": "The healthcare & clinics plug-in from BizPlug. Main function: find and request appointments. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Find and request appointments",
+          "Are you accepting new patients, and which insurance do you take?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/healthcare",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Find and request appointments",
+            "expect": "Calls find_appointment_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Are you accepting new patients, and which insurance do you take?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_appointment only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

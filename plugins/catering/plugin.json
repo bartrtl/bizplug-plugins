@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-catering",
+  "version": "0.1.0",
+  "description": "The catering & events plug-in from BizPlug. Main function: catering price by headcount. It works from the business's own published profile, covering menus, minimums and event quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Catering & Events",
+        "shortDescription": "Catering price by headcount for catering & events businesses.",
+        "longDescription": "The catering & events plug-in from BizPlug. Main function: catering price by headcount. It works from the business's own published profile, covering menus, minimums and event quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Catering price by headcount",
+          "Can you cater for fifty people on the 20th?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/catering",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Catering price by headcount",
+            "expect": "Calls get_catering_estimate and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Can you cater for fifty people on the 20th?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_catering_quote only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

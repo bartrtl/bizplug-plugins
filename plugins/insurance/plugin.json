@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-insurance",
+  "version": "0.1.0",
+  "description": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Insurance",
+        "shortDescription": "Quote request intake for insurance businesses.",
+        "longDescription": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Quote request intake",
+          "What does a basic home policy cover?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/insurance",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Quote request intake",
+            "expect": "Calls get_quote_requirements and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What does a basic home policy cover?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_quote only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

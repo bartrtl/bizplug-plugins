@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-automotive",
+  "version": "0.1.0",
+  "description": "The automotive & dealerships plug-in from BizPlug. Main function: book service and test drives. It works from the business's own published profile, covering service, inventory, hours and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Automotive & Dealerships",
+        "shortDescription": "Book service and test drives for automotive & dealerships businesses.",
+        "longDescription": "The automotive & dealerships plug-in from BizPlug. Main function: book service and test drives. It works from the business's own published profile, covering service, inventory, hours and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Book service and test drives",
+          "Can you look at a check-engine light this week?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/automotive",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Book service and test drives",
+            "expect": "Calls find_service_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Can you look at a check-engine light this week?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_service_appointment only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

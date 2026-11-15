@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-mental-health",
+  "version": "0.1.0",
+  "description": "The mental health & therapy plug-in from BizPlug. Main function: request an intake or session. It works from the business's own published profile, covering availability, fees, intake steps and telehealth options, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. If the customer seems in crisis, point them to their local emergency number or crisis line instead of booking (in the US: 988 or 911). Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Mental Health & Therapy",
+        "shortDescription": "Request an intake or session for mental health & therapy businesses.",
+        "longDescription": "The mental health & therapy plug-in from BizPlug. Main function: request an intake or session. It works from the business's own published profile, covering availability, fees, intake steps and telehealth options, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. If the customer seems in crisis, point them to their local emergency number or crisis line instead of booking (in the US: 988 or 911). Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Request an intake or session",
+          "Are you accepting new clients, and do you offer telehealth?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/mental-health",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Request an intake or session",
+            "expect": "Calls find_intake_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Are you accepting new clients, and do you offer telehealth?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_intake only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

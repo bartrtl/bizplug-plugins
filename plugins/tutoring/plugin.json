@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-tutoring",
+  "version": "0.1.0",
+  "description": "The tutoring & test prep plug-in from BizPlug. Main function: book tutoring sessions and prep trials. It works from the business's own published profile, covering subjects, rates, availability and booking, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Tutoring & Test Prep",
+        "shortDescription": "Book tutoring sessions and prep trials for tutoring & test prep businesses.",
+        "longDescription": "The tutoring & test prep plug-in from BizPlug. Main function: book tutoring sessions and prep trials. It works from the business's own published profile, covering subjects, rates, availability and booking, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Book tutoring sessions and prep trials",
+          "Do you tutor for SAT prep, and what are your rates?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/tutoring",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Book tutoring sessions and prep trials",
+            "expect": "Calls find_session_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Do you tutor for SAT prep, and what are your rates?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_session only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

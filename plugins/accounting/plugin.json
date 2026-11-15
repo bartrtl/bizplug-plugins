@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-accounting",
+  "version": "0.1.0",
+  "description": "The tax & accounting plug-in from BizPlug. Main function: book a tax or bookkeeping consult. It works from the business's own published profile, covering services, deadlines and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Tax & Accounting",
+        "shortDescription": "Book a tax or bookkeeping consult for tax & accounting businesses.",
+        "longDescription": "The tax & accounting plug-in from BizPlug. Main function: book a tax or bookkeeping consult. It works from the business's own published profile, covering services, deadlines and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Book a tax or bookkeeping consult",
+          "Can you help with a small-business return, and what do you need from me?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/accounting",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Book a tax or bookkeeping consult",
+            "expect": "Calls find_consult_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Can you help with a small-business return, and what do you need from me?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_consultation only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

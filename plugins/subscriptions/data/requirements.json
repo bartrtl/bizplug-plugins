@@ -1,0 +1,239 @@
+{
+  "industry": "subscriptions",
+  "name": "Subscription Boxes",
+  "engine": "order",
+  "functionTitle": "Choose a box and start a subscription request",
+  "datasets": [
+    {
+      "id": "business",
+      "file": "business.csv",
+      "title": "Business details",
+      "why": "What the plug-in says about the business and where customers can reach it.",
+      "required": true,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Business name",
+          "required": true,
+          "type": "text",
+          "example": "Roast Club",
+          "help": "As customers know it."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": true,
+          "type": "text",
+          "example": "Roast Club serves customers in and around Charlotte, NC.",
+          "help": "One or two sentences, in the business's own words."
+        },
+        {
+          "key": "email",
+          "label": "Public email",
+          "required": true,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The address customers may write to."
+        },
+        {
+          "key": "phone",
+          "label": "Public phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0100",
+          "help": "With country code."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "123 Main St, Charlotte, NC 28202",
+          "help": "Street address, if customers visit."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Charlotte",
+          "help": ""
+        },
+        {
+          "key": "region",
+          "label": "State or country",
+          "required": false,
+          "type": "text",
+          "example": "NC",
+          "help": ""
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Mon-Fri 09:00-17:00; Sat 10:00-14:00",
+          "help": "As shown to customers."
+        },
+        {
+          "key": "currency",
+          "label": "Currency",
+          "required": false,
+          "type": "text",
+          "example": "USD",
+          "help": "ISO code for the prices in the other files."
+        },
+        {
+          "key": "notify_email",
+          "label": "Requests go to",
+          "required": false,
+          "type": "email",
+          "example": "orders@example.com",
+          "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        }
+      ],
+      "collect": [
+        "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
+        "Write the summary in the business's own words (one or two sentences). Do not add claims the business does not make.",
+        "Ask the owner which inbox should receive requests from ChatGPT and put it in notify_email."
+      ]
+    },
+    {
+      "id": "catalog",
+      "file": "catalog.csv",
+      "title": "Catalog (boxs)",
+      "why": "What customers can order, with prices. The plug-in only offers boxs in this file.",
+      "required": true,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Item id",
+          "required": true,
+          "type": "text",
+          "example": "coffee-box-monthly",
+          "help": "Short, unique, lowercase with hyphens. Never reuse an id for a different item."
+        },
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Monthly coffee box, 2 bags",
+          "help": ""
+        },
+        {
+          "key": "price",
+          "label": "Price",
+          "required": true,
+          "type": "number",
+          "example": "34.00",
+          "help": "Number only, no currency sign."
+        },
+        {
+          "key": "category",
+          "label": "Category",
+          "required": false,
+          "type": "text",
+          "example": "Coffee",
+          "help": ""
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "required": false,
+          "type": "text",
+          "example": "Two 12 oz bags, roasted to order",
+          "help": ""
+        },
+        {
+          "key": "available",
+          "label": "Available",
+          "required": false,
+          "type": "boolean",
+          "example": "true",
+          "help": "true or false; false hides it."
+        },
+        {
+          "key": "image",
+          "label": "Photo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/photos/coffee-box-monthly.jpg",
+          "help": "The business's own photo (https). Leave empty rather than using someone else's image."
+        }
+      ],
+      "collect": [
+        "Export the product or menu list from the point-of-sale or online shop (Square, Shopify, Toast, Clover and similar all export CSV), or copy it from the website menu.",
+        "Map the export's columns to the template: one row per item, price as a plain number.",
+        "Only include photos the business owns."
+      ]
+    },
+    {
+      "id": "services",
+      "file": "services.csv",
+      "title": "Services list",
+      "why": "A short list of what the business offers, used in answers.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "service",
+          "label": "Service",
+          "required": true,
+          "type": "text",
+          "example": "Pause or skip anytime",
+          "help": "One per row."
+        }
+      ],
+      "collect": [
+        "List the services from the website's services or about page, one per row, short names only."
+      ]
+    },
+    {
+      "id": "faqs",
+      "file": "faqs.csv",
+      "title": "Questions and answers",
+      "why": "The plug-in answers customer questions only from these, so it never guesses.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "question",
+          "label": "Question",
+          "required": true,
+          "type": "text",
+          "example": "Can I pause my subscription?",
+          "help": "How a customer would ask it."
+        },
+        {
+          "key": "answer",
+          "label": "Answer",
+          "required": true,
+          "type": "text",
+          "example": "Yes, pause or skip from your account at any time.",
+          "help": "The business's answer, in full sentences."
+        }
+      ],
+      "collect": [
+        "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
+        "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    }
+  ],
+  "never": [
+    "Passwords, API keys or other secrets.",
+    "Card numbers, bank details or government ID numbers.",
+    "Customers' personal data (names, phone numbers, addresses, health or financial details)."
+  ]
+}

@@ -1,0 +1,258 @@
+{
+  "industry": "saas",
+  "name": "SaaS & Software",
+  "engine": "appt",
+  "functionTitle": "Book a product demo",
+  "datasets": [
+    {
+      "id": "business",
+      "file": "business.csv",
+      "title": "Business details",
+      "why": "What the plug-in says about the business and where customers can reach it.",
+      "required": true,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Business name",
+          "required": true,
+          "type": "text",
+          "example": "Taskline",
+          "help": "As customers know it."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": true,
+          "type": "text",
+          "example": "Taskline serves customers in and around Charlotte, NC.",
+          "help": "One or two sentences, in the business's own words."
+        },
+        {
+          "key": "email",
+          "label": "Public email",
+          "required": true,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The address customers may write to."
+        },
+        {
+          "key": "phone",
+          "label": "Public phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0100",
+          "help": "With country code."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "123 Main St, Charlotte, NC 28202",
+          "help": "Street address, if customers visit."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Charlotte",
+          "help": ""
+        },
+        {
+          "key": "region",
+          "label": "State or country",
+          "required": false,
+          "type": "text",
+          "example": "NC",
+          "help": ""
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Mon-Fri 09:00-17:00; Sat 10:00-14:00",
+          "help": "As shown to customers."
+        },
+        {
+          "key": "currency",
+          "label": "Currency",
+          "required": false,
+          "type": "text",
+          "example": "USD",
+          "help": "ISO code for the prices in the other files."
+        },
+        {
+          "key": "notify_email",
+          "label": "Requests go to",
+          "required": false,
+          "type": "email",
+          "example": "orders@example.com",
+          "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        }
+      ],
+      "collect": [
+        "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
+        "Write the summary in the business's own words (one or two sentences). Do not add claims the business does not make.",
+        "Ask the owner which inbox should receive requests from ChatGPT and put it in notify_email."
+      ]
+    },
+    {
+      "id": "bookable",
+      "file": "bookable.csv",
+      "title": "What can be booked (demos)",
+      "why": "The appointment types customers can request.",
+      "required": true,
+      "maxRows": 200,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id",
+          "required": true,
+          "type": "text",
+          "example": "product-demo",
+          "help": "Short, unique, lowercase with hyphens."
+        },
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Product demo",
+          "help": ""
+        },
+        {
+          "key": "duration_min",
+          "label": "Duration (minutes)",
+          "required": false,
+          "type": "number",
+          "example": "30",
+          "help": ""
+        },
+        {
+          "key": "price",
+          "label": "Price",
+          "required": false,
+          "type": "number",
+          "example": "0",
+          "help": "Leave empty if not published."
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "required": false,
+          "type": "text",
+          "example": "Live walkthrough for your team",
+          "help": ""
+        }
+      ],
+      "collect": [
+        "List each appointment, class, tour or call type from the booking page or price list, with its length and published price."
+      ]
+    },
+    {
+      "id": "hours",
+      "file": "open-hours.csv",
+      "title": "Bookable hours",
+      "why": "When appointments can be requested, per weekday.",
+      "required": true,
+      "maxRows": 7,
+      "columns": [
+        {
+          "key": "day",
+          "label": "Day",
+          "required": true,
+          "type": "day",
+          "example": "mon",
+          "help": "sun, mon, tue, wed, thu, fri or sat. Leave a day out if closed."
+        },
+        {
+          "key": "open",
+          "label": "From",
+          "required": true,
+          "type": "time",
+          "example": "09:00",
+          "help": "24-hour HH:MM."
+        },
+        {
+          "key": "close",
+          "label": "To",
+          "required": true,
+          "type": "time",
+          "example": "17:00",
+          "help": "24-hour HH:MM."
+        }
+      ],
+      "collect": [
+        "Use the hours appointments are taken, which can differ from opening hours. One row per open day."
+      ]
+    },
+    {
+      "id": "services",
+      "file": "services.csv",
+      "title": "Services list",
+      "why": "A short list of what the business offers, used in answers.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "service",
+          "label": "Service",
+          "required": true,
+          "type": "text",
+          "example": "Onboarding",
+          "help": "One per row."
+        }
+      ],
+      "collect": [
+        "List the services from the website's services or about page, one per row, short names only."
+      ]
+    },
+    {
+      "id": "faqs",
+      "file": "faqs.csv",
+      "title": "Questions and answers",
+      "why": "The plug-in answers customer questions only from these, so it never guesses.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "question",
+          "label": "Question",
+          "required": true,
+          "type": "text",
+          "example": "Is there a free trial?",
+          "help": "How a customer would ask it."
+        },
+        {
+          "key": "answer",
+          "label": "Answer",
+          "required": true,
+          "type": "text",
+          "example": "Yes, 14 days with no card needed.",
+          "help": "The business's answer, in full sentences."
+        }
+      ],
+      "collect": [
+        "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
+        "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    }
+  ],
+  "never": [
+    "Passwords, API keys or other secrets.",
+    "Card numbers, bank details or government ID numbers.",
+    "Customers' personal data (names, phone numbers, addresses, health or financial details)."
+  ]
+}
