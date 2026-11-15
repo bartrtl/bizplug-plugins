@@ -1,0 +1,63 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-cybersecurity",
+  "version": "0.1.0",
+  "description": "The cybersecurity plug-in from BizPlug. Main function: book a security assessment call. It works from the business's own published profile, covering services, assessments and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never ask for credentials, keys or details of live vulnerabilities in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "msg2ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Cybersecurity",
+        "shortDescription": "Book a security assessment call for cybersecurity businesses.",
+        "longDescription": "The cybersecurity plug-in from BizPlug. Main function: book a security assessment call. It works from the business's own published profile, covering services, assessments and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never ask for credentials, keys or details of live vulnerabilities in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Book a security assessment call",
+          "Do you offer a security assessment for a small team?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/cybersecurity",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, in order.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Book a security assessment call",
+            "expect": "Calls find_assessment_slots and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Do you offer a security assessment for a small team?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_assessment_call only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

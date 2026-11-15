@@ -1,2 +1,160 @@
-# bizplug-plugins
-BizPlug plug-ins for ChatGPT: the standard plug-in package for each of 80 industries
+# BizPlug plug-ins for ChatGPT
+
+The standard BizPlug plug-in for each of 80 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself: a plug-in never takes payment.
+
+This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. The server code and business data are not part of this repository.
+
+- Website: https://bizplug.ai
+- Every plug-in on one page: https://bizplug.ai/plugins
+- Contact: info@bizplug.ai
+
+## What is in a package
+
+```
+plugins/<industry>/
+  plugin.json                  name, description, starter prompts and review test cases
+  mcp.json                     the plug-in's MCP server URL (streamable HTTP, no sign-in)
+  data/requirements.json       the datasets a business provides, column by column
+  data/templates/*.csv         a CSV template per dataset, with an example row
+  data/AGENT_INSTRUCTIONS.md   how a person or an AI agent collects and submits that data
+```
+
+Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes.
+
+## Try a plug-in in ChatGPT
+
+1. In ChatGPT, open Settings, then Apps & Connectors, and turn on developer mode.
+2. Create a connector with a plug-in's MCP server URL from the tables below (no sign-in needed).
+3. Start a new chat, pick the connector and ask "What can this plug-in do?"
+
+An industry URL serves every business in that industry, so the assistant asks which business you mean. A business with its own plug-in has its own URL: `https://mcp.bizplug.ai/plugin/coffee-shops/<business>`.
+
+## Get a plug-in for your business
+
+Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
+
+## The 80 plug-ins
+
+### Business essentials
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Events & Conferences](plugins/events) | Venue availability, pricing and date holds | `https://mcp.bizplug.ai/plugin/events` |
+| [Hospitality & Hotels](plugins/hospitality) | Room availability, rates and booking requests | `https://mcp.bizplug.ai/plugin/hospitality` |
+| [Marketing Agencies](plugins/agencies) | Book a strategy call | `https://mcp.bizplug.ai/plugin/agencies` |
+| [Nonprofits & Charities](plugins/nonprofits) | Volunteer and donation requests | `https://mcp.bizplug.ai/plugin/nonprofits` |
+| [SaaS & Software](plugins/saas) | Book a product demo | `https://mcp.bizplug.ai/plugin/saas` |
+| [Consulting & Professional Services](plugins/consulting) | Book a discovery call | `https://mcp.bizplug.ai/plugin/consulting` |
+
+### Retail & food
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Retail & E-commerce](plugins/retail) | Product search and reserve in store | `https://mcp.bizplug.ai/plugin/retail` |
+| [Restaurants & Food Service](plugins/restaurants) | Order ahead and takeaway | `https://mcp.bizplug.ai/plugin/restaurants` |
+| [Coffee Shops & Cafes](plugins/coffee-shops) | Mobile order-ahead for pickup | `https://mcp.bizplug.ai/plugin/coffee-shops` |
+| [Bars & Nightlife](plugins/bars-nightlife) | Table and guest-list requests | `https://mcp.bizplug.ai/plugin/bars-nightlife` |
+| [Catering & Events](plugins/catering) | Catering price by headcount | `https://mcp.bizplug.ai/plugin/catering` |
+| [Food Delivery](plugins/food-delivery) | Delivery orders | `https://mcp.bizplug.ai/plugin/food-delivery` |
+| [Meal Kits & Subscriptions](plugins/meal-kits) | Pick a plan and order a weekly box | `https://mcp.bizplug.ai/plugin/meal-kits` |
+| [Grocery & Supermarkets](plugins/grocery) | Build a pickup or delivery list | `https://mcp.bizplug.ai/plugin/grocery` |
+| [Ghost & Cloud Kitchens](plugins/ghost-kitchens) | Order from a cloud-kitchen brand | `https://mcp.bizplug.ai/plugin/ghost-kitchens` |
+| [Fashion & Apparel](plugins/fashion) | Find sizes and reserve for try-on | `https://mcp.bizplug.ai/plugin/fashion` |
+| [Electronics & Gadgets](plugins/electronics) | Check stock and reserve a gadget | `https://mcp.bizplug.ai/plugin/electronics` |
+| [Furniture & Home Goods](plugins/furniture) | Browse pieces and request an order | `https://mcp.bizplug.ai/plugin/furniture` |
+| [Beauty E-commerce](plugins/beauty-ecommerce) | Shop products and place an order | `https://mcp.bizplug.ai/plugin/beauty-ecommerce` |
+| [Subscription Boxes](plugins/subscriptions) | Choose a box and start a subscription request | `https://mcp.bizplug.ai/plugin/subscriptions` |
+| [Convenience & C-Stores](plugins/convenience-stores) | Reserve items for quick pickup | `https://mcp.bizplug.ai/plugin/convenience-stores` |
+
+### Property & auto
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Real Estate](plugins/real-estate) | Request property showings | `https://mcp.bizplug.ai/plugin/real-estate` |
+| [Local & Home Services](plugins/home-services) | Estimate a local home service | `https://mcp.bizplug.ai/plugin/home-services` |
+| [Automotive & Dealerships](plugins/automotive) | Book service and test drives | `https://mcp.bizplug.ai/plugin/automotive` |
+
+### Health & wellness
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Healthcare & Clinics](plugins/healthcare) | Find and request appointments | `https://mcp.bizplug.ai/plugin/healthcare` |
+| [Fitness & Gyms](plugins/fitness) | Book classes, trials and tours | `https://mcp.bizplug.ai/plugin/fitness` |
+| [Beauty & Salons](plugins/beauty) | Book salon services with a stylist | `https://mcp.bizplug.ai/plugin/beauty` |
+| [Dental Practices](plugins/dental) | Book cleanings, exams and consults | `https://mcp.bizplug.ai/plugin/dental` |
+| [Optometry & Eye Care](plugins/optometry) | Book eye exams and fittings | `https://mcp.bizplug.ai/plugin/optometry` |
+| [Dermatology & Skin](plugins/dermatology) | Book skin-care visits | `https://mcp.bizplug.ai/plugin/dermatology` |
+| [Chiropractic & PT](plugins/chiropractic) | Book adjustments and therapy sessions | `https://mcp.bizplug.ai/plugin/chiropractic` |
+| [Mental Health & Therapy](plugins/mental-health) | Request an intake or session | `https://mcp.bizplug.ai/plugin/mental-health` |
+| [Veterinary & Pet Care](plugins/veterinary) | Book pet appointments | `https://mcp.bizplug.ai/plugin/veterinary` |
+| [Pharmacies](plugins/pharmacy) | Store services and callback requests | `https://mcp.bizplug.ai/plugin/pharmacy` |
+| [Med Spas & Aesthetics](plugins/med-spa) | Book aesthetic treatments and consults | `https://mcp.bizplug.ai/plugin/med-spa` |
+| [Senior Care & Communities](plugins/senior-care) | Schedule community tours | `https://mcp.bizplug.ai/plugin/senior-care` |
+| [Home Health & Hospice](plugins/home-health) | Request a care assessment | `https://mcp.bizplug.ai/plugin/home-health` |
+
+### Community & public
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Education & Schools](plugins/education) | Book campus visits and info sessions | `https://mcp.bizplug.ai/plugin/education` |
+| [Logistics & Delivery](plugins/logistics) | Shipping rate estimate and pickup request | `https://mcp.bizplug.ai/plugin/logistics` |
+| [Government & Public Sector](plugins/government) | Service requests and case status | `https://mcp.bizplug.ai/plugin/government` |
+| [Utilities & Energy](plugins/utilities) | Outage and service-request status | `https://mcp.bizplug.ai/plugin/utilities` |
+| [Telecom & ISPs](plugins/telecom) | Compare plans and request service | `https://mcp.bizplug.ai/plugin/telecom` |
+| [Religious Organizations](plugins/religious-orgs) | RSVP to services and events, book pastoral time | `https://mcp.bizplug.ai/plugin/religious-orgs` |
+| [Membership Associations](plugins/associations) | Membership applications and renewals | `https://mcp.bizplug.ai/plugin/associations` |
+| [Childcare & Daycare](plugins/childcare) | Schedule tours and enrollment calls | `https://mcp.bizplug.ai/plugin/childcare` |
+| [Tutoring & Test Prep](plugins/tutoring) | Book tutoring sessions and prep trials | `https://mcp.bizplug.ai/plugin/tutoring` |
+| [Universities & Colleges](plugins/universities) | Book campus tours and advising | `https://mcp.bizplug.ai/plugin/universities` |
+| [Political Campaigns & Advocacy](plugins/political-campaigns) | Volunteer and event sign-ups | `https://mcp.bizplug.ai/plugin/political-campaigns` |
+| [Public Transit & Mobility](plugins/public-transit) | Service alerts and issue reports | `https://mcp.bizplug.ai/plugin/public-transit` |
+| [Coworking & Offices](plugins/coworking) | Desk and office availability and rates | `https://mcp.bizplug.ai/plugin/coworking` |
+
+### Travel & leisure
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Travel & Tourism](plugins/travel) | Tour and trip availability with price per traveller | `https://mcp.bizplug.ai/plugin/travel` |
+| [Airlines](plugins/airlines) | Flight status and support requests | `https://mcp.bizplug.ai/plugin/airlines` |
+| [Cruise Lines](plugins/cruise-lines) | Sailing availability and cabin pricing | `https://mcp.bizplug.ai/plugin/cruise-lines` |
+| [Car Rental](plugins/car-rental) | Vehicle availability and rental price | `https://mcp.bizplug.ai/plugin/car-rental` |
+| [Theme Parks & Attractions](plugins/theme-parks) | Ticket availability for a visit date | `https://mcp.bizplug.ai/plugin/theme-parks` |
+| [Museums & Galleries](plugins/museums) | Timed tickets and exhibitions | `https://mcp.bizplug.ai/plugin/museums` |
+| [Casinos & Gaming](plugins/casinos) | Hotel rooms and show tickets (no wagering) | `https://mcp.bizplug.ai/plugin/casinos` |
+| [Sports Teams & Venues](plugins/sports-teams) | Seat availability and ticket requests | `https://mcp.bizplug.ai/plugin/sports-teams` |
+| [Wedding & Events Pros](plugins/wedding-services) | Check your date and request a consultation | `https://mcp.bizplug.ai/plugin/wedding-services` |
+| [Photography & Creative](plugins/photography) | Book a shoot or consultation | `https://mcp.bizplug.ai/plugin/photography` |
+
+### Finance & B2B
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [Financial Services & Banking](plugins/financial-services) | Book a banker or advisor meeting | `https://mcp.bizplug.ai/plugin/financial-services` |
+| [Insurance](plugins/insurance) | Quote request intake | `https://mcp.bizplug.ai/plugin/insurance` |
+| [Legal Services](plugins/legal) | Book an initial consultation | `https://mcp.bizplug.ai/plugin/legal` |
+| [Lending & Mortgages](plugins/lending) | Book a loan or mortgage consultation | `https://mcp.bizplug.ai/plugin/lending` |
+| [Wealth & Investing](plugins/wealth) | Book an intro meeting with an advisor | `https://mcp.bizplug.ai/plugin/wealth` |
+| [Crypto & Fintech](plugins/crypto) | Fee estimate and onboarding request | `https://mcp.bizplug.ai/plugin/crypto` |
+| [Tax & Accounting](plugins/accounting) | Book a tax or bookkeeping consult | `https://mcp.bizplug.ai/plugin/accounting` |
+| [Recruiting & Staffing](plugins/recruiting) | Book an intro call for employers or candidates | `https://mcp.bizplug.ai/plugin/recruiting` |
+| [HR & Internal Comms](plugins/hr-comms) | Book a platform demo | `https://mcp.bizplug.ai/plugin/hr-comms` |
+| [Cybersecurity](plugins/cybersecurity) | Book a security assessment call | `https://mcp.bizplug.ai/plugin/cybersecurity` |
+| [Developer Tools](plugins/dev-tools) | Book a technical demo or onboarding | `https://mcp.bizplug.ai/plugin/dev-tools` |
+
+### Home & trades
+
+| Industry | What it does | MCP server URL |
+| --- | --- | --- |
+| [HVAC & Heating/Cooling](plugins/hvac) | Instant estimate and service visit request | `https://mcp.bizplug.ai/plugin/hvac` |
+| [Plumbing](plugins/plumbing) | Estimate and book a plumber | `https://mcp.bizplug.ai/plugin/plumbing` |
+| [Electricians](plugins/electricians) | Estimate and book an electrician | `https://mcp.bizplug.ai/plugin/electricians` |
+| [Cleaning Services](plugins/cleaning) | Price a clean by home size and book | `https://mcp.bizplug.ai/plugin/cleaning` |
+| [Landscaping & Lawn](plugins/landscaping) | Estimate lawn and landscape work | `https://mcp.bizplug.ai/plugin/landscaping` |
+| [Pest Control](plugins/pest-control) | Estimate treatment and request a visit | `https://mcp.bizplug.ai/plugin/pest-control` |
+| [Moving & Storage](plugins/moving-storage) | Moving estimate and storage rates | `https://mcp.bizplug.ai/plugin/moving-storage` |
+| [Solar & Clean Energy](plugins/solar) | Rough system estimate and site survey request | `https://mcp.bizplug.ai/plugin/solar` |
+| [Property Management](plugins/property-management) | Maintenance requests and status | `https://mcp.bizplug.ai/plugin/property-management` |
+
+---
+
+© msg2ai (https://msg2.ai). BizPlug is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.
