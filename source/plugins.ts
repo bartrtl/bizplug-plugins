@@ -1,0 +1,281 @@
+// Per-industry plug-in definitions, derived from industries.ts.
+// Modelled on the VisitPass ChatGPT plug-in package: plugin.json + mcp.json per plug-in.
+// `pnpm plugins:build` writes plugins/<slug>/{plugin.json,mcp.json}; CI fails if they drift.
+import { industries, type Industry } from "@/lib/industries";
+import { getFunction, type Engine, type IndustryFunction, type Span } from "@/lib/industry-functions";
+import { pricing } from "@/lib/pricing";
+import { siteConfig } from "@/lib/seo";
+import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
+
+export const PLUGIN_VERSION = "0.4.0"; // versions and their notes: plugin-versions.ts
+export const MCP_HOST = "https://mcp.bizplug.ai";
+/** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
+export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
+
+export type PluginTool = {
+  name: string;
+  title: string;
+  description: string;
+  readOnly: boolean;
+};
+
+export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: boolean };
+
+/** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
+/** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact";
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string };
+
+export type IndustryPlugin = {
+  slug: string;
+  name: string;
+  displayName: string;
+  functionTitle: string;
+  engine: Engine;
+  shortDescription: string;
+  longDescription: string;
+  defaultPrompts: string[];
+  tools: PluginTool[];
+  /** The options show_menu returns, in order. The portal, /industries/<slug> and /plugins render the same list. */
+  menu: MenuOption[];
+  testCases: PluginTestCase[];
+  mcpUrl: string;
+};
+
+const lower = (s: string) => s.toLowerCase();
+
+// [look-up, request, status] descriptions per engine. {n} is the industry's noun.
+const TOOL_COPY: Record<Engine, [string, string, string]> = {
+  order: [
+    "List or search what this business sells, with ids and prices, from its published {n} list. Creates nothing.",
+    "Send the customer's order to the business with a priced summary. Use only once the customer has confirmed the items. The business confirms and takes payment itself; nothing is charged in chat.",
+    "Look up the status of an order by its reference.",
+  ],
+  stay: [
+    "Check which {n} options are free for the customer's dates and party size, with the published rate and total price. Creates nothing.",
+    "Send a booking request for the chosen {n} and dates to the business. Use only once the customer has chosen an option. The business confirms; nothing is held or charged in chat.",
+    "Look up the status of a booking request by its reference.",
+  ],
+  appt: [
+    "List bookable {n} options and the open times on a day, from the business's published hours. Creates nothing.",
+    "Send a request for a {n} at an open time to the business. Use only once the customer has picked a time. The business confirms the appointment.",
+    "Look up the status of a request by its reference.",
+  ],
+  quote: [
+    "Work out a price estimate for a {n} from the business's published price list, or list what can be estimated. Creates nothing and is never a final price.",
+    "Send the customer's {n} request and estimate to the business so it can confirm a price and a time. Use only once the customer agrees to send it.",
+    "Look up the status of a request by its reference.",
+  ],
+  track: [
+    "Look up the published status for a reference the customer already has. Creates nothing.",
+    "Send a new {n} to the business. Use only once the customer has given the details and agrees to send it.",
+    "Look up the status of a request by its reference.",
+  ],
+};
+
+const TITLES: Record<Engine, [string, string, string]> = {
+  order: ["Browse and prices", "Place the order", "Order status"],
+  stay: ["Availability and price", "Request the booking", "Booking status"],
+  appt: ["Open times", "Request the appointment", "Request status"],
+  quote: ["Price estimate", "Request the job", "Job status"],
+  track: ["Look up a reference", "Send a request", "Request status"],
+};
+
+// The menu: [look-up, request, status] in customer words, with a question to try. Examples stay generic
+// here; a plug-in bound to one business swaps in its own first item (plugin-mcp.ts).
+const MENU_COPY: Record<Engine, [string, string, string]> = {
+  order: ["See what is on offer, with prices.", "Send your order. The business confirms it and takes payment itself.", "Check an order with its reference."],
+  stay: ["See what is free for your dates and party size, with the total price.", "Send a booking request. The business confirms it; nothing is held or charged here.", "Check a booking request with its reference."],
+  appt: ["See what can be booked and the open times on a day.", "Ask for an open time. The business confirms the appointment.", "Check a request with its reference."],
+  quote: ["Get an estimate from the published price list. It is never a final price.", "Send your request and estimate so the business can confirm a price and a time.", "Check a request with its reference."],
+  track: ["Look up the status of a reference you already have.", "Send a new request to the business.", "Check a request with its reference."],
+};
+
+const MENU_EXAMPLES: Record<Engine, [string, string, string]> = {
+  order: ["What do you have, and how much is it?", "I'd like to order for pickup", "What's the status of my order?"],
+  stay: ["What's available this Saturday for 2 people?", "Please request the first option for me", "What's the status of my booking request?"],
+  appt: ["What times are open this week?", "Book the first open time on Tuesday", "What's the status of my request?"],
+  quote: ["Can I get a price estimate?", "Send my request to the business", "What's the status of my request?"],
+  track: ["What's the status of my reference number?", "I'd like to send a new request", "What's the status of my request?"],
+};
+
+// What a stay look-up sounds like depends on whether it is booked by the night, by the day or for one date.
+const STAY_FIRST: Record<Span, string> = {
+  nights: "Do you have anything free this weekend for 2 guests?",
+  days: "What's free next Saturday, and what does it cost?",
+  single: "What's available this Saturday for 2 people?",
+};
+
+function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
+  const { engine, tools } = fn;
+  const example = (idx: 0 | 1 | 2) => (engine === "stay" && idx === 0 ? STAY_FIRST[fn.span ?? "single"] : MENU_EXAMPLES[engine][idx]);
+  const KINDS = ["lookup", "request", "status"] as const;
+  const step = (idx: 0 | 1 | 2): MenuOption => ({ tool: tools[idx], kind: KINDS[idx], title: TITLES[engine][idx], description: MENU_COPY[engine][idx], example: example(idx) });
+  return [
+    step(0),
+    step(1),
+    { tool: "get_business_info", kind: "question", title: "Ask a question", description: `Answers from the business's own information: ${i.covers}.`, example: i.ask },
+    step(2),
+    { tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" },
+  ];
+}
+
+export function buildPlugin(i: Industry): IndustryPlugin {
+  const noun = lower(i.name);
+  const fn = getFunction(i.slug);
+  if (!fn) throw new Error(`No industry function defined for ${i.slug}`);
+  const rule = fn.note ? ` ${fn.note}` : "";
+  const tools: PluginTool[] = [
+    {
+      name: "show_menu",
+      title: "Menu",
+      description: "Return this plug-in's menu: what the customer can do here, each with a short title, a one-line description and a question to try. Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option; where there is no card, show the options exactly as returned (same titles, same order). Creates nothing.",
+      readOnly: true,
+    },
+    ...fn.tools.map((name, idx) => ({
+      name,
+      title: TITLES[fn.engine][idx],
+      description: TOOL_COPY[fn.engine][idx].replaceAll("{n}", fn.noun) + (idx < 2 ? rule : ""),
+      readOnly: idx !== 1,
+    })),
+    {
+      name: "get_business_info",
+      title: "Business information",
+      description: `Answer a general question about this ${noun} business using only its published profile: ${i.covers}. Creates nothing. If the profile does not cover the question, say so and use get_contact.${rule}`,
+      readOnly: true,
+    },
+    {
+      name: "get_contact",
+      title: "Contact details",
+      description: "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+      readOnly: true,
+    },
+  ];
+  return {
+    slug: i.slug,
+    name: i.name,
+    displayName: `BizPlug ${i.name}`,
+    functionTitle: fn.title,
+    engine: fn.engine,
+    shortDescription: `${fn.title} for ${noun} businesses.`,
+    longDescription: `The ${noun} plug-in from BizPlug. Main function: ${lower(fn.title)}. It works from the business's own published profile, covering ${i.covers}, and sends requests to the business to confirm. It never takes payment and only shares what the business has published.${rule} Provided by ${siteConfig.name}: ${siteConfig.url}, ${siteConfig.email}.`,
+    defaultPrompts: [fn.title, i.ask, "How do I contact the business?"],
+    tools,
+    menu: buildMenu(i, fn),
+    testCases: [
+      { prompt: "What can this plug-in do?", expect: "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.", shouldTrigger: true },
+      { prompt: fn.title, expect: `Calls ${fn.tools[0]} and answers from the published profile.`, shouldTrigger: true },
+      { prompt: i.ask, expect: "Answers from the business profile, or says it is not covered and offers contact details.", shouldTrigger: true },
+      { prompt: "Go ahead and send it.", expect: `Calls ${fn.tools[1]} only after the customer has confirmed the details, and reports that the business still has to confirm.`, shouldTrigger: true },
+      { prompt: "Write me a poem about the ocean.", expect: "Does not call any tool.", shouldTrigger: false },
+    ],
+    mcpUrl: `${MCP_HOST}/plugin/${i.slug}`,
+  };
+}
+
+export const plugins: IndustryPlugin[] = industries.map(buildPlugin);
+
+export function getPlugin(slug: string) {
+  return plugins.find((p) => p.slug === slug);
+}
+
+export function pluginJson(p: IndustryPlugin) {
+  return {
+    $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    name: `bizplug-${p.slug}`,
+    version: PLUGIN_VERSION,
+    description: p.longDescription,
+    author: { name: siteConfig.developer?.name ?? "msg2ai" },
+    mcpServers: "./mcp.json",
+    extensions: {
+      "com.openai": {
+        interface: {
+          displayName: p.displayName,
+          shortDescription: p.shortDescription,
+          longDescription: p.longDescription,
+          defaultPrompt: p.defaultPrompts,
+          category: "Business",
+          websiteURL: `${siteConfig.url}/industries/${p.slug}`,
+          privacyPolicyURL: `${siteConfig.url}/privacy`,
+          termsOfServiceURL: `${siteConfig.url}/terms`,
+        },
+        review: {
+          commerce: false,
+          test_cases: p.testCases,
+          demo_recording_url: null,
+        },
+        publication: { status: "draft", pricing: `${pricing.plugin.monthlyLabel}/month or ${pricing.plugin.annualLabel}/year` },
+      },
+    },
+  };
+}
+
+export function mcpJson(p: IndustryPlugin) {
+  return {
+    $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+    mcpServers: {
+      [`bizplug-${p.slug}`]: {
+        type: "streamable-http",
+        url: p.mcpUrl,
+        extensions: { "com.openai": { auth: { type: "none" } } },
+      },
+    },
+  };
+}
+
+// ---------- Event directory plug-ins (src/lib/directory-store.ts) ----------
+
+export function directoryPluginJson(d: DirectoryDef) {
+  return {
+    $schema: "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+    name: `bizplug-${d.slug}`,
+    version: PLUGIN_VERSION,
+    description: d.longDescription,
+    author: { name: siteConfig.developer?.name ?? "msg2ai" },
+    mcpServers: "./mcp.json",
+    extensions: {
+      "com.openai": {
+        interface: {
+          displayName: d.displayName,
+          shortDescription: d.shortDescription,
+          longDescription: d.longDescription,
+          defaultPrompt: d.defaultPrompts,
+          category: "Business",
+          websiteURL: `${siteConfig.url}${d.pagePath}`,
+          privacyPolicyURL: `${siteConfig.url}/privacy`,
+          termsOfServiceURL: `${siteConfig.url}/terms`,
+          // The package carries its own copy of the icon (scripts/build-plugins.ts copies it from public/).
+          ...(d.icon ? { logo: "./assets/icon.png", composerIcon: "./assets/icon.png" } : {}),
+        },
+        review: {
+          commerce: false,
+          test_cases: [
+            { prompt: d.defaultPrompts[0], expect: "Calls search_startups with the thesis in query and stage/region as filters, and lists matching startups with pitch, country and programme.", shouldTrigger: true },
+            { prompt: "My thesis is AI for SME finance. Priorities: payments first, then SMEs, then AI. Rank the startups I should meet.", expect: "Calls rank_startups with the thesis and the priorities in order, and shows a ranked shortlist with each fit score and its reasons, without calling it investment advice.", shouldTrigger: true },
+            { prompt: "Tell me more about the first one. How much have they raised?", expect: "Calls get_startup and says funding is not published, offering a web look-up or an intro request.", shouldTrigger: true },
+            { prompt: "Introduce me to the founders.", expect: "Asks for the investor's own name and firm (never filling them from memory), calls contact_founders, and shows the draft intro with the startup's own email, WhatsApp, LinkedIn or website links for the investor to send directly; does not say BizPlug will pass anything on.", shouldTrigger: true },
+            { prompt: "What can this plug-in do?", expect: "Calls show_menu and shows its options exactly as returned, starting with ranking by investment thesis and ending with Contact BizPlug; does not describe intros as BizPlug introductions.", shouldTrigger: true },
+            { prompt: "Who is behind this, and how do I contact them?", expect: "Calls about_bizplug and gives BizPlug's website, email and, where set, WhatsApp link.", shouldTrigger: true },
+            { prompt: "Should I invest in this startup?", expect: "Does not give investment advice; offers the published details instead.", shouldTrigger: true },
+            { prompt: "Write me a poem about the ocean.", expect: "Does not call any tool.", shouldTrigger: false },
+          ],
+          demo_recording_url: null,
+        },
+        publication: { status: "draft", pricing: "free" },
+      },
+    },
+  };
+}
+
+export function directoryMcpJson(d: DirectoryDef) {
+  return {
+    $schema: "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+    mcpServers: {
+      [`bizplug-${d.slug}`]: {
+        type: "streamable-http",
+        url: `${MCP_HOST}${directoryPath(d)}`,
+        extensions: { "com.openai": { auth: { type: "none" } } },
+      },
+    },
+  };
+}
