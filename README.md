@@ -2,16 +2,18 @@
 
 The standard BizPlug plug-in for each of 80 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself: a plug-in never takes payment.
 
-This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. The server code and business data are not part of this repository.
+This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
 - Website: https://bizplug.ai
 - Every plug-in on one page: https://bizplug.ai/plugins
 - Contact: info@bizplug.ai
+- Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 
 ## What is in a package
 
 ```
 plugins/<industry>/
+  README.md                    what the plug-in does, its tools and what changed in each version
   plugin.json                  name, description, starter prompts and review test cases
   mcp.json                     the plug-in's MCP server URL (streamable HTTP, no sign-in)
   data/requirements.json       the datasets a business provides, column by column
@@ -20,6 +22,21 @@ plugins/<industry>/
 ```
 
 Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes.
+
+## Source
+
+`source/` holds the files the packages are generated from, copied from the BizPlug website. They are here to be read: they import website files that are not published, so they do not build on their own.
+
+```
+source/
+  plugins.ts                   each plug-in's name, description, tools, menu and test cases
+  industry-functions.ts        the main function and tool names of each industry
+  plugin-data.ts               the datasets and columns a business provides, and the agent instructions
+  plugin-examples.ts           the example rows used in the CSV templates
+  plugin-addons.ts             what a plug-in can be bundled with, and the status of each
+  plugin-versions.ts           every plug-in version and what changed in it
+  widgets/plugin-widget.ts     the card a plug-in shows in ChatGPT
+```
 
 ## Try a plug-in in ChatGPT
 
@@ -32,6 +49,17 @@ An industry URL serves every business in that industry, so the assistant asks wh
 ## Get a plug-in for your business
 
 Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
+
+## Version 0.4.0
+
+All 80 plug-ins share one version. What changed in each:
+
+- **0.4.0** (16 November 2026): Browsing by tapping in the card: quick options on each form, search and category filters on a list, an item or option on its own screen with Back, the business's published questions and answers, and choosing the business on an industry-wide plug-in.
+- **0.3.0** (16 November 2026): Results show inside the card (prices, availability, open times, estimates and statuses), and a request can be sent straight from a result.
+- **0.2.0** (16 November 2026): A menu card in ChatGPT, with a button and a short form for each thing a customer can do.
+- **0.1.0** (15 November 2026): The plug-in's tools for the industry, answers from the business's own information, and a text menu of what it can do.
+
+A business's own plug-in stays on the version it was published with until the business upgrades it.
 
 ## The 80 plug-ins
 
