@@ -1,6 +1,6 @@
 # BizPlug Events & Conferences
 
-Version 0.17.0. Venue availability, pricing and date holds for events & conferences businesses.
+Version 0.18.0. Venue availability, pricing and date holds for events & conferences businesses.
 
 - Main function: Venue availability, pricing and date holds
 - MCP server URL: `https://mcp.bizplug.ai/plugin/events` (streamable HTTP, no sign-in)
@@ -25,9 +25,14 @@ Version 0.17.0. Venue availability, pricing and date holds for events & conferen
 | `get_hold_status` | Look up the status of a booking request by its reference. |
 | `get_business_info` | Answer a general question about this events & conferences business using only its published profile: schedule, venue, ticket and parking questions. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
+| `get_agenda` | List the sessions of this show or conference from the agenda it published, by day, with times, formats and speakers; optionally one day or sessions matching words (a topic, a speaker, a format). Says when the event is over. Creates nothing. |
+| `find_speakers` | Find the speakers the event published, by name, company or topic, each with their role, published bio and the sessions they speak in. Creates nothing. |
+| `find_exhibitors` | Find the exhibitors and sponsors the event published, by name, what they do or a category, each with its published website and company contact details. Creates nothing and sends nothing: the customer contacts a company directly, and nobody introduces or forwards. |
+| `send_event_enquiry` | Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid. |
 
 ## Changes
 
+- **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.
 - **0.17.0** (19 November 2026): Account tools: a business that runs its own MCP server can offer its tools in its plug-in, so signed-in customers work in their own account from ChatGPT.
 - **0.16.0** (19 November 2026): Customer sign-in with Clerk: a business that runs its own Clerk application can make its plug-in answer only its signed-in customers or members.
 - **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.

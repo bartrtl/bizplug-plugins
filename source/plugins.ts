@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.17.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.18.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -30,13 +30,15 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
+ * On an events plug-in (industry-functions.ts `show`), "show" options are the event guide of a show or conference that
+ * published its programme (from 0.18.0), and "venue" options the menu of a venue; plugin-mcp.ts shows one of the two.
  * `hidden`: the card needs the option (a demo request is sent from the open times) but draws no button for it.
  */
-export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy"; hidden?: boolean };
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean };
 
 export type IndustryPlugin = {
   slug: string;
@@ -66,6 +68,9 @@ export const MEMBERS_TOOL = "find_members";
 /** Software products (`software` in industry-functions.ts), from plug-in version 0.15.0 (software.ts). */
 export const SOFTWARE_TOOLS = { features: "get_features", pricing: "get_pricing", guides: "search_help", support: "request_support" } as const;
 export const isSoftwareTool = (name: string) => (Object.values(SOFTWARE_TOOLS) as string[]).includes(name);
+/** Events (`show` in industry-functions.ts), from plug-in version 0.18.0: the event guide (event-guide.ts). */
+export const SHOW_TOOLS = { agenda: "get_agenda", speakers: "find_speakers", exhibitors: "find_exhibitors", enquiry: "send_event_enquiry" } as const;
+export const isShowTool = (name: string) => (Object.values(SHOW_TOOLS) as string[]).includes(name);
 /** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
 const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
 const membersDirect = (slug: string) =>
@@ -158,6 +163,22 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
       legacy({ tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" }),
     ];
   }
+  // 0.18.0, events: a show or conference that published its programme gets the event guide; a venue keeps its menu.
+  if (fn.show) {
+    const venue = (o: MenuOption): MenuOption => ({ ...o, only: "venue" });
+    return [
+      { ...question, title: "About the event", description: "Dates, venue, opening hours, tickets and the event's own questions and answers.", example: "When and where is it?", only: "show" },
+      { tool: SHOW_TOOLS.agenda, kind: "agenda", title: "Agenda", description: "The sessions by day: times, formats and speakers.", example: "What's on the first day?", only: "show" },
+      { tool: SHOW_TOOLS.speakers, kind: "speakers", title: "Speakers", description: "Who speaks, their role and the sessions to catch them in.", example: "Who is speaking about sustainability?", only: "show" },
+      { tool: SHOW_TOOLS.exhibitors, kind: "exhibitors", title: "Exhibitors & sponsors", description: "Find an exhibitor or sponsor by name or what it does, and contact it directly.", example: "Which exhibitors do stage lighting?", only: "show" },
+      { tool: SHOW_TOOLS.enquiry, kind: "enquiry", title: "Send an enquiry", description: "Ask the organisers about exhibiting, sponsoring, visiting or speaking. The team replies by email.", example: "I'd like to exhibit next year", only: "show" },
+      venue(step(0)),
+      venue(step(1)),
+      venue(question),
+      venue(step(2)),
+      { tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" },
+    ];
+  }
   // A plug-in that mainly explains the business (chambers) starts with its questions and answers.
   return [
     ...(fn.infoFirst ? [question, step(1), step(0)] : [step(0), step(1), question]),
@@ -218,6 +239,15 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           { name: SOFTWARE_TOOLS.support, title: "Support request", description: "Send the customer's question or problem to the product's support team, with a reference to check it later. Use only once the customer has given the details and agrees to send it. The team replies by email.", readOnly: false },
         ]
       : []),
+    // 0.18.0, events: the event guide. Offered only to a show or conference on 0.18.0 or later (plugin-mcp.ts).
+    ...(fn.show
+      ? [
+          { name: SHOW_TOOLS.agenda, title: "Agenda", description: "List the sessions of this show or conference from the agenda it published, by day, with times, formats and speakers; optionally one day or sessions matching words (a topic, a speaker, a format). Says when the event is over. Creates nothing.", readOnly: true },
+          { name: SHOW_TOOLS.speakers, title: "Speakers", description: "Find the speakers the event published, by name, company or topic, each with their role, published bio and the sessions they speak in. Creates nothing.", readOnly: true },
+          { name: SHOW_TOOLS.exhibitors, title: "Exhibitors & sponsors", description: "Find the exhibitors and sponsors the event published, by name, what they do or a category, each with its published website and company contact details. Creates nothing and sends nothing: the customer contacts a company directly, and nobody introduces or forwards.", readOnly: true },
+          { name: SHOW_TOOLS.enquiry, title: "Event enquiry", description: "Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid.", readOnly: false },
+        ]
+      : []),
   ];
   return {
     slug: i.slug,
@@ -253,7 +283,8 @@ export function buildPlugin(i: Industry): IndustryPlugin {
 export const plugins: IndustryPlugin[] = industries.map(buildPlugin);
 
 /** The menu a customer sees on the current plug-in version, as the public pages and the portal list it. */
-export const currentMenu = (p: IndustryPlugin) => p.menu.filter((o) => o.only !== "legacy" && !o.hidden);
+// An events plug-in lists the venue menu here: the event guide is per business, for a show that published its programme.
+export const currentMenu = (p: IndustryPlugin) => p.menu.filter((o) => o.only !== "legacy" && o.only !== "show" && !o.hidden);
 
 export function getPlugin(slug: string) {
   return plugins.find((p) => p.slug === slug);

@@ -17,6 +17,10 @@
 //   From 0.15.0, on a software plug-in: Features (search, the plan and guide of each), Pricing (the plans, or only
 //   the pricing page), Help & guides (search and topics, each article opens on the product's site) and Support (a
 //   support request with a reference). Options marked hidden are kept for the card's flows but get no button.
+//   From 0.18.0, on an events plug-in whose show or conference published its programme (the event guide): Agenda
+//   (day filters, search), Speakers (search, a speaker on their own screen with the sessions they speak in),
+//   Exhibitors & sponsors (search, category filters, a company on its own screen with its website and email) and
+//   Send an enquiry (exhibiting, sponsoring, visiting or speaking, with a reference).
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
@@ -37,6 +41,10 @@ const ICONS: Record<string, string> = {
   support: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/>',
   members: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>',
   store: '<path d="M3 9 4.5 4h15L21 9"/><path d="M3 9v11h18V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M9 20v-6h6v6"/>',
+  agenda: '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4M7 13h4M7 17h7"/>',
+  speakers: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
+  exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
+  enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
 };
@@ -167,7 +175,9 @@ const state = { plugin: null, options: [], view: "loading", open: null, data: {}
   // 0.4.0: the screens to go back through, the item or option that is open, every item seen (for the order summary), the chosen business.
   hist: [], shown: null, going: false, sel: null, items: {}, bizName: "", businesses: [], faq: -1,
   // 0.12.0: every member business seen, by id, for a member's own screen.
-  mem: {} };
+  mem: {},
+  // 0.18.0, event guide: every speaker and exhibitor seen, by id, and the session that is open.
+  spk: {}, exh: {}, ses: "" };
 const p = () => state.plugin || {};
 function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName }); } catch (e) {} }
 function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; }
@@ -198,6 +208,9 @@ function receive(sc) {
     if (sc.view === "catalog") { if (!nav()) state.cart = {}; ((sc.catalog || {}).items || []).forEach((x) => { state.items[x.id] = x; }); }
     if (nav() && (sc.view === "sent" || sc.view === "whatsapp")) state.cart = {};
     if (sc.view === "info") state.faq = -1;
+    if (sc.view === "speakers" && sc.speakers) { (sc.speakers.items || []).forEach((x) => { state.spk[x.id] = x; }); state.f.pq = sc.speakers.query || ""; }
+    if (sc.view === "exhibitors" && sc.exhibitors) { (sc.exhibitors.items || []).forEach((x) => { state.exh[x.id] = x; }); state.f.xq = sc.exhibitors.query || ""; }
+    if (sc.view === "agenda" && sc.agenda) { state.ses = ""; state.f.aq = sc.agenda.query || ""; }
     if (sc.view === "members" && sc.members) { (sc.members.items || []).forEach((x) => { state.mem[x.id] = x; }); state.f.mq = sc.members.query || ""; }
     state.view = sc.view;
   }
@@ -386,7 +399,7 @@ function links(except) {
 function track() {
   const cur = { v: state.view, open: state.open, sel: state.sel };
   const was = state.shown;
-  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && ((cur.v !== "item" && cur.v !== "option" && cur.v !== "member") || was.sel === cur.sel);
+  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "speaker", "exhibitor"].indexOf(cur.v) < 0 || was.sel === cur.sel);
   if (same) return;
   if (["menu", "sent", "whatsapp", "loading"].indexOf(cur.v) >= 0) state.hist = [];
   else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
@@ -690,6 +703,83 @@ function supportView() {
     '<div class="actions">' + primary("Send to support", "support") + '</div><div class="note" style="margin-top:0">The support team replies by email. You get a reference to check it later.</div></div>' + links("support");
 }
 
+// ---- Event guide (version 0.18.0) ----
+// What the show or conference published: its agenda by day, its speakers, its exhibitors and sponsors. The customer
+// contacts a company directly; an enquiry goes to the organisers.
+const pastNote = (d) => (d && d.past && d.when ? '<div class="sum"><div><b>Took place ' + esc(d.when) + "</b><span>This is the programme as it was published.</span></div></div>" : "");
+const runShow = (kind, args) => { const o = opt(kind); run(o && o.tool, clean(args), (o && o.example) || ""); };
+function agendaView() {
+  const d = state.data.agenda || { items: [] };
+  const o = opt("agenda");
+  const days = d.days || [];
+  const head = top(o ? o.title : "Agenda") + pastNote(d) +
+    '<div class="find"><input type="search" data-f="aq" data-enter="afind" value="' + esc(state.f.aq || "") + '" placeholder="A topic, a speaker or a format"><button class="btn" data-act="afind">Search</button></div>' +
+    (days.length > 1 ? '<div class="qs" style="margin:8px 0 12px">' + chip("All days", "data-aday", "", !d.date) + days.map((x) => chip(esc(x.label) + " <small>" + x.count + "</small>", "data-aday", x.date, x.date === d.date)).join("") + "</div>" : '<div style="height:8px"></div>');
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">' + (d.query ? 'No session matches "' + esc(d.query) + '".' : "No agenda is published here yet.") + "</div>" + errLine() + links("agenda");
+  let day = "";
+  const rows = items.map((x) => {
+    const sub = !d.date && x.day !== day ? '<div class="cat">' + esc(x.day) + "</div>" : "";
+    day = x.day;
+    const open = state.ses === x.id;
+    return sub + '<div class="it"><button class="rowb" data-ses="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.title) + '</b><span class="qlabel">' + esc([x.start, x.end].filter(Boolean).join("–")) + "</span></div>" +
+      '<div class="bl' + (open ? "" : " clamp") + '">' + esc([x.format, x.stage, x.speakers].filter(Boolean).join(" · ")) + "</div>" + (open && x.description ? '<div class="bl">' + esc(x.description) + "</div>" : "") + "</button></div>";
+  }).join("");
+  return head + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: choose a day or search.</div>" : "") + errLine() + links("agenda");
+}
+function speakersView() {
+  const d = state.data.speakers || { items: [] };
+  const o = opt("speakers");
+  const head = top(o ? o.title : "Speakers") + '<div class="find"><input type="search" data-f="pq" data-enter="pfind" value="' + esc(state.f.pq || "") + '" placeholder="A name, a company or a topic"><button class="btn" data-act="pfind">Search</button></div><div style="height:8px"></div>';
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">' + (d.query ? 'No speaker matches "' + esc(d.query) + '".' : "No speakers are published here yet.") + "</div>" + errLine() + links("speakers");
+  return head + '<div class="list">' + items.map((x) => '<div class="it"><button class="rowb" data-spk="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + "</b></div>" +
+    '<div class="bl clamp">' + esc([x.title, x.company].filter(Boolean).join(", ")) + "</div></button></div>").join("") + "</div>" +
+    (d.more ? '<div class="note">' + d.more + " more: search to narrow the list.</div>" : "") + errLine() + links("speakers");
+}
+function speakerView() {
+  const x = state.spk[state.sel];
+  if (!x) return speakersView();
+  const sessions = x.sessions || [];
+  return top(x.name) + (x.title || x.company ? '<div class="sum"><div><b>' + esc(x.title || x.company) + "</b><span>" + esc(x.title ? x.company : "") + "</span></div></div>" : "") +
+    (x.bio ? '<p class="about" style="margin:0 0 4px">' + esc(x.bio) + "</p>" : "") +
+    (sessions.length ? '<div class="qlabel" style="margin-top:12px">Speaks in</div><div class="list" style="margin-top:6px">' + sessions.map((s) => '<div class="it"><div class="nm"><b>' + esc(s.title) + '</b><span class="qlabel">' + esc([s.day, s.start].filter(Boolean).join(" ")) + "</span></div></div>").join("") + "</div>" : "") +
+    (x.linkedin ? '<div class="actions" style="margin-top:14px"><button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button></div>' : "");
+}
+function exhibitorsView() {
+  const d = state.data.exhibitors || { items: [] };
+  const o = opt("exhibitors");
+  const cats = d.categories || [];
+  const head = top(o ? o.title : "Exhibitors & sponsors") +
+    '<div class="find"><input type="search" data-f="xq" data-enter="xfind" value="' + esc(state.f.xq || "") + '" placeholder="A company, or what you are looking for"><button class="btn" data-act="xfind">Search</button></div>' +
+    (cats.length > 1 ? '<div class="qs" style="margin:8px 0 12px">' + chip("All", "data-xcat", "", !d.category) + cats.map((c) => chip(esc(c.name) + " <small>" + c.count + "</small>", "data-xcat", c.name, c.name === d.category)).join("") + "</div>" : '<div style="height:8px"></div>');
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">' + (d.query ? 'Nothing matches "' + esc(d.query) + '".' : "No exhibitors or sponsors are published here yet.") + "</div>" + errLine() + links("exhibitors");
+  return head + '<div class="list">' + items.map((x) => '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="qlabel">' + esc(x.kind === "sponsor" ? x.role || x.category : x.category) + "</span></div>" +
+    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + "</button></div>").join("") + "</div>" +
+    (d.more ? '<div class="note">' + d.more + " more: search or choose a category.</div>" : "") + errLine() +
+    '<div class="note">As listed by ' + esc(d.business || "the event") + ". You contact a company directly; nobody introduces you or passes a message on.</div>" + links("exhibitors");
+}
+function exhibitorView() {
+  const x = state.exh[state.sel];
+  if (!x) return exhibitorsView();
+  const row = (label, value) => (value ? "<tr><td>" + label + "</td><td>" + esc(value) + "</td></tr>" : "");
+  const web = /^https:\/\//.test(x.website), mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.email);
+  const facts = row("Role", x.role) + row("Stand", x.stand) + row("City", x.city) + row("Phone", x.phone) + (mail ? row("Email", x.email) : "");
+  return top(x.name) + '<div class="sum"><div><b>' + esc(x.kind === "sponsor" ? "Sponsor" : "Exhibitor") + "</b><span>" + esc(x.category) + "</span></div></div>" +
+    (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
+    (web || mail ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
+    '<div class="note">These are the details ' + esc((state.data.exhibitors || {}).business || "the event") + " lists. You contact " + esc(x.name) + " yourself.</div>";
+}
+const TOPICS = ["Exhibiting", "Sponsoring", "Visiting", "Speaking", "Other"];
+function enquiryView() {
+  const o = opt("enquiry");
+  return '<div class="form">' + top(o ? o.title : "Send an enquiry") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
+    '<div class="qlabel">About</div><div class="qs">' + TOPICS.map((t) => chip(esc(t), "data-etopic", t, v("etopic") === t)).join("") + "</div>" +
+    field("emessage", "Your enquiry", { type: "textarea", placeholder: "What you would like to know or arrange" }) + field("ecompany", "Company", { optional: true }) + whoFields() + errLine() +
+    '<div class="actions">' + primary("Send enquiry", "enquiry") + '</div><div class="note" style="margin-top:0">The organisers reply by email. You get a reference.</div></div>' + links("enquiry");
+}
+
 function requestView() {
   const k = state.pick || {};
   const request = opt("request");
@@ -752,6 +842,9 @@ function openOption(i) {
   if (o.kind === "features" || o.kind === "guides") { state.f[o.kind === "features" ? "fq" : "gq"] = ""; run(o.tool, {}, o.example); return; }
   if (o.kind === "pricing") { run(o.tool, {}, o.example); return; }
   if (o.kind === "support") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } state.view = "support"; render(); return; }
+  // 0.18.0, event guide: Agenda, Speakers and Exhibitors open with their lists; an enquiry opens its form.
+  if (o.kind === "agenda" || o.kind === "speakers" || o.kind === "exhibitors") { state.f.aq = ""; state.f.pq = ""; state.f.xq = ""; run(o.tool, {}, o.example); return; }
+  if (o.kind === "enquiry") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } if (!v("etopic")) state.f.etopic = "Exhibiting"; state.view = "enquiry"; render(); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
@@ -777,7 +870,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView };
+  const views = { item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const on = (sel, fn) => app.querySelectorAll(sel).forEach((el) => el.addEventListener("click", () => fn(el)));
@@ -827,7 +920,7 @@ function render() {
   on('[data-act="askq"]', () => guard(() => { need(v("question"), "Type your question."); ask(v("question")); }));
   on("[data-biz]", (b) => chooseBiz(b.dataset.biz));
   on('[data-act="biz"]', () => chooseBiz(v("biz")));
-  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.options = state.options.filter((o) => o.kind !== "members"); state.hist = []; state.error = ""; save(); render(); });
+  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.spk = {}; state.exh = {}; state.options = state.options.filter((o) => o.kind !== "members"); state.hist = []; state.error = ""; save(); render(); });
   // ---- Software products (version 0.15.0) ----
   on('[data-act="ffind"]', () => findIn("features"));
   on('[data-act="gfind"]', () => findIn("guides", { topic: (state.data.guides || {}).topic || "" }));
@@ -836,6 +929,21 @@ function render() {
     const o = opt("support");
     need(v("stopic"), "Add a subject."); need(v("smessage"), "Say what happened.");
     run(o && o.tool, Object.assign(who(), { topic: v("stopic"), message: v("smessage") }), "I need support: " + v("stopic"));
+  }));
+  // ---- Event guide (version 0.18.0) ----
+  on('[data-act="afind"]', () => runShow("agenda", { query: v("aq"), date: (state.data.agenda || {}).date || "" }));
+  on("[data-aday]", (b) => { state.f.aq = ""; runShow("agenda", { date: b.dataset.aday }); });
+  on("[data-ses]", (b) => { state.ses = state.ses === b.dataset.ses ? "" : b.dataset.ses; render(); });
+  on('[data-act="pfind"]', () => runShow("speakers", { query: v("pq") }));
+  on("[data-spk]", (b) => { state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
+  on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
+  on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });
+  on("[data-exh]", (b) => { state.sel = b.dataset.exh; state.view = "exhibitor"; state.error = ""; render(); });
+  on("[data-etopic]", (b) => { state.f.etopic = b.dataset.etopic; render(); });
+  on('[data-act="enquiry"]', () => guard(() => {
+    const o = opt("enquiry");
+    need(v("emessage"), "Say what your enquiry is about.");
+    run(o && o.tool, Object.assign(who(), clean({ topic: v("etopic") || "Other", message: v("emessage"), company: v("ecompany") })), v("etopic") + " enquiry: " + v("emessage"));
   }));
   // ---- Members (version 0.12.0) ----
   on('[data-act="mfind"]', () => findMembers());

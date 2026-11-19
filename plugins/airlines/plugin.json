@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-airlines",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "The airlines plug-in from BizPlug. Main function: flight status and support requests. It works from the business's own published profile, covering baggage, check-in, policies and support contacts, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - Rethink Labs",

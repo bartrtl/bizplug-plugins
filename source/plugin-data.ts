@@ -27,6 +27,8 @@ export type Dataset = {
   title: string;
   why: string;
   required: boolean;
+  /** A required file that is not needed when one of these is given instead (a show needs no venue inventory). */
+  unless?: string[];
   /** One row (business details) or many. */
   single?: boolean;
   maxRows: number;
@@ -165,6 +167,88 @@ const guidesDataset: Dataset = {
   ],
   collect: ["List the articles from the help centre or documentation: title, link and topic. Public articles only."],
 };
+
+// Events (`show` in industry-functions.ts), from plug-in version 0.18.0: a show or conference's own programme, for the
+// event guide (event-guide.ts). With any of these the plug-in is an event guide and needs no venue inventory.
+const SHOW_FILES = ["sessions", "speakers", "exhibitors", "sponsors"];
+const sessionsDataset: Dataset = {
+  id: "sessions",
+  file: "sessions.csv",
+  title: "Agenda",
+  why: "The sessions of the show or conference, for Agenda.",
+  required: false,
+  maxRows: 1000,
+  columns: [
+    col("date", "Date", true, "date", "2026-09-01", "YYYY-MM-DD."),
+    col("start", "Starts", false, "time", "09:00", "24-hour HH:MM, local time."),
+    col("end", "Ends", false, "time", "09:50", "24-hour HH:MM."),
+    col("title", "Session", true, "text", "Opening keynote", "The session's title, as published."),
+    col("format", "Format", false, "text", "Panel", "Keynote, panel, workshop, break…"),
+    col("speakers", "Speakers", false, "text", "Jane Doe; John Smith", "The speakers' names, separated by semicolons, as in speakers.csv."),
+    col("stage", "Where", false, "text", "Main stage", "Stage, hall or room."),
+    col("description", "About", false, "text", "What the session covers.", "One or two sentences."),
+  ],
+  collect: ["Copy the agenda from the event's own programme page: one row per session, with its date, times, title and speakers."],
+};
+const speakersDataset: Dataset = {
+  id: "speakers",
+  file: "speakers.csv",
+  title: "Speakers",
+  why: "The speakers, for Speakers.",
+  required: false,
+  maxRows: 1000,
+  columns: [
+    col("name", "Name", true, "text", "Jane Doe", "As the event lists the speaker."),
+    col("title", "Title", false, "text", "Chief Executive Officer", "Job title."),
+    col("company", "Company", false, "text", "Example Events", "Organisation."),
+    col("bio", "Bio", false, "text", "Twenty years in live events.", "The bio the event published."),
+    col("linkedin", "LinkedIn", false, "url", "https://www.linkedin.com/in/janedoe", "Public profile, if the event links to it."),
+  ],
+  collect: ["Take each speaker from the event's own speakers page: name, title, company and the bio published there. Nothing the event does not publish."],
+};
+const exhibitorsDataset: Dataset = {
+  id: "exhibitors",
+  file: "exhibitors.csv",
+  title: "Exhibitors",
+  why: "The exhibitors, for Exhibitors & sponsors. People contact an exhibitor directly with these details.",
+  required: false,
+  maxRows: 2000,
+  columns: [
+    col("name", "Exhibitor", true, "text", "Northside Staging", "The company, as it trades."),
+    col("category", "Category", false, "text", "Stands & staging", "A short label people can filter by."),
+    col("description", "What it does", false, "text", "Stage and stand builds for exhibitions.", "One sentence."),
+    col("website", "Website", false, "url", "https://example.com", "Full URL."),
+    col("email", "General email", false, "email", "hello@example.com", "The company's general mailbox, never a named person's."),
+    col("phone", "General phone", false, "text", "+974 4000 0000", "The company's switchboard, with country code."),
+    col("city", "City", false, "text", "Doha", "Where the company is based."),
+    col("stand", "Stand", false, "text", "B12", "Stand or booth number, if published."),
+  ],
+  collect: [
+    "Take the exhibitors from the event's own exhibitor list, with what the event or the exhibitor publishes about each.",
+    "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email or mobile number.",
+  ],
+};
+const sponsorsDataset: Dataset = {
+  id: "sponsors",
+  file: "sponsors.csv",
+  title: "Sponsors and partners",
+  why: "The sponsors and partners, for Exhibitors & sponsors.",
+  required: false,
+  maxRows: 500,
+  columns: [
+    col("name", "Sponsor", true, "text", "Example Bank", "As the event lists it."),
+    col("group", "Group", false, "text", "Gold sponsors", "The event's own grouping."),
+    col("role", "Role", false, "text", "Official banking partner", "As published."),
+    col("description", "About", false, "text", "", "One sentence."),
+    col("website", "Website", false, "url", "https://example.com", "Full URL."),
+  ],
+  collect: ["Copy the sponsors and partners from the event's own sponsors page, in its own groups."],
+};
+
+/** The required files not accepted yet. A required file with `unless` is not needed when one of those files is. */
+export function missingRequired(spec: PluginDataSpec, accepted: (id: string) => boolean): Dataset[] {
+  return spec.datasets.filter((d) => d.required && !accepted(d.id) && !(d.unless ?? []).some(accepted));
+}
 
 // Coworking and chambers (`members` in industry-functions.ts): the member businesses find_members searches, from
 // plug-in version 0.12.0. Company-level details of members that agreed to be listed; never a named person's.
@@ -356,6 +440,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
 const INDUSTRY_NOTES: Partial<Record<string, string[]>> = {
   coworking: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only."],
   chambers: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only.", "Member-only documents, board papers or anything the chamber does not publish to the public."],
+  events: ["In speakers.csv and exhibitors.csv: only what the event itself publishes. Company-level contact details for exhibitors; never a named person's private email, phone number or address."],
   pharmacy: ["Never upload prescriptions, medication lists or patient records."],
   "mental-health": ["Never upload client names, notes or diagnoses."],
 };
@@ -378,11 +463,13 @@ export function dataSpec(industry: string): PluginDataSpec | null {
     functionTitle: fn.title,
     datasets: [
       businessDataset(ind.name, ex, Boolean(fn.software)),
-      ...engineDatasets(fn.engine, fn.noun, ex),
+      // 0.18.0: a show or conference publishes its programme instead of a venue's spaces.
+      ...engineDatasets(fn.engine, fn.noun, ex).map((d) => (fn.show && d.id === "inventory" ? { ...d, unless: SHOW_FILES } : d)),
       servicesDataset(ex),
       faqDataset(ex),
       ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
+      ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),
     ],
     never: [...BASE_NEVER, ...(INDUSTRY_NOTES[industry] ?? []), ...(fn.note ? [`The plug-in's own rule: ${fn.note}`] : [])],
   };

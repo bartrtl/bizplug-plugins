@@ -176,6 +176,12 @@
       "collect": [
         "Copy each bookable option and its standard published rate from the website or booking engine.",
         "Use the rate customers see before discounts. Note in faqs.csv whether taxes and fees are included."
+      ],
+      "unless": [
+        "sessions",
+        "speakers",
+        "exhibitors",
+        "sponsors"
       ]
     },
     {
@@ -265,11 +271,273 @@
         "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
         "Keep each answer factual and current. Leave out anything the owner has not confirmed."
       ]
+    },
+    {
+      "id": "sessions",
+      "file": "sessions.csv",
+      "title": "Agenda",
+      "why": "The sessions of the show or conference, for Agenda.",
+      "required": false,
+      "maxRows": 1000,
+      "columns": [
+        {
+          "key": "date",
+          "label": "Date",
+          "required": true,
+          "type": "date",
+          "example": "2026-09-01",
+          "help": "YYYY-MM-DD."
+        },
+        {
+          "key": "start",
+          "label": "Starts",
+          "required": false,
+          "type": "time",
+          "example": "09:00",
+          "help": "24-hour HH:MM, local time."
+        },
+        {
+          "key": "end",
+          "label": "Ends",
+          "required": false,
+          "type": "time",
+          "example": "09:50",
+          "help": "24-hour HH:MM."
+        },
+        {
+          "key": "title",
+          "label": "Session",
+          "required": true,
+          "type": "text",
+          "example": "Opening keynote",
+          "help": "The session's title, as published."
+        },
+        {
+          "key": "format",
+          "label": "Format",
+          "required": false,
+          "type": "text",
+          "example": "Panel",
+          "help": "Keynote, panel, workshop, break…"
+        },
+        {
+          "key": "speakers",
+          "label": "Speakers",
+          "required": false,
+          "type": "text",
+          "example": "Jane Doe; John Smith",
+          "help": "The speakers' names, separated by semicolons, as in speakers.csv."
+        },
+        {
+          "key": "stage",
+          "label": "Where",
+          "required": false,
+          "type": "text",
+          "example": "Main stage",
+          "help": "Stage, hall or room."
+        },
+        {
+          "key": "description",
+          "label": "About",
+          "required": false,
+          "type": "text",
+          "example": "What the session covers.",
+          "help": "One or two sentences."
+        }
+      ],
+      "collect": [
+        "Copy the agenda from the event's own programme page: one row per session, with its date, times, title and speakers."
+      ]
+    },
+    {
+      "id": "speakers",
+      "file": "speakers.csv",
+      "title": "Speakers",
+      "why": "The speakers, for Speakers.",
+      "required": false,
+      "maxRows": 1000,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Jane Doe",
+          "help": "As the event lists the speaker."
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "required": false,
+          "type": "text",
+          "example": "Chief Executive Officer",
+          "help": "Job title."
+        },
+        {
+          "key": "company",
+          "label": "Company",
+          "required": false,
+          "type": "text",
+          "example": "Example Events",
+          "help": "Organisation."
+        },
+        {
+          "key": "bio",
+          "label": "Bio",
+          "required": false,
+          "type": "text",
+          "example": "Twenty years in live events.",
+          "help": "The bio the event published."
+        },
+        {
+          "key": "linkedin",
+          "label": "LinkedIn",
+          "required": false,
+          "type": "url",
+          "example": "https://www.linkedin.com/in/janedoe",
+          "help": "Public profile, if the event links to it."
+        }
+      ],
+      "collect": [
+        "Take each speaker from the event's own speakers page: name, title, company and the bio published there. Nothing the event does not publish."
+      ]
+    },
+    {
+      "id": "exhibitors",
+      "file": "exhibitors.csv",
+      "title": "Exhibitors",
+      "why": "The exhibitors, for Exhibitors & sponsors. People contact an exhibitor directly with these details.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Exhibitor",
+          "required": true,
+          "type": "text",
+          "example": "Northside Staging",
+          "help": "The company, as it trades."
+        },
+        {
+          "key": "category",
+          "label": "Category",
+          "required": false,
+          "type": "text",
+          "example": "Stands & staging",
+          "help": "A short label people can filter by."
+        },
+        {
+          "key": "description",
+          "label": "What it does",
+          "required": false,
+          "type": "text",
+          "example": "Stage and stand builds for exhibitions.",
+          "help": "One sentence."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "email",
+          "label": "General email",
+          "required": false,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The company's general mailbox, never a named person's."
+        },
+        {
+          "key": "phone",
+          "label": "General phone",
+          "required": false,
+          "type": "text",
+          "example": "+974 4000 0000",
+          "help": "The company's switchboard, with country code."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Doha",
+          "help": "Where the company is based."
+        },
+        {
+          "key": "stand",
+          "label": "Stand",
+          "required": false,
+          "type": "text",
+          "example": "B12",
+          "help": "Stand or booth number, if published."
+        }
+      ],
+      "collect": [
+        "Take the exhibitors from the event's own exhibitor list, with what the event or the exhibitor publishes about each.",
+        "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email or mobile number."
+      ]
+    },
+    {
+      "id": "sponsors",
+      "file": "sponsors.csv",
+      "title": "Sponsors and partners",
+      "why": "The sponsors and partners, for Exhibitors & sponsors.",
+      "required": false,
+      "maxRows": 500,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Sponsor",
+          "required": true,
+          "type": "text",
+          "example": "Example Bank",
+          "help": "As the event lists it."
+        },
+        {
+          "key": "group",
+          "label": "Group",
+          "required": false,
+          "type": "text",
+          "example": "Gold sponsors",
+          "help": "The event's own grouping."
+        },
+        {
+          "key": "role",
+          "label": "Role",
+          "required": false,
+          "type": "text",
+          "example": "Official banking partner",
+          "help": "As published."
+        },
+        {
+          "key": "description",
+          "label": "About",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "One sentence."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        }
+      ],
+      "collect": [
+        "Copy the sponsors and partners from the event's own sponsors page, in its own groups."
+      ]
     }
   ],
   "never": [
     "Passwords, API keys or other secrets.",
     "Card numbers, bank details or government ID numbers.",
-    "Customers' personal data (names, phone numbers, addresses, health or financial details)."
+    "Customers' personal data (names, phone numbers, addresses, health or financial details).",
+    "In speakers.csv and exhibitors.csv: only what the event itself publishes. Company-level contact details for exhibitors; never a named person's private email, phone number or address."
   ]
 }

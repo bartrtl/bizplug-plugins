@@ -1,6 +1,6 @@
 # BizPlug Logistics & Delivery
 
-Version 0.17.0. Shipping rate estimate and pickup request for logistics & delivery businesses.
+Version 0.18.0. Shipping rate estimate and pickup request for logistics & delivery businesses.
 
 - Main function: Shipping rate estimate and pickup request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/logistics` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.17.0. Shipping rate estimate and pickup request for logistics & delive
 
 ## Changes
 
+- **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.
 - **0.17.0** (19 November 2026): Account tools: a business that runs its own MCP server can offer its tools in its plug-in, so signed-in customers work in their own account from ChatGPT.
 - **0.16.0** (19 November 2026): Customer sign-in with Clerk: a business that runs its own Clerk application can make its plug-in answer only its signed-in customers or members.
 - **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.

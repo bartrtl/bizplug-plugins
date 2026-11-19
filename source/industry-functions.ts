@@ -21,6 +21,7 @@ export type IndustryFunction = {
   members?: boolean; // the business may publish its member businesses: find_members and members.csv (plugins.ts, plugin-data.ts)
   infoFirst?: boolean; // the menu starts with "Ask a question": the plug-in mainly explains the business (chambers)
   software?: boolean; // a software product: from 0.15.0 the menu is Features, Pricing, Help & guides, Support, Book a demo (plugins.ts, software.ts)
+  show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 
 const NO_ADVICE = "Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records.";
@@ -29,7 +30,7 @@ const NO_FIN = "Information and scheduling only: never give financial, investmen
 // slug | engine | title | tool names | noun | span | perGuest | note
 const r = (
   slug: string, engine: Engine, title: string, tools: [string, string, string], noun: string,
-  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software">> = {},
+  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software" | "show">> = {},
 ): IndustryFunction => ({ slug, engine, title, tools, noun, ...extra });
 
 export const industryFunctions: IndustryFunction[] = [
@@ -51,7 +52,7 @@ export const industryFunctions: IndustryFunction[] = [
   // Lodging, venues, tickets and rentals: stay engine
   r("hospitality", "stay", "Room availability, rates and booking requests", ["check_room_availability", "request_booking", "get_booking_status"], "room type", { span: "nights" }),
   r("casinos", "stay", "Hotel rooms and show tickets (no wagering)", ["check_room_availability", "request_booking", "get_booking_status"], "room or show", { span: "nights", note: "Never place, take or discuss wagers or odds." }),
-  r("events", "stay", "Venue availability, pricing and date holds", ["check_venue_availability", "request_venue_hold", "get_hold_status"], "venue space", { span: "days" }),
+  r("events", "stay", "Venue availability, pricing and date holds", ["check_venue_availability", "request_venue_hold", "get_hold_status"], "venue space", { span: "days", show: true }),
   r("wedding-services", "stay", "Check your date and request a consultation", ["check_date_availability", "request_wedding_consultation", "get_request_status"], "package", { span: "single" }),
   r("bars-nightlife", "stay", "Table and guest-list requests", ["check_table_availability", "request_table", "get_reservation_status"], "table or guest list", { span: "single" }),
   r("travel", "stay", "Tour and trip availability with price per traveller", ["check_trip_availability", "request_trip_booking", "get_booking_status"], "trip or tour", { span: "single", perGuest: true }),
