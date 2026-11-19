@@ -342,8 +342,8 @@ const CLERK_SIGN_IN: Addon = {
   steps: [
     "In the Clerk Dashboard, open your application and the instance your customers sign in to: Production for real customers, Development to try it first.",
     "Open Agents, then MCP servers, and press Add MCP server. Enter your plug-in's test address and press Add server; do the same for its production address. Both addresses are shown on this panel. Tick Allow public clients to connect, so ChatGPT can register itself.",
-    "Open API keys and copy the publishable key (pk_…) and the secret key (sk_…) of the same instance.",
-    "Paste both here and press Save. BizPlug checks them with Clerk before saving. The secret key is stored encrypted and not shown again; save both fields empty to switch sign-in off.",
+    "Open API keys and copy the publishable key (pk_…). That is enough: sign-ins are checked with your instance's public keys and nothing secret is stored. Copy the secret key (sk_…) of the same instance too only if you switched Clerk to opaque access tokens.",
+    "Paste the key (or both keys) here and press Save. BizPlug checks them with Clerk before saving. A secret key is stored encrypted and not shown again; save both fields empty to switch sign-in off.",
     "Press Check sign-in. It checks your Clerk instance, your keys and your plug-in's version, and says what is still missing. It sends nothing to anyone.",
     "Add your plug-in again in ChatGPT (remove the old connector first): ChatGPT now opens your Clerk sign-in page. Sign in with a user of your application, and the plug-in answers as before.",
     "From the moment you save, your plug-in answers only signed-in customers, on test and in production. Customers who added it before must add it again and sign in.",
