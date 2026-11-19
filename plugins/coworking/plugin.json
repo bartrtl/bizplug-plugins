@@ -1,11 +1,15 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-coworking",
-  "version": "0.4.0",
+  "version": "0.15.0",
   "description": "The coworking & offices plug-in from BizPlug. Main function: desk and office availability and rates. It works from the business's own published profile, covering memberships, amenities and tour requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "msg2ai"
+    "name": "Bart Cant - Rethink Labs",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
   },
+  "homepage": "https://bizplug.ai/industries/coworking",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
     "com.openai": {
@@ -21,7 +25,13 @@
         "category": "Business",
         "websiteURL": "https://bizplug.ai/industries/coworking",
         "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms"
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
       },
       "review": {
         "commerce": false,
@@ -44,6 +54,11 @@
           {
             "prompt": "Go ahead and send it.",
             "expect": "Calls request_space_booking only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Which member businesses here could help with web design?",
+            "expect": "Calls find_members and lists the matching members with their published contact details, or says the business has not published a member list; says the customer contacts a member directly and offers no introduction.",
             "shouldTrigger": true
           },
           {

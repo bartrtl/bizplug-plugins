@@ -1,0 +1,16 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "bizplug-gener8tor-charlotte": {
+      "type": "streamable-http",
+      "url": "https://mcp.bizplug.ai/plugin/startups/gener8tor-charlotte",
+      "extensions": {
+        "com.openai": {
+          "auth": {
+            "type": "none"
+          }
+        }
+      }
+    }
+  }
+}

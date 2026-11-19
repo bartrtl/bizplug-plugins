@@ -1,18 +1,22 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-saas",
-  "version": "0.4.0",
-  "description": "The saas & software plug-in from BizPlug. Main function: book a product demo. It works from the business's own published profile, covering features, pricing, integrations and demo requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "version": "0.15.0",
+  "description": "The saas & software plug-in from BizPlug. Main function: book a product demo. It works from the business's own published profile, covering features, integrations, plans pages and demo requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "msg2ai"
+    "name": "Bart Cant - Rethink Labs",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
   },
+  "homepage": "https://bizplug.ai/industries/saas",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "BizPlug SaaS & Software",
         "shortDescription": "Book a product demo for saas & software businesses.",
-        "longDescription": "The saas & software plug-in from BizPlug. Main function: book a product demo. It works from the business's own published profile, covering features, pricing, integrations and demo requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The saas & software plug-in from BizPlug. Main function: book a product demo. It works from the business's own published profile, covering features, integrations, plans pages and demo requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Book a product demo",
           "Does it integrate with our CRM, and what does it cost?",
@@ -21,7 +25,13 @@
         "category": "Business",
         "websiteURL": "https://bizplug.ai/industries/saas",
         "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms"
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
       },
       "review": {
         "commerce": false,
@@ -44,6 +54,16 @@
           {
             "prompt": "Go ahead and send it.",
             "expect": "Calls request_demo only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What does it cost?",
+            "expect": "Calls get_pricing and shows the published plans, or only the pricing page when the product shows no plans; never invents a price or offers a subscription.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "How do I connect my CRM?",
+            "expect": "Calls search_help (or get_features) and gives the matching guide with its link, or says none is published.",
             "shouldTrigger": true
           },
           {

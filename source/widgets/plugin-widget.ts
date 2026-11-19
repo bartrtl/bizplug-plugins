@@ -11,10 +11,17 @@
 //   own categories and services from plugin.quick, and calendar shortcuts), search and category filters on a
 //   price list, an item or option on its own screen, Back through the screens visited, the business's
 //   published questions and answers (info), and, on the industry-wide plug-in, choosing the business.
+//   From 0.12.0, on a coworking plug-in whose business published its member businesses, the menu has a Members
+//   option (kind "members"): search and filters on the list, a member on its own screen with its published
+//   website, email and phone, and "Find a collaborator". The customer contacts a member themselves.
+//   From 0.15.0, on a software plug-in: Features (search, the plan and guide of each), Pricing (the plans, or only
+//   the pricing page), Help & guides (search and topics, each article opens on the product's site) and Support (a
+//   support request with a reference). Options marked hidden are kept for the card's flows but get no button.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
+import { siteConfig } from "@/lib/seo";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
 
@@ -24,6 +31,11 @@ const ICONS: Record<string, string> = {
   question: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4"/><path d="M12 16.5h.01"/>',
   status: '<path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="m9 14 2 2 4-4"/>',
   contact: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/>',
+  features: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
+  pricing: '<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  guides: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/>',
+  support: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 3.9 3.9M14.5 14.5l3.9 3.9M18.4 5.6l-3.9 3.9M9.5 14.5l-3.9 3.9"/>',
+  members: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.2a6.5 6.5 0 0 1 3.5 5.8"/>',
   store: '<path d="M3 9 4.5 4h15L21 9"/><path d="M3 9v11h18V9"/><path d="M3 9a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0"/><path d="M9 20v-6h6v6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
@@ -62,6 +74,8 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:7px;font-weight:650;font-size:13px;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
 .btn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .btn.wa{background:#25d366;color:#0b141a;border-color:transparent}
+.acts{margin-top:12px;gap:8px}
+.acts .btn{font-size:12.5px;padding:7px 12px}
 .btn:hover,.btn:focus-visible{filter:brightness(1.08)}
 .empty{color:var(--muted);padding:8px 0}
 .bar-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
@@ -113,6 +127,15 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .tbl td:first-child{color:var(--muted);width:90px}
 .sent ol{padding-left:18px;display:grid;gap:4px;font-size:13px;margin-top:6px}
 .sent strong{color:var(--fg)}
+.pay{margin-top:12px;padding:14px;border-radius:16px;border:1px solid var(--line);background:linear-gradient(135deg,var(--glow),transparent)}
+.pay .amt{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.pay .amt b{font-size:22px}
+.pay .amt span{color:var(--muted);font-size:12.5px}
+.pay .tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;background:#f5b94233;color:#f5b942}
+.pay .actions{margin-top:10px}
+.pay p{color:var(--muted);font-size:12.5px;margin-top:8px}
+.paid{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px;background:#2fbf7133;color:#2fbf71}
+.wait{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px;background:var(--card);color:var(--muted);border:1px solid var(--line)}
 .actions.sticky{margin-top:12px}
 .navs{display:flex;gap:14px;align-items:center;flex:none}
 .rowb{all:unset;display:block;width:100%;cursor:pointer;box-sizing:border-box}
@@ -142,7 +165,9 @@ const oa = () => window.openai || null;
 // catalog, availability, slots, estimate, status, contact, request (details before sending), sent, whatsapp.
 const state = { plugin: null, options: [], view: "loading", open: null, data: {}, f: {}, cart: {}, pick: null, business: "", busy: false, error: "", asked: "",
   // 0.4.0: the screens to go back through, the item or option that is open, every item seen (for the order summary), the chosen business.
-  hist: [], shown: null, going: false, sel: null, items: {}, bizName: "", businesses: [], faq: -1 };
+  hist: [], shown: null, going: false, sel: null, items: {}, bizName: "", businesses: [], faq: -1,
+  // 0.12.0: every member business seen, by id, for a member's own screen.
+  mem: {} };
 const p = () => state.plugin || {};
 function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName }); } catch (e) {} }
 function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; }
@@ -159,7 +184,7 @@ function receive(sc) {
   if (sc.plugin) { state.plugin = sc.plugin; state.options = sc.options || state.options; }
   if (sc.businesses) state.businesses = sc.businesses;
   if (sc.business) {
-    if (sc.business !== state.business) { state.cart = {}; state.items = {}; }
+    if (sc.business !== state.business) { state.cart = {}; state.items = {}; state.mem = {}; }
     state.business = sc.business;
     if (sc.plugin && sc.plugin.businessName) state.bizName = sc.plugin.businessName;
   }
@@ -173,6 +198,7 @@ function receive(sc) {
     if (sc.view === "catalog") { if (!nav()) state.cart = {}; ((sc.catalog || {}).items || []).forEach((x) => { state.items[x.id] = x; }); }
     if (nav() && (sc.view === "sent" || sc.view === "whatsapp")) state.cart = {};
     if (sc.view === "info") state.faq = -1;
+    if (sc.view === "members" && sc.members) { (sc.members.items || []).forEach((x) => { state.mem[x.id] = x; }); state.f.mq = sc.members.query || ""; }
     state.view = sc.view;
   }
   state.busy = false; state.error = "";
@@ -194,8 +220,17 @@ function ask(prompt) {
   else window.parent.postMessage({ jsonrpc: "2.0", id: Date.now(), method: "ui/message", params: { role: "user", content: [{ type: "text", text: prompt }] } }, "*");
   state.asked = prompt; state.view = "asked"; state.error = ""; render();
 }
+// ChatGPT opens web links from a card, not mailto: links, so an email goes through a page that starts it in the
+// customer's mail app. The address travels in the fragment and is not sent to the server.
+const MAIL_PAGE = __MAIL__;
 function openLink(href) {
   if (!href) return;
+  if (/^mailto:/i.test(href)) {
+    const m = href.slice(7).split("?");
+    let to = m[0]; try { to = decodeURIComponent(m[0]); } catch (e) {}
+    const subject = new URLSearchParams(m[1] || "").get("subject") || "";
+    href = MAIL_PAGE + "#to=" + encodeURIComponent(to) + (subject ? "&subject=" + encodeURIComponent(subject) : "");
+  }
   if (oa() && oa().openExternal) oa().openExternal({ href, redirectUrl: false });
   else window.open(href, "_blank", "noopener");
 }
@@ -334,16 +369,24 @@ function quickFor(o) {
   }
 }
 // Other places to go from a result: the look-up, the business's questions and answers, its contact details.
+// 0.7.0: the business's own buttons (WhatsApp, booking, directions, reviews, social media), where they help.
+function actionBar(keep, title) {
+  const list = (p().actions || []).filter((a) => a && /^https:\/\//.test(a.href) && keep(a)).slice(0, 12);
+  if (!list.length) return "";
+  return '<div class="more acts">' + (title ? "<span>" + esc(title) + "</span>" : "") + list.map((a) => '<button class="btn' + (a.key === "whatsapp" ? " wa" : "") + '" data-href="' + esc(a.href) + '">' + (a.key === "whatsapp" ? icon("whatsapp") : "") + esc(a.label) + "</button>").join("") + "</div>";
+}
 function links(except) {
-  if (!nav()) return "";
-  const out = state.options.map((o, i) => (o.kind === except || o.kind === "request" || o.kind === "status" ? "" : '<button class="q" data-open="' + i + '">' + esc(o.title) + "</button>")).join("");
-  return out ? '<div class="more"><span>More</span>' + out + "</div>" : "";
+  // Next to availability and open times: the business's own booking page, for a customer who wants a confirmed slot.
+  const book = except === "lookup" ? actionBar((a) => a.group === "calendars", "Or book directly") : "";
+  if (!nav()) return book;
+  const out = state.options.map((o, i) => (o.kind === except || o.hidden || o.kind === "request" || o.kind === "status" ? "" : '<button class="q" data-open="' + i + '">' + esc(o.title) + "</button>")).join("");
+  return book + (out ? '<div class="more"><span>More</span>' + out + "</div>" : "");
 }
 // Back: every screen left on the way is remembered, except the menu and the screens that only confirm.
 function track() {
   const cur = { v: state.view, open: state.open, sel: state.sel };
   const was = state.shown;
-  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && ((cur.v !== "item" && cur.v !== "option") || was.sel === cur.sel);
+  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && ((cur.v !== "item" && cur.v !== "option" && cur.v !== "member") || was.sel === cur.sel);
   if (same) return;
   if (["menu", "sent", "whatsapp", "loading"].indexOf(cur.v) >= 0) state.hist = [];
   else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
@@ -367,7 +410,8 @@ function picker() {
     '<div class="note" style="margin-top:0">Choose a business to see its prices, availability and requests here. Without one, the options below continue in the chat.</div></div>';
 }
 async function chooseBiz(name) {
-  const slug = String(name || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  // The name goes as typed: the server finds the business by its name or its address name.
+  const slug = String(name || "").trim().slice(0, 80);
   const contact = opt("contact");
   if (!slug || !contact) { state.error = "Type the name of the business."; render(); return; }
   state.busy = true; state.error = ""; render();
@@ -376,9 +420,9 @@ async function chooseBiz(name) {
     if (!sc || !sc.business) throw new Error("none");
     if (sc.plugin) { state.plugin = sc.plugin; state.options = sc.options || state.options; }
     state.business = sc.business; state.bizName = (sc.plugin && sc.plugin.businessName) || (sc.contact && sc.contact.name) || slug;
-    state.data = {}; state.cart = {}; state.items = {}; state.hist = []; state.f.biz = ""; state.busy = false; state.view = "menu";
+    state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.hist = []; state.f.biz = ""; state.busy = false; state.view = "menu";
     save(); render();
-  } catch (e) { state.busy = false; state.error = "No business with that name was found here."; render(); }
+  } catch (e) { state.busy = false; state.error = "No business with that name was found here. Check the spelling, or ask in the chat."; render(); }
 }
 
 function header() {
@@ -395,12 +439,13 @@ function contactBar() {
     (c.email ? '<button class="btn" data-href="' + esc(c.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>";
 }
 function menuView() {
-  const opts = state.options;
+  const opts = state.options.filter((o) => !o.hidden);
   const pick = picker();
   return pick + '<div class="grid">' + opts.map((o, i) =>
-    '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + i + '"><span class="ic">' + icon(o.kind) + "</span><span>" +
+    '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + state.options.indexOf(o) + '"><span class="ic">' + icon(o.kind) + "</span><span>" +
     '<div class="tt">' + esc(o.title) + (i === 0 ? '<span class="badge">Start here</span>' : "") + '</div><div class="dd">' + esc(o.description) + "</div></span></button>").join("") + "</div>" +
-    (p().bound || pick ? "" : '<div class="note">This plug-in serves every business in its industry: the assistant will ask which business you mean.</div>');
+    (p().bound || pick ? "" : '<div class="note">This plug-in serves every business in its industry: the assistant will ask which business you mean.</div>') +
+    actionBar((a) => a.where === "contact", p().businessName || p().title ? "Reach " + (p().businessName || p().title) : "");
 }
 function formView() {
   const o = state.options[state.open];
@@ -522,13 +567,24 @@ function statusView() {
   const s = state.data.status || {};
   const body = s.missing ? '<div class="sum"><div><b>' + esc(s.ref || "No reference") + "</b><span>No status is published for this reference. The business replies to requests by email.</span></div></div>"
     : '<div class="sum"><div><b>' + esc(s.status) + "</b><span>" + esc(s.ref) + (s.updated ? " · updated " + esc(s.updated) : "") + "</span></div></div>" + (s.note ? '<div class="note">' + esc(s.note) + "</div>" : "");
-  return top("Status") + body + '<div class="actions" style="margin-top:12px"><button class="btn" data-act="status">Check another</button></div>' + links("status");
+  // 0.13.0: a payment's state, from the provider via the status tool.
+  const pay = s.pay ? '<div style="margin:4px 0 6px">' + (s.pay.paid ? '<span class="paid">\u2713 Paid ' + esc(s.pay.total) + "</span>" : s.pay.waiting ? '<span class="wait">Waiting for payment</span>' : '<span class="wait">Not paid</span>') + "</div>" : "";
+  if (s.pay && s.pay.waiting) state.payRef = s.ref;
+  const again = s.pay && s.pay.waiting ? '<button class="btn" data-act="paid">Check again</button>' : "";
+  return top("Status") + pay + body + '<div class="actions" style="margin-top:12px">' + again + '<button class="btn" data-act="status">Check another</button></div>' + links("status");
+}
+function linkButtons(list) {
+  return (list || []).filter((l) => l && /^https:\/\//.test(l.href)).slice(0, 12).map((l) => '<button class="btn" data-href="' + esc(l.href) + '">' + esc(l.label) + "</button>").join("");
 }
 function contactView() {
   const c = state.data.contact || {};
   const row = (label, value, href) => (value ? "<tr><td>" + label + "</td><td>" + (href ? '<button class="link" data-href="' + esc(href) + '">' + esc(value) + "</button>" : esc(value)) + "</td></tr>" : "");
   const rows = row("Phone", c.phone, c.phone ? "tel:" + c.phone.replace(/[^+\d]/g, "") : "") + row("Email", c.email, c.email ? "mailto:" + c.email : "") + row("Website", c.website, c.website) + row("Address", c.address) + row("Hours", c.hours);
-  return top(c.name || "Contact") + (rows ? '<table class="tbl">' + rows + "</table>" : '<div class="empty">This business has not published contact details.</div>') + links("contact");
+  // 0.5.0: the business's own WhatsApp number, when it saved one.
+  // 0.6.0: buttons to the business's own pages (booking, directions, reviews), when it saved them.
+  const more = linkButtons(c.links);
+  const wa = c.whatsapp || more ? '<div class="actions" style="margin-top:12px">' + (c.whatsapp ? '<button class="btn wa" data-href="' + esc(c.whatsapp) + '">' + icon("whatsapp") + "Message on WhatsApp</button>" : "") + more + "</div>" : "";
+  return top(c.name || "Contact") + (rows || wa ? (rows ? '<table class="tbl">' + rows + "</table>" : "") + wa : '<div class="empty">This business has not published contact details.</div>') + links("contact");
 }
 // 0.4.0: what the business has published about itself, with its questions and answers one tap away. Anything
 // else is asked in the chat, where the assistant answers from the same published information.
@@ -550,6 +606,90 @@ function infoView() {
     '<div class="form" style="margin-top:14px">' + field("question", faqs.length ? "Something else?" : "Your question", { type: "textarea", placeholder: (q && q.example) || "" }) + errLine() +
     '<div class="actions">' + primary("Ask in the chat", "askq") + '</div><div class="note" style="margin-top:0">What you see here is the information the business has published. Other questions are answered in the chat from the same information.</div></div>' + links("question");
 }
+// ---- Members (version 0.12.0, coworking) ----
+// The business's published member businesses: a search box, its own industries and sites as filters, a member
+// on its own screen, and "Find a collaborator". The card only shows what the business lists for each member; the customer
+// writes or calls the member themselves.
+const memberArgs = (over) => { const d = state.data.members || {}; return clean(Object.assign({ query: v("mq"), industry: d.industry, location: d.location }, over || {})); };
+const membersAsk = (a) => (a.query ? "Which member businesses match " + a.query + "?" : "Which businesses are members here" + (a.industry ? " in " + a.industry : "") + (a.location ? " at " + a.location : "") + "?");
+const findMembers = (over) => { const o = opt("members"), a = memberArgs(over); run(o && o.tool, a, membersAsk(a)); };
+function membersView() {
+  const d = state.data.members || { items: [] };
+  const o = opt("members");
+  const inds = d.industries || [], locs = d.locations || [];
+  const chips = (list, attr, all, on) => '<div class="qs">' + chip(all, attr, "", !on) + list.map((x) => chip(esc(x.name) + " <small>" + x.count + "</small>", attr, x.name, x.name === on)).join("") + "</div>";
+  const head = top(o ? o.title : "Members") +
+    '<div class="find"><input type="search" data-f="mq" data-enter="mfind" value="' + esc(state.f.mq || "") + '" placeholder="A name, a kind of business, or what you need"><button class="btn" data-act="mfind">Search</button></div>' +
+    (inds.length ? chips(inds, "data-mind", "All", d.industry) : "") +
+    (locs.length > 1 ? '<div class="qlabel" style="margin-top:8px">Where</div>' + chips(locs, "data-mloc", "Anywhere", d.location) : "") +
+    '<div class="actions" style="margin:12px 0"><button class="btn go" data-act="collab">Find a collaborator</button></div>';
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">No member matches' + (d.query ? ' "' + esc(d.query) + '"' : "") + ". Try other words or another filter.</div>" + errLine() + links("members");
+  const rows = items.map((x) =>
+    '<div class="it"><button class="rowb" data-member="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="qlabel">' + esc(x.industry) + "</span></div>" +
+    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + (x.why ? '<div class="bl clamp">' + esc(x.why) + "</div>" : "") + "</button></div>").join("");
+  return head + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
+    '<div class="note">These are the details ' + esc(d.business || "the business") + " lists for its members. You contact a member directly; nobody introduces you or passes a message on.</div>" + links("members");
+}
+function memberView() {
+  const m = state.mem[state.sel];
+  if (!m) return membersView();
+  const row = (label, value) => (value ? "<tr><td>" + label + "</td><td>" + esc(value) + "</td></tr>" : "");
+  const web = /^https:\/\//.test(m.website), mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email);
+  const facts = row("Looking for", m.lookingFor) + row("Offers", m.offers) + row("Phone", m.phone) + (web ? "" : row("Website", m.website)) + (mail ? row("Email", m.email) : "");
+  return top(m.name) + (m.industry || m.location ? '<div class="sum"><div><b>' + esc(m.industry || m.location) + "</b><span>" + esc(m.industry ? m.location : "") + "</span></div></div>" : "") +
+    (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
+    (web || mail ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
+      (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
+    '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>";
+}
+function collabView() {
+  return '<div class="form">' + top("Find a collaborator") + '<div class="hint">Say what you need, what you can offer, or both, to see the members whose entries match.</div>' +
+    field("mneed", "What do you need?", { optional: true, placeholder: "e.g. help with a website" }) + field("moffer", "What can you offer?", { optional: true, placeholder: "e.g. bookkeeping for small teams" }) + errLine() +
+    '<div class="actions">' + primary("Show matching members", "match") + "</div>" +
+    '<div class="note" style="margin-top:0">Your words are matched against each member&rsquo;s entry, above all what it offers and what it is looking for. You contact a member directly.</div></div>';
+}
+
+// ---- Software products (version 0.15.0) ----
+const findIn = (kind, over) => { const o = opt(kind); const a = clean(Object.assign({ query: v(kind === "features" ? "fq" : "gq") }, over || {})); run(o && o.tool, a, (o && o.example) || ""); };
+function featuresView() {
+  const d = state.data.features || { items: [] };
+  const o = opt("features");
+  const head = top(o ? o.title : "Features") + '<div class="find"><input type="search" data-f="fq" data-enter="ffind" value="' + esc(state.f.fq || "") + '" placeholder="A feature, or what you want to do"><button class="btn" data-act="ffind">Search</button></div><div style="height:8px"></div>';
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">' + (d.query ? 'No feature matches "' + esc(d.query) + '". Try other words.' : "No features are published yet.") + "</div>" + errLine() + links("features");
+  return head + '<div class="list">' + items.map((x) => '<div class="it"><div class="nm"><b>' + esc(x.name) + "</b>" + (x.plan ? '<span class="tag">' + esc(x.plan) + "</span>" : "") + "</div>" +
+    (x.description ? '<div class="bl">' + esc(x.description) + "</div>" : "") + (x.guide ? '<div class="acts"><button class="btn" data-href="' + esc(x.guide) + '">Guide</button></div>' : "") + "</div>").join("") + "</div>" +
+    (d.more ? '<div class="note">' + d.more + " more: search to narrow the list.</div>" : "") + errLine() + links("features");
+}
+function pricingView() {
+  const d = state.data.pricing || { plans: [] };
+  const o = opt("pricing");
+  const plans = d.plans || [];
+  const page = d.url ? '<div class="actions" style="margin-top:12px"><button class="btn go" data-href="' + esc(d.url) + '">' + (plans.length ? "Full pricing" : "See plans and prices") + "</button></div>" : "";
+  if (!plans.length) return top(o ? o.title : "Pricing") + '<div class="sum"><div><b>' + (d.url ? "Plans and prices" : "Pricing") + "</b><span>" + (d.url ? "Every plan and its price are on " + esc(d.business || "the") + "’s own pricing page." : "No pricing is published here. Ask the team in the chat or with Contact.") + "</span></div></div>" + page + links("pricing");
+  return top(o ? o.title : "Pricing") + '<div class="list">' + plans.map((x) => '<div class="it"><div class="nm"><b>' + esc(x.name) + '</b><span class="pr">' + esc([x.price, x.billing].filter(Boolean).join(" ")) + "</span></div>" + (x.includes ? '<div class="bl">' + esc(x.includes) + "</div>" : "") + "</div>").join("") + "</div>" + page +
+    '<div class="note">As published by ' + esc(d.business || "the business") + ". Nothing is bought or started here.</div>" + links("pricing");
+}
+function guidesView() {
+  const d = state.data.guides || { items: [] };
+  const o = opt("guides");
+  const topics = d.topics || [];
+  const head = top(o ? o.title : "Help & guides") + '<div class="find"><input type="search" data-f="gq" data-enter="gfind" value="' + esc(state.f.gq || "") + '" placeholder="What do you need help with?"><button class="btn" data-act="gfind">Search</button></div>' +
+    (topics.length > 1 ? '<div class="qs" style="margin:8px 0 12px">' + chip("All", "data-gtopic", "", !d.topic) + topics.map((t) => chip(esc(t.name) + " <small>" + t.count + "</small>", "data-gtopic", t.name, t.name === d.topic)).join("") + "</div>" : '<div style="height:8px"></div>');
+  const items = d.items || [];
+  const docs = d.docs ? '<div class="actions" style="margin-top:12px"><button class="btn" data-href="' + esc(d.docs) + '">All documentation</button></div>' : "";
+  if (!items.length) return head + '<div class="empty">' + (d.query ? 'No article matches "' + esc(d.query) + '".' : "No help articles are published here yet.") + "</div>" + docs + errLine() + links("guides");
+  return head + '<div class="list">' + items.map((g) => '<div class="it"><button class="rowb" data-href="' + esc(g.url) + '"><div class="nm"><b>' + esc(g.title) + "</b>" + (g.topic ? '<span class="qlabel">' + esc(g.topic) + "</span>" : "") + "</div>" + (g.summary ? '<div class="bl clamp">' + esc(g.summary) + "</div>" : "") + "</button></div>").join("") + "</div>" +
+    (d.more ? '<div class="note">' + d.more + " more: search or choose a topic.</div>" : "") + docs + errLine() + links("guides");
+}
+function supportView() {
+  const o = opt("support");
+  return '<div class="form">' + top(o ? o.title : "Support") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
+    field("stopic", "Subject", { placeholder: "e.g. I can’t sign in" }) + field("smessage", "What happened?", { type: "textarea", placeholder: "What you were doing, what you expected, and what you saw" }) + whoFields() + errLine() +
+    '<div class="actions">' + primary("Send to support", "support") + '</div><div class="note" style="margin-top:0">The support team replies by email. You get a reference to check it later.</div></div>' + links("support");
+}
+
 function requestView() {
   const k = state.pick || {};
   const request = opt("request");
@@ -565,9 +705,22 @@ function requestView() {
     '<div class="actions">' + primary("Send request", "request") + '<button class="btn" data-act="unpick">Back</button></div>' +
     '<div class="note">The business confirms every request itself. Nothing is booked, held or charged here.</div></div>';
 }
+// 0.13.0: the pay step. The total and the provider come from the server; the card only opens the provider's own page
+// (card details are never typed here) and asks the status tool whether it was paid.
+function payBox(s) {
+  const pay = s.pay;
+  if (!pay || !/^https:\/\//.test(pay.url)) return "";
+  state.payRef = s.reference;
+  return '<div class="pay"><div class="amt"><div><span>To pay' + (pay.testMode ? '<span class="tag">TEST</span>' : "") + "</span><b>" + esc(pay.total) + "</b></div><span>" + esc(pay.provider) + " checkout</span></div>" +
+    '<div class="actions"><button class="primary" data-href="' + esc(pay.url) + '">Pay now</button>' + (opt("status") ? '<button class="btn" data-act="paid">I\u2019ve paid</button>' : "") + "</div>" +
+    "<p>You pay on " + esc(pay.provider) + "\u2019s page, in the business\u2019s name. Card details are never entered in ChatGPT." + (pay.testMode ? " Test mode: no real money; use the test card 4242 4242 4242 4242." : "") + " The page stays open for 30 minutes.</p></div>";
+}
 function sentView() {
   const s = state.data.sent || { lines: [] };
-  return '<div class="sent"><b>Request sent</b><p>Reference <strong>' + esc(s.reference) + "</strong></p>" + s.lines.map((l) => "<p>" + esc(l) + "</p>").join("") + '<p class="note">' + esc(s.note) + '</p></div><div class="actions" style="margin-top:12px"><button class="btn" data-view="menu">← Menu</button>' + contactButton() + "</div>";
+  const box = payBox(s);
+  // A card that draws the pay step drops the same link from the plain buttons.
+  const others = box ? (s.links || []).filter((l) => !s.pay || l.href !== s.pay.url) : s.links;
+  return '<div class="sent"><b>Request sent</b><p>Reference <strong>' + esc(s.reference) + "</strong></p>" + s.lines.map((l) => "<p>" + esc(l) + "</p>").join("") + '<p class="note">' + esc(s.note) + "</p></div>" + box + '<div class="actions" style="margin-top:12px"><button class="btn" data-view="menu">← Menu</button>' + (s.whatsapp ? '<button class="btn wa" data-href="' + esc(s.whatsapp) + '">' + icon("whatsapp") + "Message on WhatsApp</button>" : "") + linkButtons(others) + contactButton() + "</div>";
 }
 // 0.4.0: from a sent request, the business's contact details are one tap away.
 function contactButton() {
@@ -595,6 +748,12 @@ function openOption(i) {
   if (!o) return;
   state.error = ""; state.hint = "";
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
+  // 0.15.0: software products. Features, Pricing and Help open with their results; Support opens its form.
+  if (o.kind === "features" || o.kind === "guides") { state.f[o.kind === "features" ? "fq" : "gq"] = ""; run(o.tool, {}, o.example); return; }
+  if (o.kind === "pricing") { run(o.tool, {}, o.example); return; }
+  if (o.kind === "support") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } state.view = "support"; render(); return; }
+  // 0.12.0: the member list opens unfiltered, by industry.
+  if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
   if (o.kind === "question" && nav() && inCard()) { state.open = i; run(o.tool, {}, "", () => { state.view = "form"; render(); }); return; }
   if (o.kind === "request" && inCard()) {
@@ -618,7 +777,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView };
+  const views = { item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const on = (sel, fn) => app.querySelectorAll(sel).forEach((el) => el.addEventListener("click", () => fn(el)));
@@ -636,6 +795,7 @@ function render() {
     run(o.tool, f.args(), fallback);
   }));
   on('[data-act="again"]', () => { state.open = state.options.findIndex((x) => x.kind === "lookup"); state.hint = ""; state.view = "form"; state.error = ""; render(); });
+  on('[data-act="paid"]', () => { const st = opt("status"); if (state.payRef && st) run(st.tool, { reference: state.payRef }, "I have paid. What is the status of " + state.payRef + "?"); });
   on('[data-act="status"]', () => { state.open = state.options.findIndex((x) => x.kind === "status"); state.hint = ""; state.view = "form"; state.error = ""; render(); });
   on("[data-more]", (b) => { state.cart[b.dataset.more] = Math.min((state.cart[b.dataset.more] || 0) + 1, 99); render(); });
   on("[data-less]", (b) => { state.cart[b.dataset.less] = Math.max((state.cart[b.dataset.less] || 0) - 1, 0); render(); });
@@ -667,7 +827,23 @@ function render() {
   on('[data-act="askq"]', () => guard(() => { need(v("question"), "Type your question."); ask(v("question")); }));
   on("[data-biz]", (b) => chooseBiz(b.dataset.biz));
   on('[data-act="biz"]', () => chooseBiz(v("biz")));
-  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.hist = []; state.error = ""; save(); render(); });
+  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.options = state.options.filter((o) => o.kind !== "members"); state.hist = []; state.error = ""; save(); render(); });
+  // ---- Software products (version 0.15.0) ----
+  on('[data-act="ffind"]', () => findIn("features"));
+  on('[data-act="gfind"]', () => findIn("guides", { topic: (state.data.guides || {}).topic || "" }));
+  on("[data-gtopic]", (b) => { state.f.gq = ""; findIn("guides", { query: "", topic: b.dataset.gtopic }); });
+  on('[data-act="support"]', () => guard(() => {
+    const o = opt("support");
+    need(v("stopic"), "Add a subject."); need(v("smessage"), "Say what happened.");
+    run(o && o.tool, Object.assign(who(), { topic: v("stopic"), message: v("smessage") }), "I need support: " + v("stopic"));
+  }));
+  // ---- Members (version 0.12.0) ----
+  on('[data-act="mfind"]', () => findMembers());
+  on("[data-mind]", (b) => findMembers({ industry: b.dataset.mind }));
+  on("[data-mloc]", (b) => findMembers({ location: b.dataset.mloc }));
+  on("[data-member]", (b) => { state.sel = b.dataset.member; state.view = "member"; state.error = ""; render(); });
+  on('[data-act="collab"]', () => { state.view = "collab"; state.error = ""; render(); });
+  on('[data-act="match"]', () => guard(() => { need(v("mneed") || v("moffer"), "Say what you need or what you can offer."); state.f.mq = [v("mneed"), v("moffer")].filter(Boolean).join(" "); findMembers({ industry: "", location: "" }); }));
   const filter = app.querySelector("[data-filter]");
   const applyFilter = () => { const w = String(state.f.filter || "").toLowerCase().trim(); app.querySelectorAll(".faq").forEach((el) => { el.style.display = !w || el.dataset.text.indexOf(w) >= 0 ? "" : "none"; }); };
   if (filter) { applyFilter(); filter.addEventListener("input", () => { state.f.filter = filter.value; applyFilter(); }); }
@@ -693,7 +869,7 @@ window.addEventListener("message", (e) => {
 render();
 `;
 
-const SCRIPT = SCRIPT_SRC.replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK));
+const SCRIPT = SCRIPT_SRC.replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
 const PLUGIN_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${CSS}</style></head><body><div id="app"></div><script type="module">${SCRIPT.replace(/<\/script/gi, "<\\/script")}</script></body></html>`;
 
 export const pluginWidgetHtml = () => PLUGIN_HTML;
@@ -722,5 +898,5 @@ export const pluginWidgetMeta = {
   "openai/widgetPrefersBorder": true,
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
-  "openai/widgetCSP": { connect_domains: [], resource_domains: [], redirect_domains: ["https://wa.me", "https://api.whatsapp.com"] },
+  "openai/widgetCSP": { connect_domains: [], resource_domains: [], redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
 };

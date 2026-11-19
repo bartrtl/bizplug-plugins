@@ -54,6 +54,22 @@
           "help": "Full URL."
         },
         {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Coworking & Offices in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
@@ -249,11 +265,100 @@
         "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
         "Keep each answer factual and current. Leave out anything the owner has not confirmed."
       ]
+    },
+    {
+      "id": "members",
+      "file": "members.csv",
+      "title": "Member businesses",
+      "why": "The member businesses people can find in the plug-in and contact directly. List only members that agreed to be listed.",
+      "required": false,
+      "maxRows": 500,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Member business",
+          "required": true,
+          "type": "text",
+          "example": "Northside Design Studio",
+          "help": "The company's name, as it trades."
+        },
+        {
+          "key": "industry",
+          "label": "Industry",
+          "required": false,
+          "type": "text",
+          "example": "Design",
+          "help": "A short label people can filter by. Use the same label for similar members."
+        },
+        {
+          "key": "description",
+          "label": "What it does",
+          "required": false,
+          "type": "text",
+          "example": "Brand and web design for small businesses.",
+          "help": "One sentence."
+        },
+        {
+          "key": "location",
+          "label": "Site or floor",
+          "required": false,
+          "type": "text",
+          "example": "2nd floor",
+          "help": "Which site or floor, when there is more than one."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL of the company's website."
+        },
+        {
+          "key": "email",
+          "label": "General email",
+          "required": false,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The company's general mailbox, never a named person's private address."
+        },
+        {
+          "key": "phone",
+          "label": "General phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0142",
+          "help": "The company's switchboard, with country code. Never a personal mobile number."
+        },
+        {
+          "key": "looking_for",
+          "label": "Looking for",
+          "required": false,
+          "type": "text",
+          "example": "Developers to partner with on client websites",
+          "help": "What the member wants to collaborate on or is looking for."
+        },
+        {
+          "key": "offers",
+          "label": "Offers",
+          "required": false,
+          "type": "text",
+          "example": "A free 30-minute brand review for other members",
+          "help": "What the member can offer other members or visitors."
+        }
+      ],
+      "collect": [
+        "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
+        "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+        "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
+        "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on."
+      ]
     }
   ],
   "never": [
     "Passwords, API keys or other secrets.",
     "Card numbers, bank details or government ID numbers.",
-    "Customers' personal data (names, phone numbers, addresses, health or financial details)."
+    "Customers' personal data (names, phone numbers, addresses, health or financial details).",
+    "In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only."
   ]
 }

@@ -1,0 +1,78 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-chambers",
+  "version": "0.15.0",
+  "description": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - Rethink Labs",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "homepage": "https://bizplug.ai/industries/chambers",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Chambers of Commerce & Business Associations",
+        "shortDescription": "Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.",
+        "longDescription": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Chamber information, membership enquiries and member businesses",
+          "Who can join, what are the membership levels, and what events are coming up?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/chambers",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Chamber information, membership enquiries and member businesses",
+            "expect": "Calls get_business_info and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Who can join, what are the membership levels, and what events are coming up?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls send_chamber_enquiry only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Which member businesses here could help with web design?",
+            "expect": "Calls find_members and lists the matching members with their published contact details, or says the business has not published a member list; says the customer contacts a member directly and offers no introduction.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

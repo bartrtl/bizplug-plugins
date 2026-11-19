@@ -54,6 +54,22 @@
           "help": "Full URL."
         },
         {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "SaaS & Software in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
@@ -100,6 +116,38 @@
           "type": "email",
           "example": "orders@example.com",
           "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        },
+        {
+          "key": "pricing_url",
+          "label": "Pricing page",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/pricing",
+          "help": "Where your plans and prices are. Pricing links here; a plug-in listed in ChatGPT's directory only links here."
+        },
+        {
+          "key": "support_url",
+          "label": "Support page",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/support",
+          "help": "Your help centre or support contact page."
+        },
+        {
+          "key": "docs_url",
+          "label": "Documentation",
+          "required": false,
+          "type": "url",
+          "example": "https://docs.example.com",
+          "help": "Where your help articles and guides live."
+        },
+        {
+          "key": "status_url",
+          "label": "Status page",
+          "required": false,
+          "type": "url",
+          "example": "https://status.example.com",
+          "help": "Your service status page, if you have one."
         }
       ],
       "collect": [
@@ -247,6 +295,142 @@
       "collect": [
         "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
         "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    },
+    {
+      "id": "features",
+      "file": "features.csv",
+      "title": "Features",
+      "why": "What the product does, so people can find the feature they need, the plan it is on and the guide that explains it.",
+      "required": false,
+      "maxRows": 200,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Feature",
+          "required": true,
+          "type": "text",
+          "example": "CRM sync",
+          "help": "A short name, as on your website."
+        },
+        {
+          "key": "description",
+          "label": "What it does",
+          "required": false,
+          "type": "text",
+          "example": "Sends contacts and notes to Salesforce, HubSpot and Pipedrive.",
+          "help": "One or two sentences."
+        },
+        {
+          "key": "plan",
+          "label": "Plan",
+          "required": false,
+          "type": "text",
+          "example": "Team",
+          "help": "The plan that includes it, if not every plan does."
+        },
+        {
+          "key": "guide_url",
+          "label": "Guide",
+          "required": false,
+          "type": "url",
+          "example": "https://docs.example.com/crm-sync",
+          "help": "The help article that explains it."
+        }
+      ],
+      "collect": [
+        "Take the features from the product's features or product page, one per row, in the product's own words.",
+        "Put the plan only where a feature is limited to some plans."
+      ]
+    },
+    {
+      "id": "plans",
+      "file": "plans.csv",
+      "title": "Plans and prices",
+      "why": "What Pricing shows. A plug-in listed in ChatGPT's directory shows none of it and links to the pricing page instead.",
+      "required": false,
+      "maxRows": 20,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Plan",
+          "required": true,
+          "type": "text",
+          "example": "Team",
+          "help": "As on the pricing page."
+        },
+        {
+          "key": "price",
+          "label": "Price",
+          "required": false,
+          "type": "text",
+          "example": "$99",
+          "help": "As written on the pricing page, with the currency."
+        },
+        {
+          "key": "billing",
+          "label": "Billing",
+          "required": false,
+          "type": "text",
+          "example": "per month",
+          "help": "per month, per year, one-time, or custom."
+        },
+        {
+          "key": "includes",
+          "label": "Includes",
+          "required": false,
+          "type": "text",
+          "example": "Up to 10 members, CRM sync",
+          "help": "The main things the plan includes."
+        }
+      ],
+      "collect": [
+        "Copy the plans exactly from the current pricing page; leave out discounts that end soon."
+      ]
+    },
+    {
+      "id": "guides",
+      "file": "guides.csv",
+      "title": "Help articles and guides",
+      "why": "What Help & guides searches and links to.",
+      "required": false,
+      "maxRows": 300,
+      "columns": [
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Connect your CRM",
+          "help": "The article's title."
+        },
+        {
+          "key": "url",
+          "label": "Link",
+          "required": true,
+          "type": "url",
+          "example": "https://docs.example.com/connect-crm",
+          "help": "The article's own address."
+        },
+        {
+          "key": "topic",
+          "label": "Topic",
+          "required": false,
+          "type": "text",
+          "example": "Integrations",
+          "help": "A short label people can filter by."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": false,
+          "type": "text",
+          "example": "Connect Salesforce or HubSpot in three steps.",
+          "help": "One sentence."
+        }
+      ],
+      "collect": [
+        "List the articles from the help centre or documentation: title, link and topic. Public articles only."
       ]
     }
   ],

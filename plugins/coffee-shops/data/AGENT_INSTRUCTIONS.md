@@ -18,6 +18,8 @@ Columns (first row of the file, exactly these names):
 - `email` (required): Public email, email. The address customers may write to. Example: hello@example.com
 - `phone`: Public phone, text. With country code. Example: +1 704 555 0100
 - `website`: Website, url. Full URL. Example: https://example.com
+- `tagline`: What you are, text. A few words shown after your name in ChatGPT, e.g. "Harbor Street Studio – Yoga in Charlotte". Without it, the plug-in's industry is shown. Example: Coffee Shops & Cafes in Charlotte
+- `logo`: Logo URL, url. Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT. Example: https://example.com/logo.png
 - `address`: Address, text. Street address, if customers visit. Example: 123 Main St, Charlotte, NC 28202
 - `city`: City, text.  Example: Charlotte
 - `region`: State or country, text.  Example: NC
@@ -43,9 +45,10 @@ Columns (first row of the file, exactly these names):
 - `image`: Photo URL, url. The business's own photo (https). Leave empty rather than using someone else's image. Example: https://example.com/photos/latte-12oz.jpg
 
 How to collect it:
-1. Export the product or menu list from the point-of-sale or online shop (Square, Shopify, Toast, Clover and similar all export CSV), or copy it from the website menu.
-2. Map the export's columns to the template: one row per item, price as a plain number.
-3. Only include photos the business owns.
+1. With a Shopify shop or a Square account, import the list on the plug-in's page in the portal (Or import it from your shop) instead of making the file.
+2. Export the product or menu list from the point-of-sale or online shop (Square, Shopify, Toast, Clover and similar all export CSV), or copy it from the website menu.
+3. Map the export's columns to the template: one row per item, price as a plain number.
+4. Only include photos the business owns.
 
 ### services.csv (optional, up to 100 rows)
 A short list of what the business offers, used in answers.

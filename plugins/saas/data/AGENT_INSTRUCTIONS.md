@@ -18,12 +18,18 @@ Columns (first row of the file, exactly these names):
 - `email` (required): Public email, email. The address customers may write to. Example: hello@example.com
 - `phone`: Public phone, text. With country code. Example: +1 704 555 0100
 - `website`: Website, url. Full URL. Example: https://example.com
+- `tagline`: What you are, text. A few words shown after your name in ChatGPT, e.g. "Harbor Street Studio – Yoga in Charlotte". Without it, the plug-in's industry is shown. Example: SaaS & Software in Charlotte
+- `logo`: Logo URL, url. Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT. Example: https://example.com/logo.png
 - `address`: Address, text. Street address, if customers visit. Example: 123 Main St, Charlotte, NC 28202
 - `city`: City, text.  Example: Charlotte
 - `region`: State or country, text.  Example: NC
 - `hours`: Opening hours, text. As shown to customers. Example: Mon-Fri 09:00-17:00; Sat 10:00-14:00
 - `currency`: Currency, text. ISO code for the prices in the other files. Example: USD
 - `notify_email`: Requests go to, email. The team inbox that should receive requests from ChatGPT (not shown to customers). Example: orders@example.com
+- `pricing_url`: Pricing page, url. Where your plans and prices are. Pricing links here; a plug-in listed in ChatGPT's directory only links here. Example: https://example.com/pricing
+- `support_url`: Support page, url. Your help centre or support contact page. Example: https://example.com/support
+- `docs_url`: Documentation, url. Where your help articles and guides live. Example: https://docs.example.com
+- `status_url`: Status page, url. Your service status page, if you have one. Example: https://status.example.com
 
 How to collect it:
 1. Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.
@@ -73,6 +79,43 @@ Columns (first row of the file, exactly these names):
 How to collect it:
 1. Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).
 2. Keep each answer factual and current. Leave out anything the owner has not confirmed.
+
+### features.csv (optional, up to 200 rows)
+What the product does, so people can find the feature they need, the plan it is on and the guide that explains it.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Feature, text. A short name, as on your website. Example: CRM sync
+- `description`: What it does, text. One or two sentences. Example: Sends contacts and notes to Salesforce, HubSpot and Pipedrive.
+- `plan`: Plan, text. The plan that includes it, if not every plan does. Example: Team
+- `guide_url`: Guide, url. The help article that explains it. Example: https://docs.example.com/crm-sync
+
+How to collect it:
+1. Take the features from the product's features or product page, one per row, in the product's own words.
+2. Put the plan only where a feature is limited to some plans.
+
+### plans.csv (optional, up to 20 rows)
+What Pricing shows. A plug-in listed in ChatGPT's directory shows none of it and links to the pricing page instead.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Plan, text. As on the pricing page. Example: Team
+- `price`: Price, text. As written on the pricing page, with the currency. Example: $99
+- `billing`: Billing, text. per month, per year, one-time, or custom. Example: per month
+- `includes`: Includes, text. The main things the plan includes. Example: Up to 10 members, CRM sync
+
+How to collect it:
+1. Copy the plans exactly from the current pricing page; leave out discounts that end soon.
+
+### guides.csv (optional, up to 300 rows)
+What Help & guides searches and links to.
+
+Columns (first row of the file, exactly these names):
+- `title` (required): Title, text. The article's title. Example: Connect your CRM
+- `url` (required): Link, url. The article's own address. Example: https://docs.example.com/connect-crm
+- `topic`: Topic, text. A short label people can filter by. Example: Integrations
+- `summary`: Summary, text. One sentence. Example: Connect Salesforce or HubSpot in three steps.
+
+How to collect it:
+1. List the articles from the help centre or documentation: title, link and topic. Public articles only.
 
 ## Format
 - UTF-8 CSV with a header row; comma separated; quote cells that contain commas, quotes or line breaks.

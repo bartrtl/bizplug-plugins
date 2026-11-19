@@ -48,7 +48,7 @@ export type PluginDataSpec = {
 const col = (key: string, label: string, required: boolean, type: ColumnType, example: string, help: string): DataColumn => ({ key, label, required, type, example, help });
 
 // Shared by every plug-in. Examples come from plugin-examples.ts so each industry sees its own kind of business.
-const businessDataset = (name: string, ex?: IndustryExample): Dataset => ({
+const businessDataset = (name: string, ex?: IndustryExample, software = false): Dataset => ({
   id: "business",
   file: "business.csv",
   title: "Business details",
@@ -62,12 +62,23 @@ const businessDataset = (name: string, ex?: IndustryExample): Dataset => ({
     col("email", "Public email", true, "email", "hello@example.com", "The address customers may write to."),
     col("phone", "Public phone", false, "text", "+1 704 555 0100", "With country code."),
     col("website", "Website", false, "url", "https://example.com", "Full URL."),
+    col("tagline", "What you are", false, "text", `${name} in Charlotte`, "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."),
+    col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."),
     col("address", "Address", false, "text", "123 Main St, Charlotte, NC 28202", "Street address, if customers visit."),
     col("city", "City", false, "text", "Charlotte", ""),
     col("region", "State or country", false, "text", "NC", ""),
     col("hours", "Opening hours", false, "text", "Mon-Fri 09:00-17:00; Sat 10:00-14:00", "As shown to customers."),
     col("currency", "Currency", false, "text", "USD", "ISO code for the prices in the other files."),
     col("notify_email", "Requests go to", false, "email", "orders@example.com", "The team inbox that should receive requests from ChatGPT (not shown to customers)."),
+    // Software products (plug-in 0.15.0): the product's own pages, for Pricing, Help & guides, Support and Contact.
+    ...(software
+      ? [
+          col("pricing_url", "Pricing page", false, "url", "https://example.com/pricing", "Where your plans and prices are. Pricing links here; a plug-in listed in ChatGPT's directory only links here."),
+          col("support_url", "Support page", false, "url", "https://example.com/support", "Your help centre or support contact page."),
+          col("docs_url", "Documentation", false, "url", "https://docs.example.com", "Where your help articles and guides live."),
+          col("status_url", "Status page", false, "url", "https://status.example.com", "Your service status page, if you have one."),
+        ]
+      : []),
   ],
   collect: [
     "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
@@ -104,6 +115,94 @@ const servicesDataset = (ex?: IndustryExample): Dataset => ({
   collect: ["List the services from the website's services or about page, one per row, short names only."],
 });
 
+// Software products (`software` in industry-functions.ts), from plug-in version 0.15.0: what the product does, its
+// plans and its help articles, for Features, Pricing and Help & guides (software.ts).
+const featuresDataset: Dataset = {
+  id: "features",
+  file: "features.csv",
+  title: "Features",
+  why: "What the product does, so people can find the feature they need, the plan it is on and the guide that explains it.",
+  required: false,
+  maxRows: 200,
+  columns: [
+    col("name", "Feature", true, "text", "CRM sync", "A short name, as on your website."),
+    col("description", "What it does", false, "text", "Sends contacts and notes to Salesforce, HubSpot and Pipedrive.", "One or two sentences."),
+    col("plan", "Plan", false, "text", "Team", "The plan that includes it, if not every plan does."),
+    col("guide_url", "Guide", false, "url", "https://docs.example.com/crm-sync", "The help article that explains it."),
+  ],
+  collect: [
+    "Take the features from the product's features or product page, one per row, in the product's own words.",
+    "Put the plan only where a feature is limited to some plans.",
+  ],
+};
+const plansDataset: Dataset = {
+  id: "plans",
+  file: "plans.csv",
+  title: "Plans and prices",
+  why: "What Pricing shows. A plug-in listed in ChatGPT's directory shows none of it and links to the pricing page instead.",
+  required: false,
+  maxRows: 20,
+  columns: [
+    col("name", "Plan", true, "text", "Team", "As on the pricing page."),
+    col("price", "Price", false, "text", "$99", "As written on the pricing page, with the currency."),
+    col("billing", "Billing", false, "text", "per month", "per month, per year, one-time, or custom."),
+    col("includes", "Includes", false, "text", "Up to 10 members, CRM sync", "The main things the plan includes."),
+  ],
+  collect: ["Copy the plans exactly from the current pricing page; leave out discounts that end soon."],
+};
+const guidesDataset: Dataset = {
+  id: "guides",
+  file: "guides.csv",
+  title: "Help articles and guides",
+  why: "What Help & guides searches and links to.",
+  required: false,
+  maxRows: 300,
+  columns: [
+    col("title", "Title", true, "text", "Connect your CRM", "The article's title."),
+    col("url", "Link", true, "url", "https://docs.example.com/connect-crm", "The article's own address."),
+    col("topic", "Topic", false, "text", "Integrations", "A short label people can filter by."),
+    col("summary", "Summary", false, "text", "Connect Salesforce or HubSpot in three steps.", "One sentence."),
+  ],
+  collect: ["List the articles from the help centre or documentation: title, link and topic. Public articles only."],
+};
+
+// Coworking and chambers (`members` in industry-functions.ts): the member businesses find_members searches, from
+// plug-in version 0.12.0. Company-level details of members that agreed to be listed; never a named person's.
+const membersDataset: Dataset = {
+  id: "members",
+  file: "members.csv",
+  title: "Member businesses",
+  why: "The member businesses people can find in the plug-in and contact directly. List only members that agreed to be listed.",
+  required: false,
+  maxRows: 500,
+  columns: [
+    col("name", "Member business", true, "text", "Northside Design Studio", "The company's name, as it trades."),
+    col("industry", "Industry", false, "text", "Design", "A short label people can filter by. Use the same label for similar members."),
+    col("description", "What it does", false, "text", "Brand and web design for small businesses.", "One sentence."),
+    col("location", "Site or floor", false, "text", "2nd floor", "Which site or floor, when there is more than one."),
+    col("website", "Website", false, "url", "https://example.com", "Full URL of the company's website."),
+    col("email", "General email", false, "email", "hello@example.com", "The company's general mailbox, never a named person's private address."),
+    col("phone", "General phone", false, "text", "+1 704 555 0142", "The company's switchboard, with country code. Never a personal mobile number."),
+    col("looking_for", "Looking for", false, "text", "Developers to partner with on client websites", "What the member wants to collaborate on or is looking for."),
+    col("offers", "Offers", false, "text", "A free 30-minute brand review for other members", "What the member can offer other members or visitors."),
+  ],
+  collect: [
+    "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
+    "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+    "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
+    "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on.",
+  ],
+};
+
+// A chamber's members are spread over a city or region: the location column is where the member is based.
+const chamberMembersDataset: Dataset = {
+  ...membersDataset,
+  columns: membersDataset.columns.map((c) =>
+    c.key === "location" ? col("location", "City or area", false, "text", "South End, Charlotte", "Where the member is based, so people can filter by area.")
+    : c.key === "offers" ? col("offers", "Offers", false, "text", "A discount on brand reviews for fellow members", "What the member can offer other members or visitors.")
+    : c),
+};
+
 function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dataset[] {
   switch (engine) {
     case "order": {
@@ -126,6 +225,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("image", "Photo URL", false, "url", `https://example.com/photos/${it.id}.jpg`, "The business's own photo (https). Leave empty rather than using someone else's image."),
           ],
           collect: [
+            "With a Shopify shop or a Square account, import the list on the plug-in's page in the portal (Or import it from your shop) instead of making the file.",
             "Export the product or menu list from the point-of-sale or online shop (Square, Shopify, Toast, Clover and similar all export CSV), or copy it from the website menu.",
             "Map the export's columns to the template: one row per item, price as a plain number.",
             "Only include photos the business owns.",
@@ -254,6 +354,8 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
 
 /** Extra rules for industries where uploads could carry sensitive data. Engine notes are added automatically. */
 const INDUSTRY_NOTES: Partial<Record<string, string[]>> = {
+  coworking: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only."],
+  chambers: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only.", "Member-only documents, board papers or anything the chamber does not publish to the public."],
   pharmacy: ["Never upload prescriptions, medication lists or patient records."],
   "mental-health": ["Never upload client names, notes or diagnoses."],
 };
@@ -274,7 +376,14 @@ export function dataSpec(industry: string): PluginDataSpec | null {
     name: ind.name,
     engine: fn.engine,
     functionTitle: fn.title,
-    datasets: [businessDataset(ind.name, ex), ...engineDatasets(fn.engine, fn.noun, ex), servicesDataset(ex), faqDataset(ex)],
+    datasets: [
+      businessDataset(ind.name, ex, Boolean(fn.software)),
+      ...engineDatasets(fn.engine, fn.noun, ex),
+      servicesDataset(ex),
+      faqDataset(ex),
+      ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
+      ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
+    ],
     never: [...BASE_NEVER, ...(INDUSTRY_NOTES[industry] ?? []), ...(fn.note ? [`The plug-in's own rule: ${fn.note}`] : [])],
   };
 }

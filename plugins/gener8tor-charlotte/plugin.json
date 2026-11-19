@@ -1,0 +1,81 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-gener8tor-charlotte",
+  "version": "0.15.0",
+  "description": "Search the 19 startups from gener8tor's gBETA Charlotte and gBETA Charlotte Health cohorts (2025-2026) by thesis, sector and cohort, read each startup's description, rank a shortlist against your thesis and priorities, and reach the founders directly through their published email, WhatsApp, LinkedIn or website. Built for investors. Data comes from gener8tor's public portfolio (name, cohort, description, city, website or LinkedIn); industries are BizPlug's classification of each description. The plug-in never gives investment advice and never invents funding, traction, valuation or team facts. gener8tor's gALPHA Charlotte participants are not published, so they are not included. BizPlug is built by msg2ai, one of the listed startups, and is not affiliated with gener8tor.",
+  "author": {
+    "name": "Bart Cant - Rethink Labs",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "gener8tor Charlotte Startups for Investors",
+        "shortDescription": "Find the gBETA Charlotte startups that match your investment thesis.",
+        "longDescription": "Search the 19 startups from gener8tor's gBETA Charlotte and gBETA Charlotte Health cohorts (2025-2026) by thesis, sector and cohort, read each startup's description, rank a shortlist against your thesis and priorities, and reach the founders directly through their published email, WhatsApp, LinkedIn or website. Built for investors. Data comes from gener8tor's public portfolio (name, cohort, description, city, website or LinkedIn); industries are BizPlug's classification of each description. The plug-in never gives investment advice and never invents funding, traction, valuation or team facts. gener8tor's gALPHA Charlotte participants are not published, so they are not included. BizPlug is built by msg2ai, one of the listed startups, and is not affiliated with gener8tor.",
+        "defaultPrompt": [
+          "My thesis is B2B SaaS that automates back-office work. Rank the startups I should meet",
+          "Show me the healthtech startups from gBETA Charlotte Health",
+          "What can this plug-in do?",
+          "Help me contact this startup's founders"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/gener8tor/charlotte",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "My thesis is B2B SaaS that automates back-office work. Rank the startups I should meet",
+            "expect": "Calls search_startups with the thesis in query and stage/region as filters, and lists matching startups with pitch, country and programme.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "My thesis is AI for SME finance. Priorities: payments first, then SMEs, then AI. Rank the startups I should meet.",
+            "expect": "Calls rank_startups with the thesis and the priorities in order, and shows a ranked shortlist with each fit score and its reasons, without calling it investment advice.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Tell me more about the first one. How much have they raised?",
+            "expect": "Calls get_startup and says funding is not published, offering a web look-up or an intro request.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Introduce me to the founders.",
+            "expect": "Asks for the investor's own name and firm (never filling them from memory), calls contact_founders, and shows the draft intro with the startup's own email, WhatsApp, LinkedIn or website links for the investor to send directly; does not say BizPlug will pass anything on.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu and shows its options exactly as returned, starting with ranking by investment thesis and ending with Contact BizPlug; does not describe intros as BizPlug introductions.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Who is behind this, and how do I contact them?",
+            "expect": "Calls about_bizplug and gives BizPlug's website, email and, where set, WhatsApp link.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Should I invest in this startup?",
+            "expect": "Does not give investment advice; offers the published details instead.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "free"
+      }
+    }
+  }
+}

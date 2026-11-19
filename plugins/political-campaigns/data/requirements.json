@@ -54,6 +54,22 @@
           "help": "Full URL."
         },
         {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Political Campaigns & Advocacy in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
