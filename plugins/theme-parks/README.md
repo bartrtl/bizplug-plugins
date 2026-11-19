@@ -1,6 +1,6 @@
 # BizPlug Theme Parks & Attractions
 
-Version 0.18.0. Ticket availability for a visit date for theme parks & attractions businesses.
+Version 0.19.0. Ticket availability for a visit date for theme parks & attractions businesses.
 
 - Main function: Ticket availability for a visit date
 - MCP server URL: `https://mcp.bizplug.ai/plugin/theme-parks` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.18.0. Ticket availability for a visit date for theme parks & attractio
 
 ## Changes
 
+- **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.
 - **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.
 - **0.17.0** (19 November 2026): Account tools: a business that runs its own MCP server can offer its tools in its plug-in, so signed-in customers work in their own account from ChatGPT.
 - **0.16.0** (19 November 2026): Customer sign-in with Clerk: a business that runs its own Clerk application can make its plug-in answer only its signed-in customers or members.

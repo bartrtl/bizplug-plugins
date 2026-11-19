@@ -21,6 +21,12 @@
 //   (day filters, search), Speakers (search, a speaker on their own screen with the sessions they speak in),
 //   Exhibitors & sponsors (search, category filters, a company on its own screen with its website and email) and
 //   Send an enquiry (exhibiting, sponsoring, visiting or speaking, with a reference).
+//   From 0.19.0, on a business's plug-in whose own server declares an account menu (plugin.account, app-tools.ts):
+//   a button per entry (kind "account"). A form asks for its fields and runs the business's tool; a list shows
+//   the records a tool returns, each opening on its own screen with its actions; a longer job (a report) is
+//   waited for and then shown; a chat entry (dictating a note) hands over to the chat. A record to work in (a
+//   session) is chosen from chips, the first one preselected. What the screens show is described by the menu,
+//   as paths into the tool's result; every value is drawn as plain text.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
@@ -30,6 +36,13 @@ import { siteConfig } from "@/lib/seo";
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
 
 const ICONS: Record<string, string> = {
+  account: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  note: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+  mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/>',
+  folder: '<path d="M3 7a2 2 0 0 1 2-2h4l2 2.5h8a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',
+  list: '<path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/>',
+  check: '<path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9"/>',
+  report: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6"/><path d="M9 17h6"/>',
   lookup: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   request: '<path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/>',
   question: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4"/><path d="M12 16.5h.01"/>',
@@ -161,6 +174,9 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .faq .bl{margin-top:8px;white-space:pre-line}
 .sum.biz{align-items:center;justify-content:space-between;margin:0 0 12px}
 .sum.biz b{font-size:15px}
+.sum.sm b{font-size:14px}
+.pre{white-space:pre-line}
+.btn[disabled]{opacity:.55;cursor:default}
 `;
 
 const SCRIPT_SRC = String.raw`
@@ -455,7 +471,7 @@ function menuView() {
   const opts = state.options.filter((o) => !o.hidden);
   const pick = picker();
   return pick + '<div class="grid">' + opts.map((o, i) =>
-    '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + state.options.indexOf(o) + '"><span class="ic">' + icon(o.kind) + "</span><span>" +
+    '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + state.options.indexOf(o) + '"><span class="ic">' + icon(o.icon || o.kind) + "</span><span>" +
     '<div class="tt">' + esc(o.title) + (i === 0 ? '<span class="badge">Start here</span>' : "") + '</div><div class="dd">' + esc(o.description) + "</div></span></button>").join("") + "</div>" +
     (p().bound || pick ? "" : '<div class="note">This plug-in serves every business in its industry: the assistant will ask which business you mean.</div>') +
     actionBar((a) => a.where === "contact", p().businessName || p().title ? "Reach " + (p().businessName || p().title) : "");
@@ -833,10 +849,141 @@ function requestArgs() {
   delete base.notes;
   return Object.assign(base, { topic: v("topic"), message: v("message") });
 }
+// ---- Account menu (version 0.19.0) ----
+// The business's own server declares these entries (plugin.account); the card only draws them. "form" asks for
+// fields and runs a tool, "list" shows a tool's items and opens one, "chat" hands over to the chat.
+const acct = { item: null, rows: [], row: null, detail: null, sel: {}, picks: {}, done: "", note: "", from: "" };
+const aitems = () => p().account || [];
+const aitem = (key) => aitems().find((x) => x.key === key) || null;
+const at = (o, path) => String(path || "").split(".").reduce((x, k) => (x == null ? undefined : x[k]), o);
+const shown = (x, as) => {
+  if (x == null || typeof x === "object") return "";
+  if (as === "date") { const d = new Date(x); if (!isNaN(d.getTime())) return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }); }
+  return String(x);
+};
+const canCall = () => Boolean(p().inCard && oa() && oa().callTool);
+async function acall(tool, args) { return pickStructured(await oa().callTool(tool, clean(args || {}))) || {}; }
+const picked = (it) => (it.pick ? acct.sel[it.pick.tool] || null : null);
+const withPick = (it, args) => { const s = picked(it); const o = Object.assign({}, it.args || {}, args || {}); if (it.pick && s) o[it.pick.arg] = s.value; return o; };
+async function busyDo(fn) {
+  state.busy = true; state.error = ""; render();
+  try { await fn(); } catch (e) { state.error = (e && e.message) || "That did not work."; if (state.view === "await") state.view = "aform"; }
+  state.busy = false; render();
+}
+async function loadPicks(it) {
+  if (!it.pick || acct.picks[it.pick.tool]) return;
+  const r = await acall(it.pick.tool, {});
+  const rows = (Array.isArray(r.items) ? r.items : []).map((x) => ({ value: shown(at(x, it.pick.value)), label: shown(at(x, it.pick.label)) })).filter((x) => x.value).slice(0, 12);
+  acct.picks[it.pick.tool] = rows;
+  if (!acct.sel[it.pick.tool] && rows[0]) acct.sel[it.pick.tool] = rows[0];
+}
+async function loadList(it) { const r = await acall(it.tool, withPick(it)); acct.rows = Array.isArray(r.items) ? r.items.slice(0, 50) : []; }
+function openAccount(key, from) {
+  const it = aitem(key);
+  if (!it) return;
+  // Without a card that can run tools, the chat does it: the assistant calls the tool, and asks for sign-in.
+  if (!canCall()) { ask(it.example); return; }
+  acct.item = it; acct.from = from || ""; acct.rows = []; acct.row = null; acct.detail = null; acct.done = "";
+  state.view = it.mode === "list" ? "alist" : "aform";
+  busyDo(async () => {
+    await loadPicks(it);
+    if (it.pick && !picked(it)) throw new Error("There is nothing to choose from yet. Ask in the chat to create one.");
+    if (it.mode === "list") await loadList(it);
+  });
+}
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+// A longer job (a report): ask until it is ready, then open it. Leaving the screen stops the asking.
+async function awaitDone(it, first) {
+  const w = it.wait, id = at(first, w.from);
+  if (id == null) throw new Error("That did not start. Try again.");
+  acct.note = w.message; state.view = "await"; render();
+  for (let i = 0; i < 40; i++) {
+    await sleep(6000);
+    if (state.view !== "await") return;
+    const r = await acall(w.tool, { [w.arg]: id });
+    const st = shown(at(r, w.path));
+    if ((w.failed || []).indexOf(st) >= 0) throw new Error("That could not be finished. Try again.");
+    if ((w.done || []).indexOf(st) >= 0) {
+      const target = w.open ? aitem(w.open) : null;
+      if (target && target.open) { acct.item = target; acct.from = ""; acct.row = r; acct.detail = r; acct.rows = []; state.view = "adetail"; }
+      else { acct.done = it.done || "Done."; state.view = "adone"; }
+      return;
+    }
+  }
+  acct.done = "Still working. Open it again in a minute."; state.view = "adone";
+}
+const atop = (title, back) => '<div class="bar-top"><h3>' + esc(title) + '</h3><span class="navs">' + (back ? '<button class="link" data-aback="' + esc(back) + '">← Back</button>' : "") + '<button class="link" data-view="menu">Menu</button></span></div>';
+function apickBar(it) {
+  if (!it.pick) return "";
+  const rows = acct.picks[it.pick.tool] || [], s = picked(it);
+  if (!rows.length) return "";
+  return '<div class="qlabel">' + esc(it.pick.title) + '</div><div class="qs">' + rows.map((r) => chip(esc(r.label || r.value), "data-apick", r.value, Boolean(s && s.value === r.value))).join("") + "</div>";
+}
+// When the card's own call fails (most often: not signed in yet), the chat can do it and ask for sign-in.
+const achat = () => (state.error && acct.item ? '<div class="actions" style="margin-top:8px"><button class="btn" data-ask="' + esc(acct.item.example) + '">Continue in the chat</button></div><div class="note">If you have not signed in yet, the chat asks you to.</div>' : "");
+const alinks = (it) => (it.links || []).map((l) => '<button class="btn" data-aopen="' + esc(l.key) + '" data-afrom="' + esc(it.key) + '">' + esc(l.label) + "</button>").join("");
+function aformView() {
+  const it = acct.item;
+  if (!it) return menuView();
+  const fields = (it.fields || []).map((f) => f.type === "select"
+    ? '<div class="qlabel">' + esc(f.label) + '</div><div class="qs">' + (f.options || []).map((o) => chip(esc(o), 'data-asel="' + esc(f.arg) + '" data-val', o, v("a_" + f.arg) === o)).join("") + "</div>"
+    : field("a_" + f.arg, f.label, { type: f.type === "textarea" ? "textarea" : "text", placeholder: f.placeholder, optional: !f.required })).join("");
+  return '<div class="form">' + atop(it.title, acct.from) + '<div class="hint">' + esc(it.description) + "</div>" + apickBar(it) + fields + errLine() +
+    '<div class="actions" style="margin-top:12px">' + primary(it.submit || (it.mode === "chat" ? "Start" : "Save"), "asend") + "</div>" + achat() + "</div>";
+}
+function awaitView() {
+  return '<div class="sent"><b>Working…</b><p>' + esc(acct.note) + '</p></div><div class="actions" style="margin-top:12px"><button class="btn" data-view="menu">← Menu</button></div>';
+}
+function adoneView() {
+  const it = acct.item || {}, from = acct.from ? aitem(acct.from) : null;
+  return '<div class="sent"><b>' + esc(acct.done) + '</b></div><div class="actions" style="margin-top:12px">' +
+    (from ? '<button class="btn go" data-aopen="' + esc(from.key) + '">' + esc(from.title) + "</button>" : "") +
+    (it.mode === "form" && (it.fields || []).length ? '<button class="btn" data-aopen="' + esc(it.key) + '" data-afrom="' + esc(acct.from) + '">Add another</button>' : "") +
+    alinks(it) + '<button class="btn" data-view="menu">← Menu</button></div>';
+}
+function alistView() {
+  const it = acct.item;
+  if (!it) return menuView();
+  const d = it.item || { title: "name", meta: [] };
+  const rows = acct.rows.map((x, i) => {
+    const meta = (d.meta || []).map((m) => { const val = shown(at(x, m.path), m.as); return val ? (m.label ? esc(m.label) + " " : "") + esc(val) : ""; }).filter(Boolean).join(" · ");
+    const badge = d.badge ? shown(at(x, d.badge)) : "";
+    const title = (shown(at(x, d.title)) || "(no title)").slice(0, 140);
+    const inner = '<div class="nm"><b class="clamp">' + esc(title) + "</b>" + (badge ? '<span class="tag">' + esc(badge) + "</span>" : "") + "</div>" + (meta ? '<div class="bl">' + meta + "</div>" : "");
+    return '<div class="it">' + (it.open ? '<button class="rowb" data-arow="' + i + '">' + inner + "</button>" : inner) + "</div>";
+  }).join("");
+  const more = alinks(it);
+  return atop(it.title, acct.from) + apickBar(it) + errLine() +
+    (state.busy ? '<div class="empty">Loading…</div>' : rows ? '<div class="list" style="margin-top:10px">' + rows + "</div>" : state.error ? "" : '<div class="empty">' + esc(it.empty || "Nothing here yet.") + "</div>") +
+    (more ? '<div class="more">' + more + "</div>" : "") + achat();
+}
+function adetailView() {
+  const it = acct.item, x = acct.detail, o = it && it.open;
+  if (!it || !o || !x) return menuView();
+  const vw = o.view || { title: "", fields: [], sections: [] };
+  const fields = (vw.fields || []).map((f) => { const val = shown(at(x, f.path), f.as); return val ? "<div><b>" + esc(val) + "</b><span>" + esc(f.label) + "</span></div>" : ""; }).join("");
+  const block = (t) => '<div class="it"><div class="bl pre">' + esc(t) + "</div></div>";
+  const sections = (vw.sections || []).map((sec) => {
+    const val = at(x, sec.path);
+    let body = "";
+    if (Array.isArray(val)) body = val.slice(0, 20).map((e) => {
+      if (e && typeof e === "object") { if (!sec.item) return ""; const t = shown(at(e, sec.item.title)), b = sec.item.text ? shown(at(e, sec.item.text)) : ""; return t || b ? '<div class="it">' + (t ? '<div class="nm"><b>' + esc(t) + "</b></div>" : "") + (b ? '<div class="bl pre">' + esc(b) + "</div>" : "") + "</div>" : ""; }
+      return shown(e) ? block(shown(e)) : "";
+    }).join("");
+    else if (shown(val)) body = block(shown(val));
+    return body ? '<div class="qlabel" style="margin-top:12px">' + esc(sec.label) + '</div><div class="list">' + body + "</div>" : "";
+  }).join("");
+  const acts = (o.actions || []).map((a, i) => '<button class="btn go" data-aact="' + i + '"' + (state.busy ? " disabled" : "") + ">" + esc(a.label) + "</button>").join("");
+  return atop((shown(at(x, vw.title)) || it.title).slice(0, 80), acct.rows.length ? "list" : "") +
+    (state.busy ? '<div class="empty">Loading…</div>' : (fields ? '<div class="sum sm">' + fields + "</div>" : "") + sections) + errLine() +
+    (acts && !state.busy ? '<div class="actions" style="margin-top:12px">' + acts + "</div>" : "");
+}
+
 function openOption(i) {
   const o = state.options[i];
   if (!o) return;
   state.error = ""; state.hint = "";
+  if (o.kind === "account") { openAccount(o.key, ""); return; }
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
   // 0.15.0: software products. Features, Pricing and Help open with their results; Support opens its form.
   if (o.kind === "features" || o.kind === "guides") { state.f[o.kind === "features" ? "fq" : "gq"] = ""; run(o.tool, {}, o.example); return; }
@@ -870,7 +1017,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const on = (sel, fn) => app.querySelectorAll(sel).forEach((el) => el.addEventListener("click", () => fn(el)));
@@ -944,6 +1091,43 @@ function render() {
     const o = opt("enquiry");
     need(v("emessage"), "Say what your enquiry is about.");
     run(o && o.tool, Object.assign(who(), clean({ topic: v("etopic") || "Other", message: v("emessage"), company: v("ecompany") })), v("etopic") + " enquiry: " + v("emessage"));
+  }));
+  // ---- Account menu (version 0.19.0) ----
+  on("[data-aopen]", (b) => openAccount(b.dataset.aopen, b.dataset.afrom || ""));
+  on("[data-aback]", (b) => { state.error = ""; if (b.dataset.aback === "list") { state.view = "alist"; render(); } else if (aitem(b.dataset.aback)) openAccount(b.dataset.aback, ""); else { state.view = "menu"; render(); } });
+  on("[data-apick]", (b) => {
+    const it = acct.item;
+    const r = it && it.pick ? (acct.picks[it.pick.tool] || []).find((x) => x.value === b.dataset.apick) : null;
+    if (!r) return;
+    acct.sel[it.pick.tool] = r;
+    if (it.mode === "list") busyDo(() => loadList(it)); else render();
+  });
+  on("[data-asel]", (b) => { state.f["a_" + b.dataset.asel] = b.dataset.val; render(); });
+  on("[data-arow]", (b) => {
+    const it = acct.item, row = acct.rows[Number(b.dataset.arow)];
+    if (!it || !row || !it.open) return;
+    acct.row = row; acct.detail = row; state.view = "adetail"; state.error = "";
+    if (it.open.tool) busyDo(async () => { acct.detail = await acall(it.open.tool, { [it.open.arg]: at(row, it.open.from) }); }); else render();
+  });
+  on("[data-aact]", (b) => {
+    const it = acct.item, a = it && it.open ? (it.open.actions || [])[Number(b.dataset.aact)] : null;
+    if (!a || !acct.row || state.busy) return;
+    busyDo(async () => { await acall(a.tool, Object.assign({}, a.args || {}, { [a.arg]: at(acct.row, a.from) })); await loadList(it); state.view = "alist"; });
+  });
+  on('[data-act="asend"]', () => guard(() => {
+    const it = acct.item;
+    if (!it || state.busy) return;
+    const s = picked(it);
+    if (it.pick) need(s, "Choose one first.");
+    if (it.mode === "chat") { ask(String(it.prompt || it.example).replace(/\{label\}/g, s ? s.label : "").replace(/\{value\}/g, s ? s.value : "")); return; }
+    const args = {};
+    (it.fields || []).forEach((f) => { const val = v("a_" + f.arg); if (f.required) need(val, "Fill in: " + f.label + "."); if (val) args[f.arg] = val; });
+    busyDo(async () => {
+      const r = await acall(it.tool, withPick(it, args));
+      (it.fields || []).forEach((f) => { state.f["a_" + f.arg] = ""; });
+      if (it.wait) { await awaitDone(it, r); return; }
+      acct.done = it.done || "Done."; state.view = "adone";
+    });
   }));
   // ---- Members (version 0.12.0) ----
   on('[data-act="mfind"]', () => findMembers());

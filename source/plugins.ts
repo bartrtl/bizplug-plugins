@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.18.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.19.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -30,7 +30,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -38,7 +38,7 @@ export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" 
  * published its programme (from 0.18.0), and "venue" options the menu of a venue; plugin-mcp.ts shows one of the two.
  * `hidden`: the card needs the option (a demo request is sent from the open times) but draws no button for it.
  */
-export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean };
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean; /** 0.19.0, kind "account": which entry of the business's account menu this is, and its icon. */ key?: string; icon?: string };
 
 export type IndustryPlugin = {
   slug: string;
