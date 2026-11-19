@@ -18,6 +18,8 @@ Columns (first row of the file, exactly these names):
 - `email` (required): Public email, email. The address customers may write to. Example: hello@example.com
 - `phone`: Public phone, text. With country code. Example: +1 704 555 0100
 - `website`: Website, url. Full URL. Example: https://example.com
+- `tagline`: What you are, text. A few words shown after your name in ChatGPT, e.g. "Harbor Street Studio – Yoga in Charlotte". Without it, the plug-in's industry is shown. Example: Real Estate in Charlotte
+- `logo`: Logo URL, url. Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT. Example: https://example.com/logo.png
 - `address`: Address, text. Street address, if customers visit. Example: 123 Main St, Charlotte, NC 28202
 - `city`: City, text.  Example: Charlotte
 - `region`: State or country, text.  Example: NC

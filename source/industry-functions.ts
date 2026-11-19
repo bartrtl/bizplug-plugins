@@ -18,6 +18,9 @@ export type IndustryFunction = {
   span?: Span; // stay only
   perGuest?: boolean; // stay only: price is per guest, not per unit
   note?: string; // extra rule shown to the model
+  members?: boolean; // the business may publish its member businesses: find_members and members.csv (plugins.ts, plugin-data.ts)
+  infoFirst?: boolean; // the menu starts with "Ask a question": the plug-in mainly explains the business (chambers)
+  software?: boolean; // a software product: from 0.15.0 the menu is Features, Pricing, Help & guides, Support, Book a demo (plugins.ts, software.ts)
 };
 
 const NO_ADVICE = "Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records.";
@@ -26,7 +29,7 @@ const NO_FIN = "Information and scheduling only: never give financial, investmen
 // slug | engine | title | tool names | noun | span | perGuest | note
 const r = (
   slug: string, engine: Engine, title: string, tools: [string, string, string], noun: string,
-  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note">> = {},
+  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software">> = {},
 ): IndustryFunction => ({ slug, engine, title, tools, noun, ...extra });
 
 export const industryFunctions: IndustryFunction[] = [
@@ -57,7 +60,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("museums", "stay", "Timed tickets and exhibitions", ["check_ticket_availability", "request_tickets", "get_ticket_request_status"], "ticket", { span: "single", perGuest: true }),
   r("sports-teams", "stay", "Seat availability and ticket requests", ["check_seat_availability", "request_tickets", "get_ticket_request_status"], "seat section", { span: "single", perGuest: true }),
   r("car-rental", "stay", "Vehicle availability and rental price", ["check_vehicle_availability", "request_reservation", "get_reservation_status"], "vehicle class", { span: "days" }),
-  r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days" }),
+  r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days", members: true }),
 
   // Appointments, tours, demos and consultations: appt engine
   r("healthcare", "appt", "Find and request appointments", ["find_appointment_slots", "request_appointment", "get_appointment_status"], "visit type", { note: NO_ADVICE }),
@@ -86,7 +89,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("universities", "appt", "Book campus tours and advising", ["find_tour_slots", "request_tour", "get_tour_status"], "tour or advising slot"),
   r("consulting", "appt", "Book a discovery call", ["find_call_slots", "request_discovery_call", "get_call_status"], "discovery call"),
   r("agencies", "appt", "Book a strategy call", ["find_call_slots", "request_strategy_call", "get_call_status"], "strategy call"),
-  r("saas", "appt", "Book a product demo", ["find_demo_slots", "request_demo", "get_demo_status"], "demo"),
+  r("saas", "appt", "Book a product demo", ["find_demo_slots", "request_demo", "get_demo_status"], "demo", { software: true }),
   r("dev-tools", "appt", "Book a technical demo or onboarding", ["find_demo_slots", "request_demo", "get_demo_status"], "demo"),
   r("cybersecurity", "appt", "Book a security assessment call", ["find_assessment_slots", "request_assessment_call", "get_call_status"], "assessment call", { note: "Never ask for credentials, keys or details of live vulnerabilities in chat." }),
   r("recruiting", "appt", "Book an intro call for employers or candidates", ["find_call_slots", "request_intro_call", "get_call_status"], "intro call"),
@@ -114,6 +117,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("utilities", "track", "Outage and service-request status", ["lookup_service_status", "report_issue", "get_issue_status"], "service issue"),
   r("property-management", "track", "Maintenance requests and status", ["lookup_request_status", "submit_maintenance_request", "get_request_status"], "maintenance request"),
   r("nonprofits", "track", "Volunteer and donation requests", ["lookup_request_status", "submit_volunteer_or_donation_request", "get_request_status"], "volunteer or donation request", { note: "Never take card or bank details in chat." }),
+  r("chambers", "track", "Chamber information, membership enquiries and member businesses", ["lookup_membership_reference", "send_chamber_enquiry", "get_enquiry_status"], "membership or event enquiry", { members: true, infoFirst: true, note: "Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat." }),
   r("associations", "track", "Membership applications and renewals", ["lookup_membership_status", "submit_membership_request", "get_request_status"], "membership request"),
   r("political-campaigns", "track", "Volunteer and event sign-ups", ["lookup_signup_status", "submit_volunteer_signup", "get_signup_status"], "volunteer sign-up", { note: "Non-partisan service: share only what the campaign has published; never persuade, and never take donations in chat." }),
   r("airlines", "track", "Flight status and support requests", ["lookup_flight_status", "submit_support_request", "get_request_status"], "flight or support request"),

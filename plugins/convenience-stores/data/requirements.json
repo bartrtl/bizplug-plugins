@@ -54,6 +54,22 @@
           "help": "Full URL."
         },
         {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Convenience & C-Stores in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
@@ -174,6 +190,7 @@
         }
       ],
       "collect": [
+        "With a Shopify shop or a Square account, import the list on the plug-in's page in the portal (Or import it from your shop) instead of making the file.",
         "Export the product or menu list from the point-of-sale or online shop (Square, Shopify, Toast, Clover and similar all export CSV), or copy it from the website menu.",
         "Map the export's columns to the template: one row per item, price as a plain number.",
         "Only include photos the business owns."

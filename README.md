@@ -1,6 +1,10 @@
+<img src="assets/rethink-labs-logo.png" alt="Rethink Labs" width="96" align="right">
+
 # BizPlug plug-ins for ChatGPT
 
-The standard BizPlug plug-in for each of 80 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself: a plug-in never takes payment.
+Published by **Bart Cant - Rethink Labs**.
+
+The standard BizPlug plug-in for each of 81 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
 
 This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
@@ -8,6 +12,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Every plug-in on one page: https://bizplug.ai/plugins
 - Contact: info@bizplug.ai
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
+- Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## What is in a package
 
@@ -21,7 +26,7 @@ plugins/<industry>/
   data/AGENT_INSTRUCTIONS.md   how a person or an AI agent collects and submits that data
 ```
 
-Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes.
+Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes. Chambers of Commerce & Business Associations, Coworking & Offices have one more, `find_members`, which finds the member businesses a business has published; a person contacts a member directly.
 
 ## Source
 
@@ -50,10 +55,25 @@ An industry URL serves every business in that industry, so the assistant asks wh
 
 Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
 
-## Version 0.4.0
+## Submit a plug-in
 
-All 80 plug-ins share one version. What changed in each:
+Plug-ins from other companies can be listed in the BizPlug marketplace next to the industry plug-ins. Do not open a pull request here: this repository is generated, so submit through https://bizplug.ai/marketplace#submit. [CONTRIBUTING.md](CONTRIBUTING.md) explains the process and the components a valid plug-in must have: an MCP server over streamable HTTP, `plugin.json`, `mcp.json`, a README, review test cases, and a privacy policy and terms.
 
+## Version 0.15.0
+
+All 81 plug-ins share one version. What changed in each:
+
+- **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.
+- **0.14.0** (18 November 2026): A business's plug-in shows its full name in ChatGPT, the business's name with what it is, and its own logo as the plug-in's icon.
+- **0.13.0** (18 November 2026): A pay step in the card after a request with checkout: the total, a Pay now button to the business's own checkout page, and an I've paid button that checks the payment.
+- **0.12.0** (17 November 2026): Coworking & Offices: a business can publish its member businesses, so people can find a member by name, kind of business or what they need or offer, and contact it directly.
+- **0.11.0** (17 November 2026): Every tool states whether it only reads, whether its action can be taken back and whether it reaches outside the business's own data, as ChatGPT's plug-in directory requires.
+- **0.10.0** (17 November 2026): The plug-in introduces itself to ChatGPT and other clients with a description and a website, and BizPlug's industry-wide plug-ins with the BizPlug logo, privacy policy, terms and support contact.
+- **0.9.0** (16 November 2026): Checkout on the business's own Stripe or Checkout.com account, when it has connected one: customers pay for an order or booking right after the request, and the status check asks the provider whether it was paid.
+- **0.8.0** (16 November 2026): Clear answers on how to pay: the business's own payment page when it has one, offered whenever a customer asks, and payment never taken in the chat.
+- **0.7.0** (16 November 2026): The business's own buttons (WhatsApp, booking, directions, reviews, social media) on the menu card and next to availability, with presses counted for the business.
+- **0.6.0** (16 November 2026): Buttons to the business's own pages, when it has saved them in the portal: a payment page after a sent request, and its booking page, directions and review page with its contact details.
+- **0.5.0** (16 November 2026): A WhatsApp button to the business's own number, with its contact details and after a sent request, when the business has saved its number in the portal.
 - **0.4.0** (16 November 2026): Browsing by tapping in the card: quick options on each form, search and category filters on a list, an item or option on its own screen with Back, the business's published questions and answers, and choosing the business on an industry-wide plug-in.
 - **0.3.0** (16 November 2026): Results show inside the card (prices, availability, open times, estimates and statuses), and a request can be sent straight from a result.
 - **0.2.0** (16 November 2026): A menu card in ChatGPT, with a button and a short form for each thing a customer can do.
@@ -61,7 +81,23 @@ All 80 plug-ins share one version. What changed in each:
 
 A business's own plug-in stays on the version it was published with until the business upgrades it.
 
-## The 80 plug-ins
+## Plug-ins on the platform
+
+The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on https://bizplug.ai/plugins. The startup directories have their package in `plugins/`; the others are built from a business's own profile. Names belong to their owners and show whose published information a plug-in is built on; BizPlug is not affiliated with or endorsed by them, except Rethink Labs, the company behind BizPlug. Businesses that list their own plug-in from the portal are on the website only.
+
+| Plug-in | Kind | Added | What it does | MCP server URL |
+| --- | --- | --- | --- | --- |
+| Rethink Labs | Rethink Labs | 2026-11-18 | AI and blockchain consulting for businesses. Ask about the services and book an AI discovery call. | `https://mcp.bizplug.ai/plugin/consulting/rethink-labs` |
+| msg2ai | Rethink Labs | 2026-11-18 | AI messaging for hotels, vacation rentals and events: AI Ambassador, ChatGPT apps and WhatsApp concierges. | `https://mcp.bizplug.ai/plugin/consulting/msg2ai` |
+| AI Ambassador | Rethink Labs | 2026-11-18 | An AI assistant that answers guests and attendees around the clock on WhatsApp, SMS and RCS. | `https://mcp.bizplug.ai/plugin/consulting/ai-ambassador` |
+| ActionNotes.ai | Rethink Labs | 2026-11-18 | AI note-taking for conferences: contacts, conversations and commitments, with follow-ups. | `https://mcp.bizplug.ai/plugin/consulting/actionnotes` |
+| Doha Metro Guide | City guide | 2026-11-15 | Plan Doha Metro journeys and find what to see and do near each station. | `https://mcp.bizplug.ai/plugin/public-transit/doha-metro` |
+| [gener8tor Charlotte Startups for Investors](plugins/gener8tor-charlotte) | Startup directory | 2026-11-15 | Find the gBETA Charlotte startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/gener8tor-charlotte` |
+| [Web Summit Qatar Startups for Investors](plugins/websummit-qatar) | Startup directory | 2026-11-14 | Find Web Summit Qatar 2026 startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/websummit-qatar` |
+
+## The 81 industry plug-ins
+
+The standard plug-in of each industry, as on https://bizplug.ai/plugins/industries. A business gets its own copy, built from its profile.
 
 ### Business essentials
 
@@ -164,6 +200,7 @@ A business's own plug-in stays on the version it was published with until the bu
 | [Wealth & Investing](plugins/wealth) | Book an intro meeting with an advisor | `https://mcp.bizplug.ai/plugin/wealth` |
 | [Crypto & Fintech](plugins/crypto) | Fee estimate and onboarding request | `https://mcp.bizplug.ai/plugin/crypto` |
 | [Tax & Accounting](plugins/accounting) | Book a tax or bookkeeping consult | `https://mcp.bizplug.ai/plugin/accounting` |
+| [Chambers of Commerce & Business Associations](plugins/chambers) | Chamber information, membership enquiries and member businesses | `https://mcp.bizplug.ai/plugin/chambers` |
 | [Recruiting & Staffing](plugins/recruiting) | Book an intro call for employers or candidates | `https://mcp.bizplug.ai/plugin/recruiting` |
 | [HR & Internal Comms](plugins/hr-comms) | Book a platform demo | `https://mcp.bizplug.ai/plugin/hr-comms` |
 | [Cybersecurity](plugins/cybersecurity) | Book a security assessment call | `https://mcp.bizplug.ai/plugin/cybersecurity` |
@@ -185,4 +222,4 @@ A business's own plug-in stays on the version it was published with until the bu
 
 ---
 
-© msg2ai (https://msg2.ai). BizPlug is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.
+Published by Bart Cant - Rethink Labs. BizPlug is built and run by msg2ai (https://msg2.ai) and is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.

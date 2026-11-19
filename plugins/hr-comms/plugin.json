@@ -1,11 +1,15 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-hr-comms",
-  "version": "0.4.0",
+  "version": "0.15.0",
   "description": "The hr & internal comms plug-in from BizPlug. Main function: book a platform demo. It works from the business's own published profile, covering policies, benefits and who to contact, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "msg2ai"
+    "name": "Bart Cant - Rethink Labs",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
   },
+  "homepage": "https://bizplug.ai/industries/hr-comms",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
     "com.openai": {
@@ -21,7 +25,13 @@
         "category": "Business",
         "websiteURL": "https://bizplug.ai/industries/hr-comms",
         "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms"
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
       },
       "review": {
         "commerce": false,

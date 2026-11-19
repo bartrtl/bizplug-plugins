@@ -7,10 +7,17 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.4.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.15.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
+
+/** The public plug-in packages on GitHub, one folder per industry slug. */
+export const PLUGINS_REPO = "https://github.com/msg2ai/bizplug-plugins";
+export const pluginRepoUrl = (slug: string) => `${PLUGINS_REPO}/tree/main/plugins/${slug}`;
+
+/** Where "Add plug-in for my business" sends a business: the plug-in in the client portal. Signed-out visitors are sent to sign-up first (src/proxy.ts). */
+export const addPluginUrl = (slug: string) => `/portal/plug-ins/${slug}`;
 
 export type PluginTool = {
   name: string;
@@ -23,8 +30,13 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact";
-export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string };
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support";
+/**
+ * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
+ * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
+ * `hidden`: the card needs the option (a demo request is sent from the open times) but draws no button for it.
+ */
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy"; hidden?: boolean };
 
 export type IndustryPlugin = {
   slug: string;
@@ -43,6 +55,21 @@ export type IndustryPlugin = {
 };
 
 const lower = (s: string) => s.toLowerCase();
+
+/**
+ * Industries whose businesses may publish their member businesses (`members` in industry-functions.ts; coworking, chambers)
+ * get this tool and a Members menu option, from plug-in version 0.12.0. The server (plugin-mcp.ts) shows the
+ * option only for a business that published a member list.
+ */
+export const MEMBERS_TOOL = "find_members";
+
+/** Software products (`software` in industry-functions.ts), from plug-in version 0.15.0 (software.ts). */
+export const SOFTWARE_TOOLS = { features: "get_features", pricing: "get_pricing", guides: "search_help", support: "request_support" } as const;
+export const isSoftwareTool = (name: string) => (Object.values(SOFTWARE_TOOLS) as string[]).includes(name);
+/** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
+const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
+const membersDirect = (slug: string) =>
+  `Contact is direct: the person writes or calls the member themselves, and neither ${MEMBERS_HOST[slug] ?? "the business"} nor BizPlug introduces, forwards or vouches.`;
 
 // [look-up, request, status] descriptions per engine. {n} is the industry's noun.
 const TOOL_COPY: Record<Engine, [string, string, string]> = {
@@ -111,11 +138,33 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
   const example = (idx: 0 | 1 | 2) => (engine === "stay" && idx === 0 ? STAY_FIRST[fn.span ?? "single"] : MENU_EXAMPLES[engine][idx]);
   const KINDS = ["lookup", "request", "status"] as const;
   const step = (idx: 0 | 1 | 2): MenuOption => ({ tool: tools[idx], kind: KINDS[idx], title: TITLES[engine][idx], description: MENU_COPY[engine][idx], example: example(idx) });
+  const question: MenuOption = { tool: "get_business_info", kind: "question", title: "Ask a question", description: `Answers from the business's own information: ${i.covers}.`, example: i.ask };
+  // 0.15.0, software products: what it does, what it costs, how to use it, getting help, and a demo. The engine's
+  // look-up and request stay, as Book a demo; the menu before 0.15.0 stays for plug-ins pinned to it.
+  if (fn.software) {
+    const legacy = (o: MenuOption): MenuOption => ({ ...o, only: "legacy" });
+    return [
+      { tool: SOFTWARE_TOOLS.features, kind: "features", title: "Features", description: "What it does: find a feature, the plan it is on and the guide that explains it.", example: "Does it sync with my CRM?", only: "software" },
+      { tool: SOFTWARE_TOOLS.pricing, kind: "pricing", title: "Pricing", description: "The plans and what each includes, or the pricing page.", example: "What does it cost?", only: "software" },
+      { tool: SOFTWARE_TOOLS.guides, kind: "guides", title: "Help & guides", description: "Search the help articles and guides, and open the one you need.", example: "How do I get started?", only: "software" },
+      { tool: SOFTWARE_TOOLS.support, kind: "support", title: "Support", description: "Send a question or a problem to the support team, and check it later with its reference.", example: "I need help with my account", only: "software" },
+      { ...step(0), title: "Book a demo", description: "See the open times for a demo and ask for one. The team confirms it by email.", only: "software" },
+      legacy(step(0)),
+      { ...step(1), title: "Request a demo", hidden: true, only: "software" },
+      legacy(step(1)),
+      legacy(question),
+      step(2),
+      { tool: "get_contact", kind: "contact", title: "Contact", description: "Email, website, and the support and status pages.", example: "How do I contact the team?", only: "software" },
+      legacy({ tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" }),
+    ];
+  }
+  // A plug-in that mainly explains the business (chambers) starts with its questions and answers.
   return [
-    step(0),
-    step(1),
-    { tool: "get_business_info", kind: "question", title: "Ask a question", description: `Answers from the business's own information: ${i.covers}.`, example: i.ask },
+    ...(fn.infoFirst ? [question, step(1), step(0)] : [step(0), step(1), question]),
     step(2),
+    ...(fn.members
+      ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]
+      : []),
     { tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" },
   ];
 }
@@ -150,6 +199,25 @@ export function buildPlugin(i: Industry): IndustryPlugin {
       description: "Return the business's published contact details and opening hours for anything the other tools cannot do.",
       readOnly: true,
     },
+    ...(fn.members
+      ? [
+          {
+            name: MEMBERS_TOOL,
+            title: "Members",
+            description: `Find the member businesses of this ${noun} business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. ${membersDirect(i.slug)} Share only what the business lists for a member.`,
+            readOnly: true,
+          },
+        ]
+      : []),
+    // 0.15.0, software products (software.ts). Offered only to plug-ins on 0.15.0 or later (plugin-mcp.ts).
+    ...(fn.software
+      ? [
+          { name: SOFTWARE_TOOLS.features, title: "Features", description: "List or search what this software product does, from the features it published: each with what it does, the plan that includes it and the guide that explains it. Creates nothing.", readOnly: true },
+          { name: SOFTWARE_TOOLS.pricing, title: "Pricing", description: "Return the product's plans as it published them, or only its pricing page when the product shows no plans here. Creates nothing; never quote a price that is not returned, and never start a subscription or an upgrade.", readOnly: true },
+          { name: SOFTWARE_TOOLS.guides, title: "Help & guides", description: "Search the product's published help articles and guides by words or topic, and return each with its link. Creates nothing.", readOnly: true },
+          { name: SOFTWARE_TOOLS.support, title: "Support request", description: "Send the customer's question or problem to the product's support team, with a reference to check it later. Use only once the customer has given the details and agrees to send it. The team replies by email.", readOnly: false },
+        ]
+      : []),
   ];
   return {
     slug: i.slug,
@@ -164,9 +232,18 @@ export function buildPlugin(i: Industry): IndustryPlugin {
     menu: buildMenu(i, fn),
     testCases: [
       { prompt: "What can this plug-in do?", expect: "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.", shouldTrigger: true },
-      { prompt: fn.title, expect: `Calls ${fn.tools[0]} and answers from the published profile.`, shouldTrigger: true },
+      { prompt: fn.title, expect: `Calls ${fn.infoFirst ? "get_business_info" : fn.tools[0]} and answers from the published profile.`, shouldTrigger: true },
       { prompt: i.ask, expect: "Answers from the business profile, or says it is not covered and offers contact details.", shouldTrigger: true },
       { prompt: "Go ahead and send it.", expect: `Calls ${fn.tools[1]} only after the customer has confirmed the details, and reports that the business still has to confirm.`, shouldTrigger: true },
+      ...(fn.software
+        ? [
+            { prompt: "What does it cost?", expect: `Calls ${SOFTWARE_TOOLS.pricing} and shows the published plans, or only the pricing page when the product shows no plans; never invents a price or offers a subscription.`, shouldTrigger: true },
+            { prompt: "How do I connect my CRM?", expect: `Calls ${SOFTWARE_TOOLS.guides} (or ${SOFTWARE_TOOLS.features}) and gives the matching guide with its link, or says none is published.`, shouldTrigger: true },
+          ]
+        : []),
+      ...(fn.members
+        ? [{ prompt: "Which member businesses here could help with web design?", expect: `Calls ${MEMBERS_TOOL} and lists the matching members with their published contact details, or says the business has not published a member list; says the customer contacts a member directly and offers no introduction.`, shouldTrigger: true }]
+        : []),
       { prompt: "Write me a poem about the ocean.", expect: "Does not call any tool.", shouldTrigger: false },
     ],
     mcpUrl: `${MCP_HOST}/plugin/${i.slug}`,
@@ -175,9 +252,19 @@ export function buildPlugin(i: Industry): IndustryPlugin {
 
 export const plugins: IndustryPlugin[] = industries.map(buildPlugin);
 
+/** The menu a customer sees on the current plug-in version, as the public pages and the portal list it. */
+export const currentMenu = (p: IndustryPlugin) => p.menu.filter((o) => o.only !== "legacy" && !o.hidden);
+
 export function getPlugin(slug: string) {
   return plugins.find((p) => p.slug === slug);
 }
+
+/** Who publishes the plug-in packages, as each package's `author`. */
+export const PLUGIN_AUTHOR = { name: "Bart Cant - Rethink Labs", email: siteConfig.email, url: siteConfig.url };
+/** The logo every industry plug-in package carries, under public/. */
+export const PLUGIN_LOGO = "logo.png";
+/** BizPlug's lime, for surfaces that tint a plug-in with its brand colour. */
+export const PLUGIN_BRAND_COLOR = "#d4ff3a";
 
 export function pluginJson(p: IndustryPlugin) {
   return {
@@ -185,7 +272,9 @@ export function pluginJson(p: IndustryPlugin) {
     name: `bizplug-${p.slug}`,
     version: PLUGIN_VERSION,
     description: p.longDescription,
-    author: { name: siteConfig.developer?.name ?? "msg2ai" },
+    author: PLUGIN_AUTHOR,
+    homepage: `${siteConfig.url}/industries/${p.slug}`,
+    repository: PLUGINS_REPO,
     mcpServers: "./mcp.json",
     extensions: {
       "com.openai": {
@@ -198,6 +287,13 @@ export function pluginJson(p: IndustryPlugin) {
           websiteURL: `${siteConfig.url}/industries/${p.slug}`,
           privacyPolicyURL: `${siteConfig.url}/privacy`,
           termsOfServiceURL: `${siteConfig.url}/terms`,
+          developerName: siteConfig.name,
+          supportURL: `${siteConfig.url}/contact`,
+          supportEmail: siteConfig.email,
+          brandColor: PLUGIN_BRAND_COLOR,
+          // The package carries its own copy of the logo (scripts/build-plugins.ts copies it from public/).
+          logo: "./assets/icon.png",
+          composerIcon: "./assets/icon.png",
         },
         review: {
           commerce: false,
@@ -231,7 +327,7 @@ export function directoryPluginJson(d: DirectoryDef) {
     name: `bizplug-${d.slug}`,
     version: PLUGIN_VERSION,
     description: d.longDescription,
-    author: { name: siteConfig.developer?.name ?? "msg2ai" },
+    author: PLUGIN_AUTHOR,
     mcpServers: "./mcp.json",
     extensions: {
       "com.openai": {

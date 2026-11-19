@@ -1,0 +1,320 @@
+{
+  "industry": "chambers",
+  "name": "Chambers of Commerce & Business Associations",
+  "engine": "track",
+  "functionTitle": "Chamber information, membership enquiries and member businesses",
+  "datasets": [
+    {
+      "id": "business",
+      "file": "business.csv",
+      "title": "Business details",
+      "why": "What the plug-in says about the business and where customers can reach it.",
+      "required": true,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Business name",
+          "required": true,
+          "type": "text",
+          "example": "Lakeview Business Chamber",
+          "help": "As customers know it."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": true,
+          "type": "text",
+          "example": "Lakeview Business Chamber serves customers in and around Charlotte, NC.",
+          "help": "One or two sentences, in the business's own words."
+        },
+        {
+          "key": "email",
+          "label": "Public email",
+          "required": true,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The address customers may write to."
+        },
+        {
+          "key": "phone",
+          "label": "Public phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0100",
+          "help": "With country code."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Chambers of Commerce & Business Associations in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "123 Main St, Charlotte, NC 28202",
+          "help": "Street address, if customers visit."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Charlotte",
+          "help": ""
+        },
+        {
+          "key": "region",
+          "label": "State or country",
+          "required": false,
+          "type": "text",
+          "example": "NC",
+          "help": ""
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Mon-Fri 09:00-17:00; Sat 10:00-14:00",
+          "help": "As shown to customers."
+        },
+        {
+          "key": "currency",
+          "label": "Currency",
+          "required": false,
+          "type": "text",
+          "example": "USD",
+          "help": "ISO code for the prices in the other files."
+        },
+        {
+          "key": "notify_email",
+          "label": "Requests go to",
+          "required": false,
+          "type": "email",
+          "example": "orders@example.com",
+          "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        }
+      ],
+      "collect": [
+        "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
+        "Write the summary in the business's own words (one or two sentences). Do not add claims the business does not make.",
+        "Ask the owner which inbox should receive requests from ChatGPT and put it in notify_email."
+      ]
+    },
+    {
+      "id": "records",
+      "file": "records.csv",
+      "title": "Reference look-ups",
+      "why": "Statuses customers can look up by reference number. Keep it current; the plug-in shows what is here.",
+      "required": false,
+      "maxRows": 5000,
+      "columns": [
+        {
+          "key": "ref",
+          "label": "Reference",
+          "required": true,
+          "type": "text",
+          "example": "ENQ-2207",
+          "help": "What the customer quotes."
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "required": true,
+          "type": "text",
+          "example": "Membership call scheduled",
+          "help": ""
+        },
+        {
+          "key": "note",
+          "label": "Note",
+          "required": false,
+          "type": "text",
+          "example": "The membership team replies by email",
+          "help": "No personal data."
+        },
+        {
+          "key": "updated",
+          "label": "Updated",
+          "required": false,
+          "type": "date",
+          "example": "2026-11-14",
+          "help": "YYYY-MM-DD."
+        }
+      ],
+      "collect": [
+        "Export open references and their statuses from the case or ticket system. Remove names, addresses and any personal details first."
+      ]
+    },
+    {
+      "id": "services",
+      "file": "services.csv",
+      "title": "Services list",
+      "why": "A short list of what the business offers, used in answers.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "service",
+          "label": "Service",
+          "required": true,
+          "type": "text",
+          "example": "Monthly networking breakfast",
+          "help": "One per row."
+        }
+      ],
+      "collect": [
+        "List the services from the website's services or about page, one per row, short names only."
+      ]
+    },
+    {
+      "id": "faqs",
+      "file": "faqs.csv",
+      "title": "Questions and answers",
+      "why": "The plug-in answers customer questions only from these, so it never guesses.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "question",
+          "label": "Question",
+          "required": true,
+          "type": "text",
+          "example": "Who can join the chamber?",
+          "help": "How a customer would ask it."
+        },
+        {
+          "key": "answer",
+          "label": "Answer",
+          "required": true,
+          "type": "text",
+          "example": "Any business or organisation based in the region, from sole traders to large employers.",
+          "help": "The business's answer, in full sentences."
+        }
+      ],
+      "collect": [
+        "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
+        "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    },
+    {
+      "id": "members",
+      "file": "members.csv",
+      "title": "Member businesses",
+      "why": "The member businesses people can find in the plug-in and contact directly. List only members that agreed to be listed.",
+      "required": false,
+      "maxRows": 500,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Member business",
+          "required": true,
+          "type": "text",
+          "example": "Northside Design Studio",
+          "help": "The company's name, as it trades."
+        },
+        {
+          "key": "industry",
+          "label": "Industry",
+          "required": false,
+          "type": "text",
+          "example": "Design",
+          "help": "A short label people can filter by. Use the same label for similar members."
+        },
+        {
+          "key": "description",
+          "label": "What it does",
+          "required": false,
+          "type": "text",
+          "example": "Brand and web design for small businesses.",
+          "help": "One sentence."
+        },
+        {
+          "key": "location",
+          "label": "City or area",
+          "required": false,
+          "type": "text",
+          "example": "South End, Charlotte",
+          "help": "Where the member is based, so people can filter by area."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL of the company's website."
+        },
+        {
+          "key": "email",
+          "label": "General email",
+          "required": false,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The company's general mailbox, never a named person's private address."
+        },
+        {
+          "key": "phone",
+          "label": "General phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0142",
+          "help": "The company's switchboard, with country code. Never a personal mobile number."
+        },
+        {
+          "key": "looking_for",
+          "label": "Looking for",
+          "required": false,
+          "type": "text",
+          "example": "Developers to partner with on client websites",
+          "help": "What the member wants to collaborate on or is looking for."
+        },
+        {
+          "key": "offers",
+          "label": "Offers",
+          "required": false,
+          "type": "text",
+          "example": "A discount on brand reviews for fellow members",
+          "help": "What the member can offer other members or visitors."
+        }
+      ],
+      "collect": [
+        "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
+        "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+        "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
+        "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on."
+      ]
+    }
+  ],
+  "never": [
+    "Passwords, API keys or other secrets.",
+    "Card numbers, bank details or government ID numbers.",
+    "Customers' personal data (names, phone numbers, addresses, health or financial details).",
+    "In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only.",
+    "Member-only documents, board papers or anything the chamber does not publish to the public.",
+    "The plug-in's own rule: Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat."
+  ]
+}

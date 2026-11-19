@@ -1,6 +1,6 @@
 # BizPlug SaaS & Software
 
-Version 0.4.0. Book a product demo for saas & software businesses.
+Version 0.15.0. Book a product demo for saas & software businesses.
 
 - Main function: Book a product demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/saas` (streamable HTTP, no sign-in)
@@ -9,11 +9,13 @@ Version 0.4.0. Book a product demo for saas & software businesses.
 
 ## What a customer can do
 
-- **Open times**: See what can be booked and the open times on a day.
-- **Request the appointment**: Ask for an open time. The business confirms the appointment.
-- **Ask a question**: Answers from the business's own information: features, pricing, integrations and demo requests.
+- **Features**: What it does: find a feature, the plan it is on and the guide that explains it.
+- **Pricing**: The plans and what each includes, or the pricing page.
+- **Help & guides**: Search the help articles and guides, and open the one you need.
+- **Support**: Send a question or a problem to the support team, and check it later with its reference.
+- **Book a demo**: See the open times for a demo and ask for one. The team confirms it by email.
 - **Request status**: Check a request with its reference.
-- **Contact the business**: Phone, email, website and opening hours.
+- **Contact**: Email, website, and the support and status pages.
 
 ## Tools
 
@@ -23,11 +25,26 @@ Version 0.4.0. Book a product demo for saas & software businesses.
 | `find_demo_slots` | List bookable demo options and the open times on a day, from the business's published hours. Creates nothing. |
 | `request_demo` | Send a request for a demo at an open time to the business. Use only once the customer has picked a time. The business confirms the appointment. |
 | `get_demo_status` | Look up the status of a request by its reference. |
-| `get_business_info` | Answer a general question about this saas & software business using only its published profile: features, pricing, integrations and demo requests. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
+| `get_business_info` | Answer a general question about this saas & software business using only its published profile: features, integrations, plans pages and demo requests. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
+| `get_features` | List or search what this software product does, from the features it published: each with what it does, the plan that includes it and the guide that explains it. Creates nothing. |
+| `get_pricing` | Return the product's plans as it published them, or only its pricing page when the product shows no plans here. Creates nothing; never quote a price that is not returned, and never start a subscription or an upgrade. |
+| `search_help` | Search the product's published help articles and guides by words or topic, and return each with its link. Creates nothing. |
+| `request_support` | Send the customer's question or problem to the product's support team, with a reference to check it later. Use only once the customer has given the details and agrees to send it. The team replies by email. |
 
 ## Changes
 
+- **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.
+- **0.14.0** (18 November 2026): A business's plug-in shows its full name in ChatGPT, the business's name with what it is, and its own logo as the plug-in's icon.
+- **0.13.0** (18 November 2026): A pay step in the card after a request with checkout: the total, a Pay now button to the business's own checkout page, and an I've paid button that checks the payment.
+- **0.12.0** (17 November 2026): Coworking & Offices: a business can publish its member businesses, so people can find a member by name, kind of business or what they need or offer, and contact it directly.
+- **0.11.0** (17 November 2026): Every tool states whether it only reads, whether its action can be taken back and whether it reaches outside the business's own data, as ChatGPT's plug-in directory requires.
+- **0.10.0** (17 November 2026): The plug-in introduces itself to ChatGPT and other clients with a description and a website, and BizPlug's industry-wide plug-ins with the BizPlug logo, privacy policy, terms and support contact.
+- **0.9.0** (16 November 2026): Checkout on the business's own Stripe or Checkout.com account, when it has connected one: customers pay for an order or booking right after the request, and the status check asks the provider whether it was paid.
+- **0.8.0** (16 November 2026): Clear answers on how to pay: the business's own payment page when it has one, offered whenever a customer asks, and payment never taken in the chat.
+- **0.7.0** (16 November 2026): The business's own buttons (WhatsApp, booking, directions, reviews, social media) on the menu card and next to availability, with presses counted for the business.
+- **0.6.0** (16 November 2026): Buttons to the business's own pages, when it has saved them in the portal: a payment page after a sent request, and its booking page, directions and review page with its contact details.
+- **0.5.0** (16 November 2026): A WhatsApp button to the business's own number, with its contact details and after a sent request, when the business has saved its number in the portal.
 - **0.4.0** (16 November 2026): Browsing by tapping in the card: quick options on each form, search and category filters on a list, an item or option on its own screen with Back, the business's published questions and answers, and choosing the business on an industry-wide plug-in.
 - **0.3.0** (16 November 2026): Results show inside the card (prices, availability, open times, estimates and statuses), and a request can be sent straight from a result.
 - **0.2.0** (16 November 2026): A menu card in ChatGPT, with a button and a short form for each thing a customer can do.
