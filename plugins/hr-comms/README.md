@@ -1,6 +1,6 @@
 # BizPlug HR & Internal Comms
 
-Version 0.16.0. Book a platform demo for hr & internal comms businesses.
+Version 0.17.0. Book a platform demo for hr & internal comms businesses.
 
 - Main function: Book a platform demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/hr-comms` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.16.0. Book a platform demo for hr & internal comms businesses.
 
 ## Changes
 
+- **0.17.0** (19 November 2026): Account tools: a business that runs its own MCP server can offer its tools in its plug-in, so signed-in customers work in their own account from ChatGPT.
 - **0.16.0** (19 November 2026): Customer sign-in with Clerk: a business that runs its own Clerk application can make its plug-in answer only its signed-in customers or members.
 - **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.
 - **0.14.0** (18 November 2026): A business's plug-in shows its full name in ChatGPT, the business's name with what it is, and its own logo as the plug-in's icon.

@@ -96,6 +96,12 @@ export type PluginFeatures = {
    * in when they add the plug-in. Without saved keys nothing changes.
    */
   customerSignIn: boolean;
+  /**
+   * Account tools (app-tools.ts): a software business that runs its own MCP server can offer that server's tools
+   * in its plug-in, for customers signed in with its Clerk application. While they are saved, sign-in is asked
+   * only for those tools and the rest of the plug-in stays open. Without a saved address nothing changes.
+   */
+  appTools: boolean;
 };
 
 export type PluginVersion = {
@@ -108,8 +114,8 @@ export type PluginVersion = {
   features: PluginFeatures;
 };
 
-const FULL_NAME_FEATURES: PluginFeatures = { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false };
-const SOFTWARE_FEATURES: PluginFeatures = { ...FULL_NAME_FEATURES, softwareMenu: true, businessOnlyInstructions: true, customerSignIn: false };
+const FULL_NAME_FEATURES: PluginFeatures = { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false };
+const SOFTWARE_FEATURES: PluginFeatures = { ...FULL_NAME_FEATURES, softwareMenu: true, businessOnlyInstructions: true, customerSignIn: false, appTools: false };
 
 export const PLUGIN_VERSIONS: PluginVersion[] = [
   {
@@ -117,7 +123,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
     date: "2026-11-15",
     summary: "The plug-in's tools for the industry, answers from the business's own information, and a text menu of what it can do.",
     notes: ["The plug-in's tools for your industry, questions answered from your own information, and a text menu of what it can do."],
-    features: { menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.2.0",
@@ -127,7 +133,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A menu card in ChatGPT: your customers see a button for each thing they can do.",
       "Each button opens a short form (dates and party size, an item, a reference, a question or a request), so customers tap and fill in instead of typing everything.",
     ],
-    features: { menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.3.0",
@@ -137,7 +143,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Results show inside the card: prices, availability, open times, estimates and statuses, instead of only as text in the chat.",
       "Customers can go from a result straight to a request in the card: pick an option or a time, add their name and email, and send.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.4.0",
@@ -149,7 +155,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A list can be searched and filtered by category in the card, and each item or option opens on its own screen, with Back to return.",
       "Your published questions and answers show in the card, so common questions are answered with one tap. Other questions still go to the chat.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.5.0",
@@ -159,7 +165,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A WhatsApp button to your own number: save your WhatsApp number and a first message under Integrations on your plug-in page, and customers can open a chat with you from your contact details and after they send a request.",
       "Requests still reach you by email as before. WhatsApp is an extra way for a customer to reach you, and nothing is sent until they press send in WhatsApp.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.6.0",
@@ -169,7 +175,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A Pay online button after a request, to your own payment page (for example a Stripe Payment Link). BizPlug takes no payment: the customer pays on your page.",
       "Book online, Get directions and Leave a review buttons with your contact details, each to a link you save under Integrations on your plug-in page.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.7.0",
@@ -181,7 +187,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The assistant knows which buttons you have and points to the right one at the right moment.",
       "Your Traction Dashboard counts how often each button is pressed, and where each request was delivered.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.8.0",
@@ -192,7 +198,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your payment page is also listed with your contact details, so a customer can find it before or without sending a request. It still shows after a request as before.",
       "The assistant never takes card details or payment in the chat. The customer pays on your page, and the money never passes through BizPlug.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.9.0",
@@ -203,7 +209,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The price is taken from your published files, never from the chat. Your plug-in confirms each payment with the provider, you get an email when an order is paid, and you can refund it from Payments on your plug-in page.",
       "Test mode first: no real money. Live payments are switched on for your plug-in once BizPlug has approved it. You still confirm every request yourself.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.10.0",
@@ -213,7 +219,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your plug-in tells ChatGPT who it is: your business's own summary as its description, and your website as its link.",
       "Nothing changes in how it answers customers or handles requests.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.11.0",
@@ -223,7 +229,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Each tool of your plug-in now states whether it only reads information or sends something that cannot be taken back. ChatGPT uses this to decide when to ask a customer to confirm.",
       "Sending a request is marked as an action that cannot be undone, so ChatGPT may ask the customer to confirm before it is sent. Nothing else changes.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.12.0",
@@ -234,7 +240,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Find a collaborator: a person says what they need or what they can offer, and the plug-in shows the members whose entries match.",
       "Contact is direct: the plug-in shows the website, general email and phone number you list for each member, and the person writes or calls the member themselves. Neither you nor BizPlug introduces, forwards or vouches. Other plug-ins do not change.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.13.0",
@@ -245,7 +251,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "An I've paid button in the card asks your payment provider whether the payment went through and shows Paid or Waiting for payment, without the customer typing their reference.",
       "Card details are only ever entered on the payment provider's own page, never in ChatGPT.",
     ],
-    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false },
+    features: { menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false },
   },
   {
     version: "0.14.0",
@@ -280,6 +286,18 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Without Clerk keys saved, nothing changes: your plug-in stays open to anyone, as before.",
     ],
     features: { ...SOFTWARE_FEATURES, customerSignIn: true },
+  },
+  {
+    version: "0.17.0",
+    date: "2026-11-19",
+    summary: "Account tools: a business that runs its own MCP server can offer its tools in its plug-in, so signed-in customers work in their own account from ChatGPT.",
+    notes: [
+      "Account tools: if your product has its own MCP server, save its address under Integrations, in the Clerk sign-in panel. Your plug-in then also offers your server's tools, so a customer can work in their own account with you from ChatGPT.",
+      "Customers sign in with your Clerk application to use those tools. The rest of your plug-in (menu, answers, requests) stays open to anyone, so people who are not customers yet can still ask about your product.",
+      "Your plug-in offers the tools your server listed when you saved the address, and keeps exactly those until you press Refresh. Each call goes to your server with the customer's own sign-in; BizPlug keeps neither the sign-in nor what was asked or answered.",
+      "Without a saved address nothing changes: with Clerk sign-in alone, your whole plug-in still answers only signed-in customers, as in 0.16.0.",
+    ],
+    features: { ...SOFTWARE_FEATURES, customerSignIn: true, appTools: true },
   },
 ];
 
