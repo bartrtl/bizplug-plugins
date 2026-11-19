@@ -1,0 +1,13 @@
+{
+  "id": "ocean",
+  "name": "Ocean",
+  "description": "Cyan to blue on deep navy. Calm and clear: travel, wellness, marine and professional services.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#67e8f9",
+    "a2": "#60a5fa",
+    "ink": "#06121f",
+    "bg": "#071a2b",
+    "glow": "rgba(103,232,249,.14)"
+  }
+}

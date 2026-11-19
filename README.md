@@ -13,6 +13,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Contact: info@bizplug.ai
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Card themes, and how to propose one: [THEMES.md](THEMES.md)
 
 ## What is in a package
 
@@ -41,6 +42,7 @@ source/
   plugin-addons.ts             what a plug-in can be bundled with, and the status of each
   plugin-versions.ts           every plug-in version and what changed in it
   widgets/plugin-widget.ts     the card a plug-in shows in ChatGPT
+  card-themes.ts               the card's colour themes a business can pick, and their checks
 ```
 
 ## Try a plug-in in ChatGPT

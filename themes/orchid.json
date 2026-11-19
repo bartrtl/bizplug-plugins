@@ -1,0 +1,13 @@
+{
+  "id": "orchid",
+  "name": "Orchid",
+  "description": "Pink to violet on deep indigo. Bold and stylish: beauty, fashion, nightlife and creative studios.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#f0abfc",
+    "a2": "#a78bfa",
+    "ink": "#1a1030",
+    "bg": "#140f24",
+    "glow": "rgba(240,171,252,.14)"
+  }
+}

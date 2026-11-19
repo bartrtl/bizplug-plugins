@@ -1,0 +1,13 @@
+{
+  "id": "sunset",
+  "name": "Sunset",
+  "description": "Amber to coral on a warm dark plum. Friendly and lively: restaurants, cafés, bakeries and events.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#fcd34d",
+    "a2": "#fb7185",
+    "ink": "#1f0f14",
+    "bg": "#1c1016",
+    "glow": "rgba(251,113,133,.14)"
+  }
+}

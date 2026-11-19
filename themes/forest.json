@@ -1,0 +1,13 @@
+{
+  "id": "forest",
+  "name": "Forest",
+  "description": "Leaf green to teal on dark pine. Fresh and natural: gardens, outdoor, health and sustainable brands.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#86efac",
+    "a2": "#2dd4bf",
+    "ink": "#052e1f",
+    "bg": "#0b1a14",
+    "glow": "rgba(134,239,172,.12)"
+  }
+}

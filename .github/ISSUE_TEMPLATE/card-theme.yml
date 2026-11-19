@@ -1,0 +1,47 @@
+name: Propose a card theme
+description: A new colour theme for the BizPlug plug-in card in ChatGPT
+title: "Card theme: "
+labels: ["card theme"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [THEMES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/THEMES.md) first, and check your theme with `npx tsx themes/check-theme.ts your-theme.json`.
+  - type: textarea
+    id: theme
+    attributes:
+      label: Theme JSON
+      description: The theme in the format of the files in themes/.
+      render: json
+      placeholder: |
+        {
+          "id": "harbour",
+          "name": "Harbour",
+          "description": "Sea blue to sand on dark slate. Calm and clear: marinas, seafood restaurants and coastal stays.",
+          "author": "Your name or company",
+          "colors": { "a1": "#7dd3fc", "a2": "#fcd9a8", "ink": "#0b1620", "bg": "#0d1a24", "glow": "rgba(125,211,252,.14)" }
+        }
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Output of the check
+      description: What `npx tsx themes/check-theme.ts your-theme.json` printed.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot (optional)
+      description: Your theme on a card, if you have one, for example a copy of a preview with your colours.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before you send it
+      options:
+        - label: The theme is my own work and is not another company's brand colours used without permission.
+          required: true
+        - label: BizPlug may offer this theme to every business and publish it here, credited to the author I gave.
+          required: true
