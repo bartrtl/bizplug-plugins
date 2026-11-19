@@ -27,6 +27,9 @@
 //   waited for and then shown; a chat entry (dictating a note) hands over to the chat. A record to work in (a
 //   session) is chosen from chips, the first one preselected. What the screens show is described by the menu,
 //   as paths into the tool's result; every value is drawn as plain text.
+//   From 0.20.0 a record's screen can carry Send by email and Send on WhatsApp (open.send): they open the
+//   customer's own mail app (through the email page) or WhatsApp with a text from the record filled in. The
+//   customer sends it; the card sends nothing.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
@@ -973,10 +976,33 @@ function adetailView() {
     else if (shown(val)) body = block(shown(val));
     return body ? '<div class="qlabel" style="margin-top:12px">' + esc(sec.label) + '</div><div class="list">' + body + "</div>" : "";
   }).join("");
-  const acts = (o.actions || []).map((a, i) => '<button class="btn go" data-aact="' + i + '"' + (state.busy ? " disabled" : "") + ">" + esc(a.label) + "</button>").join("");
+  // 0.20.0: Send by email / Send on WhatsApp, only when the record has a text to send.
+  const sends = (o.send || []).map((sd, i) => (asendText(sd, x) ? '<button class="btn' + (sd.via === "whatsapp" ? " wa" : "") + '" data-asendto="' + i + '">' + icon(sd.via === "whatsapp" ? "whatsapp" : "mail") + esc(sd.label) + "</button>" : "")).join("");
+  const acts = sends + (o.actions || []).map((a, i) => '<button class="btn go" data-aact="' + i + '"' + (state.busy ? " disabled" : "") + ">" + esc(a.label) + "</button>").join("");
   return atop((shown(at(x, vw.title)) || it.title).slice(0, 80), acct.rows.length ? "list" : "") +
     (state.busy ? '<div class="empty">Loading…</div>' : (fields ? '<div class="sum sm">' + fields + "</div>" : "") + sections) + errLine() +
-    (acts && !state.busy ? '<div class="actions" style="margin-top:12px">' + acts + "</div>" : "");
+    (acts && !state.busy ? '<div class="actions" style="margin-top:12px">' + acts + "</div>" : "") +
+    (sends && !state.busy ? '<div class="note">Send opens your own mail app or WhatsApp with the text filled in. You send it yourself.</div>' : "");
+}
+// The text a send button carries: the record's own draft, or the fallback the menu names.
+const asendText = (sd, x) => shown(at(x, sd.body)) || (sd.orBody ? shown(at(x, sd.orBody)) : "");
+// A draft may open with its subject ("Subject: ..." then a blank line): email keeps it apart, WhatsApp drops it.
+function asplit(text) {
+  const m = String(text).match(/^\s*Subject:[ \t]*([^\n]*)\n+([\s\S]*)$/i);
+  return m ? { subject: m[1].trim().slice(0, 200), body: m[2].trim() } : { subject: "", body: String(text).trim() };
+}
+function asendOpen(sd, x) {
+  const d = asplit(asendText(sd, x));
+  const to = sd.to ? shown(at(x, sd.to)).trim() : "";
+  let href;
+  if (sd.via === "whatsapp") {
+    const digits = to.replace(/[^0-9]/g, "");
+    href = "https://wa.me/" + (digits.length >= 7 && digits.length <= 15 ? digits : "") + "?text=" + encodeURIComponent(d.body.slice(0, 3000));
+  } else {
+    const ok = /^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']+$/.test(to);
+    href = MAIL_PAGE + "#" + (ok ? "to=" + encodeURIComponent(to) + "&" : "") + (d.subject ? "subject=" + encodeURIComponent(d.subject) + "&" : "") + "body=" + encodeURIComponent(d.body.slice(0, 6000));
+  }
+  if (oa() && oa().openExternal) oa().openExternal({ href, redirectUrl: false }); else window.open(href, "_blank", "noopener");
 }
 
 function openOption(i) {
@@ -1108,6 +1134,10 @@ function render() {
     if (!it || !row || !it.open) return;
     acct.row = row; acct.detail = row; state.view = "adetail"; state.error = "";
     if (it.open.tool) busyDo(async () => { acct.detail = await acall(it.open.tool, { [it.open.arg]: at(row, it.open.from) }); }); else render();
+  });
+  on("[data-asendto]", (b) => {
+    const it = acct.item, sd = it && it.open ? (it.open.send || [])[Number(b.dataset.asendto)] : null;
+    if (sd && acct.detail) asendOpen(sd, acct.detail);
   });
   on("[data-aact]", (b) => {
     const it = acct.item, a = it && it.open ? (it.open.actions || [])[Number(b.dataset.aact)] : null;
