@@ -7,7 +7,7 @@ import type { Engine, Span } from "@/lib/industry-functions";
 import { CUSTOMER_LINKS, type CustomerLinkKey } from "@/lib/customer-links";
 
 export type AddonStatus = "included" | "setup" | "custom";
-export type AddonGroup = "requests" | "chat" | "payments" | "calendars" | "reviews" | "social";
+export type AddonGroup = "requests" | "chat" | "payments" | "calendars" | "reviews" | "social" | "access";
 
 export type Addon = {
   id: string;
@@ -57,6 +57,7 @@ export const ADDON_GROUP_LABEL: Record<AddonGroup, string> = {
   calendars: "Calendars and booking pages",
   reviews: "Directions and reviews",
   social: "Social media",
+  access: "Who can use your plug-in",
 };
 
 // Offered on every plug-in.
@@ -332,8 +333,27 @@ const CHECKOUT_COM: Addon = {
   link: { label: "How checkout works", href: "/how-to/requests/stripe-checkout" },
 };
 
+// Customer sign-in with the business's own Clerk application (customer-sign-in.ts, plug-in version 0.16.0).
+const CLERK_SIGN_IN: Addon = {
+  id: "clerk-sign-in", name: "Clerk sign-in", group: "access", status: "included",
+  what: "Only your own customers or members can use your plug-in: ChatGPT asks them to sign in with your Clerk application first.",
+  value: "Keep a plug-in for your members or existing customers only, with the sign-in you already run on Clerk.",
+  needs: ["A Clerk application of your own (clerk.com), with the customers or members who may use the plug-in as its users.", "Your plug-in live on test, on version 0.16.0 or later."],
+  steps: [
+    "In the Clerk Dashboard, open your application and the instance your customers sign in to: Production for real customers, Development to try it first.",
+    "Open Agents, then MCP servers, and press Add MCP server. Enter your plug-in's test address and press Add server; do the same for its production address. Both addresses are shown on this panel. Tick Allow public clients to connect, so ChatGPT can register itself.",
+    "Open API keys and copy the publishable key (pk_…) and the secret key (sk_…) of the same instance.",
+    "Paste both here and press Save. BizPlug checks them with Clerk before saving. The secret key is stored encrypted and not shown again; save both fields empty to switch sign-in off.",
+    "Press Check sign-in. It checks your Clerk instance, your keys and your plug-in's version, and says what is still missing. It sends nothing to anyone.",
+    "Add your plug-in again in ChatGPT (remove the old connector first): ChatGPT now opens your Clerk sign-in page. Sign in with a user of your application, and the plug-in answers as before.",
+    "From the moment you save, your plug-in answers only signed-in customers, on test and in production. Customers who added it before must add it again and sign in.",
+    "BizPlug checks each customer's sign-in with your Clerk application on every request. It keeps none of their account details, and requests reach you as before. Who may sign in is up to you, in Clerk.",
+  ],
+  link: { label: "Set up customer sign-in", href: "/how-to/plug-in/customer-sign-in" },
+};
+
 /** The add-ons with their own how-to page, for src/lib/how-to.ts: the pages are written from the same steps. */
-export const GUIDED_ADDONS = { stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
+export const GUIDED_ADDONS = { clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span): Addon[] {
@@ -342,7 +362,7 @@ export function addonsFor(engine: Engine, span?: Span): Addon[] {
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...checkout, ...LINK_ADDONS];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...checkout, ...LINK_ADDONS, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 

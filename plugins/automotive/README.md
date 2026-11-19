@@ -1,6 +1,6 @@
 # BizPlug Automotive & Dealerships
 
-Version 0.15.0. Book service and test drives for automotive & dealerships businesses.
+Version 0.16.0. Book service and test drives for automotive & dealerships businesses.
 
 - Main function: Book service and test drives
 - MCP server URL: `https://mcp.bizplug.ai/plugin/automotive` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.15.0. Book service and test drives for automotive & dealerships busine
 
 ## Changes
 
+- **0.16.0** (19 November 2026): Customer sign-in with Clerk: a business that runs its own Clerk application can make its plug-in answer only its signed-in customers or members.
 - **0.15.0** (18 November 2026): Software & SaaS plug-ins get a menu made for software (Features, Pricing, Help & guides, Support, Book a demo), and every business's plug-in describes only the business to ChatGPT.
 - **0.14.0** (18 November 2026): A business's plug-in shows its full name in ChatGPT, the business's name with what it is, and its own logo as the plug-in's icon.
 - **0.13.0** (18 November 2026): A pay step in the card after a request with checkout: the total, a Pay now button to the business's own checkout page, and an I've paid button that checks the payment.
