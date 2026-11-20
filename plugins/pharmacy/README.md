@@ -1,6 +1,6 @@
 # BizPlug Pharmacies
 
-Version 0.26.0. Store services and callback requests for pharmacies businesses.
+Version 0.27.0. Store services and callback requests for pharmacies businesses.
 
 - Main function: Store services and callback requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pharmacy` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.26.0. Store services and callback requests for pharmacies businesses.
 
 ## Changes
 
+- **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.
 - **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.
 - **0.25.0** (20 November 2026): Showcase: the business's logo on its card, member logos, and committees, the newsletter, and news and events on their own screens.
 - **0.24.0** (20 November 2026): Password sign-in: parts of a plug-in that only the people on the business's own list can use, after they sign in with an email and password.

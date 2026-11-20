@@ -189,6 +189,34 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .find input:focus{border-color:var(--a2)}
 .q small{opacity:.7;margin-left:3px}
 .tag{font-size:12.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.stay h4{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;font-weight:650}
+.calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.calhd b{font-size:15px}
+.calnav{all:unset;cursor:pointer;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;border:1px solid var(--line);background:var(--bg);font-size:16px}
+.calnav[disabled]{opacity:.3;cursor:default}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .dw{font-size:11px;color:var(--muted);text-align:center;padding:2px 0}
+.cd{all:unset;box-sizing:border-box;cursor:pointer;border-radius:10px;padding:6px 2px;text-align:center;border:1px solid var(--line);background:var(--card);min-height:46px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cd b{font-size:13.5px;font-weight:650}
+.cd small{font-size:9.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.cd.past,.cd.closed{opacity:.3;cursor:default}
+.cd.soldout{opacity:.45;cursor:default;text-decoration:line-through}
+.cd.in{background:var(--glow);border-color:var(--a2)}
+.cd.start,.cd.end{color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));border-color:transparent}
+.cd.start small,.cd.end small{color:var(--ink);opacity:.8}
+.cd.blank{visibility:hidden}
+.guest{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-top:1px solid var(--line)}
+.guest:first-of-type{border-top:0}
+.guest .qty{margin:0}
+.room .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.room .chip{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.room .chip.left{color:#f5b942;border-color:#f5b94266}
+.room .per{font-size:12.5px;color:var(--muted)}
+.room details{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.room details summary{cursor:pointer}
+.room details div{display:flex;justify-content:space-between;padding:2px 0}
+.pol{font-size:12.5px;color:var(--muted);margin-top:4px}
+.testtag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.04em;background:#f5b94233;color:#f5b942;vertical-align:middle}
 .about{color:var(--muted);font-size:13.5px;margin-top:8px}
 .more{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
 .more span{font-size:12px;color:var(--muted);margin-right:4px}
@@ -652,8 +680,79 @@ function catalogView() {
   return top(lookup ? lookup.title : "Prices") + '<div class="list">' + rows + "</div>" + (c.more ? '<div class="note">' + c.more + " more: search to narrow the list.</div>" : "") + errLine() +
     '<div class="actions sticky">' + (request ? primary(n ? request.title + " (" + n + ")" : "Choose items to order", "order", n ? "" : " disabled") : "") + '<button class="btn" data-act="again">Search</button></div>';
 }
+// ---- 0.27.0: the hotel booking screen (stay-booking.ts), after msg2ai's Visit Pass card ----
+const DOW = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const monthName = (m) => { const x = String(m || "").split("-"); return x.length === 2 ? MONTHS[Number(x[1]) - 1] + " " + x[0] : m; };
+const shortDay = (d) => { const x = String(d || "").split("-"); return x.length === 3 ? Number(x[2]) + " " + MONTHS[Number(x[1]) - 1].slice(0, 3) : d; };
+// The stay being chosen on the card: dates are tapped here first and asked for once both are set.
+function stayQ() {
+  const a = (state.data.availability || {}).stay || {};
+  const q = a.query || {};
+  if (!state.sq || state.sq.v !== a) state.sq = { v: a, start: q.start || "", end: q.end || "", adults: q.adults || 2, children: q.children || 0, rooms: q.rooms || 1, month: q.month || (a.calendar || {}).month || "" };
+  return state.sq;
+}
+function stayArgsOf(q, over) {
+  const o = Object.assign({ adults: q.adults, children: q.children, rooms: q.rooms }, over || {});
+  if (q.start && q.end && !("month" in (over || {}))) { o.start = q.start; o.end = q.end; }
+  else if (o.month === undefined) o.month = q.month;
+  return clean(o);
+}
+function stayAsk(over) {
+  const lookup = opt("lookup"), q = stayQ(), a = stayArgsOf(q, over);
+  const party = q.adults + " adults" + (q.children ? ", " + q.children + " children" : "") + (q.rooms > 1 ? ", " + q.rooms + " rooms" : "");
+  run(lookup && lookup.tool, a, a.start ? "What rooms are free from " + a.start + " to " + a.end + " for " + party + "?" : "Show me which nights are free in " + monthName(a.month) + ".");
+}
+let stayTimer = null;
+function stayAskSoon() { if (stayTimer) clearTimeout(stayTimer); stayTimer = setTimeout(() => { stayTimer = null; if (stayQ().start && stayQ().end) stayAsk(); else render(); }, 400); }
+function stayScreen() {
+  const s = state.data.availability.stay, q = stayQ(), pol = s.policies || {}, cal = s.calendar || { days: [] };
+  const lookup = opt("lookup"), request = opt("request");
+  const homes = false;
+  const intro = '<div class="sum"><div><b>Book your stay</b><span>' + (pol.ratePlan ? esc(pol.ratePlan) + " · " : "") + esc(pol.tax || "") +
+    (s.checkout && s.checkout.testMode ? '<span class="testtag">' + esc(s.checkout.label) + " TEST</span>" : "") + "</span></div></div>";
+  // Calendar: the first tap is check-in, the next one after it check-out.
+  const first = cal.days.length ? new Date(cal.days[0].date + "T00:00:00Z").getUTCDay() : 0;
+  const cells = DOW.map((d) => '<span class="dw">' + d + "</span>").join("") + Array.from({ length: first }, () => '<span class="cd blank"></span>').join("") +
+    cal.days.map((d) => {
+      const out = q.start && !q.end && d.date > q.start && d.state !== "past";
+      const can = d.state === "open" || out;
+      const cls = ["cd", d.state, d.date === q.start ? "start" : "", d.date === q.end ? "end" : "", q.start && q.end && d.date > q.start && d.date < q.end ? "in" : ""].join(" ");
+      return '<button class="' + cls + '" data-sday="' + esc(d.date) + '"' + (can ? "" : " disabled") + "><b>" + Number(d.date.slice(8)) + "</b>" + (d.state === "open" && d.from ? "<small>" + esc(String(d.from).replace(/\.00$/, "")) + "</small>" : d.state === "soldout" ? "<small>Full</small>" : "") + "</button>";
+    }).join("");
+  const pickNote = !q.start ? "Tap your check-in day." : !q.end ? "Check-in " + shortDay(q.start) + ". Now tap your check-out day." : shortDay(q.start) + " to " + shortDay(q.end) + (s.query && s.query.nights ? " · " + s.query.nights + (s.query.nights === 1 ? " night" : " nights") : "");
+  const calendar = "<h4>Dates</h4>" + '<div class="calhd"><button class="calnav" data-smonth="' + esc(cal.prev || "") + '"' + (cal.prev ? "" : " disabled") + ' aria-label="Previous month">‹</button><b>' + esc(monthName(cal.month)) +
+    '</b><button class="calnav" data-smonth="' + esc(cal.next || "") + '"' + (cal.next ? "" : " disabled") + ' aria-label="Next month">›</button></div><div class="cal">' + cells + '</div><div class="note">' + esc(pickNote) + "</div>";
+  const stepper = (key, label, n, min, max) => '<div class="guest"><span>' + label + '</span><div class="qty"><button class="step" data-g="' + key + '" data-by="-1"' + (n <= min ? " disabled" : "") + ' aria-label="Fewer ' + label.toLowerCase() + '">−</button><span>' + n + '</span><button class="step" data-g="' + key + '" data-by="1"' + (n >= max ? " disabled" : "") + ' aria-label="More ' + label.toLowerCase() + '">+</button></div></div>';
+  const guests = "<h4>Guests</h4>" + stepper("adults", "Adults", q.adults, 1, pol.maxAdults || 12) + stepper("children", "Children", q.children, 0, pol.maxChildren || 9) + (homes ? "" : stepper("rooms", "Rooms", q.rooms, 1, pol.maxRooms || 3));
+  // Rooms: only once both dates are chosen.
+  let rooms = "";
+  if (q.start && q.end && s.query && s.query.start === q.start && s.query.end === q.end) {
+    if (s.problem) rooms = '<div class="empty">' + esc(s.problem) + "</div>";
+    else if (!s.rooms.length) rooms = '<div class="empty">No room is free on every night for your party. Try other dates.</div>';
+    else rooms = '<div class="list">' + s.rooms.map((r) => {
+      const label = s.book === "pay" ? "Book & pay " + r.total : s.book === "whatsapp" ? "Book on WhatsApp" : (request ? request.title : "Request the booking");
+      const btn = s.book === "request" ? '<button class="btn go" data-pick-stay="' + esc(r.id) + '" data-name="' + esc(r.name) + '" data-total="' + esc(r.total) + '">' + esc(label) + "</button>"
+        : '<button class="' + (s.book === "whatsapp" ? "btn wa" : "btn go") + '" data-book-room="' + esc(r.id) + '" data-name="' + esc(r.name) + '"' + (state.busy ? " disabled" : "") + ">" + (s.book === "whatsapp" ? icon("whatsapp") : "") + esc(label) + "</button>";
+      const chips = [r.view ? r.view + " view" : "", r.bed, r.max ? "Up to " + r.max + " people" : ""].filter(Boolean).map((c) => '<span class="chip">' + esc(c) + "</span>").join("") +
+        (r.left != null && r.left <= 3 ? '<span class="chip left">Only ' + r.left + " left</span>" : "") + (r.amenities || []).map((c) => '<span class="chip">' + esc(c) + "</span>").join("");
+      const nights = r.nightly && r.nightly.length > 1 ? "<details><summary>Night by night</summary>" + r.nightly.map((n) => "<div><span>" + esc(shortDay(n.date)) + "</span><span>" + esc(n.rate) + "</span></div>").join("") + "</details>" : "";
+      return '<div class="it room"><div class="nm"><b>' + esc(r.name) + '</b><span class="pr">' + esc(r.total) + '</span></div><div class="per">' + esc(r.avgNightly) + " avg per night" + (q.rooms > 1 ? " · " + q.rooms + " rooms" : "") + "</div>" +
+        (r.blurb ? '<div class="bl">' + esc(r.blurb) + "</div>" : "") + (chips ? '<div class="chips">' + chips + "</div>" : "") + nights + '<div class="acts">' + btn + "</div></div>";
+    }).join("") + "</div>";
+    const out = [s.soldOut && s.soldOut.length ? "Full on these dates: " + s.soldOut.join(", ") + "." : "", s.tooSmall && s.tooSmall.length ? "Too small for your party: " + s.tooSmall.join(", ") + "." : "", s.tooShort && s.tooShort.length ? "Needs a longer stay: " + s.tooShort.join(", ") + "." : ""].filter(Boolean).join(" ");
+    rooms = "<h4>Rooms</h4>" + rooms + (out ? '<div class="note">' + esc(out) + "</div>" : "");
+  }
+  const how = s.book === "pay" ? "Book & pay opens " + (s.checkout ? s.checkout.label : "the hotel") + "'s secure page; the room is held for 30 minutes while you pay. Card details are never entered here."
+    : s.book === "whatsapp" ? "Book on WhatsApp opens the hotel's concierge with your visit code; nothing is booked until you pay there."
+    : "The hotel confirms your request by email; nothing is held or charged here.";
+  const policies = '<div class="pol">' + (pol.checkIn ? "Check-in from " + esc(pol.checkIn) + " · check-out by " + esc(pol.checkOut) + ". " : "") + (pol.cancellation ? esc(pol.cancellation) + " " : "") + esc(how) + "</div>";
+  const concierge = s.concierge ? '<div class="actions" style="margin-top:12px"><button class="btn wa" data-href="' + esc(s.concierge) + '">' + icon("whatsapp") + "Questions? Chat with the concierge</button></div>" : "";
+  return top(lookup ? lookup.title : "Book your stay") + '<div class="stay">' + intro + calendar + guests + (state.busy ? '<div class="note">Checking rooms and rates…</div>' : "") + errLine() + rooms + policies + concierge + "</div>";
+}
 function availabilityView() {
   const a = state.data.availability || { options: [] };
+  if (a.stay && a.stay.calendar) return stayScreen();
   const lookup = opt("lookup"), request = opt("request");
   const head = top(lookup ? lookup.title : "Availability") + '<div class="sum"><div><b>' + esc(a.when) + "</b><span>" + esc(a.tax) + "</span></div></div>";
   // 0.4.0: other dates with one tap, and each option opens on its own screen.
@@ -1086,7 +1185,7 @@ function sentView() {
   const box = payBox(s);
   // A card that draws the pay step drops the same link from the plain buttons.
   const others = box ? (s.links || []).filter((l) => !s.pay || l.href !== s.pay.url) : s.links;
-  return '<div class="sent"><b>Request sent</b><p>Reference <strong>' + esc(s.reference) + "</strong></p>" + s.lines.map((l) => "<p>" + esc(l) + "</p>").join("") + '<p class="note">' + esc(s.note) + "</p></div>" + box + '<div class="actions" style="margin-top:12px"><button class="btn" data-view="menu">← Menu</button>' + (s.whatsapp ? '<button class="btn wa" data-href="' + esc(s.whatsapp) + '">' + icon("whatsapp") + "Message on WhatsApp</button>" : "") + linkButtons(others) + contactButton() + "</div>";
+  return '<div class="sent"><b>' + esc(s.title || "Request sent") + '</b><p>Reference <strong>'  + esc(s.reference) + "</strong></p>" + s.lines.map((l) => "<p>" + esc(l) + "</p>").join("") + '<p class="note">' + esc(s.note) + "</p></div>" + box + '<div class="actions" style="margin-top:12px"><button class="btn" data-view="menu">← Menu</button>' + (s.whatsapp ? '<button class="btn wa" data-href="' + esc(s.whatsapp) + '">' + icon("whatsapp") + "Message on WhatsApp</button>" : "") + linkButtons(others) + contactButton() + "</div>";
 }
 // 0.4.0: from a sent request, the business's contact details are one tap away.
 function contactButton() {
@@ -1268,6 +1367,8 @@ function openOption(i) {
   state.error = ""; state.hint = "";
   if (o.kind === "account") { openAccount(o.key, ""); return; }
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
+  // 0.27.0: a hotel's Availability and price opens the booking screen on this month's calendar.
+  if (o.kind === "lookup" && p().stayCal && inCard()) { const q = state.sq || {}; run(o.tool, clean({ adults: q.adults || 2, children: q.children || 0, rooms: q.rooms || 1, start: q.start && q.end ? q.start : "", end: q.start && q.end ? q.end : "" }), o.example); return; }
   // 0.15.0: software products. Features, Pricing and Help open with their results; Support opens its form.
   if (o.kind === "features" || o.kind === "guides") { state.f[o.kind === "features" ? "fq" : "gq"] = ""; run(o.tool, {}, o.example); return; }
   if (o.kind === "pricing") { run(o.tool, {}, o.example); return; }
@@ -1336,7 +1437,32 @@ function render() {
   on("[data-more]", (b) => { state.cart[b.dataset.more] = Math.min((state.cart[b.dataset.more] || 0) + 1, 99); render(); });
   on("[data-less]", (b) => { state.cart[b.dataset.less] = Math.max((state.cart[b.dataset.less] || 0) - 1, 0); render(); });
   on('[data-act="order"]', () => { state.pick = { type: "order" }; state.view = "request"; state.error = ""; render(); });
-  on("[data-pick-stay]", (b) => { state.pick = { type: "stay", id: b.dataset.pickStay, name: b.dataset.name, total: b.dataset.total }; state.view = "request"; state.error = ""; render(); });
+  on("[data-pick-stay]", (b) => {
+    // 0.27.0: the request form gets the dates and party chosen on the booking screen.
+    if (state.sq && state.sq.start && state.sq.end) { state.f.start = state.sq.start; state.f.end = state.sq.end; state.f.guests = String(state.sq.adults + state.sq.children); }
+    state.pick = { type: "stay", id: b.dataset.pickStay, name: b.dataset.name, total: b.dataset.total }; state.view = "request"; state.error = ""; render();
+  });
+  // ---- 0.27.0: the hotel booking screen ----
+  on("[data-sday]", (b) => {
+    const q = stayQ(), d = b.dataset.sday;
+    state.error = "";
+    if (q.start && !q.end && d > q.start) { q.end = d; stayAsk(); return; }
+    q.start = d; q.end = ""; render();
+  });
+  on("[data-smonth]", (b) => { if (!b.dataset.smonth) return; const q = stayQ(); q.month = b.dataset.smonth; stayAsk({ month: b.dataset.smonth }); });
+  on("[data-g]", (b) => {
+    const q = stayQ(), k = b.dataset.g, pol = (state.data.availability.stay || {}).policies || {};
+    const max = { adults: pol.maxAdults || 12, children: pol.maxChildren || 9, rooms: pol.maxRooms || 3 }[k], min = k === "children" ? 0 : 1;
+    q[k] = Math.max(min, Math.min(max, q[k] + Number(b.dataset.by)));
+    if (k === "rooms" && q.adults < q.rooms) q.adults = q.rooms;
+    if (k === "adults" && q.rooms > q.adults) q.rooms = q.adults;
+    render(); stayAskSoon();
+  });
+  on("[data-book-room]", (b) => {
+    const q = stayQ(), r = opt("request");
+    run(r && r.tool, clean({ option: b.dataset.bookRoom, start: q.start, end: q.end, adults: q.adults, children: q.children, rooms: q.rooms, guests: q.adults + q.children }),
+      "Book the " + b.dataset.name + " from " + q.start + " to " + q.end + " for " + q.adults + " adults" + (q.children ? " and " + q.children + " children" : "") + (q.rooms > 1 ? ", " + q.rooms + " rooms" : "") + ".");
+  });
   on("[data-service]", (b) => run(lookup && lookup.tool, clean({ service: b.dataset.service, date: v("date") }), "What times are open for " + b.dataset.service + "?"));
   on('[data-act="slots"]', () => run(lookup && lookup.tool, clean({ service: (state.data.slots && state.data.slots.service && state.data.slots.service.id) || "", date: v("date") }), "What times are open on " + v("date") + "?"));
   on("[data-time]", (b) => {
