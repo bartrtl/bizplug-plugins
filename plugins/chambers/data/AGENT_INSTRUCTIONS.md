@@ -23,6 +23,7 @@ Columns (first row of the file, exactly these names):
 - `website`: Website, url. Full URL. Example: https://example.com
 - `tagline`: What you are, text. A few words shown after your name in ChatGPT, e.g. "Harbor Street Studio – Yoga in Charlotte". Without it, the plug-in's industry is shown. Example: Chambers of Commerce & Business Associations in Charlotte
 - `logo`: Logo URL, url. Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT. Example: https://example.com/logo.png
+- `wordmark`: Wide logo URL, url. Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above. Example: https://example.com/logo-wide.png
 - `address`: Address, text. Street address, if customers visit. Example: 123 Main St, Charlotte, NC 28202
 - `city`: City, text.  Example: Charlotte
 - `region`: State or country, text.  Example: NC
@@ -80,12 +81,55 @@ Columns (first row of the file, exactly these names):
 - `phone`: General phone, text. The company's switchboard, with country code. Never a personal mobile number. Example: +1 704 555 0142
 - `looking_for`: Looking for, text. What the member wants to collaborate on or is looking for. Example: Developers to partner with on client websites
 - `offers`: Offers, text. What the member can offer other members or visitors. Example: A discount on brand reviews for fellow members
+- `level`: Membership level, text. The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0. Example: Corporate
+- `logo`: Logo URL, url. The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials. Example: https://example.com/logo.png
 
 How to collect it:
 1. List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.
 2. Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.
-3. Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.
-4. People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on.
+3. A logo is optional: the image address of the logo on the member's own website, a PNG, JPEG or WebP file.
+4. Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.
+5. People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on.
+
+### committees.csv (optional, up to 60 rows)
+The committees and working groups members can join, shown under Committees in the plug-in.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Committee, text. As the chamber names it. Example: Hospitality and Tourism Committee
+- `description`: What it works on, text. One to three sentences, in the chamber's own words. Example: Initiatives and discussions on tourism as a growth sector.
+- `chair`: Chair, text. Who chairs it, only as the chamber publishes it. Example: Jane Doe, Example Hotel
+- `url`: Page, url. The committee's page, or the page that describes it. Example: https://example.org/committees
+
+How to collect it:
+1. Take the committees from the chamber's own site: its committees page, or where its events and news name them.
+2. Name a chair only when the chamber publishes who it is.
+
+### news.csv (optional, up to 60 rows)
+The latest news and the upcoming and recent events, shown under News & events in the plug-in.
+
+Columns (first row of the file, exactly these names):
+- `title` (required): Title, text.  Example: Annual Evening of Giving Thanks
+- `kind`: News or event, text. "news" or "event". An event dated before today shows as a past event. Example: event
+- `date`: Date, text. YYYY-MM-DD, or YYYY-MM when only the month is published. Example: 2026-11-20
+- `location`: Where, text. For an event. Example: Four Seasons Hotel, Doha
+- `summary`: Summary, text. One or two sentences. Example: Members, sponsors and partners came together to give thanks.
+- `url`: Page, url. Where to read more or register. Example: https://example.org/events
+
+How to collect it:
+1. Take news and events from the chamber's own site, newest first. Keep upcoming events current: replace the file when the calendar changes.
+
+### newsletter.csv (optional, one row)
+The newsletter and where to subscribe, shown under News & events in the plug-in.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Newsletter, text. Its name, or a plain description if it has none. Example: Chamber newsletter
+- `description`: What it covers, text. In the chamber's own words. Example: Special offers and opportunities for members.
+- `frequency`: How often, text. Only when the chamber says so. Example: Monthly
+- `signup_url`: Sign-up page, url.  Example: https://example.org/#newsletter
+- `archive_url`: Past issues, url.  Example: https://example.org/newsletter
+
+How to collect it:
+1. Take the newsletter's name, sign-up page and archive from the chamber's own site.
 
 ## Format
 - UTF-8 CSV with a header row; comma separated; quote cells that contain commas, quotes or line breaks.

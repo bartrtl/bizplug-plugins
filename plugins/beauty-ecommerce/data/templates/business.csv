@@ -1,2 +1,2 @@
-name,summary,email,phone,website,tagline,logo,address,city,region,hours,currency,notify_email
-Glow Lab Skincare,"Glow Lab Skincare serves customers in and around Charlotte, NC.",hello@example.com,+1 704 555 0100,https://example.com,Beauty E-commerce in Charlotte,https://example.com/logo.png,"123 Main St, Charlotte, NC 28202",Charlotte,NC,Mon-Fri 09:00-17:00; Sat 10:00-14:00,USD,orders@example.com
+name,summary,email,phone,website,tagline,logo,wordmark,address,city,region,hours,currency,notify_email
+Glow Lab Skincare,"Glow Lab Skincare serves customers in and around Charlotte, NC.",hello@example.com,+1 704 555 0100,https://example.com,Beauty E-commerce in Charlotte,https://example.com/logo.png,https://example.com/logo-wide.png,"123 Main St, Charlotte, NC 28202",Charlotte,NC,Mon-Fri 09:00-17:00; Sat 10:00-14:00,USD,orders@example.com

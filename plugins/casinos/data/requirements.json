@@ -70,6 +70,14 @@
           "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
         },
         {
+          "key": "wordmark",
+          "label": "Wide logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo-wide.png",
+          "help": "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,

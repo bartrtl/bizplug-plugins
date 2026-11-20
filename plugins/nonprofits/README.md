@@ -1,6 +1,6 @@
 # BizPlug Nonprofits & Charities
 
-Version 0.24.0. Volunteer and donation requests for nonprofits & charities businesses.
+Version 0.25.0. Volunteer and donation requests for nonprofits & charities businesses.
 
 - Main function: Volunteer and donation requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/nonprofits` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.24.0. Volunteer and donation requests for nonprofits & charities busin
 
 ## Changes
 
+- **0.25.0** (20 November 2026): Showcase: the business's logo on its card, member logos, and committees, the newsletter, and news and events on their own screens.
 - **0.24.0** (20 November 2026): Password sign-in: parts of a plug-in that only the people on the business's own list can use, after they sign in with an email and password.
 - **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.
 - **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.

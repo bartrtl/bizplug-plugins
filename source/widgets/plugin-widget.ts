@@ -74,6 +74,8 @@ const ICONS: Record<string, string> = {
   exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
   enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
   tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  committees: '<circle cx="12" cy="6" r="2.5"/><circle cx="5" cy="17" r="2.5"/><circle cx="19" cy="17" r="2.5"/><path d="M12 8.5v3M12 11.5l-5 3.5M12 11.5l5 3.5"/>',
+  news: '<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 16h3"/>',
   daypass: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 9v6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
@@ -195,6 +197,44 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .sum.biz{align-items:center;justify-content:space-between;margin:0 0 12px}
 .sum.biz b{font-size:15px}
 .sum.sm b{font-size:14px}
+.head .ic.logo{width:54px;height:54px;border-radius:15px;background:#fff;padding:6px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
+.head .wm{flex:none;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
+.head .wm img{height:100%;width:auto;max-width:100%;object-fit:contain;display:block}
+@media (max-width:420px){.head .wm{height:48px;max-width:150px}}
+.lvl{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:999px;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));margin-left:6px;vertical-align:1px;white-space:nowrap}
+.ic.logo img,.lg img{width:100%;height:100%;object-fit:contain;display:block}
+.lg{flex:none;width:46px;height:46px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:5px;box-shadow:0 0 0 1px var(--line)}
+.lg.mono,.ic.mono{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--ink);font-weight:800;font-size:15px;letter-spacing:.02em;padding:0}
+.lg.big{width:84px;height:84px;border-radius:20px;padding:9px}
+.lg.big.mono{font-size:28px}
+.it.mb{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:center}
+.it.mb .rowb{display:contents}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
+.stat{flex:1;min-width:90px;padding:10px 12px;border-radius:14px;background:linear-gradient(135deg,color-mix(in srgb,var(--a1) 16%,transparent),color-mix(in srgb,var(--a2) 10%,transparent));border:1px solid var(--line)}
+.stat b{display:block;font-size:20px;letter-spacing:-.02em}
+.stat span{font-size:12px;color:var(--muted)}
+.logos{display:flex;gap:8px;overflow:hidden;margin:12px 0 2px;mask-image:linear-gradient(90deg,#000 85%,transparent)}
+.logos .lg{width:40px;height:40px;border-radius:11px}
+.mhero{display:flex;gap:14px;align-items:center;margin:4px 0 10px}
+.mhero b{font-size:18px;display:block}
+.mhero span{color:var(--muted);font-size:13px}
+.mhero .lvl{color:var(--ink);font-size:10.5px}
+.cm{padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);position:relative;overflow:hidden}
+.cm:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--a1),var(--a2))}
+.cm b{font-size:15px;display:block}
+.cm .ch{font-size:12px;color:var(--a2);font-weight:650;margin-top:2px}
+:root[data-theme=light] .cm .ch{color:var(--fg)}
+.cm p{font-size:13px;color:var(--muted);margin-top:6px}
+.nl{padding:16px;border-radius:18px;border:1px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(110deg,var(--a1),var(--a2)) border-box;margin:10px 0 14px}
+.nl b{font-size:16px;display:block}
+.nl p{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.nw{display:grid;grid-template-columns:58px 1fr;gap:12px;align-items:start}
+.dt{border-radius:12px;text-align:center;padding:6px 0;background:var(--card);border:1px solid var(--line)}
+.dt b{display:block;font-size:19px;line-height:1.1}
+.dt span{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.dt.up{background:linear-gradient(135deg,var(--a1),var(--a2));border-color:transparent;color:var(--ink)}
+.dt.up span{color:var(--ink);opacity:.75}
+.kd{font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .pre{white-space:pre-line}
 .btn[disabled]{opacity:.55;cursor:default}
 .sent p.msg{color:var(--fg);font-size:14px;margin-top:6px;padding:10px 12px;border-radius:12px;border:1px dashed var(--line);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
@@ -517,7 +557,8 @@ async function chooseBiz(name) {
 function header() {
   const d = p();
   // A business's card shows no BizPlug mark (BizPlug stays in the contact bar); the industry-wide one does.
-  const mark = d.bound ? '<span class="ic">' + icon("store") + "</span>" : MARK;
+  // 0.25.0: the business's own logo in place of the store icon; the store icon comes back if the logo fails to load (render).
+  const mark = !d.bound ? MARK : d.logo && d.logoWide ? '<span class="wm"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"></span>' : d.logo ? '<span class="ic logo"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"></span>' : '<span class="ic">' + icon("store") + "</span>";
   // 0.21.0: the business's own picture above the menu, from BizPlug's site (card-banner.ts); removed if it fails to load (render).
   const banner = d.banner && state.view === "menu" ? '<img class="banner" src="' + esc(d.banner) + '" alt="' + esc(d.title || "") + '">' : "";
   return banner + '<div class="glow"></div><div class="head">' + mark + '<div><div class="t">' + esc(d.title || "Plug-in") + '</div><div class="s">' + esc(d.subtitle) + "</div></div></div>";
@@ -705,6 +746,10 @@ function infoView() {
 const memberArgs = (over) => { const d = state.data.members || {}; return clean(Object.assign({ query: v("mq"), industry: d.industry, location: d.location }, over || {})); };
 const membersAsk = (a) => (a.query ? "Which member businesses match " + a.query + "?" : "Which businesses are members here" + (a.industry ? " in " + a.industry : "") + (a.location ? " at " + a.location : "") + "?");
 const findMembers = (over) => { const o = opt("members"), a = memberArgs(over); run(o && o.tool, a, membersAsk(a)); };
+// 0.25.0: a member's logo, from BizPlug's site (card-logos.ts), or its initials when it has none or it fails to load.
+const LEAVE = /^(of|the|and|for|in|at|llp|llc|inc|ltd|wll|qfc|co|plc|sa|ag|gmbh)$/i;
+const initials = (n) => String(n || "").replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter((w) => w && !LEAVE.test(w)).slice(0, 2).map((w) => w[0].toUpperCase()).join("") || "?";
+const mlogo = (m, big) => (m.logo && /^https:\/\//.test(m.logo) ? '<span class="lg' + (big ? " big" : "") + '"><img src="' + esc(m.logo) + '" alt="" loading="lazy" data-fallback="' + esc(initials(m.name)) + '"></span>' : '<span class="lg mono' + (big ? " big" : "") + '">' + esc(initials(m.name)) + "</span>");
 function membersView() {
   const d = state.data.members || { items: [] };
   const o = opt("members");
@@ -717,10 +762,17 @@ function membersView() {
     '<div class="actions" style="margin:12px 0"><button class="btn go" data-act="collab">Find a collaborator</button></div>';
   const items = d.items || [];
   if (!items.length) return head + '<div class="empty">No member matches' + (d.query ? ' "' + esc(d.query) + '"' : "") + ". Try other words or another filter.</div>" + errLine() + links("members");
-  const rows = items.map((x) =>
-    '<div class="it"><button class="rowb" data-member="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="qlabel">' + esc(x.industry) + "</span></div>" +
-    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + (x.why ? '<div class="bl clamp">' + esc(x.why) + "</div>" : "") + "</button></div>").join("");
-  return head + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
+  // 0.25.0: each member with its logo, and the list's size at the top when nothing narrows it.
+  const logos = items.some((x) => "logo" in x);
+  const text = (x) => '<div class="nm"><b>' + esc(x.name) + (x.level ? '<span class="lvl">' + esc(x.level) + "</span>" : "") + '</b><span class="qlabel">' + esc(x.industry) + "</span></div>" +
+    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + (x.why ? '<div class="bl clamp">' + esc(x.why) + "</div>" : "");
+  const rows = items.map((x) => logos
+    ? '<div class="it mb"><button class="rowb" data-member="' + esc(x.id) + '">' + mlogo(x) + "<div>" + text(x) + "</div></button></div>"
+    : '<div class="it"><button class="rowb" data-member="' + esc(x.id) + '">' + text(x) + "</button></div>").join("");
+  const stats = logos && !d.query && !d.industry && !d.location && d.total
+    ? '<div class="stats"><div class="stat"><b>' + d.total + "</b><span>members</span></div>" + (inds.length ? '<div class="stat"><b>' + inds.length + "</b><span>industries</span></div>" : "") + (locs.length > 1 ? '<div class="stat"><b>' + locs.length + "</b><span>areas</span></div>" : "") + "</div>"
+    : "";
+  return head.replace('<div class="find">', stats + '<div class="find">') + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
     '<div class="note">These are the details ' + esc(d.business || "the business") + " lists for its members. You contact a member directly; nobody introduces you or passes a message on.</div>" + links("members");
 }
 function memberView() {
@@ -729,11 +781,57 @@ function memberView() {
   const row = (label, value) => (value ? "<tr><td>" + label + "</td><td>" + esc(value) + "</td></tr>" : "");
   const web = /^https:\/\//.test(m.website), mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email);
   const facts = row("Looking for", m.lookingFor) + row("Offers", m.offers) + row("Phone", m.phone) + (web ? "" : row("Website", m.website)) + (mail ? row("Email", m.email) : "");
-  return top(m.name) + (m.industry || m.location ? '<div class="sum"><div><b>' + esc(m.industry || m.location) + "</b><span>" + esc(m.industry ? m.location : "") + "</span></div></div>" : "") +
+  const hero = "logo" in m
+    ? '<div class="mhero">' + mlogo(m, true) + "<div><b>" + esc(m.name) + "</b><span>" + esc([m.industry, m.location].filter(Boolean).join(" · ")) + "</span>" + (m.level ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(m.level) + "</span></div>" : "") + "</div></div>"
+    : m.industry || m.location ? '<div class="sum"><div><b>' + esc(m.industry || m.location) + "</b><span>" + esc(m.industry ? m.location : "") + "</span></div></div>" : "";
+  return top(m.name) + hero +
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
       (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
     '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>";
+}
+// ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
+// What the business published, with links to its own pages. Nothing is sent from these screens.
+function committeesView() {
+  const d = state.data.committees || { items: [] };
+  const o = opt("committees");
+  const items = d.items || [];
+  const list = items.map((c) =>
+    '<div class="cm"><b>' + esc(c.name) + "</b>" + (c.chair ? '<div class="ch">Chair: ' + esc(c.chair) + "</div>" : "") + (c.description ? "<p>" + esc(c.description) + "</p>" : "") +
+    (/^https:\/\//.test(c.url) ? '<div class="actions" style="margin-top:10px"><button class="btn go" data-href="' + esc(c.url) + '">More about it</button></div>' : "") + "</div>").join("");
+  const join = opt("request");
+  return top(o ? o.title : "Committees") +
+    '<div class="list" style="margin-top:10px">' + list + "</div>" +
+    (join ? '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc("I'd like to join a committee of " + (d.business || "the chamber") + ".") + '">Ask about joining a committee</button></div>' : "") +
+    '<div class="note">These are the committees ' + esc(d.business || "the business") + " publishes. Who may join each one is up to " + esc(d.business || "the business") + ".</div>" + links("committees");
+}
+const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function newsView() {
+  const d = state.data.news || { items: [] };
+  const o = opt("news");
+  const n = d.newsletter;
+  const today = d.today || isoDay(new Date());
+  const items = d.items || [];
+  const box = (x) => {
+    // A date with only a month (YYYY-MM) shows the month large and the year under it.
+    const m = /^(\d{4})-(\d{2})(?:-(\d{2}))?/.exec(x.date || "");
+    const up = x.kind === "event" && x.date >= today;
+    return m ? '<div class="dt' + (up ? " up" : "") + '"><b>' + (m[3] ? Number(m[3]) : MON[Number(m[2]) - 1]) + "</b><span>" + (m[3] ? MON[Number(m[2]) - 1] + " " + m[1].slice(2) : m[1]) + "</span></div>" : '<div class="dt"><b>·</b><span>' + (x.kind === "event" ? "Event" : "News") + "</span></div>";
+  };
+  const row = (x) => '<div class="it nw">' + box(x) + "<div>" +
+    '<div class="kd">' + (x.kind === "event" ? (x.date >= today ? "Upcoming event" : "Past event") : "News") + (x.location ? " · " + esc(x.location) : "") + "</div>" +
+    "<b>" + esc(x.title) + "</b>" + (x.summary ? '<div class="bl">' + esc(x.summary) + "</div>" : "") +
+    (/^https:\/\//.test(x.url) ? '<div class="acts"><button class="btn" data-href="' + esc(x.url) + '">' + (x.kind === "event" ? "Event page" : "Read more") + "</button></div>" : "") + "</div></div>";
+  const upcoming = items.filter((x) => x.kind === "event" && x.date >= today).sort((a, b) => (a.date < b.date ? -1 : 1));
+  const rest = items.filter((x) => upcoming.indexOf(x) < 0);
+  const issues = n && n.issues && n.issues.length ? '<div class="qlabel" style="margin-top:10px">Latest issues</div><div class="list" style="margin-top:6px">' + n.issues.slice(0, 4).map((i) => '<div class="it"><button class="rowb"' + (/^https:\/\//.test(i.url) ? ' data-href="' + esc(i.url) + '"' : "") + '><div class="nm"><b>' + esc(i.title) + '</b><span class="qlabel">' + esc(i.date || "") + "</span></div></button></div>").join("") + "</div>" : "";
+  const letter = n ? '<div class="nl"><span class="kd">Newsletter' + (n.frequency ? " · " + esc(n.frequency) : "") + "</span><b>" + esc(n.name) + "</b>" + (n.description ? "<p>" + esc(n.description) + "</p>" : "") +
+    '<div class="actions">' + (/^https:\/\//.test(n.signupUrl) ? '<button class="primary" data-href="' + esc(n.signupUrl) + '">Subscribe</button>' : "") + (/^https:\/\//.test(n.archiveUrl) ? '<button class="btn" data-href="' + esc(n.archiveUrl) + '">Past issues</button>' : "") + "</div>" + issues + "</div>" : "";
+  return top(o ? o.title : "News & events") +
+    (upcoming.length ? '<div class="qlabel" style="margin-top:6px">Coming up</div><div class="list" style="margin-top:6px">' + upcoming.map(row).join("") + "</div>" : "") +
+    letter +
+    (rest.length ? '<div class="qlabel">Latest</div><div class="list" style="margin-top:6px">' + rest.map(row).join("") + "</div>" : "") +
+    '<div class="note">Published by ' + esc(d.business || "the business") + ". Links open its own pages.</div>" + links("news");
 }
 function collabView() {
   return '<div class="form">' + top("Find a collaborator") + '<div class="hint">Say what you need, what you can offer, or both, to see the members whose entries match.</div>' +
@@ -1153,6 +1251,8 @@ function openOption(i) {
   if ((o.kind === "tour" || o.kind === "daypass") && inCard() && vlocs(o.kind).length) { openVisit(o.kind, ""); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
+  // 0.25.0: committees, and news, events and newsletter, each on its own screen.
+  if (o.kind === "committees" || o.kind === "news") { run(o.tool, { section: o.kind }, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
   if (o.kind === "question" && nav() && inCard()) { state.open = i; run(o.tool, {}, "", () => { state.view = "form"; render(); }); return; }
   if (o.kind === "request" && inCard()) {
@@ -1176,11 +1276,18 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
+  // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
+  app.querySelectorAll("img[data-fallback]").forEach((img) => img.addEventListener("error", () => {
+    const box = img.parentElement, f = img.dataset.fallback;
+    if (!box) return;
+    if (f === "store") { box.className = "ic"; box.innerHTML = icon("store"); return; }
+    box.classList.add("mono"); box.innerHTML = esc(f);
+  }, { once: true }));
   const on = (sel, fn) => app.querySelectorAll(sel).forEach((el) => el.addEventListener("click", () => fn(el)));
   const lookup = opt("lookup"), request = opt("request"), status = opt("status");
   const guard = (fn) => { try { fn(); } catch (e) { state.error = (e && e.message) || "Check the form."; render(); } };

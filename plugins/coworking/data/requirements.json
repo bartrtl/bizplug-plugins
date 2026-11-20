@@ -70,6 +70,14 @@
           "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
         },
         {
+          "key": "wordmark",
+          "label": "Wide logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo-wide.png",
+          "help": "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
@@ -345,11 +353,28 @@
           "type": "text",
           "example": "A free 30-minute brand review for other members",
           "help": "What the member can offer other members or visitors."
+        },
+        {
+          "key": "level",
+          "label": "Membership level",
+          "required": false,
+          "type": "text",
+          "example": "Corporate",
+          "help": "The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials."
         }
       ],
       "collect": [
         "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
         "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+        "A logo is optional: the image address of the logo on the member's own website, a PNG, JPEG or WebP file.",
         "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
         "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on."
       ]

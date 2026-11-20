@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.24.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.25.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -30,7 +30,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -196,8 +196,15 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
         { tool: VISIT_TOOLS.pass, kind: "daypass", title: "Day pass", description: "Ask for a day pass at a location that sells one, with the published rate. The business confirms it; nothing is paid here.", example: "Can I get a day pass for tomorrow?" },
       ]
     : [];
+  // 0.25.0, chambers: committees and news on their own screens, shown only for a business that published them.
+  const showcase: MenuOption[] = fn.infoFirst
+    ? [
+        { tool: "get_business_info", kind: "committees", title: "Committees", description: "The committees and working groups, what each works on and who chairs it, when the business publishes them.", example: "Which committees can members join?" },
+        { tool: "get_business_info", kind: "news", title: "News & events", description: "The latest news, upcoming events and the newsletter, with links to read more and sign up.", example: "What events are coming up?" },
+      ]
+    : [];
   return [
-    ...(fn.infoFirst ? [question, step(1), step(0), ...visits] : [step(0), step(1), ...visits, question]),
+    ...(fn.infoFirst ? [question, ...showcase, step(1), step(0), ...visits] : [step(0), step(1), ...visits, question]),
     step(2),
     ...(fn.members
       ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]

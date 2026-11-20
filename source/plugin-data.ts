@@ -66,6 +66,7 @@ const businessDataset = (name: string, ex?: IndustryExample, software = false): 
     col("website", "Website", false, "url", "https://example.com", "Full URL."),
     col("tagline", "What you are", false, "text", `${name} in Charlotte`, "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."),
     col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."),
+    col("wordmark", "Wide logo URL", false, "url", "https://example.com/logo-wide.png", "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."),
     col("address", "Address", false, "text", "123 Main St, Charlotte, NC 28202", "Street address, if customers visit."),
     col("city", "City", false, "text", "Charlotte", ""),
     col("region", "State or country", false, "text", "NC", ""),
@@ -269,10 +270,13 @@ const membersDataset: Dataset = {
     col("phone", "General phone", false, "text", "+1 704 555 0142", "The company's switchboard, with country code. Never a personal mobile number."),
     col("looking_for", "Looking for", false, "text", "Developers to partner with on client websites", "What the member wants to collaborate on or is looking for."),
     col("offers", "Offers", false, "text", "A free 30-minute brand review for other members", "What the member can offer other members or visitors."),
+    col("level", "Membership level", false, "text", "Corporate", "The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0."),
+    col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials."),
   ],
   collect: [
     "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
     "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+    "A logo is optional: the image address of the logo on the member's own website, a PNG, JPEG or WebP file.",
     "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
     "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on.",
   ],
@@ -285,6 +289,61 @@ const chamberMembersDataset: Dataset = {
     c.key === "location" ? col("location", "City or area", false, "text", "South End, Charlotte", "Where the member is based, so people can filter by area.")
     : c.key === "offers" ? col("offers", "Offers", false, "text", "A discount on brand reviews for fellow members", "What the member can offer other members or visitors.")
     : c),
+};
+
+// Chambers (`infoFirst` in industry-functions.ts), plug-in version 0.25.0 (`showcase`): committees, news and events,
+// and the newsletter, each on its own card screen. Only what the chamber publishes on its own site.
+const committeesDataset: Dataset = {
+  id: "committees",
+  file: "committees.csv",
+  title: "Committees",
+  why: "The committees and working groups members can join, shown under Committees in the plug-in.",
+  required: false,
+  maxRows: 60,
+  columns: [
+    col("name", "Committee", true, "text", "Hospitality and Tourism Committee", "As the chamber names it."),
+    col("description", "What it works on", false, "text", "Initiatives and discussions on tourism as a growth sector.", "One to three sentences, in the chamber's own words."),
+    col("chair", "Chair", false, "text", "Jane Doe, Example Hotel", "Who chairs it, only as the chamber publishes it."),
+    col("url", "Page", false, "url", "https://example.org/committees", "The committee's page, or the page that describes it."),
+  ],
+  collect: [
+    "Take the committees from the chamber's own site: its committees page, or where its events and news name them.",
+    "Name a chair only when the chamber publishes who it is.",
+  ],
+};
+const newsDataset: Dataset = {
+  id: "news",
+  file: "news.csv",
+  title: "News and events",
+  why: "The latest news and the upcoming and recent events, shown under News & events in the plug-in.",
+  required: false,
+  maxRows: 60,
+  columns: [
+    col("title", "Title", true, "text", "Annual Evening of Giving Thanks", ""),
+    col("kind", "News or event", false, "text", "event", "\"news\" or \"event\". An event dated before today shows as a past event."),
+    col("date", "Date", false, "text", "2026-11-20", "YYYY-MM-DD, or YYYY-MM when only the month is published."),
+    col("location", "Where", false, "text", "Four Seasons Hotel, Doha", "For an event."),
+    col("summary", "Summary", false, "text", "Members, sponsors and partners came together to give thanks.", "One or two sentences."),
+    col("url", "Page", false, "url", "https://example.org/events", "Where to read more or register."),
+  ],
+  collect: ["Take news and events from the chamber's own site, newest first. Keep upcoming events current: replace the file when the calendar changes."],
+};
+const newsletterDataset: Dataset = {
+  id: "newsletter",
+  file: "newsletter.csv",
+  title: "Newsletter",
+  why: "The newsletter and where to subscribe, shown under News & events in the plug-in.",
+  required: false,
+  single: true,
+  maxRows: 1,
+  columns: [
+    col("name", "Newsletter", true, "text", "Chamber newsletter", "Its name, or a plain description if it has none."),
+    col("description", "What it covers", false, "text", "Special offers and opportunities for members.", "In the chamber's own words."),
+    col("frequency", "How often", false, "text", "Monthly", "Only when the chamber says so."),
+    col("signup_url", "Sign-up page", false, "url", "https://example.org/#newsletter", ""),
+    col("archive_url", "Past issues", false, "url", "https://example.org/newsletter", ""),
+  ],
+  collect: ["Take the newsletter's name, sign-up page and archive from the chamber's own site."],
 };
 
 // Coworking (`visits` in industry-functions.ts): the locations Book a tour and Day pass work from, from plug-in
@@ -495,6 +554,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       faqDataset(ex),
       ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
       ...(fn.visits ? [locationsDataset] : []),
+      ...(fn.infoFirst ? [committeesDataset, newsDataset, newsletterDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),
     ],

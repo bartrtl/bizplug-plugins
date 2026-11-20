@@ -70,6 +70,14 @@
           "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
         },
         {
+          "key": "wordmark",
+          "label": "Wide logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo-wide.png",
+          "help": "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."
+        },
+        {
           "key": "address",
           "label": "Address",
           "required": false,
@@ -299,13 +307,191 @@
           "type": "text",
           "example": "A discount on brand reviews for fellow members",
           "help": "What the member can offer other members or visitors."
+        },
+        {
+          "key": "level",
+          "label": "Membership level",
+          "required": false,
+          "type": "text",
+          "example": "Corporate",
+          "help": "The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials."
         }
       ],
       "collect": [
         "List only member businesses that agreed to be listed in the plug-in. Ask each one first, and leave out any that did not answer.",
         "Take each member's details from the member itself or its own website: one sentence on what it does, what it is looking for and what it offers, in its own words.",
+        "A logo is optional: the image address of the logo on the member's own website, a PNG, JPEG or WebP file.",
         "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
         "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on."
+      ]
+    },
+    {
+      "id": "committees",
+      "file": "committees.csv",
+      "title": "Committees",
+      "why": "The committees and working groups members can join, shown under Committees in the plug-in.",
+      "required": false,
+      "maxRows": 60,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Committee",
+          "required": true,
+          "type": "text",
+          "example": "Hospitality and Tourism Committee",
+          "help": "As the chamber names it."
+        },
+        {
+          "key": "description",
+          "label": "What it works on",
+          "required": false,
+          "type": "text",
+          "example": "Initiatives and discussions on tourism as a growth sector.",
+          "help": "One to three sentences, in the chamber's own words."
+        },
+        {
+          "key": "chair",
+          "label": "Chair",
+          "required": false,
+          "type": "text",
+          "example": "Jane Doe, Example Hotel",
+          "help": "Who chairs it, only as the chamber publishes it."
+        },
+        {
+          "key": "url",
+          "label": "Page",
+          "required": false,
+          "type": "url",
+          "example": "https://example.org/committees",
+          "help": "The committee's page, or the page that describes it."
+        }
+      ],
+      "collect": [
+        "Take the committees from the chamber's own site: its committees page, or where its events and news name them.",
+        "Name a chair only when the chamber publishes who it is."
+      ]
+    },
+    {
+      "id": "news",
+      "file": "news.csv",
+      "title": "News and events",
+      "why": "The latest news and the upcoming and recent events, shown under News & events in the plug-in.",
+      "required": false,
+      "maxRows": 60,
+      "columns": [
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Annual Evening of Giving Thanks",
+          "help": ""
+        },
+        {
+          "key": "kind",
+          "label": "News or event",
+          "required": false,
+          "type": "text",
+          "example": "event",
+          "help": "\"news\" or \"event\". An event dated before today shows as a past event."
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "required": false,
+          "type": "text",
+          "example": "2026-11-20",
+          "help": "YYYY-MM-DD, or YYYY-MM when only the month is published."
+        },
+        {
+          "key": "location",
+          "label": "Where",
+          "required": false,
+          "type": "text",
+          "example": "Four Seasons Hotel, Doha",
+          "help": "For an event."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": false,
+          "type": "text",
+          "example": "Members, sponsors and partners came together to give thanks.",
+          "help": "One or two sentences."
+        },
+        {
+          "key": "url",
+          "label": "Page",
+          "required": false,
+          "type": "url",
+          "example": "https://example.org/events",
+          "help": "Where to read more or register."
+        }
+      ],
+      "collect": [
+        "Take news and events from the chamber's own site, newest first. Keep upcoming events current: replace the file when the calendar changes."
+      ]
+    },
+    {
+      "id": "newsletter",
+      "file": "newsletter.csv",
+      "title": "Newsletter",
+      "why": "The newsletter and where to subscribe, shown under News & events in the plug-in.",
+      "required": false,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Newsletter",
+          "required": true,
+          "type": "text",
+          "example": "Chamber newsletter",
+          "help": "Its name, or a plain description if it has none."
+        },
+        {
+          "key": "description",
+          "label": "What it covers",
+          "required": false,
+          "type": "text",
+          "example": "Special offers and opportunities for members.",
+          "help": "In the chamber's own words."
+        },
+        {
+          "key": "frequency",
+          "label": "How often",
+          "required": false,
+          "type": "text",
+          "example": "Monthly",
+          "help": "Only when the chamber says so."
+        },
+        {
+          "key": "signup_url",
+          "label": "Sign-up page",
+          "required": false,
+          "type": "url",
+          "example": "https://example.org/#newsletter",
+          "help": ""
+        },
+        {
+          "key": "archive_url",
+          "label": "Past issues",
+          "required": false,
+          "type": "url",
+          "example": "https://example.org/newsletter",
+          "help": ""
+        }
+      ],
+      "collect": [
+        "Take the newsletter's name, sign-up page and archive from the chamber's own site."
       ]
     }
   ],
