@@ -1,2 +1,2 @@
-id,name,rate,capacity,description
-midsize-suv,Midsize SUV,64,5,"Toyota RAV4 or similar, per day"
+id,name,rate,capacity,description,day_rates
+midsize-suv,Midsize SUV,64,5,"Toyota RAV4 or similar, per day",fri:64;sat:64

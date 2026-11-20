@@ -179,6 +179,14 @@
           "type": "text",
           "example": "All rides and shows",
           "help": ""
+        },
+        {
+          "key": "day_rates",
+          "label": "Weekday rates",
+          "required": false,
+          "type": "text",
+          "example": "fri:69;sat:69",
+          "help": "Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0."
         }
       ],
       "collect": [
@@ -221,6 +229,51 @@
       ],
       "collect": [
         "Add closures and sold-out periods the owner knows about. This is not a live calendar; BizPlug confirms each request with the business."
+      ]
+    },
+    {
+      "id": "rates",
+      "file": "rates.csv",
+      "title": "Rates by date",
+      "why": "Seasons and holidays with their own rate (from plug-in version 0.29.0). A date range here wins over the weekday rates and the standard rate.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Option id",
+          "required": true,
+          "type": "text",
+          "example": "day-pass-adult",
+          "help": "An id from inventory.csv."
+        },
+        {
+          "key": "start",
+          "label": "From",
+          "required": true,
+          "type": "date",
+          "example": "2026-12-20",
+          "help": "YYYY-MM-DD, the first day at this rate."
+        },
+        {
+          "key": "end",
+          "label": "To",
+          "required": true,
+          "type": "date",
+          "example": "2027-01-03",
+          "help": "YYYY-MM-DD, the last day at this rate."
+        },
+        {
+          "key": "rate",
+          "label": "Rate",
+          "required": true,
+          "type": "number",
+          "example": "69",
+          "help": "Per night, day or person, as in inventory.csv."
+        }
+      ],
+      "collect": [
+        "Copy the business's own published seasonal or holiday rates. Only rates customers can see; BizPlug confirms each request with the business."
       ]
     },
     {

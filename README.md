@@ -61,10 +61,11 @@ Sign up at https://bizplug.ai/portal, pick your industry and provide the data it
 
 Plug-ins from other companies can be listed in the BizPlug marketplace next to the industry plug-ins. Do not open a pull request here: this repository is generated, so submit through https://bizplug.ai/marketplace#submit. [CONTRIBUTING.md](CONTRIBUTING.md) explains the process and the components a valid plug-in must have: an MCP server over streamable HTTP, `plugin.json`, `mcp.json`, a README, review test cases, and a privacy policy and terms.
 
-## Version 0.28.0
+## Version 0.29.0
 
 All 81 plug-ins share one version. What changed in each:
 
+- **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.
 - **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.
 - **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.

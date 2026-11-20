@@ -43,6 +43,7 @@ Columns (first row of the file, exactly these names):
 - `rate` (required): Published rate, number. Per night, day or booking, as the business publishes it. Example: 2500
 - `capacity`: Capacity, number. Most guests or people. Example: 250
 - `description`: Description, text.  Example: 250 standing or 180 seated, per day
+- `day_rates`: Weekday rates, text. Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0. Example: fri:2500;sat:2500
 
 How to collect it:
 1. Copy each bookable option and its standard published rate from the website or booking engine.
@@ -58,6 +59,18 @@ Columns (first row of the file, exactly these names):
 
 How to collect it:
 1. Add closures and sold-out periods the owner knows about. This is not a live calendar; BizPlug confirms each request with the business.
+
+### rates.csv (optional, up to 2000 rows)
+Seasons and holidays with their own rate (from plug-in version 0.29.0). A date range here wins over the weekday rates and the standard rate.
+
+Columns (first row of the file, exactly these names):
+- `id` (required): Option id, text. An id from inventory.csv. Example: main-hall
+- `start` (required): From, date. YYYY-MM-DD, the first day at this rate. Example: 2026-12-20
+- `end` (required): To, date. YYYY-MM-DD, the last day at this rate. Example: 2027-01-03
+- `rate` (required): Rate, number. Per night, day or person, as in inventory.csv. Example: 2500
+
+How to collect it:
+1. Copy the business's own published seasonal or holiday rates. Only rates customers can see; BizPlug confirms each request with the business.
 
 ### services.csv (optional, up to 100 rows)
 A short list of what the business offers, used in answers.

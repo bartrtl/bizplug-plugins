@@ -1,2 +1,2 @@
-id,name,rate,capacity,description
-lower-bowl-sideline,"Lower bowl, sideline",85,1,"Sections 101 to 110, per seat"
+id,name,rate,capacity,description,day_rates
+lower-bowl-sideline,"Lower bowl, sideline",85,1,"Sections 101 to 110, per seat",fri:85;sat:85

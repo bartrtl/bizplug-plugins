@@ -433,6 +433,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("rate", "Published rate", true, "number", it.rate, "Per night, day or booking, as the business publishes it."),
             col("capacity", "Capacity", false, "number", it.capacity, "Most guests or people."),
             col("description", "Description", false, "text", it.description, ""),
+            col("day_rates", "Weekday rates", false, "text", "fri:" + it.rate + ";sat:" + it.rate, "Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0."),
           ],
           collect: [
             "Copy each bookable option and its standard published rate from the website or booking engine.",
@@ -452,6 +453,21 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("end", "To", true, "date", "2026-12-27", "YYYY-MM-DD, the day after the last blocked night or day."),
           ],
           collect: ["Add closures and sold-out periods the owner knows about. This is not a live calendar; BizPlug confirms each request with the business."],
+        },
+        {
+          id: "rates",
+          file: "rates.csv",
+          title: "Rates by date",
+          why: "Seasons and holidays with their own rate (from plug-in version 0.29.0). A date range here wins over the weekday rates and the standard rate.",
+          required: false,
+          maxRows: 2000,
+          columns: [
+            col("id", "Option id", true, "text", it.id, "An id from inventory.csv."),
+            col("start", "From", true, "date", "2026-12-20", "YYYY-MM-DD, the first day at this rate."),
+            col("end", "To", true, "date", "2027-01-03", "YYYY-MM-DD, the last day at this rate."),
+            col("rate", "Rate", true, "number", it.rate, "Per night, day or person, as in inventory.csv."),
+          ],
+          collect: ["Copy the business's own published seasonal or holiday rates. Only rates customers can see; BizPlug confirms each request with the business."],
         },
       ];
     }

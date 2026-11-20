@@ -698,57 +698,77 @@ function stayArgsOf(q, over) {
   else if (o.month === undefined) o.month = q.month;
   return clean(o);
 }
+// 0.29.0: the screen's mode, from the result: by the night (a hotel), by the day, or one date.
+const staySpan = () => (((state.data.availability || {}).stay || {}).span) || "nights";
 function stayAsk(over) {
-  const lookup = opt("lookup"), q = stayQ(), a = stayArgsOf(q, over);
-  const party = q.adults + " adults" + (q.children ? ", " + q.children + " children" : "") + (q.rooms > 1 ? ", " + q.rooms + " rooms" : "");
-  run(lookup && lookup.tool, a, a.start ? "What rooms are free from " + a.start + " to " + a.end + " for " + party + "?" : "Show me which nights are free in " + monthName(a.month) + ".");
+  const lookup = opt("lookup"), q = stayQ(), a = stayArgsOf(q, over), sp = staySpan();
+  if (sp === "single" && a.start) delete a.end;
+  if (sp !== "nights") delete a.rooms;
+  const party = sp === "days" ? q.adults + (q.adults === 1 ? " person" : " people") : q.adults + " adults" + (q.children ? ", " + q.children + " children" : "") + (q.rooms > 1 && sp === "nights" ? ", " + q.rooms + " rooms" : "");
+  const ask = !a.start ? "Show me which " + (sp === "nights" ? "nights" : "days") + " are free in " + monthName(a.month) + "."
+    : sp === "single" ? "What is available on " + a.start + " for " + party + "?"
+    : sp === "days" ? "What is available from " + a.start + " to " + a.end + " for " + party + "?"
+    : "What rooms are free from " + a.start + " to " + a.end + " for " + party + "?";
+  run(lookup && lookup.tool, a, ask);
 }
 let stayTimer = null;
 function stayAskSoon() { if (stayTimer) clearTimeout(stayTimer); stayTimer = setTimeout(() => { stayTimer = null; if (stayQ().start && stayQ().end) stayAsk(); else render(); }, 400); }
+// What the screen calls things, by mode.
+function stayWords(sp) {
+  // "vehicle class" -> "Vehicle classes", "ticket" -> "Tickets"; a noun with a choice in it ("desk, room or office") -> "Options".
+  const raw = p().noun || "option", noun = /,| or /.test(raw) ? "Option" : raw.replace(/^\w/, (c) => c.toUpperCase());
+  const plural = (x) => (/(s|x|ch|sh)$/.test(x) ? x + "es" : x + "s");
+  if (sp === "days") return { title: "Choose your dates", pick: ["Tap the first day.", "Now tap the last day."], unit: "day", units: "days", per: "avg per day", list: plural(noun), breakdown: "Day by day", none: "Nothing is free on every day you chose. Try other dates." };
+  if (sp === "single") return { title: "Choose your date", pick: ["Tap the date.", ""], unit: "", units: "", per: "per person", list: plural(noun), breakdown: "", none: "Nothing is available on that date. Try another day." };
+  return { title: "Book your stay", pick: ["Tap your check-in day.", "Now tap your check-out day."], unit: "night", units: "nights", per: "avg per night", list: "Rooms", breakdown: "Night by night", none: "No room is free on every night for your party. Try other dates." };
+}
 function stayScreen() {
   const s = state.data.availability.stay, q = stayQ(), pol = s.policies || {}, cal = s.calendar || { days: [] };
   const lookup = opt("lookup"), request = opt("request");
+  const sp = s.span || "nights", w = stayWords(sp);
   const homes = false;
-  const intro = '<div class="sum"><div><b>Book your stay</b><span>' + (pol.ratePlan ? esc(pol.ratePlan) + " · " : "") + esc(pol.tax || "") +
+  const intro = '<div class="sum"><div><b>' + esc(w.title) + "</b><span>" + (pol.ratePlan ? esc(pol.ratePlan) + " · " : "") + esc(pol.tax || "") +
     (s.checkout && s.checkout.testMode ? '<span class="testtag">' + esc(s.checkout.label) + " TEST</span>" : "") + "</span></div></div>";
   // Calendar: the first tap is check-in, the next one after it check-out.
   const first = cal.days.length ? new Date(cal.days[0].date + "T00:00:00Z").getUTCDay() : 0;
   const cells = DOW.map((d) => '<span class="dw">' + d + "</span>").join("") + Array.from({ length: first }, () => '<span class="cd blank"></span>').join("") +
     cal.days.map((d) => {
-      const out = q.start && !q.end && d.date > q.start && d.state !== "past";
+      const out = sp !== "single" && q.start && !q.end && (sp === "days" ? d.date >= q.start : d.date > q.start) && d.state !== "past";
       const can = d.state === "open" || out;
       const cls = ["cd", d.state, d.date === q.start ? "start" : "", d.date === q.end ? "end" : "", q.start && q.end && d.date > q.start && d.date < q.end ? "in" : ""].join(" ");
       return '<button class="' + cls + '" data-sday="' + esc(d.date) + '"' + (can ? "" : " disabled") + "><b>" + Number(d.date.slice(8)) + "</b>" + (d.state === "open" && d.from ? "<small>" + esc(String(d.from).replace(/\.00$/, "")) + "</small>" : d.state === "soldout" ? "<small>Full</small>" : "") + "</button>";
     }).join("");
-  const pickNote = !q.start ? "Tap your check-in day." : !q.end ? "Check-in " + shortDay(q.start) + ". Now tap your check-out day." : shortDay(q.start) + " to " + shortDay(q.end) + (s.query && s.query.nights ? " · " + s.query.nights + (s.query.nights === 1 ? " night" : " nights") : "");
+  const n = s.query && s.query.nights;
+  const pickNote = !q.start ? w.pick[0] : sp === "single" ? shortDay(q.start) : !q.end ? (sp === "nights" ? "Check-in " : "From ") + shortDay(q.start) + ". " + w.pick[1] : shortDay(q.start) + " to " + shortDay(q.end) + (n ? " · " + n + " " + (n === 1 ? w.unit : w.units) : "");
   const calendar = "<h4>Dates</h4>" + '<div class="calhd"><button class="calnav" data-smonth="' + esc(cal.prev || "") + '"' + (cal.prev ? "" : " disabled") + ' aria-label="Previous month">‹</button><b>' + esc(monthName(cal.month)) +
     '</b><button class="calnav" data-smonth="' + esc(cal.next || "") + '"' + (cal.next ? "" : " disabled") + ' aria-label="Next month">›</button></div><div class="cal">' + cells + '</div><div class="note">' + esc(pickNote) + "</div>";
   const stepper = (key, label, n, min, max) => '<div class="guest"><span>' + label + '</span><div class="qty"><button class="step" data-g="' + key + '" data-by="-1"' + (n <= min ? " disabled" : "") + ' aria-label="Fewer ' + label.toLowerCase() + '">−</button><span>' + n + '</span><button class="step" data-g="' + key + '" data-by="1"' + (n >= max ? " disabled" : "") + ' aria-label="More ' + label.toLowerCase() + '">+</button></div></div>';
-  const guests = "<h4>Guests</h4>" + stepper("adults", "Adults", q.adults, 1, pol.maxAdults || 12) + stepper("children", "Children", q.children, 0, pol.maxChildren || 9) + (homes ? "" : stepper("rooms", "Rooms", q.rooms, 1, pol.maxRooms || 3));
+  const guests = sp === "days" ? "<h4>People</h4>" + stepper("adults", "People", q.adults, 1, pol.maxAdults || 12)
+    : (sp === "single" ? "<h4>Who&rsquo;s coming</h4>" : "<h4>Guests</h4>") + stepper("adults", "Adults", q.adults, 1, pol.maxAdults || 12) + stepper("children", "Children", q.children, 0, pol.maxChildren || 9) + (homes || sp !== "nights" ? "" : stepper("rooms", "Rooms", q.rooms, 1, pol.maxRooms || 3));
   // Rooms: only once both dates are chosen.
   let rooms = "";
   if (q.start && q.end && s.query && s.query.start === q.start && s.query.end === q.end) {
     if (s.problem) rooms = '<div class="empty">' + esc(s.problem) + "</div>";
-    else if (!s.rooms.length) rooms = '<div class="empty">No room is free on every night for your party. Try other dates.</div>';
+    else if (!s.rooms.length) rooms = '<div class="empty">' + esc(w.none) + "</div>";
     else rooms = '<div class="list">' + s.rooms.map((r) => {
       const label = s.book === "pay" ? "Book & pay " + r.total : s.book === "whatsapp" ? "Book on WhatsApp" : (request ? request.title : "Request the booking");
       const btn = s.book === "request" ? '<button class="btn go" data-pick-stay="' + esc(r.id) + '" data-name="' + esc(r.name) + '" data-total="' + esc(r.total) + '">' + esc(label) + "</button>"
         : '<button class="' + (s.book === "whatsapp" ? "btn wa" : "btn go") + '" data-book-room="' + esc(r.id) + '" data-name="' + esc(r.name) + '"' + (state.busy ? " disabled" : "") + ">" + (s.book === "whatsapp" ? icon("whatsapp") : "") + esc(label) + "</button>";
       const chips = [r.view ? r.view + " view" : "", r.bed, r.max ? "Up to " + r.max + " people" : ""].filter(Boolean).map((c) => '<span class="chip">' + esc(c) + "</span>").join("") +
         (r.left != null && r.left <= 3 ? '<span class="chip left">Only ' + r.left + " left</span>" : "") + (r.amenities || []).map((c) => '<span class="chip">' + esc(c) + "</span>").join("");
-      const nights = r.nightly && r.nightly.length > 1 ? "<details><summary>Night by night</summary>" + r.nightly.map((n) => "<div><span>" + esc(shortDay(n.date)) + "</span><span>" + esc(n.rate) + "</span></div>").join("") + "</details>" : "";
-      return '<div class="it room"><div class="nm"><b>' + esc(r.name) + '</b><span class="pr">' + esc(r.total) + '</span></div><div class="per">' + esc(r.avgNightly) + " avg per night" + (q.rooms > 1 ? " · " + q.rooms + " rooms" : "") + "</div>" +
+      const nights = w.breakdown && r.nightly && r.nightly.length > 1 ? "<details><summary>" + esc(w.breakdown) + "</summary>" + r.nightly.map((n) => "<div><span>" + esc(shortDay(n.date)) + "</span><span>" + esc(n.rate) + "</span></div>").join("") + "</details>" : "";
+      return '<div class="it room"><div class="nm"><b>' + esc(r.name) + '</b><span class="pr">' + esc(r.total) + '</span></div><div class="per">' + esc(r.avgNightly) + " " + (sp === "single" && s.unit !== "person" ? "per booking" : w.per) + (q.rooms > 1 && sp === "nights" ? " · " + q.rooms + " rooms" : "") + "</div>" +
         (r.blurb ? '<div class="bl">' + esc(r.blurb) + "</div>" : "") + (chips ? '<div class="chips">' + chips + "</div>" : "") + nights + '<div class="acts">' + btn + "</div></div>";
     }).join("") + "</div>";
     const out = [s.soldOut && s.soldOut.length ? "Full on these dates: " + s.soldOut.join(", ") + "." : "", s.tooSmall && s.tooSmall.length ? "Too small for your party: " + s.tooSmall.join(", ") + "." : "", s.tooShort && s.tooShort.length ? "Needs a longer stay: " + s.tooShort.join(", ") + "." : ""].filter(Boolean).join(" ");
-    rooms = "<h4>Rooms</h4>" + rooms + (out ? '<div class="note">' + esc(out) + "</div>" : "");
+    rooms = "<h4>" + esc(w.list) + "</h4>" + rooms + (out ? '<div class="note">' + esc(out) + "</div>" : "");
   }
   const how = s.book === "pay" ? "Book & pay opens " + (s.checkout ? s.checkout.label : "the hotel") + "'s secure page; the room is held for 30 minutes while you pay. Card details are never entered here."
     : s.book === "whatsapp" ? "Book on WhatsApp opens the hotel's concierge with your visit code; nothing is booked until you pay there."
-    : "The hotel confirms your request by email; nothing is held or charged here.";
+    : (sp === "nights" ? "The hotel" : (p().businessName || "The business")) + " confirms your request by email; nothing is held or charged here." + (sp !== "nights" ? " Prices can differ by day." : "");
   const policies = '<div class="pol">' + (pol.checkIn ? "Check-in from " + esc(pol.checkIn) + " · check-out by " + esc(pol.checkOut) + ". " : "") + (pol.cancellation ? esc(pol.cancellation) + " " : "") + esc(how) + "</div>";
   const concierge = s.concierge ? '<div class="actions" style="margin-top:12px"><button class="btn wa" data-href="' + esc(s.concierge) + '">' + icon("whatsapp") + "Questions? Chat with the concierge</button></div>" : "";
-  return top(lookup ? lookup.title : "Book your stay") + '<div class="stay">' + intro + calendar + guests + (state.busy ? '<div class="note">Checking rooms and rates…</div>' : "") + errLine() + rooms + policies + concierge + "</div>";
+  return top(lookup ? lookup.title : w.title) + '<div class="stay">' + intro + calendar + guests + (state.busy ? '<div class="note">Checking ' + (sp === "nights" ? "rooms" : "availability") + " and prices…</div>" : "") + errLine() + rooms + policies + concierge + "</div>";
 }
 function availabilityView() {
   const a = state.data.availability || { options: [] };
@@ -1457,14 +1477,17 @@ function render() {
   on('[data-act="order"]', () => { state.pick = { type: "order" }; state.view = "request"; state.error = ""; render(); });
   on("[data-pick-stay]", (b) => {
     // 0.27.0: the request form gets the dates and party chosen on the booking screen.
-    if (state.sq && state.sq.start && state.sq.end) { state.f.start = state.sq.start; state.f.end = state.sq.end; state.f.guests = String(state.sq.adults + state.sq.children); }
+    if (state.sq && state.sq.start && state.sq.end) { state.f.start = state.sq.start; state.f.end = staySpan() === "single" ? "" : state.sq.end; state.f.guests = String(state.sq.adults + state.sq.children); }
     state.pick = { type: "stay", id: b.dataset.pickStay, name: b.dataset.name, total: b.dataset.total }; state.view = "request"; state.error = ""; render();
   });
   // ---- 0.27.0: the hotel booking screen ----
   on("[data-sday]", (b) => {
     const q = stayQ(), d = b.dataset.sday;
     state.error = "";
-    if (q.start && !q.end && d > q.start) { q.end = d; stayAsk(); return; }
+    const sp = staySpan();
+    // 0.29.0: one date is asked at once; by the day the last day may be the first.
+    if (sp === "single") { q.start = d; q.end = d; stayAsk(); return; }
+    if (q.start && !q.end && (sp === "days" ? d >= q.start : d > q.start)) { q.end = d; stayAsk(); return; }
     q.start = d; q.end = ""; render();
   });
   on("[data-smonth]", (b) => { if (!b.dataset.smonth) return; const q = stayQ(); q.month = b.dataset.smonth; stayAsk({ month: b.dataset.smonth }); });

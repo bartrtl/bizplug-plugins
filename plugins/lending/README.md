@@ -1,6 +1,6 @@
 # BizPlug Lending & Mortgages
 
-Version 0.28.0. Book a loan or mortgage consultation for lending & mortgages businesses.
+Version 0.29.0. Book a loan or mortgage consultation for lending & mortgages businesses.
 
 - Main function: Book a loan or mortgage consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/lending` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.28.0. Book a loan or mortgage consultation for lending & mortgages bus
 
 ## Changes
 
+- **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.
 - **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.
 - **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.
