@@ -35,6 +35,7 @@
 import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
 import { siteConfig } from "@/lib/seo";
+import { CARD_IMAGE_ORIGINS } from "@/lib/profile-store";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
 
@@ -135,6 +136,9 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .it .nm b{font-size:15px}
 .it .pr{font-weight:700;white-space:nowrap}
 .it .bl{font-size:13px;color:var(--muted);margin-top:3px}
+.it.ph{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:start}
+.thumb{width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--line);display:block}
+.hero{width:100%;max-width:420px;aspect-ratio:4/3;border-radius:16px;object-fit:cover;background:var(--line);display:block;margin:4px 0 12px}
 .it .acts{display:flex;gap:8px;margin-top:10px}
 .qty{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:650}
 .step{all:unset;cursor:pointer;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;border:1px solid var(--line);background:var(--bg);font-size:17px}
@@ -496,6 +500,7 @@ function askedView() {
 
 // ---- Results (version 0.3.0) ----
 const cartCount = () => Object.keys(state.cart).reduce((n, k) => n + state.cart[k], 0);
+const thumb = (x) => x.image ? '<img class="thumb" src="' + esc(x.image) + '" alt="" loading="lazy">' : "";
 const stepper = (id, n) => '<div class="qty"><button class="step" data-less="' + esc(id) + '"' + (n ? "" : " disabled") + '>−</button><span>' + n + '</span><button class="step" data-more="' + esc(id) + '">+</button></div>';
 // 0.4.0: the list with a search box and the business's categories as filters; an item opens on its own screen.
 function catalogNav() {
@@ -512,8 +517,8 @@ function catalogNav() {
   const rows = c.items.map((x) => {
     const sub = !c.category && x.category && x.category !== cat ? '<div class="cat">' + esc(x.category) + "</div>" : "";
     cat = x.category || cat;
-    return sub + '<div class="it"><button class="rowb" data-item="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="pr">' + esc(x.price) + "</span></div>" +
-      (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + "</button>" + stepper(x.id, state.cart[x.id] || 0) + "</div>";
+    return sub + '<div class="it' + (x.image ? " ph" : "") + '">' + thumb(x) + '<div><button class="rowb" data-item="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="pr">' + esc(x.price) + "</span></div>" +
+      (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + "</button>" + stepper(x.id, state.cart[x.id] || 0) + "</div></div>";
   }).join("");
   return head + '<div class="list">' + rows + "</div>" + (c.more ? '<div class="note">' + c.more + " more: search or choose a category to narrow the list.</div>" : "") + errLine() + order + links("lookup");
 }
@@ -522,7 +527,7 @@ function itemView() {
   if (!x) return catalogView();
   const request = opt("request");
   const all = cartCount();
-  return top(x.name) + '<div class="sum"><div><b>' + esc(x.price) + "</b><span>" + esc(x.category || "") + "</span></div></div>" +
+  return top(x.name) + (x.image ? '<img class="hero" src="' + esc(x.image) + '" alt="' + esc(x.name) + '">' : "") + '<div class="sum"><div><b>' + esc(x.price) + "</b><span>" + esc(x.category || "") + "</span></div></div>" +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + stepper(x.id, state.cart[x.id] || 0) + errLine() +
     '<div class="actions" style="margin-top:14px">' + (request ? primary(all ? request.title + " (" + all + ")" : "Choose a quantity to order", "order", all ? "" : " disabled") : "") +
     (x.category ? '<button class="btn" data-cat="' + esc(x.category) + '">More in ' + esc(x.category) + "</button>" : "") + "</div>";
@@ -537,8 +542,8 @@ function catalogView() {
     const head = x.category && x.category !== cat ? '<div class="cat">' + esc(x.category) + "</div>" : "";
     cat = x.category || cat;
     const n = state.cart[x.id] || 0;
-    return head + '<div class="it"><div class="nm"><b>' + esc(x.name) + '</b><span class="pr">' + esc(x.price) + "</span></div>" + (x.description ? '<div class="bl">' + esc(x.description) + "</div>" : "") +
-      '<div class="qty"><button class="step" data-less="' + esc(x.id) + '"' + (n ? "" : " disabled") + '>−</button><span>' + n + '</span><button class="step" data-more="' + esc(x.id) + '">+</button></div></div>';
+    return head + '<div class="it' + (x.image ? " ph" : "") + '">' + thumb(x) + '<div><div class="nm"><b>' + esc(x.name) + '</b><span class="pr">' + esc(x.price) + "</span></div>" + (x.description ? '<div class="bl">' + esc(x.description) + "</div>" : "") +
+      '<div class="qty"><button class="step" data-less="' + esc(x.id) + '"' + (n ? "" : " disabled") + '>−</button><span>' + n + '</span><button class="step" data-more="' + esc(x.id) + '">+</button></div></div></div>';
   }).join("");
   const n = cartCount();
   return top(lookup ? lookup.title : "Prices") + '<div class="list">' + rows + "</div>" + (c.more ? '<div class="note">' + c.more + " more: search to narrow the list.</div>" : "") + errLine() +
@@ -1214,11 +1219,11 @@ export const pluginResultToolMeta = (invoking: string, invoked: string) => ({ ..
 /** tools/list _meta for a tool the card may call but whose result stays in the chat. */
 export const pluginCallableToolMeta = { "openai/widgetAccessible": true };
 
-/** resources/read _meta: no network, links open outside; the description ChatGPT's model sees with the card. */
+/** resources/read _meta: no network (menu photos load from CARD_IMAGE_ORIGINS), links open outside; the description ChatGPT's model sees with the card. */
 export const pluginWidgetMeta = {
-  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: [] } },
+  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: CARD_IMAGE_ORIGINS } },
   "openai/widgetPrefersBorder": true,
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
-  "openai/widgetCSP": { connect_domains: [], resource_domains: [], redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
+  "openai/widgetCSP": { connect_domains: [], resource_domains: CARD_IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
 };
