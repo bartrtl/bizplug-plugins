@@ -353,7 +353,23 @@ const CLERK_SIGN_IN: Addon = {
 };
 
 /** The add-ons with their own how-to page, for src/lib/how-to.ts: the pages are written from the same steps. */
-export const GUIDED_ADDONS = { clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
+// Password sign-in (password-sign-in.ts, plug-in version 0.24.0): BizPlug signs customers in from the business's own list.
+const PASSWORD_SIGN_IN: Addon = {
+  id: "password-sign-in", name: "Password sign-in", group: "access", status: "included",
+  what: "Parts of your plug-in that only the people on your list can use, after they sign in with an email and password you give them.",
+  value: "Keep member prices, a member directory or request status for the people you choose, without running a sign-in system of your own.",
+  needs: ["The email address of each person who may use the restricted parts, and a password for each.", "Your plug-in on version 0.24.0 or later."],
+  steps: [
+    "Under Restricted parts, tick what only signed-in people may use, and press Save. Everything you leave unticked stays open to anyone.",
+    "Add the people: an email address and a password each, one by one (Generate makes a strong password), or as a CSV file with the columns email and password.",
+    "Give each person their email and password yourself. BizPlug stores only a one-way hash of each password and never shows it again.",
+    "Try it: in ChatGPT or Claude, use a restricted part. A BizPlug sign-in page with your business's name opens; sign in with an email and password from your list.",
+    "To end someone's access, remove them or give them a new password. Their sign-in stops working at once.",
+  ],
+  link: { label: "How password sign-in works", href: "/how-to/plug-in/password-sign-in" },
+};
+
+export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span): Addon[] {
@@ -362,7 +378,7 @@ export function addonsFor(engine: Engine, span?: Span): Addon[] {
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...checkout, ...LINK_ADDONS, CLERK_SIGN_IN];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 

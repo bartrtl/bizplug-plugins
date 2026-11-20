@@ -1,6 +1,6 @@
 # BizPlug Wedding & Events Pros
 
-Version 0.23.0. Check your date and request a consultation for wedding & events pros businesses.
+Version 0.24.0. Check your date and request a consultation for wedding & events pros businesses.
 
 - Main function: Check your date and request a consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/wedding-services` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.23.0. Check your date and request a consultation for wedding & events 
 
 ## Changes
 
+- **0.24.0** (20 November 2026): Password sign-in: parts of a plug-in that only the people on the business's own list can use, after they sign in with an email and password.
 - **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.
 - **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.

@@ -318,7 +318,14 @@ async function run(tool, args, fallbackPrompt, onNone) {
     const sc = pickStructured(await oa().callTool(tool, Object.assign({}, biz(), args)));
     state.busy = false;
     if (sc) receive(sc); else if (onNone) onNone(); else ask(fallbackPrompt);
-  } catch (e) { state.busy = false; state.error = (e && e.message) || "That did not run."; render(); }
+  } catch (e) {
+    state.busy = false;
+    // 0.24.0: a restricted part needs the customer signed in, which the chat asks for; the card cannot.
+    const locked = (p().restricted || []).indexOf(tool) >= 0 && fallbackPrompt;
+    state.error = locked ? "This part needs you to sign in first." : (e && e.message) || "That did not run.";
+    state.retry = locked ? { error: state.error, prompt: fallbackPrompt } : null;
+    render();
+  }
 }
 
 const v = (k) => String(state.f[k] == null ? "" : state.f[k]).trim();
@@ -402,7 +409,7 @@ function formFor(o) {
 const back = (label) => '<button class="link" data-view="menu">← ' + (label || "Menu") + "</button>";
 const top = (title) => '<div class="bar-top"><h3>' + esc(title) + "</h3>" +
   (nav() && state.hist.length ? '<span class="navs"><button class="link" data-act="back">← Back</button><button class="link" data-view="menu">Menu</button></span>' : back()) + "</div>";
-const errLine = () => (state.error ? '<div class="err">' + esc(state.error) + "</div>" : "");
+const errLine = () => (state.error ? '<div class="err">' + esc(state.error) + "</div>" + (state.retry && state.retry.error === state.error ? '<div class="actions" style="margin-top:8px"><button class="btn" data-ask="' + esc(state.retry.prompt) + '">Continue in the chat</button></div><div class="note">The chat opens the sign-in page. Use the email and password the business gave you.</div>' : "") : "");
 const primary = (label, act, extra) => '<button class="primary" data-act="' + act + '"' + (extra || "") + (state.busy ? " disabled" : "") + ">" + (state.busy ? "Working…" : esc(label)) + "</button>";
 
 // ---- Browsing (version 0.4.0) ----
