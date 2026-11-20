@@ -120,6 +120,11 @@ Columns (first row of the file, exactly these names):
 - `phone`: General phone, text. The company's switchboard, with country code. Example: +974 4000 0000
 - `city`: City, text. Where the company is based. Example: Doha
 - `stand`: Stand, text. Stand or booth number, if published. Example: B12
+- `logo`: Logo URL, url. The company's logo as an https PNG, JPEG or WebP image (not SVG), shown from plug-in version 0.28.0. Example: https://example.com/logo.png
+- `about`: About, text. Two to four sentences from the company's own website, shown under More about. Example: Stage and stand builder working across the Gulf since 2012.
+- `highlights`: Highlights, text. Main products or services, separated by semicolons. Example: Custom stands; Modular systems; LED walls
+- `linkedin`: LinkedIn, url. The company's page on LinkedIn. Example: https://www.linkedin.com/company/example
+- `sources`: Sources, text. The company's own pages these details come from, separated by semicolons. Example: https://example.com/about
 
 How to collect it:
 1. Take the exhibitors from the event's own exhibitor list, with what the event or the exhibitor publishes about each.
@@ -134,6 +139,11 @@ Columns (first row of the file, exactly these names):
 - `role`: Role, text. As published. Example: Official banking partner
 - `description`: About, text. One sentence. Example: 
 - `website`: Website, url. Full URL. Example: https://example.com
+- `logo`: Logo URL, url. The company's logo as an https PNG, JPEG or WebP image (not SVG), shown from plug-in version 0.28.0. Example: https://example.com/logo.png
+- `about`: About, text. Two to four sentences from the company's own website, shown under More about. Example: Regional bank serving businesses and households.
+- `highlights`: Highlights, text. Main products or services, separated by semicolons. Example: Business banking; Trade finance
+- `linkedin`: LinkedIn, url. The company's page on LinkedIn. Example: https://www.linkedin.com/company/example
+- `sources`: Sources, text. The company's own pages these details come from, separated by semicolons. Example: https://example.com/about
 
 How to collect it:
 1. Copy the sponsors and partners from the event's own sponsors page, in its own groups.

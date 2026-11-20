@@ -223,6 +223,11 @@ const exhibitorsDataset: Dataset = {
     col("phone", "General phone", false, "text", "+974 4000 0000", "The company's switchboard, with country code."),
     col("city", "City", false, "text", "Doha", "Where the company is based."),
     col("stand", "Stand", false, "text", "B12", "Stand or booth number, if published."),
+    col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "The company's logo as an https PNG, JPEG or WebP image (not SVG), shown from plug-in version 0.28.0."),
+    col("about", "About", false, "text", "Stage and stand builder working across the Gulf since 2012.", "Two to four sentences from the company's own website, shown under More about."),
+    col("highlights", "Highlights", false, "text", "Custom stands; Modular systems; LED walls", "Main products or services, separated by semicolons."),
+    col("linkedin", "LinkedIn", false, "url", "https://www.linkedin.com/company/example", "The company's page on LinkedIn."),
+    col("sources", "Sources", false, "text", "https://example.com/about", "The company's own pages these details come from, separated by semicolons."),
   ],
   collect: [
     "Take the exhibitors from the event's own exhibitor list, with what the event or the exhibitor publishes about each.",
@@ -242,6 +247,11 @@ const sponsorsDataset: Dataset = {
     col("role", "Role", false, "text", "Official banking partner", "As published."),
     col("description", "About", false, "text", "", "One sentence."),
     col("website", "Website", false, "url", "https://example.com", "Full URL."),
+    col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "The company's logo as an https PNG, JPEG or WebP image (not SVG), shown from plug-in version 0.28.0."),
+    col("about", "About", false, "text", "Regional bank serving businesses and households.", "Two to four sentences from the company's own website, shown under More about."),
+    col("highlights", "Highlights", false, "text", "Business banking; Trade finance", "Main products or services, separated by semicolons."),
+    col("linkedin", "LinkedIn", false, "url", "https://www.linkedin.com/company/example", "The company's page on LinkedIn."),
+    col("sources", "Sources", false, "text", "https://example.com/about", "The company's own pages these details come from, separated by semicolons."),
   ],
   collect: ["Copy the sponsors and partners from the event's own sponsors page, in its own groups."],
 };

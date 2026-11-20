@@ -1,6 +1,6 @@
 # BizPlug SaaS & Software
 
-Version 0.27.0. Book a product demo for saas & software businesses.
+Version 0.28.0. Book a product demo for saas & software businesses.
 
 - Main function: Book a product demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/saas` (streamable HTTP, no sign-in)
@@ -34,6 +34,7 @@ Version 0.27.0. Book a product demo for saas & software businesses.
 
 ## Changes
 
+- **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.
 - **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.
 - **0.25.0** (20 November 2026): Showcase: the business's logo on its card, member logos, and committees, the newsletter, and news and events on their own screens.

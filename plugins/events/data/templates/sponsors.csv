@@ -1,2 +1,2 @@
-name,group,role,description,website
-Example Bank,Gold sponsors,Official banking partner,,https://example.com
+name,group,role,description,website,logo,about,highlights,linkedin,sources
+Example Bank,Gold sponsors,Official banking partner,,https://example.com,https://example.com/logo.png,Regional bank serving businesses and households.,Business banking; Trade finance,https://www.linkedin.com/company/example,https://example.com/about

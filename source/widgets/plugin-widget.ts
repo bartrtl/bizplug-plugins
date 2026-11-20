@@ -905,16 +905,21 @@ const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); 
 // 0.26.0: the More about panel. What the business lists for the member; anything more comes from the chat, and says so.
 function memberFly(m) {
   const biz = (state.data.members || {}).business || "the business";
+  return companyFly(m, biz, [m.industry, m.location].filter(Boolean).join(" · "), m.level, "member list");
+}
+// The More about panel for a member (0.26.0), an exhibitor or a sponsor (0.28.0): what the business lists for the
+// company; anything more comes from the chat, and says so.
+function companyFly(m, biz, sub, badge, listName) {
   const sites = (m.sources || []).map(hostOf).filter((h, i, a) => h && a.indexOf(h) === i);
-  const prompt = "Tell me more about " + m.name + (/^https:\/\//.test(m.website || "") ? " (" + m.website + ")" : "") + ": what they do in Qatar, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s member list.";
+  const prompt = "Tell me more about " + m.name + (/^https:\/\//.test(m.website || "") ? " (" + m.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s " + listName + ".";
   return '<div class="fly" data-act="mflyx"><div class="sheet" role="dialog" aria-label="More about ' + esc(m.name) + '">' +
     '<div class="bar-top"><span class="kd">More about</span><button class="link" data-act="mflyx">Close ✕</button></div>' +
-    '<div class="mhero" style="margin-top:8px">' + mlogo(m, true) + "<div><b>" + esc(m.name) + "</b><span>" + esc([m.industry, m.location].filter(Boolean).join(" · ")) + "</span>" + (m.level ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(m.level) + "</span></div>" : "") + "</div></div>" +
+    '<div class="mhero" style="margin-top:8px">' + mlogo(m, true) + "<div><b>" + esc(m.name) + "</b><span>" + esc(sub || "") + "</span>" + (badge ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(badge) + "</span></div>" : "") + "</div></div>" +
     (m.about ? '<p class="about">' + esc(m.about) + "</p>" : m.description ? '<p class="about">' + esc(m.description) + "</p>" : "") +
     ((m.highlights || []).length ? '<div class="qlabel" style="margin-top:12px">Highlights</div><ul class="hl">' + m.highlights.map((h) => "<li>" + esc(h) + "</li>").join("") + "</ul>" : "") +
     (m.address ? '<div class="qlabel" style="margin-top:12px">Address</div><div class="bl" style="margin-top:3px">' + esc(m.address) + "</div>" : "") +
     (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
-    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ChatGPT for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + "</div>" +
+    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ChatGPT for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" +
     '<div class="note">Ask ChatGPT for more continues in the chat, where ChatGPT may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div></div></div>";
 }
 // ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
@@ -1130,8 +1135,12 @@ function exhibitorsView() {
     (cats.length > 1 ? '<div class="qs" style="margin:8px 0 12px">' + chip("All", "data-xcat", "", !d.category) + cats.map((c) => chip(esc(c.name) + " <small>" + c.count + "</small>", "data-xcat", c.name, c.name === d.category)).join("") + "</div>" : '<div style="height:8px"></div>');
   const items = d.items || [];
   if (!items.length) return head + '<div class="empty">' + (d.query ? 'Nothing matches "' + esc(d.query) + '".' : "No exhibitors or sponsors are published here yet.") + "</div>" + errLine() + links("exhibitors");
-  return head + '<div class="list">' + items.map((x) => '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + '</b><span class="qlabel">' + esc(x.kind === "sponsor" ? x.role || x.category : x.category) + "</span></div>" +
-    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + "</button></div>").join("") + "</div>" +
+  // 0.28.0: each company with its logo, or its initials.
+  const text = (x) => '<div class="nm"><b>' + esc(x.name) + (x.stand ? '<span class="lvl">Stand ' + esc(x.stand) + "</span>" : "") + '</b><span class="qlabel">' + esc(x.kind === "sponsor" ? x.role || x.category : x.category) + "</span></div>" +
+    (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "");
+  return head + '<div class="list">' + items.map((x) => "logo" in x
+    ? '<div class="it mb"><button class="rowb" data-exh="' + esc(x.id) + '">' + mlogo(x) + "<div>" + text(x) + "</div></button></div>"
+    : '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '">' + text(x) + "</button></div>").join("") + "</div>" +
     (d.more ? '<div class="note">' + d.more + " more: search or choose a category.</div>" : "") + errLine() +
     '<div class="note">As listed by ' + esc(d.business || "the event") + ". You contact a company directly; nobody introduces you or passes a message on.</div>" + links("exhibitors");
 }
@@ -1141,10 +1150,19 @@ function exhibitorView() {
   const row = (label, value) => (value ? "<tr><td>" + label + "</td><td>" + esc(value) + "</td></tr>" : "");
   const web = /^https:\/\//.test(x.website), mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.email);
   const facts = row("Role", x.role) + row("Stand", x.stand) + row("City", x.city) + row("Phone", x.phone) + (mail ? row("Email", x.email) : "");
-  return top(x.name) + '<div class="sum"><div><b>' + esc(x.kind === "sponsor" ? "Sponsor" : "Exhibitor") + "</b><span>" + esc(x.category) + "</span></div></div>" +
+  const biz = (state.data.exhibitors || {}).business || "the event";
+  const label = x.kind === "sponsor" ? "Sponsor" : "Exhibitor";
+  // 0.28.0: the company's logo, its LinkedIn, and More about with Ask ChatGPT for more.
+  const more = "about" in x, li = /^https:\/\//.test(x.linkedin || "");
+  const hero = "logo" in x
+    ? '<div class="mhero">' + mlogo(x, true) + "<div><b>" + esc(x.name) + "</b><span>" + esc([label, x.category].filter(Boolean).join(" · ")) + "</span>" + (x.stand ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">Stand ' + esc(x.stand) + "</span></div>" : "") + "</div></div>"
+    : '<div class="sum"><div><b>' + esc(label) + "</b><span>" + esc(x.category) + "</span></div></div>";
+  return top(x.name) + hero +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
-    (web || mail ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
-    '<div class="note">These are the details ' + esc((state.data.exhibitors || {}).business || "the event") + " lists. You contact " + esc(x.name) + " yourself.</div>";
+    (web || mail || li ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
+    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask ChatGPT what it knows or finds about them") + "</div></div></button>" : "") +
+    '<div class="note">These are the details ' + esc(biz) + " lists. You contact " + esc(x.name) + " yourself.</div>" +
+    (more && state.fly === state.sel ? companyFly(x, biz, [label, x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list") : "");
 }
 const TOPICS = ["Exhibiting", "Sponsoring", "Visiting", "Speaking", "Other"];
 function enquiryView() {
@@ -1507,7 +1525,7 @@ function render() {
   on("[data-spk]", (b) => { state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
   on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
   on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });
-  on("[data-exh]", (b) => { state.sel = b.dataset.exh; state.view = "exhibitor"; state.error = ""; render(); });
+  on("[data-exh]", (b) => { state.sel = b.dataset.exh; state.fly = ""; state.view = "exhibitor"; state.error = ""; render(); });
   on("[data-etopic]", (b) => { state.f.etopic = b.dataset.etopic; render(); });
   on('[data-act="enquiry"]', () => guard(() => {
     const o = opt("enquiry");
