@@ -1,0 +1,9 @@
+.lay-your-layout{display:grid;gap:12px}
+.lay-your-layout .lay-your-layout-head h1{font-size:20px;margin:8px 0 2px}
+.lay-your-layout .lay-your-layout-head p{color:var(--muted);font-size:13px}
+.lay-your-layout .lay-your-layout-banner{display:block;width:100%;aspect-ratio:1.91/1;object-fit:cover;border-radius:16px}
+.lay-your-layout .lay-your-layout-start{all:unset;cursor:pointer;display:grid;gap:4px;padding:16px;border-radius:16px;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2))}
+.lay-your-layout .lay-your-layout-list{display:grid;gap:6px}
+.lay-your-layout .lay-your-layout-row{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--card)}
+.lay-your-layout .lay-your-layout-row svg{width:18px;height:18px;color:var(--atext)}
+.lay-your-layout .lay-your-layout-ask{all:unset;cursor:pointer;padding:8px 12px;border-radius:999px;border:1px solid var(--line);font-size:13px}

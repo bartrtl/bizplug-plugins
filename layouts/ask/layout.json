@@ -1,0 +1,8 @@
+{
+  "id": "ask",
+  "name": "Ask bar",
+  "author": { "name": "BizPlug", "url": "https://www.bizplug.ai" },
+  "summary": "A large Ask or search bar with suggested questions under it, and every option in one compact list that filters as people type. Enter opens the first match; anything else is asked in the chat.",
+  "suits": "Businesses people come to with a question, or with many options: chambers, software, clinics, professional services, guides.",
+  "ownHeader": true
+}

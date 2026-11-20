@@ -45,12 +45,24 @@ import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
 import { siteConfig, siteOrigins } from "@/lib/seo";
 import { CARD_IMAGE_ORIGINS } from "@/lib/profile-store";
+import { LAYOUT_PACKAGES } from "@/lib/layouts.generated";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
 /** The same card for an MCP Apps host (Claude), from plug-in version 0.23.0. */
 export const PLUGIN_APP_MIME = "text/html;profile=mcp-app";
 
 const ICONS: Record<string, string> = {
+  // 0.31.0: icons the menu layouts use (card-layouts.ts, layouts/<id>/).
+  spark: '<path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7z"/>',
+  enter: '<path d="M20 5v6a3 3 0 0 1-3 3H5"/><path d="m9 10-4 4 4 4"/>',
+  home: '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+  more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+  arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
+  chev: '<path d="m9 6 6 6-6 6"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  bed: '<path d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/>',
+  social: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>',
   account: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
   note: '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>',
   mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v4"/>',
@@ -84,8 +96,8 @@ const ICONS: Record<string, string> = {
 const MARK = `<svg viewBox="${brand.markViewBox}" aria-hidden="true"><defs><linearGradient id="bp-g" x1="14" y1="9" x2="50" y2="55" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="${brand.lime}"/><stop offset="1" stop-color="${brand.mint}"/></linearGradient></defs><path fill="url(#bp-g)" fill-rule="evenodd" d="${brand.markPath}"/></svg>`;
 
 const CSS = String.raw`
-:root{--ink:#0f1320;--fg:#f3f5fb;--muted:#a3aabd;--card:rgba(255,255,255,.05);--line:rgba(255,255,255,.1);--a1:#e8ebf3;--a2:#b9c2d8;--glow:rgba(185,194,216,.12);--bg:#0f1320}
-:root[data-theme=light]{--fg:#0f1320;--muted:#5b6275;--card:#f5f7fb;--line:rgba(15,19,32,.1);--bg:#ffffff}
+:root{--ink:#0f1320;--fg:#f3f5fb;--muted:#a3aabd;--card:rgba(255,255,255,.05);--card2:rgba(255,255,255,.09);--line:rgba(255,255,255,.1);--a1:#e8ebf3;--a2:#b9c2d8;--glow:rgba(185,194,216,.12);--bg:#0f1320;--atext:var(--a1)}
+:root[data-theme=light]{--fg:#0f1320;--muted:#5b6275;--card:#f5f7fb;--card2:#eaedf5;--line:rgba(15,19,32,.1);--bg:#ffffff;--atext:color-mix(in srgb,var(--a1) 45%,#0f1320)}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,sans-serif}
 #app{padding:18px;position:relative;overflow:hidden}
@@ -397,6 +409,9 @@ function ask(prompt) {
 // ChatGPT opens web links from a card, not mailto: links, so an email goes through a page that starts it in the
 // customer's mail app. The address travels in the fragment and is not sent to the server.
 const MAIL_PAGE = __MAIL__;
+// ---- 0.31.0: menu layouts (card-layouts.ts). Each package's render(ctx) is a pure function to HTML (layouts/<id>/). ----
+const LAYOUTS = {};
+__LAYOUTS__
 function openLink(href) {
   if (!href) return;
   if (/^mailto:/i.test(href)) {
@@ -628,9 +643,86 @@ function contactBar() {
     (c.whatsapp ? '<button class="btn wa" data-href="' + esc(c.whatsapp) + '">' + icon("whatsapp") + "WhatsApp</button>" : "") +
     (c.email ? '<button class="btn" data-href="' + esc(c.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>";
 }
+// ---- 0.31.0: the business's menu layout (card-layouts.ts, layouts/<id>/) ----
+const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", contact: "Contact", committees: "Committees", news: "News", social: "Social", agenda: "Agenda", speakers: "Speakers", exhibitors: "Exhibitors", features: "Features", pricing: "Pricing", guides: "Help", support: "Support", enquiry: "Enquire", tour: "Tour", daypass: "Day pass", account: "Account" };
+// A short label for tabs, round buttons and chapters.
+function shortOf(o) {
+  if (o.short) return o.short;
+  const e = p().engine;
+  if (o.kind === "lookup") return e === "stay" ? (p().span === "nights" ? "Rooms" : "Dates") : e === "order" ? "Menu" : e === "appt" ? "Times" : e === "quote" ? "Prices" : "Look up";
+  if (o.kind === "request") return e === "stay" || e === "appt" ? "Book" : e === "order" ? "Order" : "Request";
+  return LAYOUT_SHORT[o.kind] || o.title;
+}
+function layoutIcon(o) { const stay = p().engine === "stay"; return icon(stay && o.kind === "lookup" ? "calendar" : stay && o.kind === "request" ? "bed" : o.icon || o.kind); }
+const activeLayout = () => { const id = p().layout; return id && LAYOUTS[id] ? id : ""; };
+// What a layout gets: the business, its menu, BizPlug's contact links and the layout's own state.
+function layoutCtx() {
+  const d = p(), name = d.businessName || d.title || "";
+  const opts = state.options.filter((o) => !o.hidden);
+  const c = d.contact || {};
+  return {
+    business: { name: name, subtitle: d.subtitle || "", logo: d.logo || null, logoWide: Boolean(d.logoWide), banner: d.banner || null, initials: name.split(/\s+/).filter((w) => /^[A-Z0-9]/.test(w)).slice(0, 3).map((w) => w[0]).join("") || name.slice(0, 2).toUpperCase(), engine: d.engine || "", span: d.span || "" },
+    options: opts.map((o, i) => ({ index: state.options.indexOf(o), kind: o.kind, title: o.title, short: shortOf(o), description: o.description || "", example: o.example || "", icon: layoutIcon(o), start: i === 0 })),
+    contact: c.whatsapp || c.email ? { title: c.title || "", description: c.description || "", whatsapp: c.whatsapp || null, email: c.email || null } : null,
+    ui: Object.assign({}, state.lay || {}),
+    mode: document.documentElement.dataset.theme === "light" ? "light" : "dark",
+    h: esc,
+    icon: (n) => icon(n),
+  };
+}
+// What a layout returns is drawn without scripts, frames, forms or inline event handlers.
+function cleanHtml(html) {
+  const t = document.createElement("template");
+  t.innerHTML = String(html || "");
+  t.content.querySelectorAll("script,iframe,frame,object,embed,link,meta,style,base,form").forEach((n) => n.remove());
+  t.content.querySelectorAll("*").forEach((n) => Array.from(n.attributes).forEach((a) => {
+    if (/^on/i.test(a.name) || (/^(href|src|action|formaction|xlink:href|srcdoc)$/i.test(a.name) && !/^(https:|data:image\/|#|$)/i.test(a.value.trim()))) n.removeAttribute(a.name);
+  }));
+  return t.innerHTML;
+}
+function layoutMenu(id) {
+  try { return '<div class="lay lay-' + id + '">' + cleanHtml(LAYOUTS[id].render(layoutCtx())) + "</div>"; }
+  catch (e) { console.error("[layout] " + id, e); return ""; }
+}
+// A layout's search box filters the rows marked data-lay-text without drawing the card again, so it keeps its focus.
+function wireLayoutFilter(root, input) {
+  const rows = () => Array.from(root.querySelectorAll("[data-lay-text]"));
+  const askRow = root.querySelector("[data-lay-ask-row]");
+  const count = root.querySelector("[data-lay-count]");
+  const visible = () => Array.from(root.querySelectorAll("[data-lay-text]:not([hidden]),[data-lay-ask-row]:not([hidden])"));
+  let sel = 0;
+  const mark = () => visible().forEach((r, i) => r.classList.toggle("lay-sel", i === sel));
+  const apply = () => {
+    const q = input.value.trim(), words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    let shown = 0;
+    rows().forEach((r) => { const hit = !words.length || words.every((w) => (r.dataset.layText || "").includes(w)); r.hidden = !hit; if (hit) shown++; });
+    if (askRow) {
+      askRow.hidden = !q; askRow.dataset.ask = q;
+      root.querySelectorAll("[data-lay-query]").forEach((n) => (n.textContent = q));
+      if (q && askRow.parentNode) { if (shown) askRow.parentNode.appendChild(askRow); else askRow.parentNode.prepend(askRow); }
+    }
+    if (count) count.textContent = q ? shown + " of " + rows().length + " match" : count.dataset.layCountIdle || count.textContent;
+    sel = 0; mark();
+    state.lay = Object.assign(state.lay || {}, { q: q });
+  };
+  input.value = (state.lay && state.lay.q) || "";
+  input.addEventListener("input", apply);
+  input.addEventListener("keydown", (e) => {
+    const v = visible();
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); if (v.length) { sel = (sel + (e.key === "ArrowDown" ? 1 : -1) + v.length) % v.length; mark(); } }
+    else if (e.key === "Enter") { e.preventDefault(); const r = v[sel]; if (r) r.click(); else if (input.value.trim()) ask(input.value.trim()); }
+    else if (e.key === "Escape") { input.value = ""; apply(); }
+  });
+  root.querySelectorAll("[data-lay-askbtn]").forEach((b) => b.addEventListener("click", () => { const q = input.value.trim(); if (q) ask(q); else { const r = rows()[0]; if (r) r.click(); } }));
+  apply();
+}
 function menuView() {
   const opts = state.options.filter((o) => !o.hidden);
   const pick = picker();
+  // 0.31.0: the business's own layout, when it picked one (a business's card only; the industry-wide card keeps the tiles).
+  const lay = !pick && p().bound ? activeLayout() : "";
+  const drawn = lay ? layoutMenu(lay) : "";
+  if (drawn) return drawn + actionBar((a) => a.where === "contact", p().businessName || p().title ? "Reach " + (p().businessName || p().title) : "");
   return pick + '<div class="grid">' + opts.map((o, i) =>
     '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + state.options.indexOf(o) + '"><span class="ic">' + icon(o.icon || o.kind) + "</span><span>" +
     '<div class="tt">' + esc(o.title) + (i === 0 ? '<span class="badge">Start here</span>' : "") + '</div><div class="dd">' + esc(o.description) + "</div></span></button>").join("") + "</div>" +
@@ -1488,7 +1580,8 @@ function render() {
   const app = document.getElementById("app");
   const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
-  app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
+  const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
+  app.innerHTML = (ownHead ? "" : header()) + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
@@ -1503,7 +1596,16 @@ function render() {
   const guard = (fn) => { try { fn(); } catch (e) { state.error = (e && e.message) || "Check the form."; render(); } };
   on("[data-open]", (b) => openOption(Number(b.dataset.open)));
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
-  on("[data-ask]", (b) => ask(b.dataset.ask));
+  on("[data-ask]", (b) => { if (b.dataset.ask) ask(b.dataset.ask); });
+  // 0.31.0: a layout's own state (a tab, an open panel): data-lay="key:value"; an empty value clears the key.
+  on("[data-lay]", (b) => {
+    state.lay = state.lay || {};
+    // Several pairs at once: data-lay="tab:3;more:".
+    (b.dataset.lay || "").split(";").forEach((pair) => { const k = pair.split(":")[0].trim(), val = pair.slice(pair.indexOf(":") + 1).trim(); if (!k) return; if (!val || pair.indexOf(":") < 0) delete state.lay[k]; else state.lay[k] = val; });
+    render();
+  });
+  const layFilter = app.querySelector(".lay input[data-lay-filter]");
+  if (layFilter) wireLayoutFilter(layFilter.closest(".lay"), layFilter);
   on("[data-href]", (b) => openLink(b.dataset.href));
   on('[data-act="send"]', () => guard(() => {
     const o = state.options[state.open], f = formFor(o);
@@ -1724,8 +1826,12 @@ if (!window.openai && window.parent !== window) {
 }
 `;
 
-const SCRIPT = SCRIPT_SRC.replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
-const PLUGIN_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${CSS}</style></head><body><div id="app"></div><script type="module">${SCRIPT.replace(/<\/script/gi, "<\\/script")}</script></body></html>`;
+// Each layout package runs in its own function scope; layout-check.ts kept page access, events and timers out of it.
+const LAYOUT_CODE = LAYOUT_PACKAGES.map((l) => `LAYOUTS[${JSON.stringify(l.meta.id)}] = (function () {\n"use strict";\n${l.js}\nreturn { render: render, own: ${l.meta.ownHeader ? "true" : "false"} };\n})();`).join("\n");
+const SCRIPT = SCRIPT_SRC.replace("__LAYOUTS__", () => LAYOUT_CODE).replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
+// 0.31.0: the layouts' own styles, each scoped under .lay-<id> (layout-check.ts), after the card's.
+const LAYOUT_CSS = ".lay [hidden]{display:none!important}\n.lay svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n" + LAYOUT_PACKAGES.map((l) => l.css).join("\n");
+const PLUGIN_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${CSS}${LAYOUT_CSS}</style></head><body><div id="app"></div><script type="module">${SCRIPT.replace(/<\/script/gi, "<\\/script")}</script></body></html>`;
 
 export const pluginWidgetHtml = () => PLUGIN_HTML;
 /** Content-addressed: a changed card gets a new URI, so ChatGPT never shows a stale copy. */

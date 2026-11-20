@@ -1,0 +1,35 @@
+.lay-ask{display:block}
+.lay-ask .lay-ask-top{position:relative;display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.lay-ask .lay-ask-bn{display:block;flex:0 0 calc(100% + 24px);margin:-12px -12px 0;width:calc(100% + 24px);aspect-ratio:1.91/1;max-height:220px;object-fit:cover}
+.lay-ask .lay-ask-id{flex:1;min-width:0}
+.lay-ask .lay-ask-id b{display:block;font-size:16px;letter-spacing:-.01em}
+.lay-ask .lay-ask-id span{display:block;font-size:12.5px;color:var(--muted)}
+.lay-ask .lay-ask-logo{flex:none;width:44px;height:44px;border-radius:12px;overflow:hidden;background:#fff;display:grid;place-items:center}
+.lay-ask .lay-ask-logo img{width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box}
+.lay-ask .lay-ask-mono{font-weight:800;font-size:14px;color:var(--ink);background:linear-gradient(135deg,var(--a1),var(--a2))}
+.lay-ask .lay-ask-bar{margin-top:14px;display:flex;align-items:center;gap:10px;padding:6px 6px 6px 14px;border-radius:18px;border:1.5px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(110deg,var(--a1),var(--a2)) border-box;box-shadow:0 0 0 6px var(--glow)}
+.lay-ask .lay-ask-sp{color:var(--atext);display:grid}
+.lay-ask .lay-ask-sp svg,.lay-ask .lay-ask-go svg,.lay-ask .lay-ask-k svg{width:16px;height:16px}
+.lay-ask .lay-ask-bar input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--fg);font:inherit;font-size:16px;padding:10px 0}
+.lay-ask .lay-ask-bar input::placeholder{color:var(--muted)}
+.lay-ask .lay-ask-go{all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:13px;font-weight:700;font-size:14px;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2))}
+.lay-ask .lay-ask-chips{display:flex;gap:8px;margin:12px 0 4px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.lay-ask .lay-ask-chip{all:unset;cursor:pointer;flex:none;max-width:260px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-size:13px;color:var(--fg)}
+.lay-ask .lay-ask-first{border-color:transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(110deg,var(--a1),var(--a2)) border-box;font-weight:600}
+.lay-ask .lay-ask-first i{font-style:normal;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));padding:2px 6px;border-radius:999px;margin-right:6px}
+.lay-ask .lay-ask-lh{display:flex;align-items:baseline;justify-content:space-between;margin:16px 2px 6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.lay-ask .lay-ask-lh kbd{font:inherit;text-transform:none;letter-spacing:0;font-weight:500}
+.lay-ask .lay-ask-list{display:grid;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card)}
+.lay-ask .lay-ask-row{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;min-height:56px;border-top:1px solid var(--line)}
+.lay-ask .lay-ask-row:first-child{border-top:0}
+.lay-ask .lay-ask-ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:var(--atext);background:color-mix(in srgb,var(--a1) 14%,transparent);flex:none}
+.lay-ask .lay-ask-ic svg{width:18px;height:18px}
+.lay-ask .lay-ask-tx{flex:1;min-width:0}
+.lay-ask .lay-ask-tx b{display:block;font-weight:650;font-size:14.5px}
+.lay-ask .lay-ask-tx small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lay-ask .lay-ask-tx em{font-style:normal;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));padding:2px 7px;border-radius:999px;margin-left:8px;vertical-align:1px}
+.lay-ask .lay-ask-k{flex:none;color:var(--muted);opacity:0;display:grid}
+.lay-ask .lay-ask-row:hover,.lay-ask .lay-sel{background:color-mix(in srgb,var(--a1) 10%,transparent)}
+.lay-ask .lay-ask-row:hover .lay-ask-k,.lay-ask .lay-sel .lay-ask-k{opacity:1}
+.lay-ask .lay-ask-q .lay-ask-ic{color:var(--ink);background:linear-gradient(135deg,var(--a1),var(--a2))}
+@media (max-width:420px){.lay-ask .lay-ask-go span{display:none}.lay-ask .lay-ask-lh kbd{display:none}}

@@ -1,0 +1,11 @@
+{
+  "id": "your-layout",
+  "name": "Your layout",
+  "author": {
+    "name": "Your name",
+    "url": "https://example.com"
+  },
+  "summary": "What it looks like and how people use it, in one or two sentences.",
+  "suits": "The kinds of businesses it suits.",
+  "ownHeader": true
+}

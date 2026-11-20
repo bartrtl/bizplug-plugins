@@ -1,0 +1,8 @@
+{
+  "id": "app",
+  "name": "App",
+  "author": { "name": "BizPlug", "url": "https://www.bizplug.ai" },
+  "summary": "A phone-app home: your banner with your logo on its edge, a row of round quick actions, a big Start here card and the questions people often ask, with a tab bar for your three main destinations and More.",
+  "suits": "Businesses customers come back to, with two or three clear jobs: hotels, restaurants, gyms, coworking, salons, members' clubs and chambers.",
+  "ownHeader": true
+}

@@ -1,0 +1,69 @@
+{
+  "view": "menu",
+  "title": "Corniche Lantern Hotel",
+  "subtitle": "Room availability, rates and booking requests",
+  "options": [
+    {
+      "tool": "check_room_availability",
+      "kind": "lookup",
+      "title": "Availability and price",
+      "description": "See what is free for your dates and party size, with the total price.",
+      "example": "Do you have anything free this weekend for 2 guests?"
+    },
+    {
+      "tool": "request_booking",
+      "kind": "request",
+      "title": "Request the booking",
+      "description": "Send a booking request. The business confirms it; nothing is held or charged here.",
+      "example": "Please request the first option for me"
+    },
+    {
+      "tool": "get_business_info",
+      "kind": "question",
+      "title": "Ask a question",
+      "description": "Answers from the business's own information: rooms, amenities, policies and booking enquiries.",
+      "example": "Do you have a room for two nights next weekend?"
+    },
+    {
+      "tool": "get_booking_status",
+      "kind": "status",
+      "title": "Booking status",
+      "description": "Check a booking request with its reference.",
+      "example": "What's the status of my booking request?"
+    },
+    {
+      "tool": "get_contact",
+      "kind": "contact",
+      "title": "Contact the business",
+      "description": "Phone, email, website and opening hours.",
+      "example": "How do I contact the business?"
+    }
+  ],
+  "plugin": {
+    "title": "Corniche Lantern Hotel",
+    "subtitle": "Room availability, rates and booking requests",
+    "bound": true,
+    "inCard": true,
+    "nav": true,
+    "stayCal": true,
+    "quick": {
+      "maxGuests": 6
+    },
+    "businessName": "Corniche Lantern Hotel",
+    "sample": false,
+    "engine": "stay",
+    "span": "nights",
+    "noun": "room type",
+    "needsContact": false,
+    "theme": null,
+    "banner": "https://bizplug.ai/banner/hospitality/corniche-lantern-hotel?v=64fc00373f",
+    "logo": "https://bizplug.ai/logo/hospitality/corniche-lantern-hotel?v=fef6936fba",
+    "logoWide": false,
+    "contact": {
+      "title": "Contact BizPlug",
+      "description": "Questions about this plug-in, or one like it for your business.",
+      "whatsapp": "https://wa.me/17047372724?text=Hi%20BizPlug%2C%20I'm%20using%20the%20Corniche%20Lantern%20Hotel%20plug-in%20in%20ChatGPT%20and%20would%20like%20to%20know%20more.",
+      "email": "mailto:info@bizplug.ai"
+    }
+  }
+}

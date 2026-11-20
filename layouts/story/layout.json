@@ -1,0 +1,8 @@
+{
+  "id": "story",
+  "name": "Story",
+  "author": { "name": "BizPlug", "url": "https://www.bizplug.ai" },
+  "summary": "A magazine-style page: a cover with your picture, your name and the Start here action, a row of chapters, then each option as a numbered chapter with large artwork, its example question and an Ask this button.",
+  "suits": "Brands with strong pictures and a story to tell: hotels and resorts, venues, tourism, events, restaurants, and chambers presenting their programmes.",
+  "ownHeader": true
+}

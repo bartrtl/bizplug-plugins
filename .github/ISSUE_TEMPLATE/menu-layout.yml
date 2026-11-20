@@ -1,0 +1,39 @@
+name: Propose a menu layout
+description: Propose a menu layout for BizPlug plug-in cards
+title: "Menu layout: <name>"
+labels: ["menu-layout"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for building a layout. Read LAYOUTS.md first, run `npx tsx layouts/check-layout.ts layouts/<your-layout>`, and make the two preview pictures.
+  - type: input
+    id: link
+    attributes:
+      label: Where is your layout?
+      description: A link to your fork, branch or gist with the folder layouts/<your-layout>/ (layout.json, layout.css, layout.js, preview-desktop.png, preview-mobile.png).
+    validations:
+      required: true
+  - type: textarea
+    id: about
+    attributes:
+      label: What it does
+      description: How the menu is organised, how people use it, and the businesses it suits.
+    validations:
+      required: true
+  - type: textarea
+    id: check
+    attributes:
+      label: Output of check-layout.ts
+      render: text
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before you send it
+      options:
+        - label: I wrote this layout, and it may be published under this repository's licence.
+          required: true
+        - label: I checked it at 390 and 680 px wide, in dark and light mode, with both sample businesses.
+          required: true
