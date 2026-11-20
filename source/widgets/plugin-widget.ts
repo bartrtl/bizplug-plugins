@@ -226,9 +226,9 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .sum.biz b{font-size:15px}
 .sum.sm b{font-size:14px}
 .head .ic.logo{width:54px;height:54px;border-radius:15px;background:#fff;padding:6px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
-.head .wm{flex:none;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
-.head .wm img{height:100%;width:auto;max-width:100%;object-fit:contain;display:block}
-@media (max-width:420px){.head .wm{height:48px;max-width:150px}}
+.head .wm{flex:none;box-sizing:border-box;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
+.head .wm img{height:44px;width:auto;max-width:100%;object-fit:contain;display:block}
+@media (max-width:420px){.head .wm{height:48px;max-width:150px}.head .wm img{height:34px}}
 .fly{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end;background:rgba(5,6,12,.55);animation:flyin .15s ease-out}
 .sheet{width:min(440px,94%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:18px;box-shadow:-16px 0 40px rgba(0,0,0,.4);animation:slidein .22s ease-out}
 @keyframes flyin{from{opacity:0}to{opacity:1}}
