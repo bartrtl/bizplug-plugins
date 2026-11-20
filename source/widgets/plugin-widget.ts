@@ -1050,7 +1050,7 @@ function payBox(s) {
   if (!pay || !/^https:\/\//.test(pay.url)) return "";
   state.payRef = s.reference;
   return '<div class="pay"><div class="amt"><div><span>To pay' + (pay.testMode ? '<span class="tag">TEST</span>' : "") + "</span><b>" + esc(pay.total) + "</b></div><span>" + esc(pay.provider) + " checkout</span></div>" +
-    '<div class="actions"><button class="primary" data-href="' + esc(pay.url) + '">Pay now</button>' + (opt("status") ? '<button class="btn" data-act="paid">I\u2019ve paid</button>' : "") + "</div>" +
+    '<div class="actions"><button class="primary" data-href="' + esc(pay.url) + '">Pay now</button>' + (opt("status") && !pay.door ? '<button class="btn" data-act="paid">I\u2019ve paid</button>' : "") + "</div>" +
     "<p>You pay on " + esc(pay.provider) + "\u2019s page, in the business\u2019s name. Card details are never entered in ChatGPT." + (pay.testMode ? " Test mode: no real money; use the test card 4242 4242 4242 4242." : "") + " The page stays open for 30 minutes.</p></div>";
 }
 function sentView() {
@@ -1521,7 +1521,7 @@ export const pluginWidgetMeta = {
   "openai/widgetPrefersBorder": true,
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
-  "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
+  "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin, "https://checkout.stripe.com"] },
 };
 /** resources/read _meta for an MCP Apps host: a border, no network, images from IMAGE_ORIGINS only, as in ChatGPT. */
 export const pluginAppMeta = { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS } } };
