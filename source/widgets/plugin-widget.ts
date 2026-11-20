@@ -138,7 +138,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .it .bl{font-size:13px;color:var(--muted);margin-top:3px}
 .it.ph{display:grid;grid-template-columns:64px 1fr;gap:12px;align-items:start}
 .thumb{width:64px;height:64px;border-radius:12px;object-fit:cover;background:var(--line);display:block}
-.hero{width:100%;max-width:420px;aspect-ratio:4/3;border-radius:16px;object-fit:cover;background:var(--line);display:block;margin:4px 0 12px}
+.photo{width:100%;max-width:420px;aspect-ratio:4/3;border-radius:16px;object-fit:cover;background:var(--line);display:block;margin:4px 0 12px}
 .it .acts{display:flex;gap:8px;margin-top:10px}
 .qty{display:flex;align-items:center;gap:10px;margin-top:10px;font-weight:650}
 .step{all:unset;cursor:pointer;width:30px;height:30px;border-radius:999px;display:grid;place-items:center;border:1px solid var(--line);background:var(--bg);font-size:17px}
@@ -527,7 +527,7 @@ function itemView() {
   if (!x) return catalogView();
   const request = opt("request");
   const all = cartCount();
-  return top(x.name) + (x.image ? '<img class="hero" src="' + esc(x.image) + '" alt="' + esc(x.name) + '">' : "") + '<div class="sum"><div><b>' + esc(x.price) + "</b><span>" + esc(x.category || "") + "</span></div></div>" +
+  return top(x.name) + (x.image ? '<img class="photo" src="' + esc(x.image) + '" alt="' + esc(x.name) + '">' : "") + '<div class="sum"><div><b>' + esc(x.price) + "</b><span>" + esc(x.category || "") + "</span></div></div>" +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + stepper(x.id, state.cart[x.id] || 0) + errLine() +
     '<div class="actions" style="margin-top:14px">' + (request ? primary(all ? request.title + " (" + all + ")" : "Choose a quantity to order", "order", all ? "" : " disabled") : "") +
     (x.category ? '<button class="btn" data-cat="' + esc(x.category) + '">More in ' + esc(x.category) + "</button>" : "") + "</div>";
