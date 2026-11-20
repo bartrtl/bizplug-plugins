@@ -1,6 +1,6 @@
 # BizPlug Coworking & Offices
 
-Version 0.20.0. Desk and office availability and rates for coworking & offices businesses.
+Version 0.21.0. Desk and office availability and rates for coworking & offices businesses.
 
 - Main function: Desk and office availability and rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coworking` (streamable HTTP, no sign-in)
@@ -27,9 +27,11 @@ Version 0.20.0. Desk and office availability and rates for coworking & offices b
 | `get_business_info` | Answer a general question about this coworking & offices business using only its published profile: memberships, amenities and tour requests. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `find_members` | Find the member businesses of this coworking & offices business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. Contact is direct: the person writes or calls the member themselves, and neither the coworking business nor BizPlug introduces, forwards or vouches. Share only what the business lists for a member. |
+| `write_to_member` | Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with find_members. Contact is direct: the person writes or calls the member themselves, and neither the coworking business nor BizPlug introduces, forwards or vouches. |
 
 ## Changes
 
+- **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.
 - **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.

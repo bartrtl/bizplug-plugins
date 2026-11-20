@@ -34,7 +34,7 @@
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
-import { siteConfig } from "@/lib/seo";
+import { siteConfig, siteOrigins } from "@/lib/seo";
 import { CARD_IMAGE_ORIGINS } from "@/lib/profile-store";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
@@ -75,7 +75,7 @@ const CSS = String.raw`
 html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,sans-serif}
 #app{padding:18px;position:relative;overflow:hidden}
 .glow{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
-.head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}.banner{display:block;width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:1.91/1;object-fit:cover;background:rgba(255,255,255,.04);border-bottom:2px solid var(--a2,rgba(255,255,255,.1));position:relative}
 .head>svg{width:26px;height:36px;flex:none}
 .head .t{font-weight:700;font-size:17px;letter-spacing:-.01em}
 .head .s{color:var(--muted);font-size:13px}
@@ -422,7 +422,7 @@ function links(except) {
 function track() {
   const cur = { v: state.view, open: state.open, sel: state.sel };
   const was = state.shown;
-  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "speaker", "exhibitor"].indexOf(cur.v) < 0 || was.sel === cur.sel);
+  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "mwrite", "speaker", "exhibitor"].indexOf(cur.v) < 0 || was.sel === cur.sel);
   if (same) return;
   if (["menu", "sent", "whatsapp", "loading"].indexOf(cur.v) >= 0) state.hist = [];
   else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
@@ -465,7 +465,9 @@ function header() {
   const d = p();
   // A business's card shows no BizPlug mark (BizPlug stays in the contact bar); the industry-wide one does.
   const mark = d.bound ? '<span class="ic">' + icon("store") + "</span>" : MARK;
-  return '<div class="glow"></div><div class="head">' + mark + '<div><div class="t">' + esc(d.title || "Plug-in") + '</div><div class="s">' + esc(d.subtitle) + "</div></div></div>";
+  // 0.21.0: the business's own picture above the menu, from BizPlug's site (card-banner.ts); removed if it fails to load (render).
+  const banner = d.banner && state.view === "menu" ? '<img class="banner" src="' + esc(d.banner) + '" alt="' + esc(d.title || "") + '">' : "";
+  return banner + '<div class="glow"></div><div class="head">' + mark + '<div><div class="t">' + esc(d.title || "Plug-in") + '</div><div class="s">' + esc(d.subtitle) + "</div></div></div>";
 }
 function contactBar() {
   const c = p().contact || {};
@@ -676,7 +678,7 @@ function memberView() {
   const facts = row("Looking for", m.lookingFor) + row("Offers", m.offers) + row("Phone", m.phone) + (web ? "" : row("Website", m.website)) + (mail ? row("Email", m.email) : "");
   return top(m.name) + (m.industry || m.location ? '<div class="sum"><div><b>' + esc(m.industry || m.location) + "</b><span>" + esc(m.industry ? m.location : "") + "</span></div></div>" : "") +
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
-    (web || mail ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
+    (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
       (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
     '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>";
 }
@@ -685,6 +687,27 @@ function collabView() {
     field("mneed", "What do you need?", { optional: true, placeholder: "e.g. help with a website" }) + field("moffer", "What can you offer?", { optional: true, placeholder: "e.g. bookkeeping for small teams" }) + errLine() +
     '<div class="actions">' + primary("Show matching members", "match") + "</div>" +
     '<div class="note" style="margin-top:0">Your words are matched against each member&rsquo;s entry, above all what it offers and what it is looking for. You contact a member directly.</div></div>';
+}
+// 0.21.0: a first message to one member, drafted by write_to_member for the person to send themselves.
+function mwriteView() {
+  const m = state.mem[state.sel];
+  if (!m) return membersView();
+  return '<div class="form">' + top("Write to " + m.name) + '<div class="hint">Say who you are and what you would like to discuss. The card drafts a first message; you read it and send it yourself.</div>' +
+    field("wname", "Your name", { placeholder: "First and last name" }) + field("wcompany", "Your company", { optional: true }) + field("wemail", "Your email", { optional: true, type: "email", placeholder: "To sign the message" }) +
+    field("wmsg", "What would you like to discuss?", { type: "textarea", placeholder: "e.g. We are looking for a logistics partner for our new plant." }) + errLine() +
+    '<div class="actions">' + primary("Draft my message", "mdraft") + "</div>" +
+    '<div class="note" style="margin-top:0">Nothing is sent from here. ' + esc((state.data.members || {}).business || "The business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div></div>";
+}
+function memberMessageView() {
+  const d = state.data.memberMessage || {};
+  const routes = d.routes || [];
+  const label = { email: "Open in email", whatsapp: "Open in WhatsApp", website: "Website" };
+  const btn = (r, i) => '<button class="btn' + (r.kind === "whatsapp" ? " wa" : i === 0 ? " go" : "") + '" data-href="' + esc(r.url) + '">' + (r.kind === "whatsapp" ? icon("whatsapp") : r.kind === "email" ? icon("mail") : "") + esc(label[r.kind] || r.label) + "</button>";
+  return top("Your message to " + ((d.member || {}).name || "the member")) +
+    '<div class="sum"><div><b>' + esc(d.subject || "") + '</b><span>Subject</span></div></div>' +
+    '<div class="draft" style="white-space:pre-wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.5">' + esc(d.body || "") + "</div>" +
+    (routes.length ? '<div class="actions">' + routes.map(btn).join("") + "</div>" : '<div class="empty">This member published no email, WhatsApp number or website here. Copy the message and use another way you know.</div>') +
+    '<div class="note">You send it yourself from your own email or WhatsApp. Nothing was sent by this card, ' + esc(d.business || "the business") + " or BizPlug. Check that a number uses WhatsApp before relying on it.</div>";
 }
 
 // ---- Software products (version 0.15.0) ----
@@ -1048,9 +1071,11 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
+  const pic = app.querySelector(".banner");
+  if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   const on = (sel, fn) => app.querySelectorAll(sel).forEach((el) => el.addEventListener("click", () => fn(el)));
   const lookup = opt("lookup"), request = opt("request"), status = opt("status");
   const guard = (fn) => { try { fn(); } catch (e) { state.error = (e && e.message) || "Check the form."; render(); } };
@@ -1170,6 +1195,12 @@ function render() {
   on("[data-mloc]", (b) => findMembers({ location: b.dataset.mloc }));
   on("[data-member]", (b) => { state.sel = b.dataset.member; state.view = "member"; state.error = ""; render(); });
   on('[data-act="collab"]', () => { state.view = "collab"; state.error = ""; render(); });
+  on('[data-act="mwrite"]', () => { state.view = "mwrite"; state.error = ""; render(); });
+  on('[data-act="mdraft"]', () => guard(() => {
+    const m = state.mem[state.sel] || {};
+    need(v("wname"), "Add your name."); need(v("wmsg"), "Say what you would like to discuss.");
+    run(p().memberWrite, clean({ member: m.name, name: v("wname"), company: v("wcompany"), email: v("wemail"), message: v("wmsg") }), "Draft a message from me (" + v("wname") + ") to " + m.name + ": " + v("wmsg"));
+  }));
   on('[data-act="match"]', () => guard(() => { need(v("mneed") || v("moffer"), "Say what you need or what you can offer."); state.f.mq = [v("mneed"), v("moffer")].filter(Boolean).join(" "); findMembers({ industry: "", location: "" }); }));
   const filter = app.querySelector("[data-filter]");
   const applyFilter = () => { const w = String(state.f.filter || "").toLowerCase().trim(); app.querySelectorAll(".faq").forEach((el) => { el.style.display = !w || el.dataset.text.indexOf(w) >= 0 ? "" : "none"; }); };
@@ -1219,11 +1250,16 @@ export const pluginResultToolMeta = (invoking: string, invoked: string) => ({ ..
 /** tools/list _meta for a tool the card may call but whose result stays in the chat. */
 export const pluginCallableToolMeta = { "openai/widgetAccessible": true };
 
-/** resources/read _meta: no network (menu photos load from CARD_IMAGE_ORIGINS), links open outside; the description ChatGPT's model sees with the card. */
+/**
+ * Where the card may load images from: menu photos (CARD_IMAGE_ORIGINS) and, from 0.21.0, the business's banner,
+ * which BizPlug's own site serves (card-banner.ts).
+ */
+const IMAGE_ORIGINS = [...CARD_IMAGE_ORIGINS, ...siteOrigins()];
+/** resources/read _meta: no network (images load from IMAGE_ORIGINS), links open outside; the description ChatGPT's model sees with the card. */
 export const pluginWidgetMeta = {
-  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: CARD_IMAGE_ORIGINS } },
+  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS } },
   "openai/widgetPrefersBorder": true,
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
-  "openai/widgetCSP": { connect_domains: [], resource_domains: CARD_IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
+  "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
 };

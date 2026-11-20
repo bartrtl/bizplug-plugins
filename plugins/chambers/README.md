@@ -1,6 +1,6 @@
 # BizPlug Chambers of Commerce & Business Associations
 
-Version 0.20.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
+Version 0.21.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
@@ -27,9 +27,11 @@ Version 0.20.0. Chamber information, membership enquiries and member businesses 
 | `get_business_info` | Answer a general question about this chambers of commerce & business associations business using only its published profile: membership levels and benefits, events, programs, committees, advocacy and member businesses. Creates nothing. If the profile does not cover the question, say so and use get_contact. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `find_members` | Find the member businesses of this chambers of commerce & business associations business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. Share only what the business lists for a member. |
+| `write_to_member` | Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with find_members. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. |
 
 ## Changes
 
+- **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.
 - **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.

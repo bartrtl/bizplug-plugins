@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.20.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.21.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -64,6 +64,8 @@ const lower = (s: string) => s.toLowerCase();
  * option only for a business that published a member list.
  */
 export const MEMBERS_TOOL = "find_members";
+/** 0.21.0 (`memberMessages`): drafts a first message from the person to one member; nothing is sent (members.ts). */
+export const MEMBER_MESSAGE_TOOL = "write_to_member";
 
 /** Software products (`software` in industry-functions.ts), from plug-in version 0.15.0 (software.ts). */
 export const SOFTWARE_TOOLS = { features: "get_features", pricing: "get_pricing", guides: "search_help", support: "request_support" } as const;
@@ -226,6 +228,12 @@ export function buildPlugin(i: Industry): IndustryPlugin {
             name: MEMBERS_TOOL,
             title: "Members",
             description: `Find the member businesses of this ${noun} business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. ${membersDirect(i.slug)} Share only what the business lists for a member.`,
+            readOnly: true,
+          },
+          {
+            name: MEMBER_MESSAGE_TOOL,
+            title: "Write to a member",
+            description: `Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with ${MEMBERS_TOOL}. ${membersDirect(i.slug)}`,
             readOnly: true,
           },
         ]

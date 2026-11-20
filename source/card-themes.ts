@@ -78,6 +78,24 @@ export function cardColors(picked: string | null | undefined, own: CardThemeColo
   return getCardTheme(picked)?.colors ?? own ?? null;
 }
 
+/** The text colours tried on a brand's accent, darkest first. */
+const INKS = ["#0b0f1a", "#ffffff"];
+
+/**
+ * A business's own colours for its card from the three it chooses (its brand's main colour, a second accent and
+ * a dark background): the text on the accent is whichever of near-black and white reads on both accents, and
+ * the glow is the main colour, faint. Returns the colours, or what is wrong with them (themeProblems).
+ */
+export function brandColors(a1: string, a2: string, bg: string): { colors: CardThemeColors; problems: string[] } {
+  const hex = (v: string) => v.trim().toLowerCase();
+  const [x, y, z] = [hex(a1), hex(a2), hex(bg)];
+  const ok = [x, y, z].every((v) => HEX.test(v));
+  const ink = (ok && INKS.find((i) => contrast(i, x) >= 4.5 && contrast(i, y) >= 4.5)) || INKS[0];
+  const rgb = ok ? [1, 3, 5].map((i) => parseInt(x.slice(i, i + 2), 16)).join(",") : "0,0,0";
+  const colors = { a1: x, a2: y, ink, bg: z, glow: `rgba(${rgb},.16)` };
+  return { colors, problems: themeProblems(colors) };
+}
+
 // ---- Checks, for themes added here and proposed in the public repository ----
 
 const HEX = /^#[0-9a-f]{6}$/;

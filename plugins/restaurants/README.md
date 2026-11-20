@@ -1,6 +1,6 @@
 # BizPlug Restaurants & Food Service
 
-Version 0.20.0. Order ahead and takeaway for restaurants & food service businesses.
+Version 0.21.0. Order ahead and takeaway for restaurants & food service businesses.
 
 - Main function: Order ahead and takeaway
 - MCP server URL: `https://mcp.bizplug.ai/plugin/restaurants` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.20.0. Order ahead and takeaway for restaurants & food service business
 
 ## Changes
 
+- **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.
 - **0.18.0** (19 November 2026): Event guide: an Events & Conferences plug-in for a show or conference answers with its agenda, speakers, exhibitors and sponsors, and sends exhibiting, sponsoring and visiting enquiries.
