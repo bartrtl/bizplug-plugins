@@ -61,10 +61,11 @@ Sign up at https://bizplug.ai/portal, pick your industry and provide the data it
 
 Plug-ins from other companies can be listed in the BizPlug marketplace next to the industry plug-ins. Do not open a pull request here: this repository is generated, so submit through https://bizplug.ai/marketplace#submit. [CONTRIBUTING.md](CONTRIBUTING.md) explains the process and the components a valid plug-in must have: an MCP server over streamable HTTP, `plugin.json`, `mcp.json`, a README, review test cases, and a privacy policy and terms.
 
-## Version 0.25.0
+## Version 0.26.0
 
 All 81 plug-ins share one version. What changed in each:
 
+- **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.
 - **0.25.0** (20 November 2026): Showcase: the business's logo on its card, member logos, and committees, the newsletter, and news and events on their own screens.
 - **0.24.0** (20 November 2026): Password sign-in: parts of a plug-in that only the people on the business's own list can use, after they sign in with an email and password.
 - **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.

@@ -317,6 +317,46 @@
           "help": "The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0."
         },
         {
+          "key": "about",
+          "label": "About",
+          "required": false,
+          "type": "text",
+          "example": "Brand and web design studio working with small businesses since 2015.",
+          "help": "Two to four sentences from the member's own website, shown under More about from plug-in version 0.26.0."
+        },
+        {
+          "key": "highlights",
+          "label": "Highlights",
+          "required": false,
+          "type": "text",
+          "example": "Brand identity; Websites; Packaging",
+          "help": "A few main services or programmes, separated by semicolons."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "Tornado Tower, West Bay, Doha",
+          "help": "The member's office address, as it publishes it."
+        },
+        {
+          "key": "linkedin",
+          "label": "LinkedIn",
+          "required": false,
+          "type": "url",
+          "example": "https://www.linkedin.com/company/example",
+          "help": "The member's company page on LinkedIn."
+        },
+        {
+          "key": "sources",
+          "label": "Sources",
+          "required": false,
+          "type": "text",
+          "example": "https://example.com/about",
+          "help": "The member's own pages these details come from, separated by semicolons."
+        },
+        {
           "key": "logo",
           "label": "Logo URL",
           "required": false,

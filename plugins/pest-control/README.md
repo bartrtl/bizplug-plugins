@@ -1,6 +1,6 @@
 # BizPlug Pest Control
 
-Version 0.25.0. Estimate treatment and request a visit for pest control businesses.
+Version 0.26.0. Estimate treatment and request a visit for pest control businesses.
 
 - Main function: Estimate treatment and request a visit
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pest-control` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.25.0. Estimate treatment and request a visit for pest control business
 
 ## Changes
 
+- **0.26.0** (20 November 2026): Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.
 - **0.25.0** (20 November 2026): Showcase: the business's logo on its card, member logos, and committees, the newsletter, and news and events on their own screens.
 - **0.24.0** (20 November 2026): Password sign-in: parts of a plug-in that only the people on the business's own list can use, after they sign in with an email and password.
 - **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.

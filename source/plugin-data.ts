@@ -271,6 +271,11 @@ const membersDataset: Dataset = {
     col("looking_for", "Looking for", false, "text", "Developers to partner with on client websites", "What the member wants to collaborate on or is looking for."),
     col("offers", "Offers", false, "text", "A free 30-minute brand review for other members", "What the member can offer other members or visitors."),
     col("level", "Membership level", false, "text", "Corporate", "The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0."),
+    col("about", "About", false, "text", "Brand and web design studio working with small businesses since 2015.", "Two to four sentences from the member's own website, shown under More about from plug-in version 0.26.0."),
+    col("highlights", "Highlights", false, "text", "Brand identity; Websites; Packaging", "A few main services or programmes, separated by semicolons."),
+    col("address", "Address", false, "text", "Tornado Tower, West Bay, Doha", "The member's office address, as it publishes it."),
+    col("linkedin", "LinkedIn", false, "url", "https://www.linkedin.com/company/example", "The member's company page on LinkedIn."),
+    col("sources", "Sources", false, "text", "https://example.com/about", "The member's own pages these details come from, separated by semicolons."),
     col("logo", "Logo URL", false, "url", "https://example.com/logo.png", "The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials."),
   ],
   collect: [

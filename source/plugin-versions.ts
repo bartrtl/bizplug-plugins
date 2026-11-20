@@ -161,6 +161,12 @@ export type PluginFeatures = {
    * `section`) when it publishes them. Without the flag the card shows the store icon and members without logos.
    */
   showcase: boolean;
+  /**
+   * Member details (members.ts): a member's screen shows its address and LinkedIn page, and a More about panel with
+   * a longer profile, highlights and where they came from, plus Ask ChatGPT for more, which asks the chat; there, and
+   * only when the person asks, the assistant may add what it knows or finds, saying it is not from the business's list.
+   */
+  memberDetails: boolean;
 };
 
 export type PluginVersion = {
@@ -173,7 +179,7 @@ export type PluginVersion = {
   features: PluginFeatures;
 };
 
-const FULL_NAME_FEATURES: PluginFeatures = { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false };
+const FULL_NAME_FEATURES: PluginFeatures = { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false };
 const SOFTWARE_FEATURES: PluginFeatures = { ...FULL_NAME_FEATURES, softwareMenu: true, businessOnlyInstructions: true, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false };
 
 export const PLUGIN_VERSIONS: PluginVersion[] = [
@@ -182,7 +188,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
     date: "2026-11-15",
     summary: "The plug-in's tools for the industry, answers from the business's own information, and a text menu of what it can do.",
     notes: ["The plug-in's tools for your industry, questions answered from your own information, and a text menu of what it can do."],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.2.0",
@@ -192,7 +198,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A menu card in ChatGPT: your customers see a button for each thing they can do.",
       "Each button opens a short form (dates and party size, an item, a reference, a question or a request), so customers tap and fill in instead of typing everything.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.3.0",
@@ -202,7 +208,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Results show inside the card: prices, availability, open times, estimates and statuses, instead of only as text in the chat.",
       "Customers can go from a result straight to a request in the card: pick an option or a time, add their name and email, and send.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.4.0",
@@ -214,7 +220,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A list can be searched and filtered by category in the card, and each item or option opens on its own screen, with Back to return.",
       "Your published questions and answers show in the card, so common questions are answered with one tap. Other questions still go to the chat.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.5.0",
@@ -224,7 +230,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A WhatsApp button to your own number: save your WhatsApp number and a first message under Integrations on your plug-in page, and customers can open a chat with you from your contact details and after they send a request.",
       "Requests still reach you by email as before. WhatsApp is an extra way for a customer to reach you, and nothing is sent until they press send in WhatsApp.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.6.0",
@@ -234,7 +240,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A Pay online button after a request, to your own payment page (for example a Stripe Payment Link). BizPlug takes no payment: the customer pays on your page.",
       "Book online, Get directions and Leave a review buttons with your contact details, each to a link you save under Integrations on your plug-in page.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.7.0",
@@ -246,7 +252,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The assistant knows which buttons you have and points to the right one at the right moment.",
       "Your Traction Dashboard counts how often each button is pressed, and where each request was delivered.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.8.0",
@@ -257,7 +263,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your payment page is also listed with your contact details, so a customer can find it before or without sending a request. It still shows after a request as before.",
       "The assistant never takes card details or payment in the chat. The customer pays on your page, and the money never passes through BizPlug.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.9.0",
@@ -268,7 +274,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The price is taken from your published files, never from the chat. Your plug-in confirms each payment with the provider, you get an email when an order is paid, and you can refund it from Payments on your plug-in page.",
       "Test mode first: no real money. Live payments are switched on for your plug-in once BizPlug has approved it. You still confirm every request yourself.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.10.0",
@@ -278,7 +284,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your plug-in tells ChatGPT who it is: your business's own summary as its description, and your website as its link.",
       "Nothing changes in how it answers customers or handles requests.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.11.0",
@@ -288,7 +294,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Each tool of your plug-in now states whether it only reads information or sends something that cannot be taken back. ChatGPT uses this to decide when to ask a customer to confirm.",
       "Sending a request is marked as an action that cannot be undone, so ChatGPT may ask the customer to confirm before it is sent. Nothing else changes.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.12.0",
@@ -299,7 +305,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Find a collaborator: a person says what they need or what they can offer, and the plug-in shows the members whose entries match.",
       "Contact is direct: the plug-in shows the website, general email and phone number you list for each member, and the person writes or calls the member themselves. Neither you nor BizPlug introduces, forwards or vouches. Other plug-ins do not change.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.13.0",
@@ -310,7 +316,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "An I've paid button in the card asks your payment provider whether the payment went through and shows Paid or Waiting for payment, without the customer typing their reference.",
       "Card details are only ever entered on the payment provider's own page, never in ChatGPT.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.14.0",
@@ -451,6 +457,18 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Without a logo, committees, a newsletter or news, your card looks as before.",
     ],
     features: { ...SOFTWARE_FEATURES, customerSignIn: true, appTools: true, eventGuide: true, accountMenu: true, accountSend: true, cardBanner: true, memberMessages: true, visits: true, claudeCard: true, passwordSignIn: true, showcase: true },
+  },
+  {
+    version: "0.26.0",
+    date: "2026-11-20",
+    summary: "Member details: each member's address, LinkedIn page and a More about panel, with Ask ChatGPT for more.",
+    notes: [
+      "A member's screen shows its address and LinkedIn page next to its phone, email and website, when you list them.",
+      "More about: a panel with a longer profile of the member, its main services and where the details came from.",
+      "Ask ChatGPT for more: the person can ask the chat about a member. Only then may the assistant add what it knows or finds on the web, and it says that this is not from your member list.",
+      "Without these details, a member's screen looks as before.",
+    ],
+    features: { ...SOFTWARE_FEATURES, customerSignIn: true, appTools: true, eventGuide: true, accountMenu: true, accountSend: true, cardBanner: true, memberMessages: true, visits: true, claudeCard: true, passwordSignIn: true, showcase: true, memberDetails: true },
   },
 ];
 

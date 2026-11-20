@@ -201,6 +201,12 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .head .wm{flex:none;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
 .head .wm img{height:100%;width:auto;max-width:100%;object-fit:contain;display:block}
 @media (max-width:420px){.head .wm{height:48px;max-width:150px}}
+.fly{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end;background:rgba(5,6,12,.55);animation:flyin .15s ease-out}
+.sheet{width:min(440px,94%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:18px;box-shadow:-16px 0 40px rgba(0,0,0,.4);animation:slidein .22s ease-out}
+@keyframes flyin{from{opacity:0}to{opacity:1}}
+@keyframes slidein{from{transform:translateX(40px);opacity:.4}to{transform:none;opacity:1}}
+.hl{margin:6px 0 0 18px;font-size:13.5px;display:grid;gap:4px}
+.morebtn{margin-top:14px;width:100%}
 .lvl{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:999px;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));margin-left:6px;vertical-align:1px;white-space:nowrap}
 .ic.logo img,.lg img{width:100%;height:100%;object-fit:contain;display:block}
 .lg{flex:none;width:46px;height:46px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:5px;box-shadow:0 0 0 1px var(--line)}
@@ -331,6 +337,7 @@ function pickStructured(res) {
 const firstSentence = (t) => { const m = String(t || "").match(/^[\s\S]*?[.!?](\s|$)/); return (m ? m[0] : String(t || "")).trim().slice(0, 220); };
 function ask(prompt) {
   if (!prompt) return;
+  state.fly = "";
   save();
   if (oa() && oa().sendFollowUpMessage) oa().sendFollowUpMessage({ prompt });
   else window.parent.postMessage({ jsonrpc: "2.0", id: Date.now(), method: "ui/message", params: { role: "user", content: [{ type: "text", text: prompt }] } }, "*");
@@ -780,15 +787,36 @@ function memberView() {
   if (!m) return membersView();
   const row = (label, value) => (value ? "<tr><td>" + label + "</td><td>" + esc(value) + "</td></tr>" : "");
   const web = /^https:\/\//.test(m.website), mail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email);
-  const facts = row("Looking for", m.lookingFor) + row("Offers", m.offers) + row("Phone", m.phone) + (web ? "" : row("Website", m.website)) + (mail ? row("Email", m.email) : "");
+  const facts = row("Looking for", m.lookingFor) + row("Offers", m.offers) + row("Phone", m.phone) + (web ? "" : row("Website", m.website)) + (mail ? row("Email", m.email) : "") + row("Address", m.address);
+  // 0.26.0: the member's LinkedIn page, and More about: a panel with its longer profile and Ask ChatGPT for more.
+  const li = /^https:\/\//.test(m.linkedin || "");
+  const more = "about" in m;
   const hero = "logo" in m
     ? '<div class="mhero">' + mlogo(m, true) + "<div><b>" + esc(m.name) + "</b><span>" + esc([m.industry, m.location].filter(Boolean).join(" · ")) + "</span>" + (m.level ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(m.level) + "</span></div>" : "") + "</div></div>"
     : m.industry || m.location ? '<div class="sum"><div><b>' + esc(m.industry || m.location) + "</b><span>" + esc(m.industry ? m.location : "") + "</span></div></div>" : "";
   return top(m.name) + hero +
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
-      (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>" : "") +
-    '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>";
+      (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
+    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask ChatGPT what it knows or finds about them") + "</div></div></button>" : "") +
+    '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>" +
+    (more && state.fly === state.sel ? memberFly(m) : "");
+}
+const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } };
+// 0.26.0: the More about panel. What the business lists for the member; anything more comes from the chat, and says so.
+function memberFly(m) {
+  const biz = (state.data.members || {}).business || "the business";
+  const sites = (m.sources || []).map(hostOf).filter((h, i, a) => h && a.indexOf(h) === i);
+  const prompt = "Tell me more about " + m.name + (/^https:\/\//.test(m.website || "") ? " (" + m.website + ")" : "") + ": what they do in Qatar, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s member list.";
+  return '<div class="fly" data-act="mflyx"><div class="sheet" role="dialog" aria-label="More about ' + esc(m.name) + '">' +
+    '<div class="bar-top"><span class="kd">More about</span><button class="link" data-act="mflyx">Close ✕</button></div>' +
+    '<div class="mhero" style="margin-top:8px">' + mlogo(m, true) + "<div><b>" + esc(m.name) + "</b><span>" + esc([m.industry, m.location].filter(Boolean).join(" · ")) + "</span>" + (m.level ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(m.level) + "</span></div>" : "") + "</div></div>" +
+    (m.about ? '<p class="about">' + esc(m.about) + "</p>" : m.description ? '<p class="about">' + esc(m.description) + "</p>" : "") +
+    ((m.highlights || []).length ? '<div class="qlabel" style="margin-top:12px">Highlights</div><ul class="hl">' + m.highlights.map((h) => "<li>" + esc(h) + "</li>").join("") + "</ul>" : "") +
+    (m.address ? '<div class="qlabel" style="margin-top:12px">Address</div><div class="bl" style="margin-top:3px">' + esc(m.address) + "</div>" : "") +
+    (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
+    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ChatGPT for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + "</div>" +
+    '<div class="note">Ask ChatGPT for more continues in the chat, where ChatGPT may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div></div></div>";
 }
 // ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
 // What the business published, with links to its own pages. Nothing is sent from these screens.
@@ -1423,9 +1451,12 @@ function render() {
   on('[data-act="mfind"]', () => findMembers());
   on("[data-mind]", (b) => findMembers({ industry: b.dataset.mind }));
   on("[data-mloc]", (b) => findMembers({ location: b.dataset.mloc }));
-  on("[data-member]", (b) => { state.sel = b.dataset.member; state.view = "member"; state.error = ""; render(); });
+  on("[data-member]", (b) => { state.sel = b.dataset.member; state.fly = ""; state.view = "member"; state.error = ""; render(); });
   on('[data-act="collab"]', () => { state.view = "collab"; state.error = ""; render(); });
-  on('[data-act="mwrite"]', () => { state.view = "mwrite"; state.error = ""; render(); });
+  on('[data-act="mwrite"]', () => { state.fly = ""; state.view = "mwrite"; state.error = ""; render(); });
+  // 0.26.0: open and close the More about panel; a tap on the dimmed backdrop closes it too.
+  on('[data-act="mfly"]', () => { state.fly = state.sel; render(); });
+  app.querySelectorAll('[data-act="mflyx"]').forEach((el) => el.addEventListener("click", (e) => { if (e.target === el) { state.fly = ""; render(); } }));
   on('[data-act="mdraft"]', () => guard(() => {
     const m = state.mem[state.sel] || {};
     need(v("wname"), "Add your name."); need(v("wmsg"), "Say what you would like to discuss.");

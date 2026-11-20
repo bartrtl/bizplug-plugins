@@ -82,6 +82,11 @@ Columns (first row of the file, exactly these names):
 - `looking_for`: Looking for, text. What the member wants to collaborate on or is looking for. Example: Developers to partner with on client websites
 - `offers`: Offers, text. What the member can offer other members or visitors. Example: A discount on brand reviews for fellow members
 - `level`: Membership level, text. The member's level or tier as you name it, shown as a badge from plug-in version 0.25.0. Example: Corporate
+- `about`: About, text. Two to four sentences from the member's own website, shown under More about from plug-in version 0.26.0. Example: Brand and web design studio working with small businesses since 2015.
+- `highlights`: Highlights, text. A few main services or programmes, separated by semicolons. Example: Brand identity; Websites; Packaging
+- `address`: Address, text. The member's office address, as it publishes it. Example: Tornado Tower, West Bay, Doha
+- `linkedin`: LinkedIn, url. The member's company page on LinkedIn. Example: https://www.linkedin.com/company/example
+- `sources`: Sources, text. The member's own pages these details come from, separated by semicolons. Example: https://example.com/about
 - `logo`: Logo URL, url. The member's own logo as an https PNG, JPEG or WebP image (not SVG). Shown next to its name in the card from plug-in version 0.25.0; without one the card shows its initials. Example: https://example.com/logo.png
 
 How to collect it:
