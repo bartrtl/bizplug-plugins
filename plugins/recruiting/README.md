@@ -1,6 +1,6 @@
 # BizPlug Recruiting & Staffing
 
-Version 0.29.0. Book an intro call for employers or candidates for recruiting & staffing businesses.
+Version 0.30.0. Book an intro call for employers or candidates for recruiting & staffing businesses.
 
 - Main function: Book an intro call for employers or candidates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/recruiting` (streamable HTTP, no sign-in)
@@ -13,6 +13,7 @@ Version 0.29.0. Book an intro call for employers or candidates for recruiting & 
 - **Request the appointment**: Ask for an open time. The business confirms the appointment.
 - **Ask a question**: Answers from the business's own information: open roles, process and candidate enquiries.
 - **Request status**: Check a request with its reference.
+- **Social media**: The latest posts from the business's social media, with their pictures, and where to follow it.
 - **Contact the business**: Phone, email, website and opening hours.
 
 ## Tools
@@ -28,6 +29,7 @@ Version 0.29.0. Book an intro call for employers or candidates for recruiting & 
 
 ## Changes
 
+- **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.
 - **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.

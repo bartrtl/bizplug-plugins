@@ -1,6 +1,6 @@
 # BizPlug Chambers of Commerce & Business Associations
 
-Version 0.29.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
+Version 0.30.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
@@ -16,6 +16,7 @@ Version 0.29.0. Chamber information, membership enquiries and member businesses 
 - **Look up a reference**: Look up the status of a reference you already have.
 - **Request status**: Check a request with its reference.
 - **Members**: The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.
+- **Social media**: The latest posts from the business's social media, with their pictures, and where to follow it.
 - **Contact the business**: Phone, email, website and opening hours.
 
 ## Tools
@@ -33,6 +34,7 @@ Version 0.29.0. Chamber information, membership enquiries and member businesses 
 
 ## Changes
 
+- **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.
 - **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.

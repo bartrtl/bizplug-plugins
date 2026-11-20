@@ -361,6 +361,30 @@ const newsletterDataset: Dataset = {
   collect: ["Take the newsletter's name, sign-up page and archive from the chamber's own site."],
 };
 
+// Every industry, plug-in version 0.30.0 (`socialFeed`, social-feed.ts): Social media on the card. One file for the
+// three kinds of row: where to follow the business, the public feeds read automatically, and posts it pins itself.
+const socialDataset: Dataset = {
+  id: "social",
+  file: "social.csv",
+  title: "Social media",
+  why: "Where to follow you, and your latest posts with their pictures, shown under Social media in the plug-in. Feeds (YouTube, podcast, blog, Substack, Medium, Bluesky, Mastodon) are read automatically; for LinkedIn, Instagram, X, Facebook and TikTok you pin the posts you want shown.",
+  required: false,
+  maxRows: 60,
+  columns: [
+    col("kind", "Kind", true, "text", "follow", "\"follow\" for a profile to follow, \"feed\" for a public feed BizPlug reads (YouTube channel, podcast or blog RSS, Substack, Medium, Bluesky or Mastodon profile), \"post\" for one post you pin."),
+    col("network", "Network", false, "text", "instagram", "instagram, linkedin, facebook, x, tiktok, youtube, threads, bluesky, mastodon, podcast, blog, substack, medium, pinterest or whatsapp. Left empty, it is read from the address."),
+    col("url", "Address", true, "url", "https://www.instagram.com/yourbusiness/", "The profile, the feed or the post, as an https address."),
+    col("image", "Picture", false, "url", "https://example.com/post.jpg", "For a pinned post: its picture, an https PNG, JPEG or WebP image."),
+    col("text", "Text", false, "text", "Our new menu is here.", "For a pinned post: its caption, or the first lines of it."),
+    col("date", "Date", false, "text", "2026-11-20", "For a pinned post: YYYY-MM-DD."),
+  ],
+  collect: [
+    "Take the profiles from the links on the business's own website (header or footer).",
+    "Add a feed row for a YouTube channel, a podcast or blog RSS, a Substack, Medium, Bluesky or Mastodon profile; its latest posts appear by themselves.",
+    "Pin a few recent posts from LinkedIn, Instagram, X, Facebook or TikTok with their own picture and text: only posts the business published.",
+  ],
+};
+
 // Coworking (`visits` in industry-functions.ts): the locations Book a tour and Day pass work from, from plug-in
 // version 0.22.0 (visits.ts). Tours run at a location unless it says no; a day pass is sold only where it says yes.
 const locationsDataset: Dataset = {
@@ -588,6 +612,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       ...(fn.infoFirst ? [committeesDataset, newsDataset, newsletterDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),
+      socialDataset,
     ],
     never: [...BASE_NEVER, ...(INDUSTRY_NOTES[industry] ?? []), ...(fn.note ? [`The plug-in's own rule: ${fn.note}`] : [])],
   };

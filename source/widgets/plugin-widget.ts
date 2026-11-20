@@ -189,6 +189,29 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .find input:focus{border-color:var(--a2)}
 .q small{opacity:.7;margin-left:3px}
 .tag{font-size:12.5px;padding:5px 11px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.soc .follow{display:flex;gap:6px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}
+.soc .follow::-webkit-scrollbar,.soc .rail::-webkit-scrollbar{display:none}
+.soc .fl{all:unset;cursor:pointer;flex:none;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:650;padding:6px 12px 6px 6px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.soc .fl:hover,.soc .fl:focus-visible{border-color:var(--a2)}
+.nb{flex:none;display:inline-grid;place-items:center;width:22px;height:22px;border-radius:999px;color:#fff;font-size:10.5px;font-weight:800;letter-spacing:-.02em;background:var(--nc,#666)}
+.soc .feat{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card);margin:6px 0 12px}
+.soc .feat .pic{aspect-ratio:16/9}
+.soc .pic{position:relative;width:100%;background:linear-gradient(135deg,var(--nc,#555),transparent 120%),var(--card);display:grid;place-items:center;overflow:hidden}
+.soc .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.soc .pic .big{font-size:30px;font-weight:800;color:#fff;opacity:.85}
+.soc .pic .nb{position:absolute;left:10px;top:10px;width:26px;height:26px;box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.soc .pin{position:absolute;right:10px;top:10px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff}
+.soc .bd{padding:12px 14px 14px}
+.soc .bd .kd{font-size:11.5px;color:var(--muted)}
+.soc .bd b{display:block;margin-top:3px;font-size:15px;line-height:1.3}
+.soc .bd p{color:var(--muted);font-size:13px;margin-top:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.soc .rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin:0 -2px}
+.soc .sc{all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:210px;scroll-snap-align:start;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.soc .sc:hover,.soc .sc:focus-visible,.soc .feat:hover,.soc .feat:focus-visible{border-color:var(--a2)}
+.soc .sc .pic{aspect-ratio:4/3}
+.soc .sc .bd{padding:10px 12px 12px}
+.soc .sc .bd b{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.soc .sc .bd p{-webkit-line-clamp:2;font-size:12.5px}
 .stay h4{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;font-weight:650}
 .calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .calhd b{font-size:15px}
@@ -985,6 +1008,26 @@ function newsView() {
     (rest.length ? '<div class="qlabel">Latest</div><div class="list" style="margin-top:6px">' + rest.map(row).join("") + "</div>" : "") +
     '<div class="note">Published by ' + esc(d.business || "the business") + ". Links open its own pages.</div>" + links("news");
 }
+// ---- 0.30.0: Social media (social-feed.ts) ----
+const NET = { instagram: ["IG", "#e1306c"], linkedin: ["in", "#0a66c2"], facebook: ["f", "#1877f2"], x: ["X", "#2b2b2b"], tiktok: ["TT", "#fe2c55"], youtube: ["▶", "#ff0033"], threads: ["@", "#2b2b2b"], bluesky: ["B", "#1185fe"], mastodon: ["M", "#6364ff"], podcast: ["P", "#8940fa"], blog: ["B", "#4b5563"], substack: ["S", "#ff6719"], medium: ["M", "#2b2b2b"], whatsapp: ["W", "#25d366"], pinterest: ["P", "#e60023"] };
+const netBadge = (n) => { const x = NET[n] || ["•", "#666"]; return '<span class="nb" style="--nc:' + x[1] + '">' + esc(x[0]) + "</span>"; };
+const netColor = (n) => (NET[n] || ["", "#666"])[1];
+function socialView() {
+  const d = state.data.social || { follow: [], posts: [], networks: [] };
+  const o = opt("social");
+  const on = state.socNet || "";
+  const posts = (d.posts || []).filter((x) => !on || x.network === on);
+  const date = (x) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(x.date || ""); return m ? Number(m[3]) + " " + MON[Number(m[2]) - 1] + " " + m[1] : ""; };
+  const pic = (x, big) => '<div class="pic" style="--nc:' + netColor(x.network) + '">' + (x.image ? '<img src="' + esc(x.image) + '" alt="" loading="lazy" data-soc-img>' : '<span class="big">' + esc((NET[x.network] || ["•"])[0]) + "</span>") + netBadge(x.network) + (x.pinned ? '<span class="pin">Pinned</span>' : "") + "</div>";
+  const body = (x) => '<div class="bd"><div class="kd">' + esc(x.name) + (date(x) ? " · " + esc(date(x)) : "") + "</div>" + (x.title ? "<b>" + esc(x.title) + "</b>" : "") + (x.text && x.text !== x.title ? "<p>" + esc(x.text) + "</p>" : "") + "</div>";
+  const follow = (d.follow || []).length ? '<div class="qlabel">Follow ' + esc(d.business || "") + '</div><div class="follow">' + d.follow.map((f) => '<button class="fl" data-href="' + esc(f.url) + '">' + netBadge(f.network) + esc(f.name) + "</button>").join("") + "</div>" : "";
+  const filters = (d.networks || []).length > 1 ? '<div class="qs" style="margin:2px 0 6px">' + chip("All", "data-soc", "", !on) + d.networks.map((n) => chip(esc(n.name) + " <small>" + n.count + "</small>", "data-soc", n.network, on === n.network)).join("") + "</div>" : "";
+  const first = posts[0];
+  const feat = first ? '<button class="feat" data-href="' + esc(first.url) + '">' + pic(first, true) + body(first) + "</button>" : '<div class="empty">No recent posts to show right now.</div>';
+  const rail = posts.length > 1 ? '<div class="qlabel">More posts</div><div class="rail" style="margin-top:6px">' + posts.slice(1).map((x) => '<button class="sc" data-href="' + esc(x.url) + '">' + pic(x) + body(x) + "</button>").join("") + "</div>" : "";
+  return top(o ? o.title : "Social media") + '<div class="soc">' + follow + filters + feat + rail + "</div>" +
+    '<div class="note">From ' + esc(d.business || "the business") + "&rsquo;s own accounts. Each post opens on its network.</div>" + links("social");
+}
 function collabView() {
   return '<div class="form">' + top("Find a collaborator") + '<div class="hint">Say what you need, what you can offer, or both, to see the members whose entries match.</div>' +
     field("mneed", "What do you need?", { optional: true, placeholder: "e.g. help with a website" }) + field("moffer", "What can you offer?", { optional: true, placeholder: "e.g. bookkeeping for small teams" }) + errLine() +
@@ -1419,7 +1462,7 @@ function openOption(i) {
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
   // 0.25.0: committees, and news, events and newsletter, each on its own screen.
-  if (o.kind === "committees" || o.kind === "news") { run(o.tool, { section: o.kind }, o.example); return; }
+  if (o.kind === "committees" || o.kind === "news" || o.kind === "social") { state.socNet = ""; run(o.tool, { section: o.kind }, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
   if (o.kind === "question" && nav() && inCard()) { state.open = i; run(o.tool, {}, "", () => { state.view = "form"; render(); }); return; }
   if (o.kind === "request" && inCard()) {
@@ -1443,7 +1486,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const pic = app.querySelector(".banner");
@@ -1517,6 +1560,9 @@ function render() {
   on("[data-pick-quote]", (b) => { state.pick = { type: "quote", id: b.dataset.pickQuote, name: b.dataset.name, size: (state.data.estimate || {}).size || undefined }; state.view = "request"; state.error = ""; render(); });
   on('[data-act="unpick"]', () => { if (nav()) { goBack(); return; } const back = { order: "catalog", stay: "availability", appt: "slots", quote: "estimate" }[(state.pick || {}).type] || "menu"; state.view = back; state.error = ""; render(); });
   on('[data-act="request"]', () => guard(() => run(request && request.tool, requestArgs(), request ? request.title : "Send my request")));
+  // 0.30.0: Social media filters, and a picture that does not load gives way to the network's colour.
+  on("[data-soc]", (b) => { state.socNet = b.dataset.soc || ""; render(); });
+  app.querySelectorAll("img[data-soc-img]").forEach((img) => img.addEventListener("error", () => img.remove(), { once: true }));
   // ---- Browsing (version 0.4.0) ----
   on('[data-act="back"]', () => goBack());
   on("[data-cat]", (b) => { state.f.q = ""; run(lookup && lookup.tool, clean({ category: b.dataset.cat }), b.dataset.cat ? "Show me " + b.dataset.cat + ", with prices." : "Show me what you offer, with prices."); });

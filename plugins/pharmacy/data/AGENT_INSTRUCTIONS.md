@@ -67,6 +67,22 @@ How to collect it:
 1. Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).
 2. Keep each answer factual and current. Leave out anything the owner has not confirmed.
 
+### social.csv (optional, up to 60 rows)
+Where to follow you, and your latest posts with their pictures, shown under Social media in the plug-in. Feeds (YouTube, podcast, blog, Substack, Medium, Bluesky, Mastodon) are read automatically; for LinkedIn, Instagram, X, Facebook and TikTok you pin the posts you want shown.
+
+Columns (first row of the file, exactly these names):
+- `kind` (required): Kind, text. "follow" for a profile to follow, "feed" for a public feed BizPlug reads (YouTube channel, podcast or blog RSS, Substack, Medium, Bluesky or Mastodon profile), "post" for one post you pin. Example: follow
+- `network`: Network, text. instagram, linkedin, facebook, x, tiktok, youtube, threads, bluesky, mastodon, podcast, blog, substack, medium, pinterest or whatsapp. Left empty, it is read from the address. Example: instagram
+- `url` (required): Address, url. The profile, the feed or the post, as an https address. Example: https://www.instagram.com/yourbusiness/
+- `image`: Picture, url. For a pinned post: its picture, an https PNG, JPEG or WebP image. Example: https://example.com/post.jpg
+- `text`: Text, text. For a pinned post: its caption, or the first lines of it. Example: Our new menu is here.
+- `date`: Date, text. For a pinned post: YYYY-MM-DD. Example: 2026-11-20
+
+How to collect it:
+1. Take the profiles from the links on the business's own website (header or footer).
+2. Add a feed row for a YouTube channel, a podcast or blog RSS, a Substack, Medium, Bluesky or Mastodon profile; its latest posts appear by themselves.
+3. Pin a few recent posts from LinkedIn, Instagram, X, Facebook or TikTok with their own picture and text: only posts the business published.
+
 ## Format
 - UTF-8 CSV with a header row; comma separated; quote cells that contain commas, quotes or line breaks.
 - Numbers without currency signs or thousands separators (4.75, not $4.75).

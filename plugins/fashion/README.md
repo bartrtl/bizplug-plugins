@@ -1,6 +1,6 @@
 # BizPlug Fashion & Apparel
 
-Version 0.29.0. Find sizes and reserve for try-on for fashion & apparel businesses.
+Version 0.30.0. Find sizes and reserve for try-on for fashion & apparel businesses.
 
 - Main function: Find sizes and reserve for try-on
 - MCP server URL: `https://mcp.bizplug.ai/plugin/fashion` (streamable HTTP, no sign-in)
@@ -13,6 +13,7 @@ Version 0.29.0. Find sizes and reserve for try-on for fashion & apparel business
 - **Place the order**: Send your order. The business confirms it and takes payment itself.
 - **Ask a question**: Answers from the business's own information: sizing, stock, shipping and returns.
 - **Order status**: Check an order with its reference.
+- **Social media**: The latest posts from the business's social media, with their pictures, and where to follow it.
 - **Contact the business**: Phone, email, website and opening hours.
 
 ## Tools
@@ -28,6 +29,7 @@ Version 0.29.0. Find sizes and reserve for try-on for fashion & apparel business
 
 ## Changes
 
+- **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.
 - **0.28.0** (20 November 2026): Event guides: exhibitor and sponsor logos, and a More about panel for each company with Ask ChatGPT for more.
 - **0.27.0** (20 November 2026): Hotels: a booking screen with a calendar of free nights, adults, children and rooms, room cards with nightly prices, the hotel's policies, and a booking button on each room.
