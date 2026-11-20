@@ -1,6 +1,6 @@
 # BizPlug Coworking & Offices
 
-Version 0.22.0. Desk and office availability and rates for coworking & offices businesses.
+Version 0.23.0. Desk and office availability and rates for coworking & offices businesses.
 
 - Main function: Desk and office availability and rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coworking` (streamable HTTP, no sign-in)
@@ -36,6 +36,7 @@ Version 0.22.0. Desk and office availability and rates for coworking & offices b
 
 ## Changes
 
+- **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.
 - **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.

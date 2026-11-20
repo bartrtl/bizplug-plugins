@@ -1,6 +1,6 @@
 # BizPlug Sports Teams & Venues
 
-Version 0.22.0. Seat availability and ticket requests for sports teams & venues businesses.
+Version 0.23.0. Seat availability and ticket requests for sports teams & venues businesses.
 
 - Main function: Seat availability and ticket requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/sports-teams` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.22.0. Seat availability and ticket requests for sports teams & venues 
 
 ## Changes
 
+- **0.23.0** (20 November 2026): The card also shows in Claude: the menu, the forms and the results are drawn there as they are in ChatGPT.
 - **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.

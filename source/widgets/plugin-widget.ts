@@ -38,12 +38,17 @@
 //   locations from the chat (view "visits") lists them with a button into each form.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
+//   From 0.23.0 the same card also runs in an MCP Apps host (Claude), served there as text/html;profile=mcp-app
+//   under its own URI: with no window.openai it does the ui/initialize handshake and makes the same calls as
+//   JSON-RPC messages to the host (tools/call, ui/message, ui/open-link, ui/notifications/size-changed).
 import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
 import { siteConfig, siteOrigins } from "@/lib/seo";
 import { CARD_IMAGE_ORIGINS } from "@/lib/profile-store";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
+/** The same card for an MCP Apps host (Claude), from plug-in version 0.23.0. */
+export const PLUGIN_APP_MIME = "text/html;profile=mcp-app";
 
 const ICONS: Record<string, string> = {
   account: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
@@ -200,7 +205,33 @@ const ICONS = __ICONS__;
 const MARK = __MARK__;
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const icon = (k) => '<svg viewBox="0 0 24 24">' + (ICONS[k] || ICONS.lookup) + "</svg>";
-const oa = () => window.openai || null;
+// The host the card talks to. In ChatGPT that is window.openai. In an MCP Apps host (Claude, from plug-in version
+// 0.21.0) there is none, and "mcp" below stands in for it with the same calls, sent to the host as JSON-RPC
+// messages (ui/initialize first; see the end of this script).
+let mcp = null;
+const oa = () => window.openai || mcp;
+const waiting = {};
+let lastId = 0;
+const post = (m) => { try { window.parent.postMessage(Object.assign({ jsonrpc: "2.0" }, m), "*"); } catch (e) {} };
+const request = (method, params) => new Promise((resolve, reject) => { const id = ++lastId; waiting[id] = { resolve, reject }; post({ id, method, params }); });
+const quiet = (pr) => { pr.catch(() => {}); };
+let sentHeight = 0;
+function tellHeight() {
+  const h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+  if (h > 0 && h !== sentHeight) { sentHeight = h; post({ method: "ui/notifications/size-changed", params: { height: h } }); }
+}
+function mcpHost(init) {
+  const caps = (init && init.hostCapabilities) || {}, ctx = (init && init.hostContext) || {};
+  const host = {
+    theme: ctx.theme === "light" ? "light" : "dark",
+    sendFollowUpMessage: (o) => quiet(request("ui/message", { role: "user", content: [{ type: "text", text: String((o && o.prompt) || "").slice(0, 8000) }] })),
+    notifyIntrinsicHeight: tellHeight,
+  };
+  // Without these the card falls back to the chat (tools) and to a plain new tab (links).
+  if (caps.serverTools) host.callTool = (name, args) => request("tools/call", { name, arguments: args || {} });
+  if (caps.openLinks) host.openExternal = (o) => quiet(request("ui/open-link", { url: o.href }));
+  return host;
+}
 // Views: menu, form (one option's inputs), asked (what went to the chat), and from 0.3.0 the results:
 // catalog, availability, slots, estimate, status, contact, request (details before sending), sent, whatsapp.
 const state = { plugin: null, options: [], view: "loading", open: null, data: {}, f: {}, cart: {}, pick: null, business: "", busy: false, error: "", asked: "",
@@ -1297,7 +1328,7 @@ function render() {
   try { oa() && oa().notifyIntrinsicHeight && oa().notifyIntrinsicHeight(document.body.scrollHeight); } catch (e) {}
 }
 
-if (oa()) {
+if (window.openai) {
   load();
   receive(oa().toolOutput);
   window.addEventListener("openai:set_globals", (e) => {
@@ -1307,9 +1338,32 @@ if (oa()) {
 }
 window.addEventListener("message", (e) => {
   const m = e.data;
-  if (e.source === window.parent && m && m.jsonrpc === "2.0" && m.method === "ui/notifications/tool-result") receive(m.params && m.params.structuredContent);
+  if (e.source !== window.parent || !m || m.jsonrpc !== "2.0") return;
+  if (m.method === "ui/notifications/tool-result") { receive(m.params && m.params.structuredContent); return; }
+  if (window.openai) return;
+  // An MCP Apps host: answers to the card's own requests, then what the host asks or tells.
+  if (!m.method) {
+    const w = waiting[m.id];
+    if (!w) return;
+    delete waiting[m.id];
+    if (m.error) w.reject(new Error((m.error && m.error.message) || "That did not work.")); else w.resolve(m.result || {});
+    return;
+  }
+  if (m.method === "ui/notifications/host-context-changed") { if (mcp && m.params && m.params.theme) { mcp.theme = m.params.theme === "light" ? "light" : "dark"; render(); } return; }
+  if (m.id === undefined || m.id === null) return;
+  if (m.method === "ping" || m.method === "ui/resource-teardown") post({ id: m.id, result: {} });
+  else post({ id: m.id, error: { code: -32601, message: "Method not found" } });
 });
 render();
+// An MCP Apps host sends the tool's result only after this handshake. ChatGPT serves the card with window.openai.
+if (!window.openai && window.parent !== window) {
+  request("ui/initialize", { appInfo: { name: "BizPlug plug-in card", version: "1.0.0" }, appCapabilities: {}, protocolVersion: "2026-01-26" }).then((init) => {
+    mcp = mcpHost(init);
+    post({ method: "ui/notifications/initialized" });
+    render();
+    try { new ResizeObserver(tellHeight).observe(document.documentElement); } catch (e) {}
+  }, () => {});
+}
 `;
 
 const SCRIPT = SCRIPT_SRC.replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
@@ -1321,17 +1375,24 @@ export const PLUGIN_WIDGET_URI = `ui://bizplug/plugin-${createHash("sha256").upd
 /** Any plug-in card URI ever published; ChatGPT keeps old URIs for hours and they read the current card. */
 export const isPluginWidgetUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.html$/.test(uri);
 
-/** tools/list _meta for show_menu: the card it renders in. */
-export const pluginCardToolMeta = {
-  ui: { resourceUri: PLUGIN_WIDGET_URI },
-  "openai/outputTemplate": PLUGIN_WIDGET_URI,
+/**
+ * 0.23.0: the same card under its own address for an MCP Apps host (Claude), which reads it as
+ * text/html;profile=mcp-app. ChatGPT keeps the address above, so nothing changes there.
+ */
+export const PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
+export const isPluginAppUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.app\.html$/.test(uri);
+
+/** tools/list _meta for show_menu: the card it renders in. With `app`, the card for an MCP Apps host. */
+export const pluginCardToolMeta = (app = false) => ({
+  ui: { resourceUri: app ? PLUGIN_APP_URI : PLUGIN_WIDGET_URI },
+  "openai/outputTemplate": app ? PLUGIN_APP_URI : PLUGIN_WIDGET_URI,
   "openai/widgetAccessible": true,
   "openai/toolInvocation/invoking": "Opening the menu",
   "openai/toolInvocation/invoked": "Menu ready",
-};
+});
 
 /** tools/list _meta for a tool whose result the card draws (plug-in version 0.3.0 and later). */
-export const pluginResultToolMeta = (invoking: string, invoked: string) => ({ ...pluginCardToolMeta, "openai/toolInvocation/invoking": invoking, "openai/toolInvocation/invoked": invoked });
+export const pluginResultToolMeta = (invoking: string, invoked: string, app = false) => ({ ...pluginCardToolMeta(app), "openai/toolInvocation/invoking": invoking, "openai/toolInvocation/invoked": invoked });
 /** tools/list _meta for a tool the card may call but whose result stays in the chat. */
 export const pluginCallableToolMeta = { "openai/widgetAccessible": true };
 
@@ -1348,3 +1409,5 @@ export const pluginWidgetMeta = {
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
   "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin] },
 };
+/** resources/read _meta for an MCP Apps host: a border, no network, images from IMAGE_ORIGINS only, as in ChatGPT. */
+export const pluginAppMeta = { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS } } };
