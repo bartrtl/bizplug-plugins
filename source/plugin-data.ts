@@ -287,6 +287,32 @@ const chamberMembersDataset: Dataset = {
     : c),
 };
 
+// Coworking (`visits` in industry-functions.ts): the locations Book a tour and Day pass work from, from plug-in
+// version 0.22.0 (visits.ts). Tours run at a location unless it says no; a day pass is sold only where it says yes.
+const locationsDataset: Dataset = {
+  id: "locations",
+  file: "locations.csv",
+  title: "Locations, tours and day passes",
+  why: "Your locations, with whether you give tours there and when, and whether you sell a day pass there and at what rate. The plug-in offers Book a tour and Day pass only for the locations in this file.",
+  required: false,
+  maxRows: 50,
+  columns: [
+    col("name", "Location", true, "text", "Uptown Tower", "The location's name, as customers know it. One row per location."),
+    col("address", "Address", false, "text", "200 South Tryon Street, Charlotte, NC", "Street address of this location."),
+    col("tours", "Tours", false, "boolean", "yes", "yes or no: whether people can ask for a tour of this location. Empty means yes."),
+    col("tour_hours", "Tour hours", false, "text", "Monday to Friday, 09:00 to 16:00", "When tours are given, in your own words. The plug-in shows it as written."),
+    col("day_pass", "Day pass", false, "boolean", "yes", "yes or no: whether you sell a day pass at this location. Empty means no."),
+    col("day_pass_rate", "Day pass rate", false, "number", "35", "Per person, per day, in the currency of business.csv. Leave empty if you confirm the price yourself."),
+    col("day_pass_includes", "Day pass includes", false, "text", "A hot desk from 08:00 to 18:00, Wi-Fi and coffee", "What a day pass includes, in one sentence."),
+  ],
+  collect: [
+    "List each location once, with the name used on the business's own website and its street address.",
+    "Ask the owner which locations give tours and when, and write the tour hours as the business states them. Do not guess hours from the opening hours.",
+    "Mark a day pass only where the business sells one, with the published rate per person per day and what it includes. Leave the rate empty when the business has not published one: the plug-in then says the business confirms the price.",
+    "A request for a tour or a day pass is confirmed by the business; nothing here is a time slot or a paid booking.",
+  ],
+};
+
 function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dataset[] {
   switch (engine) {
     case "order": {
@@ -468,6 +494,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       servicesDataset(ex),
       faqDataset(ex),
       ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
+      ...(fn.visits ? [locationsDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),
     ],

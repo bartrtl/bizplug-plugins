@@ -27,7 +27,7 @@ plugins/<industry>/
   data/AGENT_INSTRUCTIONS.md   how a person or an AI agent collects and submits that data
 ```
 
-Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes. Chambers of Commerce & Business Associations, Coworking & Offices have one more, `find_members`, which finds the member businesses a business has published; a person contacts a member directly.
+Every plug-in has the same six tools: a menu (`show_menu`), a look-up, a request, a status check, `get_business_info` and `get_contact`. The look-up, request and status tools are named for the industry, for example `get_menu`, `place_pickup_order` and `get_order_status` for Coffee Shops & Cafes. Chambers of Commerce & Business Associations, Coworking & Offices have one more, `find_members`, which finds the member businesses a business has published; a person contacts a member directly. Coworking & Offices also has `get_visit_options`, `book_tour` and `request_day_pass`, for tours and day passes at the locations a business has published; the business confirms each one.
 
 ## Source
 
@@ -61,10 +61,11 @@ Sign up at https://bizplug.ai/portal, pick your industry and provide the data it
 
 Plug-ins from other companies can be listed in the BizPlug marketplace next to the industry plug-ins. Do not open a pull request here: this repository is generated, so submit through https://bizplug.ai/marketplace#submit. [CONTRIBUTING.md](CONTRIBUTING.md) explains the process and the components a valid plug-in must have: an MCP server over streamable HTTP, `plugin.json`, `mcp.json`, a README, review test cases, and a privacy policy and terms.
 
-## Version 0.21.0
+## Version 0.22.0
 
 All 81 plug-ins share one version. What changed in each:
 
+- **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.

@@ -353,6 +353,78 @@
         "Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.",
         "People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on."
       ]
+    },
+    {
+      "id": "locations",
+      "file": "locations.csv",
+      "title": "Locations, tours and day passes",
+      "why": "Your locations, with whether you give tours there and when, and whether you sell a day pass there and at what rate. The plug-in offers Book a tour and Day pass only for the locations in this file.",
+      "required": false,
+      "maxRows": 50,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Location",
+          "required": true,
+          "type": "text",
+          "example": "Uptown Tower",
+          "help": "The location's name, as customers know it. One row per location."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "200 South Tryon Street, Charlotte, NC",
+          "help": "Street address of this location."
+        },
+        {
+          "key": "tours",
+          "label": "Tours",
+          "required": false,
+          "type": "boolean",
+          "example": "yes",
+          "help": "yes or no: whether people can ask for a tour of this location. Empty means yes."
+        },
+        {
+          "key": "tour_hours",
+          "label": "Tour hours",
+          "required": false,
+          "type": "text",
+          "example": "Monday to Friday, 09:00 to 16:00",
+          "help": "When tours are given, in your own words. The plug-in shows it as written."
+        },
+        {
+          "key": "day_pass",
+          "label": "Day pass",
+          "required": false,
+          "type": "boolean",
+          "example": "yes",
+          "help": "yes or no: whether you sell a day pass at this location. Empty means no."
+        },
+        {
+          "key": "day_pass_rate",
+          "label": "Day pass rate",
+          "required": false,
+          "type": "number",
+          "example": "35",
+          "help": "Per person, per day, in the currency of business.csv. Leave empty if you confirm the price yourself."
+        },
+        {
+          "key": "day_pass_includes",
+          "label": "Day pass includes",
+          "required": false,
+          "type": "text",
+          "example": "A hot desk from 08:00 to 18:00, Wi-Fi and coffee",
+          "help": "What a day pass includes, in one sentence."
+        }
+      ],
+      "collect": [
+        "List each location once, with the name used on the business's own website and its street address.",
+        "Ask the owner which locations give tours and when, and write the tour hours as the business states them. Do not guess hours from the opening hours.",
+        "Mark a day pass only where the business sells one, with the published rate per person per day and what it includes. Leave the rate empty when the business has not published one: the plug-in then says the business confirms the price.",
+        "A request for a tour or a day pass is confirmed by the business; nothing here is a time slot or a paid booking."
+      ]
     }
   ],
   "never": [

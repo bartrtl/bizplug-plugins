@@ -30,6 +30,12 @@
 //   From 0.20.0 a record's screen can carry Send by email and Send on WhatsApp (open.send): they open the
 //   customer's own mail app (through the email page) or WhatsApp with a text from the record filled in. The
 //   customer sends it; the card sends nothing.
+//   From 0.22.0, on a coworking plug-in whose business published its locations (plugin.visits): Book a tour and
+//   Day pass (kinds "tour" and "daypass"), each a form with the locations that offer it as chips, a day (with the
+//   day shortcuts), and for a tour a time and how many people. Where the business takes these on WhatsApp the
+//   result (view "visit") is a summary, the message to send as text and Continue on WhatsApp, and no name or
+//   email is asked; otherwise the form asks for them and the result is the usual sent request. A look-up of the
+//   locations from the chat (view "visits") lists them with a button into each form.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 import { createHash } from "node:crypto";
@@ -62,6 +68,8 @@ const ICONS: Record<string, string> = {
   speakers: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
   exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
   enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
+  tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
+  daypass: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 9v6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
 };
@@ -184,6 +192,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .sum.sm b{font-size:14px}
 .pre{white-space:pre-line}
 .btn[disabled]{opacity:.55;cursor:default}
+.sent p.msg{color:var(--fg);font-size:14px;margin-top:6px;padding:10px 12px;border-radius:12px;border:1px dashed var(--line);user-select:all;-webkit-user-select:all;overflow-wrap:anywhere}
 `;
 
 const SCRIPT_SRC = String.raw`
@@ -344,6 +353,12 @@ function formFor(o) {
       prompt: () => { need(v("details"), "Say what you would like."); const w = who(); return o.title + ": " + v("details") + (w.name ? ". My name is " + w.name + " and my email is " + w.email + "." : ""); },
       args: null };
   }
+  // 0.22.0: outside the card's own run (no business chosen yet) a tour or a day pass is asked for in the chat.
+  if (o.kind === "tour" || o.kind === "daypass") {
+    return { html: field("details", "Where and when?", { type: "textarea", placeholder: "The location, the day" + (o.kind === "tour" ? ", a time" : "") + " and how many people" }),
+      prompt: () => { need(v("details"), "Say which location and which day."); return o.title + ": " + v("details"); },
+      args: null };
+  }
   if (o.kind === "status") {
     return { html: field("ref", "Your reference", { placeholder: "e.g. BP-7K2Q9D" }),
       prompt: () => { need(v("ref"), "Add the reference you were given."); return "What is the status of my request " + v("ref") + "?"; },
@@ -424,8 +439,8 @@ function track() {
   const was = state.shown;
   const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "mwrite", "speaker", "exhibitor"].indexOf(cur.v) < 0 || was.sel === cur.sel);
   if (same) return;
-  if (["menu", "sent", "whatsapp", "loading"].indexOf(cur.v) >= 0) state.hist = [];
-  else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
+  if (["menu", "sent", "whatsapp", "visit", "loading"].indexOf(cur.v) >= 0) state.hist = [];
+  else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp", "visit"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
   state.going = false; state.shown = cur;
 }
 function goBack() {
@@ -708,6 +723,56 @@ function memberMessageView() {
     '<div class="draft" style="white-space:pre-wrap;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.5">' + esc(d.body || "") + "</div>" +
     (routes.length ? '<div class="actions">' + routes.map(btn).join("") + "</div>" : '<div class="empty">This member published no email, WhatsApp number or website here. Copy the message and use another way you know.</div>') +
     '<div class="note">You send it yourself from your own email or WhatsApp. Nothing was sent by this card, ' + esc(d.business || "the business") + " or BizPlug. Check that a number uses WhatsApp before relying on it.</div>";
+}
+
+// ---- Tours and day passes (version 0.22.0, coworking) ----
+// The business's published locations (plugin.visits.locations): a tour where it gives tours, a day pass where it
+// sells one. The rate and the tour hours are shown as the business published them; the total comes with the result.
+const vlocs = (kind) => ((p().visits || {}).locations || []).filter((l) => (kind === "tour" ? l.tours : l.dayPass));
+const vloc = (kind) => { const list = vlocs(kind); return list.find((l) => l.name === v("vloc")) || (list.length === 1 ? list[0] : null); };
+const vcontact = () => !p().visits || p().visits.contact !== false;
+function openVisit(kind, location) {
+  state.vkind = kind; state.error = "";
+  if (location) state.f.vloc = location;
+  state.view = "visitform"; render();
+}
+function visitFormView() {
+  const kind = state.vkind === "daypass" ? "daypass" : "tour", tour = kind === "tour";
+  const o = opt(kind), list = vlocs(kind), loc = vloc(kind);
+  const where = list.length > 1 ? '<div class="qlabel">Location</div><div class="qs" style="margin-top:0">' + list.map((l) => chip(esc(l.name), "data-vloc", l.name, Boolean(loc && loc.name === l.name))).join("") + "</div>" : "";
+  const facts = loc ? [loc.address, tour ? (loc.tourHours ? "Tours: " + loc.tourHours : "") : (loc.rate || "The business confirms the price"), !tour && loc.includes ? "Includes: " + loc.includes : ""].filter(Boolean) : [];
+  const info = loc ? '<div class="sum sm" style="margin:0"><div><b>' + esc(loc.name) + "</b>" + facts.map((x) => "<span style=\"display:block\">" + esc(x) + "</span>").join("") + "</div></div>" : "";
+  const fields = tour
+    ? '<div class="row three">' + field("vdate", "Day", { type: "date" }) + field("vtime", "Time", { optional: true, placeholder: "10:00 or morning" }) + field("vpeople", "People", { type: "number", min: 1, placeholder: "1" }) + "</div>"
+    : '<div class="row">' + field("vdate", "Day", { type: "date" }) + field("vpeople", "People", { type: "number", min: 1, placeholder: "1" }) + "</div>";
+  const days = '<div><div class="qlabel">Or pick the day</div><div class="qs">' + dayChoices(6).map((c) => chip(esc(c.label), "data-vday", c.start, v("vdate") === c.start)).join("") + "</div></div>";
+  const who = vcontact() ? '<div class="row">' + field("name", "Your name") + field("email", "Your email", { type: "email" }) + "</div>" : "";
+  return '<div class="form">' + top(o ? o.title : tour ? "Book a tour" : "Day pass") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
+    where + info + fields + days + who + errLine() +
+    '<div class="actions">' + primary(vcontact() ? (tour ? "Send tour request" : "Send day pass request") : "Continue", "visit") + "</div>" +
+    '<div class="note" style="margin-top:0">' + (vcontact() ? "The business confirms by email. Nothing is booked or paid here." : "Next you continue with the business on WhatsApp. Nothing is sent from here, and nothing is booked until the business confirms.") + "</div></div>";
+}
+function visitView() {
+  const d = state.data.visit || {};
+  const ok = /^https:\/\//.test(d.link || "");
+  return '<div class="sent"><b>' + esc(d.title) + "</b>" + (d.lines || []).map((l) => "<p>" + esc(l) + "</p>").join("") + "</div>" +
+    '<div class="sent" style="margin-top:10px"><b>' + (d.assistant ? "Message to send on WhatsApp" : "Your WhatsApp message") + '</b><p class="msg">' + esc(d.message) + "</p>" +
+    (d.assistant ? "<ol><li>Tap Continue on WhatsApp and send the message it fills in" + (d.join ? " (" + esc(d.join) + ")" : "") + ", as it is.</li><li>Then send the message above.</li></ol>" : "") +
+    '<p class="note">' + esc(d.note) + "</p></div>" +
+    '<div class="actions" style="margin-top:12px">' + (ok ? '<button class="btn wa" data-href="' + esc(d.link) + '">' + icon("whatsapp") + "Continue on WhatsApp</button>" : "") + '<button class="btn" data-view="menu">← Menu</button>' + contactButton() + "</div>";
+}
+function visitsView() {
+  const d = state.data.visits || { locations: [] };
+  const tour = opt("tour"), pass = opt("daypass");
+  const rows = (d.locations || []).map((l) =>
+    '<div class="it"><div class="nm"><b>' + esc(l.name) + "</b></div>" + (l.address ? '<div class="bl">' + esc(l.address) + "</div>" : "") +
+    '<div class="bl">' + (l.tours ? "Tours: " + esc(l.tourHours || "on request") : "No tours at this location") + "</div>" +
+    '<div class="bl">' + (l.dayPass ? "Day pass: " + esc(l.rate || "the business confirms the price") + (l.includes ? " · " + esc(l.includes) : "") : "No day pass at this location") + "</div>" +
+    ((l.tours && tour) || (l.dayPass && pass) ? '<div class="acts">' + (l.tours && tour ? '<button class="btn go" data-vgo="tour" data-loc="' + esc(l.name) + '">' + esc(tour.title) + "</button>" : "") +
+      (l.dayPass && pass ? '<button class="btn" data-vgo="daypass" data-loc="' + esc(l.name) + '">' + esc(pass.title) + "</button>" : "") + "</div>" : "") + "</div>").join("");
+  return top("Tours and day passes") + (d.sample ? '<div class="note" style="margin-top:6px">Sample data, not a real business.</div>' : "") +
+    '<div class="list" style="margin-top:10px">' + (rows || '<div class="empty">No locations are published.</div>') + "</div>" +
+    '<div class="note">As published by ' + esc(d.business || "the business") + ". The business confirms every tour and day pass; nothing is booked or paid here.</div>" + links("");
 }
 
 // ---- Software products (version 0.15.0) ----
@@ -1046,6 +1111,8 @@ function openOption(i) {
   // 0.18.0, event guide: Agenda, Speakers and Exhibitors open with their lists; an enquiry opens its form.
   if (o.kind === "agenda" || o.kind === "speakers" || o.kind === "exhibitors") { state.f.aq = ""; state.f.pq = ""; state.f.xq = ""; run(o.tool, {}, o.example); return; }
   if (o.kind === "enquiry") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } if (!v("etopic")) state.f.etopic = "Exhibiting"; state.view = "enquiry"; render(); return; }
+  // 0.22.0: a tour or a day pass opens its form, with the business's own locations to choose from.
+  if ((o.kind === "tour" || o.kind === "daypass") && inCard() && vlocs(o.kind).length) { openVisit(o.kind, ""); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
@@ -1071,7 +1138,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   app.innerHTML = header() + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
   const pic = app.querySelector(".banner");
@@ -1123,7 +1190,7 @@ function render() {
   on('[data-act="askq"]', () => guard(() => { need(v("question"), "Type your question."); ask(v("question")); }));
   on("[data-biz]", (b) => chooseBiz(b.dataset.biz));
   on('[data-act="biz"]', () => chooseBiz(v("biz")));
-  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.spk = {}; state.exh = {}; state.options = state.options.filter((o) => o.kind !== "members"); state.hist = []; state.error = ""; save(); render(); });
+  on('[data-act="unbiz"]', () => { state.business = ""; state.bizName = ""; state.data = {}; state.cart = {}; state.items = {}; state.mem = {}; state.spk = {}; state.exh = {}; state.options = state.options.filter((o) => o.kind !== "members" && o.kind !== "tour" && o.kind !== "daypass"); state.hist = []; state.error = ""; save(); render(); });
   // ---- Software products (version 0.15.0) ----
   on('[data-act="ffind"]', () => findIn("features"));
   on('[data-act="gfind"]', () => findIn("guides", { topic: (state.data.guides || {}).topic || "" }));
@@ -1188,6 +1255,24 @@ function render() {
       if (it.wait) { await awaitDone(it, r); return; }
       acct.done = it.done || "Done."; state.view = "adone";
     });
+  }));
+  // ---- Tours and day passes (version 0.22.0) ----
+  on("[data-vloc]", (b) => { state.f.vloc = b.dataset.vloc; render(); });
+  on("[data-vday]", (b) => { state.f.vdate = b.dataset.vday; render(); });
+  on("[data-vgo]", (b) => openVisit(b.dataset.vgo, b.dataset.loc));
+  on('[data-act="visit"]', () => guard(() => {
+    const kind = state.vkind === "daypass" ? "daypass" : "tour", o = opt(kind), loc = vloc(kind);
+    need(loc, "Choose a location.");
+    need(v("vdate"), "Choose a day.");
+    const who = {};
+    if (vcontact()) {
+      need(v("name"), "Add your name so the business can reply.");
+      need(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")), "Add a valid email so the business can reply.");
+      who.name = v("name"); who.email = v("email");
+    }
+    const people = num("vpeople");
+    run(o && o.tool, Object.assign(who, clean({ location: loc.name, date: v("vdate"), time: kind === "tour" ? v("vtime") : "", people: people ? Math.floor(people) : undefined })),
+      (o ? o.title : "Visit") + ": " + loc.name + ", " + v("vdate") + (kind === "tour" && v("vtime") ? ", " + v("vtime") : "") + (people ? ", " + Math.floor(people) + (people === 1 ? " person" : " people") : ""));
   }));
   // ---- Members (version 0.12.0) ----
   on('[data-act="mfind"]', () => findMembers());

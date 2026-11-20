@@ -98,6 +98,24 @@ How to collect it:
 3. Company-level contact details only: a general mailbox and a switchboard number. Never a named person's private email, mobile number or home address; leave the cell empty instead.
 4. People contact a member directly with these details. Neither the business nor BizPlug introduces or forwards, so publish only what the member is happy to be contacted on.
 
+### locations.csv (optional, up to 50 rows)
+Your locations, with whether you give tours there and when, and whether you sell a day pass there and at what rate. The plug-in offers Book a tour and Day pass only for the locations in this file.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Location, text. The location's name, as customers know it. One row per location. Example: Uptown Tower
+- `address`: Address, text. Street address of this location. Example: 200 South Tryon Street, Charlotte, NC
+- `tours`: Tours, boolean. yes or no: whether people can ask for a tour of this location. Empty means yes. Example: yes
+- `tour_hours`: Tour hours, text. When tours are given, in your own words. The plug-in shows it as written. Example: Monday to Friday, 09:00 to 16:00
+- `day_pass`: Day pass, boolean. yes or no: whether you sell a day pass at this location. Empty means no. Example: yes
+- `day_pass_rate`: Day pass rate, number. Per person, per day, in the currency of business.csv. Leave empty if you confirm the price yourself. Example: 35
+- `day_pass_includes`: Day pass includes, text. What a day pass includes, in one sentence. Example: A hot desk from 08:00 to 18:00, Wi-Fi and coffee
+
+How to collect it:
+1. List each location once, with the name used on the business's own website and its street address.
+2. Ask the owner which locations give tours and when, and write the tour hours as the business states them. Do not guess hours from the opening hours.
+3. Mark a day pass only where the business sells one, with the published rate per person per day and what it includes. Leave the rate empty when the business has not published one: the plug-in then says the business confirms the price.
+4. A request for a tour or a day pass is confirmed by the business; nothing here is a time slot or a paid booking.
+
 ## Format
 - UTF-8 CSV with a header row; comma separated; quote cells that contain commas, quotes or line breaks.
 - Numbers without currency signs or thousands separators (4.75, not $4.75).

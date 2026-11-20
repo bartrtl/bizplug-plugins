@@ -21,6 +21,7 @@ export type IndustryFunction = {
   members?: boolean; // the business may publish its member businesses: find_members and members.csv (plugins.ts, plugin-data.ts)
   infoFirst?: boolean; // the menu starts with "Ask a question": the plug-in mainly explains the business (chambers)
   software?: boolean; // a software product: from 0.15.0 the menu is Features, Pricing, Help & guides, Support, Book a demo (plugins.ts, software.ts)
+  visits?: boolean; // the business may publish its locations with tours and day passes: from 0.22.0 get_visit_options, book_tour and request_day_pass, and locations.csv (plugins.ts, plugin-data.ts, visits.ts)
   show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 
@@ -30,7 +31,7 @@ const NO_FIN = "Information and scheduling only: never give financial, investmen
 // slug | engine | title | tool names | noun | span | perGuest | note
 const r = (
   slug: string, engine: Engine, title: string, tools: [string, string, string], noun: string,
-  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software" | "show">> = {},
+  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software" | "show" | "visits">> = {},
 ): IndustryFunction => ({ slug, engine, title, tools, noun, ...extra });
 
 export const industryFunctions: IndustryFunction[] = [
@@ -61,7 +62,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("museums", "stay", "Timed tickets and exhibitions", ["check_ticket_availability", "request_tickets", "get_ticket_request_status"], "ticket", { span: "single", perGuest: true }),
   r("sports-teams", "stay", "Seat availability and ticket requests", ["check_seat_availability", "request_tickets", "get_ticket_request_status"], "seat section", { span: "single", perGuest: true }),
   r("car-rental", "stay", "Vehicle availability and rental price", ["check_vehicle_availability", "request_reservation", "get_reservation_status"], "vehicle class", { span: "days" }),
-  r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days", members: true }),
+  r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days", members: true, visits: true }),
 
   // Appointments, tours, demos and consultations: appt engine
   r("healthcare", "appt", "Find and request appointments", ["find_appointment_slots", "request_appointment", "get_appointment_status"], "visit type", { note: NO_ADVICE }),

@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.21.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.22.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -30,7 +30,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -73,6 +73,13 @@ export const isSoftwareTool = (name: string) => (Object.values(SOFTWARE_TOOLS) a
 /** Events (`show` in industry-functions.ts), from plug-in version 0.18.0: the event guide (event-guide.ts). */
 export const SHOW_TOOLS = { agenda: "get_agenda", speakers: "find_speakers", exhibitors: "find_exhibitors", enquiry: "send_event_enquiry" } as const;
 export const isShowTool = (name: string) => (Object.values(SHOW_TOOLS) as string[]).includes(name);
+/**
+ * Industries whose businesses may publish their locations with tours and day passes (`visits` in industry-functions.ts;
+ * coworking), from plug-in version 0.22.0 (visits.ts). The server (plugin-mcp.ts) lists the tools only on a version
+ * with the flag, and shows Book a tour and Day pass only for a business that published a location offering it.
+ */
+export const VISIT_TOOLS = { options: "get_visit_options", tour: "book_tour", pass: "request_day_pass" } as const;
+export const isVisitTool = (name: string) => (Object.values(VISIT_TOOLS) as string[]).includes(name);
 /** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
 const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
 const membersDirect = (slug: string) =>
@@ -182,8 +189,15 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
     ];
   }
   // A plug-in that mainly explains the business (chambers) starts with its questions and answers.
+  // 0.22.0, coworking: a tour and a day pass, after the booking options.
+  const visits: MenuOption[] = fn.visits
+    ? [
+        { tool: VISIT_TOOLS.tour, kind: "tour", title: "Book a tour", description: "Ask to see a location, when the business has published its locations: choose the location and a day. The business confirms the tour.", example: "Can I come for a tour on Tuesday morning?" },
+        { tool: VISIT_TOOLS.pass, kind: "daypass", title: "Day pass", description: "Ask for a day pass at a location that sells one, with the published rate. The business confirms it; nothing is paid here.", example: "Can I get a day pass for tomorrow?" },
+      ]
+    : [];
   return [
-    ...(fn.infoFirst ? [question, step(1), step(0)] : [step(0), step(1), question]),
+    ...(fn.infoFirst ? [question, step(1), step(0), ...visits] : [step(0), step(1), ...visits, question]),
     step(2),
     ...(fn.members
       ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]
@@ -238,6 +252,14 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           },
         ]
       : []),
+    // 0.22.0, coworking: tours and day passes at the business's locations (visits.ts). Offered only to plug-ins on 0.22.0 or later.
+    ...(fn.visits
+      ? [
+          { name: VISIT_TOOLS.options, title: "Tours and day passes", description: `List this ${noun} business's locations from what it published: where tours are given and their tour hours, and where a day pass is sold, with its rate per person per day and what it includes; optionally one location. Creates nothing and sends nothing. Use it for any question about tours, day passes or their prices.`, readOnly: true },
+          { name: VISIT_TOOLS.tour, title: "Book a tour", description: "Ask for a tour of one of the business's published locations on a date. Use only once the customer has chosen the location and the day and wants to go ahead. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message for the customer to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms the tour; nothing is booked here. Never invent a location or tour hours.", readOnly: false },
+          { name: VISIT_TOOLS.pass, title: "Day pass", description: "Ask for a day pass at one of the business's published locations that sells one, for a date and a number of people. Use only once the customer has chosen the location and the day and wants to go ahead; for the price alone use the tours and day passes look-up. It returns the published rate times the people, or says the business confirms the price when no rate is published. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms; nothing is booked or paid here. Never invent a price or a location.", readOnly: false },
+        ]
+      : []),
     // 0.15.0, software products (software.ts). Offered only to plug-ins on 0.15.0 or later (plugin-mcp.ts).
     ...(fn.software
       ? [
@@ -281,6 +303,13 @@ export function buildPlugin(i: Industry): IndustryPlugin {
         : []),
       ...(fn.members
         ? [{ prompt: "Which member businesses here could help with web design?", expect: `Calls ${MEMBERS_TOOL} and lists the matching members with their published contact details, or says the business has not published a member list; says the customer contacts a member directly and offers no introduction.`, shouldTrigger: true }]
+        : []),
+      ...(fn.visits
+        ? [
+            { prompt: "Which of your locations give tours, and is there a day pass?", expect: `Calls ${VISIT_TOOLS.options} and lists only the published locations, tour hours and day pass rates, or says the business has not published its locations; invents no location, hours or price.`, shouldTrigger: true },
+            { prompt: "I'd like a tour next Tuesday at 10:00 for two people.", expect: `Asks which location when the business has more than one, then calls ${VISIT_TOOLS.tour}. Gives the WhatsApp link and the exact message to send when the business takes tours on WhatsApp, without asking for a name or email; otherwise asks for the customer's name and email first and gives the reference. Says the business still has to confirm, and never that the tour is booked.`, shouldTrigger: true },
+            { prompt: "How much is a day pass for two people tomorrow?", expect: `Calls ${VISIT_TOOLS.options} and quotes only the published rate, or says the business confirms the price; calls ${VISIT_TOOLS.pass} only once the customer wants to go ahead, and takes no payment.`, shouldTrigger: true },
+          ]
         : []),
       { prompt: "Write me a poem about the ocean.", expect: "Does not call any tool.", shouldTrigger: false },
     ],

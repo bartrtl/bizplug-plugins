@@ -1,6 +1,6 @@
 # BizPlug Coworking & Offices
 
-Version 0.21.0. Desk and office availability and rates for coworking & offices businesses.
+Version 0.22.0. Desk and office availability and rates for coworking & offices businesses.
 
 - Main function: Desk and office availability and rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coworking` (streamable HTTP, no sign-in)
@@ -11,6 +11,8 @@ Version 0.21.0. Desk and office availability and rates for coworking & offices b
 
 - **Availability and price**: See what is free for your dates and party size, with the total price.
 - **Request the booking**: Send a booking request. The business confirms it; nothing is held or charged here.
+- **Book a tour**: Ask to see a location, when the business has published its locations: choose the location and a day. The business confirms the tour.
+- **Day pass**: Ask for a day pass at a location that sells one, with the published rate. The business confirms it; nothing is paid here.
 - **Ask a question**: Answers from the business's own information: memberships, amenities and tour requests.
 - **Booking status**: Check a booking request with its reference.
 - **Members**: The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.
@@ -28,9 +30,13 @@ Version 0.21.0. Desk and office availability and rates for coworking & offices b
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `find_members` | Find the member businesses of this coworking & offices business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. Contact is direct: the person writes or calls the member themselves, and neither the coworking business nor BizPlug introduces, forwards or vouches. Share only what the business lists for a member. |
 | `write_to_member` | Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with find_members. Contact is direct: the person writes or calls the member themselves, and neither the coworking business nor BizPlug introduces, forwards or vouches. |
+| `get_visit_options` | List this coworking & offices business's locations from what it published: where tours are given and their tour hours, and where a day pass is sold, with its rate per person per day and what it includes; optionally one location. Creates nothing and sends nothing. Use it for any question about tours, day passes or their prices. |
+| `book_tour` | Ask for a tour of one of the business's published locations on a date. Use only once the customer has chosen the location and the day and wants to go ahead. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message for the customer to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms the tour; nothing is booked here. Never invent a location or tour hours. |
+| `request_day_pass` | Ask for a day pass at one of the business's published locations that sells one, for a date and a number of people. Use only once the customer has chosen the location and the day and wants to go ahead; for the price alone use the tours and day passes look-up. It returns the published rate times the people, or says the business confirms the price when no rate is published. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms; nothing is booked or paid here. Never invent a price or a location. |
 
 ## Changes
 
+- **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.

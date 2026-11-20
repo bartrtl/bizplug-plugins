@@ -1,6 +1,6 @@
 # BizPlug Cruise Lines
 
-Version 0.21.0. Sailing availability and cabin pricing for cruise lines businesses.
+Version 0.22.0. Sailing availability and cabin pricing for cruise lines businesses.
 
 - Main function: Sailing availability and cabin pricing
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cruise-lines` (streamable HTTP, no sign-in)
@@ -28,6 +28,7 @@ Version 0.21.0. Sailing availability and cabin pricing for cruise lines business
 
 ## Changes
 
+- **0.22.0** (20 November 2026): Coworking & Offices: Book a tour and Day pass at the business's own locations, continued with the business's WhatsApp assistant when it has one.
 - **0.21.0** (20 November 2026): Card banner: a business's own wide picture at the top of its card's menu. Member messages: on a member list, the card drafts a first message to a member, sent from the person's own email or WhatsApp.
 - **0.20.0** (19 November 2026): Send from the account menu: a record's screen can open the customer's own mail app or WhatsApp with a text from it filled in, such as a follow-up draft.
 - **0.19.0** (19 November 2026): Account menu: the account tools of a business's own server get buttons in the card, with a form or a list for each, so signed-in customers tap instead of typing.
