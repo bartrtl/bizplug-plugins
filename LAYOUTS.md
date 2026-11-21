@@ -6,58 +6,16 @@ Layouts are open source. This page is also how to build one.
 
 ## The layouts
 
-The pictures show BizPlug's generic sample businesses, with no logo or photos: the sample hotel on a computer and the sample café on a phone.
+6 layouts. Each name opens the layout's package: its code, its description and two pictures of it on a sample business, on a computer (680 px) and on a phone (390 px). To see one on a real card next to the standard layout, use [bizplug.ai/layouts](https://bizplug.ai/layouts).
 
-### Tiles (standard)
-
-Your banner and name, a highlighted Start here tile, then every option as a tile in two columns. The layout every card has had so far.
-
-**Suits:** Any business with four to eight options. By [BizPlug](https://www.bizplug.ai). Built into the card.
-
-| Desktop (680 px) | Mobile (390 px) |
-|---|---|
-| <img src="layouts/grid/preview-desktop.png" alt="Tiles on a computer" width="420"> | <img src="layouts/grid/preview-mobile.png" alt="Tiles on a phone" width="240"> |
-
-### App
-
-A phone-app home: your banner with your logo on its edge, a row of round quick actions, a big Start here card and the questions people often ask, with a tab bar for your three main destinations and More.
-
-**Suits:** Businesses customers come back to, with two or three clear jobs: hotels, restaurants, gyms, coworking, salons, members' clubs and chambers. By [BizPlug](https://www.bizplug.ai). Package: [layouts/app/](layouts/app/).
-
-| Desktop (680 px) | Mobile (390 px) |
-|---|---|
-| <img src="layouts/app/preview-desktop.png" alt="App on a computer" width="420"> | <img src="layouts/app/preview-mobile.png" alt="App on a phone" width="240"> |
-
-### Ask bar
-
-A large Ask or search bar with suggested questions under it, and every option in one compact list that filters as people type. Enter opens the first match; anything else is asked in the chat.
-
-**Suits:** Businesses people come to with a question, or with many options: chambers, software, clinics, professional services, guides. By [BizPlug](https://www.bizplug.ai). Package: [layouts/ask/](layouts/ask/).
-
-| Desktop (680 px) | Mobile (390 px) |
-|---|---|
-| <img src="layouts/ask/preview-desktop.png" alt="Ask bar on a computer" width="420"> | <img src="layouts/ask/preview-mobile.png" alt="Ask bar on a phone" width="240"> |
-
-### Christmas
-
-The Tiles menu dressed for the holidays: a string of twinkling lights, gentle snow over your name and banner, a holly sticker, bauble icons and a snowy edge. Motion stops for people who turn it off on their device.
-
-**Suits:** Any business for December: shops, markets, cafés, bakeries, restaurants, hotels and holiday events. Switch back to your usual layout in January. By [BizPlug](https://www.bizplug.ai). Package: [layouts/christmas/](layouts/christmas/).
-
-| Desktop (680 px) | Mobile (390 px) |
-|---|---|
-| <img src="layouts/christmas/preview-desktop.png" alt="Christmas on a computer" width="420"> | <img src="layouts/christmas/preview-mobile.png" alt="Christmas on a phone" width="240"> |
-
-### Story
-
-A magazine-style page: a cover with your picture, your name and the Start here action, a row of chapters, then each option as a numbered chapter with large artwork, its example question and an Ask this button.
-
-**Suits:** Brands with strong pictures and a story to tell: hotels and resorts, venues, tourism, events, restaurants, and chambers presenting their programmes. By [BizPlug](https://www.bizplug.ai). Package: [layouts/story/](layouts/story/).
-
-| Desktop (680 px) | Mobile (390 px) |
-|---|---|
-| <img src="layouts/story/preview-desktop.png" alt="Story on a computer" width="420"> | <img src="layouts/story/preview-mobile.png" alt="Story on a phone" width="240"> |
-
+| Layout | What it is | Suits | By | Pictures |
+|---|---|---|---|---|
+| [Tiles](layouts/grid/) (standard) | Your banner and name, a highlighted Start here tile, then every option as a tile in two columns. The layout every card has had so far. | Any business with four to eight options. | [BizPlug](https://www.bizplug.ai) | [computer](layouts/grid/preview-desktop.png), [phone](layouts/grid/preview-mobile.png) |
+| [App](layouts/app/) | A phone-app home: your banner with your logo on its edge, a row of round quick actions, a big Start here card and the questions people often ask, with a tab bar for your three main destinations and More. | Businesses customers come back to, with two or three clear jobs: hotels, restaurants, gyms, coworking, salons, members' clubs and chambers. | [BizPlug](https://www.bizplug.ai) | [computer](layouts/app/preview-desktop.png), [phone](layouts/app/preview-mobile.png) |
+| [Ask bar](layouts/ask/) | A large Ask or search bar with suggested questions under it, and every option in one compact list that filters as people type. Enter opens the first match; anything else is asked in the chat. | Businesses people come to with a question, or with many options: chambers, software, clinics, professional services, guides. | [BizPlug](https://www.bizplug.ai) | [computer](layouts/ask/preview-desktop.png), [phone](layouts/ask/preview-mobile.png) |
+| [Christmas](layouts/christmas/) | The Tiles menu dressed for the holidays: a string of twinkling lights, gentle snow over your name and banner, a holly sticker, bauble icons and a snowy edge. Motion stops for people who turn it off on their device. | Any business for December: shops, markets, cafés, bakeries, restaurants, hotels and holiday events. Switch back to your usual layout in January. | [BizPlug](https://www.bizplug.ai) | [computer](layouts/christmas/preview-desktop.png), [phone](layouts/christmas/preview-mobile.png) |
+| [Event](layouts/event/) | The menu of the Qatar Event Show 2026 card: your picture across the top with a coloured rule under it, a dark title strip with your name, three large buttons for what people ask first, the other options in two columns, one wide button to ask a question and one for contact. | Events, shows and conferences, venues, chambers and any business with a wide picture and a few clear things to do. | [msg2ai](https://www.msg2.ai) | [computer](layouts/event/preview-desktop.png), [phone](layouts/event/preview-mobile.png) |
+| [Story](layouts/story/) | A magazine-style page: a cover with your picture, your name and the Start here action, a row of chapters, then each option as a numbered chapter with large artwork, its example question and an Ask this button. | Brands with strong pictures and a story to tell: hotels and resorts, venues, tourism, events, restaurants, and chambers presenting their programmes. | [BizPlug](https://www.bizplug.ai) | [computer](layouts/story/preview-desktop.png), [phone](layouts/story/preview-mobile.png) |
 
 ## Build a layout
 

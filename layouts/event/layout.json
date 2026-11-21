@@ -1,0 +1,8 @@
+{
+  "id": "event",
+  "name": "Event",
+  "author": { "name": "msg2ai", "url": "https://www.msg2.ai" },
+  "summary": "The menu of the Qatar Event Show 2026 card: your picture across the top with a coloured rule under it, a dark title strip with your name, three large buttons for what people ask first, the other options in two columns, one wide button to ask a question and one for contact.",
+  "suits": "Events, shows and conferences, venues, chambers and any business with a wide picture and a few clear things to do.",
+  "ownHeader": true
+}
