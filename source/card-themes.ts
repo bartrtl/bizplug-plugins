@@ -65,7 +65,17 @@ export const CARD_THEMES: CardTheme[] = [
     author: "BizPlug",
     colors: { a1: "#f0abfc", a2: "#a78bfa", ink: "#1a1030", bg: "#140f24", glow: "rgba(240,171,252,.14)" },
   },
+  {
+    id: "christmas",
+    name: "Christmas",
+    description: "Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events.",
+    author: "BizPlug",
+    colors: { a1: "#f87171", a2: "#4ade80", ink: "#1a0a0a", bg: "#0c1a12", glow: "rgba(248,113,113,.14)" },
+  },
 ];
+
+/** The shape of a theme id, built-in or from the public repository's themes/ (card-themes-remote.ts). */
+export const THEME_ID = /^[a-z][a-z-]{1,23}$/;
 
 export const getCardTheme = (id: string | null | undefined): CardTheme | undefined => (id ? CARD_THEMES.find((t) => t.id === id) : undefined);
 export const isCardThemeId = (id: unknown): id is string => typeof id === "string" && CARD_THEMES.some((t) => t.id === id);
@@ -139,7 +149,7 @@ export function cardThemeListProblems(list: CardTheme[] = CARD_THEMES): string[]
   const out: string[] = [];
   const seen = new Set<string>();
   for (const t of list) {
-    if (!/^[a-z][a-z-]{1,23}$/.test(t.id) || t.id === DEFAULT_CARD_THEME) out.push(`${t.id}: the id must be 2 to 24 lower-case letters or hyphens, and not "${DEFAULT_CARD_THEME}".`);
+    if (!THEME_ID.test(t.id) || t.id === DEFAULT_CARD_THEME) out.push(`${t.id}: the id must be 2 to 24 lower-case letters or hyphens, and not "${DEFAULT_CARD_THEME}".`);
     if (seen.has(t.id)) out.push(`${t.id}: the id is used twice.`);
     seen.add(t.id);
     if (!t.name.trim() || t.name.length > 24) out.push(`${t.id}: the name must be 1 to 24 characters.`);

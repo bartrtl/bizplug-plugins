@@ -311,6 +311,76 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .lay-ask .lay-ask-row:hover .lay-ask-k,.lay-ask .lay-sel .lay-ask-k{opacity:1}
 .lay-ask .lay-ask-q .lay-ask-ic{color:var(--ink);background:linear-gradient(135deg,var(--a1),var(--a2))}
 @media (max-width:420px){.lay-ask .lay-ask-go span{display:none}.lay-ask .lay-ask-lh kbd{display:none}}
+.lay-christmas{display:block}
+.lay-christmas svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lay-christmas button{all:unset;box-sizing:border-box;cursor:pointer}
+.lay-christmas button:focus-visible{outline:2px solid var(--a1);outline-offset:2px}
+.lay-christmas .lay-christmas-wrap{--lay-xs-snow:rgba(255,255,255,.9);position:relative}
+.lay-christmas .lay-christmas-light{--lay-xs-snow:#cfdbea}
+.lay-christmas .lay-christmas-lights{position:relative;display:flex;justify-content:space-between;align-items:flex-start;height:30px;padding:0 6px;margin:-4px 0 2px}
+.lay-christmas .lay-christmas-lights::before{content:"";position:absolute;left:0;right:0;top:-14px;height:24px;border-bottom:1.5px solid color-mix(in srgb,var(--fg) 35%,transparent);border-radius:0 0 50% 50%/0 0 100% 100%}
+.lay-christmas .lay-christmas-lights i{position:relative;width:9px;height:13px;margin-top:9px;border-radius:50% 50% 50% 50%/40% 40% 60% 60%;background:currentColor;color:#ff5a5f;box-shadow:0 0 10px 2px currentColor;animation:lay-christmas-twinkle 2.4s ease-in-out infinite}
+.lay-christmas .lay-christmas-lights i::before{content:"";position:absolute;left:2px;top:-3px;width:5px;height:4px;border-radius:1px;background:color-mix(in srgb,var(--fg) 55%,#3a3a3a)}
+.lay-christmas .lay-christmas-lights i:nth-child(4n+2){color:#ffd166}
+.lay-christmas .lay-christmas-lights i:nth-child(4n+3){color:#3ddc84}
+.lay-christmas .lay-christmas-lights i:nth-child(4n+4){color:#5ab0ff}
+.lay-christmas .lay-christmas-lights i:nth-child(odd){margin-top:13px}
+.lay-christmas .lay-christmas-lights i:nth-child(3n+2){animation-delay:-.8s}
+.lay-christmas .lay-christmas-lights i:nth-child(3n+3){animation-delay:-1.6s}
+.lay-christmas .lay-christmas-lights i:nth-child(1),.lay-christmas .lay-christmas-lights i:nth-child(18){margin-top:4px}
+.lay-christmas .lay-christmas-top{position:relative;overflow:hidden;border-radius:18px;border:1px solid var(--line);background:radial-gradient(120% 90% at 100% 0%,var(--glow),transparent 60%),var(--card)}
+.lay-christmas .lay-christmas-bn{display:block;width:100%;aspect-ratio:1.91/1;max-height:240px;object-fit:cover;border-bottom:2px solid var(--a2)}
+.lay-christmas .lay-christmas-id{position:relative;z-index:1;display:flex;align-items:center;gap:12px;padding:14px 80px 14px 14px;min-height:72px}
+.lay-christmas .lay-christmas-logo{flex:none;width:46px;height:46px;border-radius:12px;overflow:hidden;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 1px var(--line)}
+.lay-christmas .lay-christmas-logo img{width:100%;height:100%;object-fit:contain;padding:4px;box-sizing:border-box}
+.lay-christmas .lay-christmas-wide{width:auto;max-width:150px;padding:0 6px}
+.lay-christmas .lay-christmas-wide img{width:auto;max-width:100%;height:36px}
+.lay-christmas .lay-christmas-mono{font-weight:800;font-size:15px;color:var(--ink);background:linear-gradient(135deg,var(--a1),var(--a2))}
+.lay-christmas .lay-christmas-nm{min-width:0}
+.lay-christmas .lay-christmas-nm b{display:block;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.lay-christmas .lay-christmas-nm span{display:block;font-size:13px;color:var(--muted)}
+.lay-christmas .lay-christmas-holly{position:absolute;z-index:1;right:10px;bottom:10px;width:62px;height:46px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 48'%3E%3Cpath d='M30 27C22 14 10 12 2 16c6 2 6 8 2 12 8-2 12 4 10 10 6-6 12-6 16-11z' fill='%232f9e5b'/%3E%3Cpath d='M34 27c8-13 20-15 28-11-6 2-6 8-2 12-8-2-12 4-10 10-6-6-12-6-16-11z' fill='%2323824a'/%3E%3Cpath d='M8 19c8 1 15 4 22 8M56 19c-8 1-15 4-22 8' stroke='%231b6b3c' stroke-width='1.5' fill='none'/%3E%3Ccircle cx='26' cy='29' r='6' fill='%23d92f2f'/%3E%3Ccircle cx='38' cy='29' r='6' fill='%23c42428'/%3E%3Ccircle cx='32' cy='21' r='6' fill='%23ec4a3c'/%3E%3Ccircle cx='30' cy='19' r='1.8' fill='%23fff' opacity='.7'/%3E%3Ccircle cx='24' cy='27' r='1.8' fill='%23fff' opacity='.6'/%3E%3Ccircle cx='36' cy='27' r='1.8' fill='%23fff' opacity='.6'/%3E%3C/svg%3E") center/contain no-repeat;transform:rotate(-8deg);filter:drop-shadow(0 3px 4px rgba(0,0,0,.3))}
+.lay-christmas .lay-christmas-snow{position:absolute;inset:0;z-index:2;overflow:hidden;pointer-events:none;color:var(--lay-xs-snow)}
+.lay-christmas .lay-christmas-snow i{position:absolute;top:-8px;border-radius:50%;background:currentColor;box-shadow:0 0 3px currentColor;opacity:0;animation:lay-christmas-fall 9s linear infinite}
+.lay-christmas .lay-christmas-snow .lay-christmas-f0{left:5%;width:3px;height:3px;animation-duration:7.0s;animation-delay:0.0s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f1{left:42%;width:4px;height:4px;animation-duration:8.6s;animation-delay:-1.3s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f2{left:79%;width:5px;height:5px;animation-duration:10.2s;animation-delay:-2.6s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f3{left:16%;width:6px;height:6px;animation-duration:11.8s;animation-delay:-3.9s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f4{left:53%;width:3px;height:3px;animation-duration:13.4s;animation-delay:-5.2s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f5{left:90%;width:4px;height:4px;animation-duration:7.0s;animation-delay:-6.5s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f6{left:27%;width:5px;height:5px;animation-duration:8.6s;animation-delay:-7.8s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f7{left:64%;width:6px;height:6px;animation-duration:10.2s;animation-delay:-9.1s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f8{left:1%;width:3px;height:3px;animation-duration:11.8s;animation-delay:-10.4s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f9{left:38%;width:4px;height:4px;animation-duration:13.4s;animation-delay:-11.7s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f10{left:75%;width:5px;height:5px;animation-duration:7.0s;animation-delay:-6.0s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f11{left:12%;width:6px;height:6px;animation-duration:8.6s;animation-delay:-5.7s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f12{left:49%;width:3px;height:3px;animation-duration:10.2s;animation-delay:-5.4s}
+.lay-christmas .lay-christmas-snow .lay-christmas-f13{left:86%;width:4px;height:4px;animation-duration:11.8s;animation-delay:-5.1s}
+.lay-christmas .lay-christmas-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+@media (max-width:520px){.lay-christmas .lay-christmas-grid{grid-template-columns:1fr}.lay-christmas .lay-christmas-id{flex-wrap:wrap;padding-right:14px}.lay-christmas .lay-christmas-wide+.lay-christmas-nm{flex-basis:100%}.lay-christmas .lay-christmas-nm{padding-right:56px}.lay-christmas .lay-christmas-wide+.lay-christmas-nm{padding-right:0}.lay-christmas .lay-christmas-holly{width:50px;height:38px;right:8px}.lay-christmas .lay-christmas-holly{top:18px;bottom:auto}}
+.lay-christmas .lay-christmas-tile{position:relative;display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;background:var(--card);border:1px solid var(--line);transition:transform .15s ease,border-color .15s ease}
+.lay-christmas .lay-christmas-tile:hover,.lay-christmas .lay-christmas-tile:focus-visible{transform:translateY(-2px);border-color:var(--a2)}
+.lay-christmas .lay-christmas-hero{grid-column:1/-1;padding:18px 60px 18px 18px;border:1px solid transparent;background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(110deg,var(--a1),var(--a2)) border-box}
+.lay-christmas .lay-christmas-full{grid-column:1/-1}
+.lay-christmas .lay-christmas-ball{position:relative;flex:none;width:38px;height:38px;margin-top:6px;border-radius:50%;display:grid;place-items:center;color:var(--ink);background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.55),transparent 34%),linear-gradient(135deg,var(--a1),var(--a2));transform-origin:50% -8px}
+.lay-christmas .lay-christmas-ball::before{content:"";position:absolute;left:50%;top:-5px;width:12px;height:6px;margin-left:-6px;border-radius:2px 2px 1px 1px;background:linear-gradient(90deg,#b8862b,#f5d27a,#b8862b)}
+.lay-christmas .lay-christmas-ball::after{content:"";position:absolute;left:50%;top:-9px;width:6px;height:5px;margin-left:-3px;border:1.5px solid #c9a24a;border-bottom:0;border-radius:6px 6px 0 0}
+.lay-christmas .lay-christmas-ball svg{width:18px;height:18px}
+.lay-christmas .lay-christmas-hero .lay-christmas-ball{width:46px;height:46px}
+.lay-christmas .lay-christmas-hero .lay-christmas-ball svg{width:21px;height:21px}
+.lay-christmas .lay-christmas-tile:hover .lay-christmas-ball,.lay-christmas .lay-christmas-tile:focus-visible .lay-christmas-ball{animation:lay-christmas-swing 1.1s ease-in-out}
+.lay-christmas .lay-christmas-tx{min-width:0}
+.lay-christmas .lay-christmas-tx b{display:block;font-weight:650;font-size:15px}
+.lay-christmas .lay-christmas-hero .lay-christmas-tx b{font-size:18px}
+.lay-christmas .lay-christmas-tx small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.lay-christmas .lay-christmas-tx em{display:inline-block;margin-left:8px;font-style:normal;font-size:11px;font-weight:700;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));border-radius:999px;padding:2px 8px;vertical-align:2px}
+.lay-christmas .lay-christmas-gift{position:absolute;right:12px;top:-14px;width:40px;height:40px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='5' y='17' width='30' height='20' rx='3' fill='%23d8343a'/%3E%3Crect x='3' y='11' width='34' height='8' rx='2' fill='%23e8474c'/%3E%3Crect x='17' y='11' width='6' height='26' fill='%23f5c542'/%3E%3Cpath d='M20 11c-4-8-12-8-11-3 1 4 7 4 11 3zm0 0c4-8 12-8 11-3-1 4-7 4-11 3z' fill='%23f5c542'/%3E%3C/svg%3E") center/contain no-repeat;filter:drop-shadow(0 3px 4px rgba(0,0,0,.3));animation:lay-christmas-bob 3.2s ease-in-out infinite}
+.lay-christmas .lay-christmas-ground{height:18px;margin:16px 0 0;border-radius:0 0 10px 10px;background:radial-gradient(ellipse 50% 100% at 50% 100%,var(--lay-xs-snow) 96%,transparent 100%) 0 100%/52px 14px repeat-x,radial-gradient(ellipse 50% 100% at 50% 100%,var(--lay-xs-snow) 96%,transparent 100%) 26px 100%/68px 18px repeat-x,linear-gradient(var(--lay-xs-snow),var(--lay-xs-snow)) 0 100%/100% 6px no-repeat}
+@keyframes lay-christmas-twinkle{0%,100%{opacity:1;box-shadow:0 0 10px 2px currentColor}50%{opacity:.45;box-shadow:0 0 2px 0 currentColor}}
+@keyframes lay-christmas-fall{0%{top:-8px;opacity:0;transform:translateX(0)}10%{opacity:.95}50%{transform:translateX(12px)}90%{opacity:.9}100%{top:100%;opacity:0;transform:translateX(-6px)}}
+@keyframes lay-christmas-swing{0%,100%{transform:rotate(0)}25%{transform:rotate(9deg)}60%{transform:rotate(-6deg)}85%{transform:rotate(3deg)}}
+@keyframes lay-christmas-bob{0%,100%{transform:translateY(0) rotate(6deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+@media (prefers-reduced-motion:reduce){.lay-christmas *,.lay-christmas *::before,.lay-christmas *::after{animation:none !important;transition:none !important}.lay-christmas .lay-christmas-snow{display:none}.lay-christmas .lay-christmas-lights i{opacity:1}}
 .lay-story{display:block}
 .lay-story svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .lay-story button{all:unset;box-sizing:border-box;cursor:pointer}
@@ -580,6 +650,54 @@ function render(ctx) {
     (chips ? '<div class="lay-ask-chips">' + chips + "</div>" : "") +
     '<div class="lay-ask-lh"><span data-lay-count data-lay-count-idle="What you can do here">What you can do here</span><kbd>&uarr;&darr; to move &middot; &crarr; to open</kbd></div>' +
     '<div class="lay-ask-list">' + askRow + rows + "</div>"
+  );
+}
+return { render: render, own: true };
+})();
+LAYOUTS["christmas"] = (function () {
+"use strict";
+// Christmas: the Tiles menu dressed for the season. A string of lights across the top, snow falling over the
+// business's name and banner (decoration only, drawn with CSS), a holly sticker, bauble icons on the tiles and a
+// snowy edge at the end. All motion is CSS (@keyframes lay-christmas-*), and stops under prefers-reduced-motion.
+function render(ctx) {
+  const h = ctx.h;
+  const b = ctx.business;
+  const opts = ctx.options;
+  if (!opts.length) return "";
+  const dark = ctx.mode !== "light";
+
+  let bulbs = "";
+  for (let i = 0; i < 18; i++) bulbs += "<i></i>";
+  const lights = '<div class="lay-christmas-lights" aria-hidden="true">' + bulbs + "</div>";
+
+  let flakes = "";
+  for (let i = 0; i < 14; i++) flakes += '<i class="lay-christmas-f' + i + '"></i>';
+  const snow = '<div class="lay-christmas-snow" aria-hidden="true">' + flakes + "</div>";
+
+  const logo = b.logo
+    ? '<span class="lay-christmas-logo' + (b.logoWide ? " lay-christmas-wide" : "") + '"><img src="' + h(b.logo) + '" alt=""></span>'
+    : '<span class="lay-christmas-logo lay-christmas-mono">' + h(b.initials) + "</span>";
+  // The banner is shown whole: it may carry its own text, so the name goes under it, never over it.
+  const head =
+    '<div class="lay-christmas-top">' +
+    (b.banner ? '<img class="lay-christmas-bn" src="' + h(b.banner) + '" alt="">' : "") +
+    '<div class="lay-christmas-id">' + logo + '<div class="lay-christmas-nm"><b>' + h(b.name) + "</b>" +
+    (b.subtitle ? "<span>" + h(b.subtitle) + "</span>" : "") + "</div>" +
+    '<span class="lay-christmas-holly" aria-hidden="true"></span></div>' + snow + "</div>";
+
+  const even = opts.length % 2 === 0;
+  const tiles = opts
+    .map((o, i) =>
+      '<button class="lay-christmas-tile' + (o.start ? " lay-christmas-hero" : "") + (i > 0 && even && i === opts.length - 1 ? " lay-christmas-full" : "") + '" data-open="' + o.index + '">' +
+      '<span class="lay-christmas-ball">' + o.icon + "</span>" +
+      '<span class="lay-christmas-tx"><b>' + h(o.title) + (o.start ? "<em>Start here</em>" : "") + "</b><small>" + h(o.description) + "</small></span>" +
+      (o.start ? '<span class="lay-christmas-gift" aria-hidden="true"></span>' : "") + "</button>")
+    .join("");
+
+  return (
+    '<div class="lay-christmas-wrap ' + (dark ? "lay-christmas-dark" : "lay-christmas-light") + '">' +
+    lights + head + '<div class="lay-christmas-grid">' + tiles + "</div>" +
+    '<div class="lay-christmas-ground" aria-hidden="true"></div></div>'
   );
 }
 return { render: render, own: true };

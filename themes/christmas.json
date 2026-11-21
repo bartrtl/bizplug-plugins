@@ -1,0 +1,13 @@
+{
+  "id": "christmas",
+  "name": "Christmas",
+  "description": "Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#f87171",
+    "a2": "#4ade80",
+    "ink": "#1a0a0a",
+    "bg": "#0c1a12",
+    "glow": "rgba(248,113,113,.14)"
+  }
+}

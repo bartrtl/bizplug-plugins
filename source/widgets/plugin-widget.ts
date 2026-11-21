@@ -45,7 +45,7 @@ import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
 import { siteConfig, siteOrigins } from "@/lib/seo";
 import { CARD_IMAGE_ORIGINS } from "@/lib/profile-store";
-import { LAYOUT_PACKAGES } from "@/lib/layouts.generated";
+import { LAYOUT_PACKAGES, type LayoutPackage } from "@/lib/layouts.generated";
 
 export const PLUGIN_WIDGET_MIME = "text/html+skybridge";
 /** The same card for an MCP Apps host (Claude), from plug-in version 0.23.0. */
@@ -1826,16 +1826,30 @@ if (!window.openai && window.parent !== window) {
 }
 `;
 
-// Each layout package runs in its own function scope; layout-check.ts kept page access, events and timers out of it.
-const LAYOUT_CODE = LAYOUT_PACKAGES.map((l) => `LAYOUTS[${JSON.stringify(l.meta.id)}] = (function () {\n"use strict";\n${l.js}\nreturn { render: render, own: ${l.meta.ownHeader ? "true" : "false"} };\n})();`).join("\n");
-const SCRIPT = SCRIPT_SRC.replace("__LAYOUTS__", () => LAYOUT_CODE).replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
-// 0.31.0: the layouts' own styles, each scoped under .lay-<id> (layout-check.ts), after the card's.
-const LAYOUT_CSS = ".lay [hidden]{display:none!important}\n.lay svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n" + LAYOUT_PACKAGES.map((l) => l.css).join("\n");
-const PLUGIN_HTML = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${CSS}${LAYOUT_CSS}</style></head><body><div id="app"></div><script type="module">${SCRIPT.replace(/<\/script/gi, "<\\/script")}</script></body></html>`;
+/**
+ * The card's HTML with a set of layout packages: the built-in ones (layouts.generated.ts) and those the team added
+ * in /admin/portal (card-layouts-store.ts, checked with layout-check.ts before they get here). Each package runs in
+ * its own function scope; layout-check.ts kept page access, events and timers out of it.
+ */
+function buildCard(packages: LayoutPackage[]): string {
+  const code = packages.map((l) => `LAYOUTS[${JSON.stringify(l.meta.id)}] = (function () {\n"use strict";\n${l.js}\nreturn { render: render, own: ${l.meta.ownHeader ? "true" : "false"} };\n})();`).join("\n");
+  const script = SCRIPT_SRC.replace("__LAYOUTS__", () => code).replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
+  // 0.31.0: the layouts' own styles, each scoped under .lay-<id> (layout-check.ts), after the card's. A style
+  // closing tag in a layout's CSS would end the style element, so it is taken out.
+  const layoutCss = ".lay [hidden]{display:none!important}\n.lay svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n" + packages.map((l) => l.css.replace(/<\/style/gi, "")).join("\n");
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${CSS}${layoutCss}</style></head><body><div id="app"></div><script type="module">${script.replace(/<\/script/gi, "<\\/script")}</script></body></html>`;
+}
+const uriOf = (html: string) => `ui://bizplug/plugin-${createHash("sha256").update(html).digest("hex").slice(0, 12)}.html`;
+
+let PLUGIN_HTML = buildCard(LAYOUT_PACKAGES);
+let extraKey = "";
 
 export const pluginWidgetHtml = () => PLUGIN_HTML;
-/** Content-addressed: a changed card gets a new URI, so ChatGPT never shows a stale copy. */
-export const PLUGIN_WIDGET_URI = `ui://bizplug/plugin-${createHash("sha256").update(PLUGIN_HTML).digest("hex").slice(0, 12)}.html`;
+/**
+ * Content-addressed: a changed card gets a new URI, so ChatGPT never shows a stale copy. It changes with a deploy
+ * and when the team adds, changes or switches off a layout (withExtraLayouts); `let`, so importers read the current one.
+ */
+export let PLUGIN_WIDGET_URI = uriOf(PLUGIN_HTML);
 /** Any plug-in card URI ever published; ChatGPT keeps old URIs for hours and they read the current card. */
 export const isPluginWidgetUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.html$/.test(uri);
 
@@ -1843,7 +1857,21 @@ export const isPluginWidgetUri = (uri: unknown): uri is string => typeof uri ===
  * 0.23.0: the same card under its own address for an MCP Apps host (Claude), which reads it as
  * text/html;profile=mcp-app. ChatGPT keeps the address above, so nothing changes there.
  */
-export const PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
+export let PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
+
+/**
+ * Builds the card again with the layouts the team added in /admin/portal (card-layouts-store.ts), when they differ
+ * from the ones it has. Called before the card or its address is used (plugin-mcp.ts serve, /preview/card).
+ */
+export function withExtraLayouts(extra: LayoutPackage[]): void {
+  const key = createHash("sha256").update(JSON.stringify(extra)).digest("hex");
+  if (key === extraKey) return;
+  extraKey = key;
+  const ids = new Set(LAYOUT_PACKAGES.map((l) => l.meta.id));
+  PLUGIN_HTML = buildCard([...LAYOUT_PACKAGES, ...extra.filter((l) => !ids.has(l.meta.id))]);
+  PLUGIN_WIDGET_URI = uriOf(PLUGIN_HTML);
+  PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
+}
 export const isPluginAppUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.app\.html$/.test(uri);
 
 /** tools/list _meta for show_menu: the card it renders in. With `app`, the card for an MCP Apps host. */

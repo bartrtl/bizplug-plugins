@@ -38,6 +38,16 @@ A large Ask or search bar with suggested questions under it, and every option in
 |---|---|
 | <img src="layouts/ask/preview-desktop.png" alt="Ask bar on a computer" width="420"> | <img src="layouts/ask/preview-mobile.png" alt="Ask bar on a phone" width="240"> |
 
+### Christmas
+
+The Tiles menu dressed for the holidays: a string of twinkling lights, gentle snow over your name and banner, a holly sticker, bauble icons and a snowy edge. Motion stops for people who turn it off on their device.
+
+**Suits:** Any business for December: shops, markets, cafés, bakeries, restaurants, hotels and holiday events. Switch back to your usual layout in January. By [BizPlug](https://www.bizplug.ai). Package: [layouts/christmas/](layouts/christmas/).
+
+| Desktop (680 px) | Mobile (390 px) |
+|---|---|
+| <img src="layouts/christmas/preview-desktop.png" alt="Christmas on a computer" width="420"> | <img src="layouts/christmas/preview-mobile.png" alt="Christmas on a phone" width="240"> |
+
 ### Story
 
 A magazine-style page: a cover with your picture, your name and the Start here action, a row of chapters, then each option as a numbered chapter with large artwork, its example question and an Ask this button.
@@ -95,7 +105,7 @@ A layout never runs code of its own in the card: `render` is called again whenev
 
 - `layout.js` starts with `function render(ctx)`, and uses no `document`, `window`, events, timers, `fetch` or other network access, `eval`, imports or template literals. Join strings with `+`.
 - What it returns has no `<script>`, inline event handlers (`onclick=` and the like) or `javascript:` addresses. The card removes them anyway, with forms, frames and styles.
-- `layout.css` scopes every selector under `.lay-<id>`, and uses no `@import`, no `url()` other than `data:` addresses, and no `position: fixed`.
+- `layout.css` scopes every selector under `.lay-<id>`, names every `@keyframes` `lay-<id>-<name>`, and uses no `@import`, no `url()` other than `data:` addresses, and no `position: fixed`.
 - At most 24,000 characters of JavaScript and 16,000 of CSS.
 
 ### Design notes
@@ -103,6 +113,7 @@ A layout never runs code of its own in the card: `render` is called again whenev
 - **Colours.** Use the card's colour tokens, so your layout wears every business's colours and works in dark and light mode: `--a1` and `--a2` (the accents), `--ink` (text on an accent), `--bg`, `--fg` (text), `--muted`, `--card`, `--card2`, `--line`, `--glow`, and `--atext` (an accent colour that stays readable as text in light mode). Colour themes are made separately: see [THEMES.md](THEMES.md).
 - **Icons.** `ctx.icon()` and each option's `icon` are line icons, 20 px, drawn in the text colour; size them with your own CSS.
 - **Size.** The card has 18 px of padding around your layout, and is about 680 px wide on a computer and 360 to 420 px on a phone. It grows with its content and does not scroll inside itself, so a bar fixed to the bottom of the screen or a scroll-linked effect does not work; put a tab bar at the end of your layout, open a panel in place, and keep it short enough for a chat.
+- **Motion.** CSS animations are fine (`@keyframes lay-<id>-<name>`); keep them gentle, and stop them under `@media (prefers-reduced-motion: reduce)`. The card draws your layout again when something changes, so an animation starts over then. [layouts/christmas/](layouts/christmas/) has falling snow, twinkling lights and stickers drawn as `data:` SVG.
 - **Pictures.** The card shows images only from BizPlug's own site, which is where `ctx.business.logo` and `banner` already point. Draw anything else with CSS or SVG.
 - **People.** Make every control a `<button>` or a link, at least 40 px tall to tap, with a visible focus.
 
@@ -114,4 +125,4 @@ A layout never runs code of its own in the card: `render` is called again whenev
 4. `npx tsx layouts/check-layout.ts layouts/<your-id>`.
 5. Propose it with the [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml) form, with a link to your folder. This repository is generated from the BizPlug website on every release, so a pull request here would be overwritten.
 
-We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the issue. Once accepted, it is added to the BizPlug website's source with you as its author: it appears here, on https://bizplug.ai/layouts and in every business's portal with the next release.
+We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the issue. Once accepted, the BizPlug team adds it in BizPlug's admin with you as its author: it is checked again there, and it appears on https://bizplug.ai/layouts and in every business's portal within a few minutes, with no release. The layouts listed above are the ones that come with the website; [https://bizplug.ai/layouts](https://bizplug.ai/layouts) lists every layout on offer.

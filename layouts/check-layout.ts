@@ -5,7 +5,7 @@
  *
  * A layout package is a folder `layouts/<id>/` with:
  * - layout.json: { id, name, author: { name, url? }, summary, suits, ownHeader? }
- * - layout.css: styles, every selector scoped under `.lay-<id>`
+ * - layout.css: styles, every selector scoped under `.lay-<id>`, and every @keyframes named `lay-<id>-<name>`
  * - layout.js: `function render(ctx) { ... return html; }`: a pure function from the card's data to an HTML string
  *
  * A layout never runs code of its own in the card: no events, timers, network or page access. It interacts through
@@ -31,7 +31,7 @@ const FORBIDDEN_JS: [RegExp, string][] = [
 ];
 const FORBIDDEN_CSS: [RegExp, string][] = [
   [/@import/i, "@import"],
-  [/url\(\s*['"]?(?!data:)/i, "a url() that is not a data: address"],
+  [/url\(\s*(?!['"]?data:)/i, "a url() that is not a data: address"],
   [/expression\s*\(/i, "expression()"],
   [/behavior\s*:/i, "behavior:"],
   [/(^|[;{\s])position\s*:\s*fixed/i, "position: fixed (the card grows with its content; there is no screen to fix to)"],
@@ -71,7 +71,13 @@ export function layoutProblems(dir: string, metaText: string, css: string, js: s
   for (const [re, what] of FORBIDDEN_CSS) if (re.test(css)) out.push(`layout.css uses ${what}, which a layout may not.`);
   // Every rule must be scoped to the layout, so a layout cannot restyle the rest of the card.
   const scope = `.lay-${meta.id}`;
-  const body = css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/@(media|supports|container)[^{]*\{/g, "");
+  // CSS animations: each @keyframes is named lay-<id>-<name>, so a layout cannot replace the card's own
+  // animations or another layout's. Their from/to/% steps are not selectors.
+  const bare = css.replace(/\/\*[\s\S]*?\*\//g, "");
+  const frames = [...bare.matchAll(/@(?:-webkit-)?keyframes\s+([^\s{]+)\s*\{/g)].map((m) => m[1]);
+  const loneFrames = frames.filter((n) => !n.startsWith(`lay-${meta!.id}-`));
+  if (loneFrames.length) out.push(`layout.css: every @keyframes name must start with lay-${meta.id}-; not: ${[...new Set(loneFrames)].slice(0, 5).join(" | ")}`);
+  const body = bare.replace(/@(media|supports|container)[^{]*\{/g, "").replace(/@(?:-webkit-)?keyframes\s+[^\s{]+\s*\{/g, "{");
   const selectors = [...body.matchAll(/([^{}@]+)\{/g)].map((m) => m[1].trim()).filter((s) => s && !/^(from|to|\d+%)$/.test(s) && !s.startsWith("@"));
   const loose = selectors.flatMap((s) => s.split(",").map((x) => x.trim())).filter((x) => x && !x.startsWith(scope) && !/^(from|to|\d+%)$/.test(x));
   if (loose.length) out.push(`layout.css: every selector must start with ${scope}; not: ${[...new Set(loose)].slice(0, 5).join(" | ")}`);
