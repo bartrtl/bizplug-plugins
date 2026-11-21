@@ -6,6 +6,7 @@
 //   appt  : find open slots, request an appointment, check status
 //   quote : get a price estimate from published rules, request a quote or visit, check status
 //   track : look up a reference, submit a request, check status
+import { isPreviewSlug, previewFunctions } from "@/lib/preview-registry";
 export type Engine = "order" | "stay" | "appt" | "quote" | "track";
 export type Span = "nights" | "days" | "single";
 
@@ -144,4 +145,4 @@ export const industryFunctions: IndustryFunction[] = [
 ];
 
 export const functionBySlug = new Map(industryFunctions.map((f) => [f.slug, f]));
-export const getFunction = (slug: string) => functionBySlug.get(slug);
+export const getFunction = (slug: string) => functionBySlug.get(slug) ?? (isPreviewSlug(slug) ? previewFunctions.get(slug) : undefined);

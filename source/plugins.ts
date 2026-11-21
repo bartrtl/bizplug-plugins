@@ -1,6 +1,7 @@
 // Per-industry plug-in definitions, derived from industries.ts.
 // Modelled on the VisitPass ChatGPT plug-in package: plugin.json + mcp.json per plug-in.
 // `pnpm plugins:build` writes plugins/<slug>/{plugin.json,mcp.json}; CI fails if they drift.
+import { isPreviewSlug, previewPlugins } from "@/lib/preview-registry";
 import { industries, type Industry } from "@/lib/industries";
 import { getFunction, type Engine, type IndustryFunction, type Span } from "@/lib/industry-functions";
 import { pricing } from "@/lib/pricing";
@@ -344,7 +345,7 @@ export const plugins: IndustryPlugin[] = industries.map(buildPlugin);
 export const currentMenu = (p: IndustryPlugin) => p.menu.filter((o) => o.only !== "legacy" && o.only !== "show" && !o.hidden);
 
 export function getPlugin(slug: string) {
-  return plugins.find((p) => p.slug === slug);
+  return plugins.find((p) => p.slug === slug) ?? (isPreviewSlug(slug) ? previewPlugins.get(slug) : undefined);
 }
 
 /** Who publishes the plug-in packages, as each package's `author`. */
