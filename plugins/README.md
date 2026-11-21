@@ -1,6 +1,6 @@
 # Plug-in packages
 
-BizPlug's plug-ins, one folder each: the 81 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in). To propose a new industry, see [INDUSTRIES.md](../INDUSTRIES.md).
+BizPlug's plug-ins, one folder each: the 82 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in). To propose a new industry, see [INDUSTRIES.md](../INDUSTRIES.md).
 
 ## What is in a package
 
@@ -55,6 +55,7 @@ To try a plug-in first, add its MCP server URL as a connector in ChatGPT develop
 | [`furniture/`](furniture) | Furniture & Home Goods: Browse pieces and request an order | `https://mcp.bizplug.ai/plugin/furniture` |
 | [`beauty-ecommerce/`](beauty-ecommerce) | Beauty E-commerce: Shop products and place an order | `https://mcp.bizplug.ai/plugin/beauty-ecommerce` |
 | [`subscriptions/`](subscriptions) | Subscription Boxes: Choose a box and start a subscription request | `https://mcp.bizplug.ai/plugin/subscriptions` |
+| [`florists/`](florists) | Florists & Flower Delivery: Bouquets for pickup or delivery | `https://mcp.bizplug.ai/plugin/florists` |
 | [`convenience-stores/`](convenience-stores) | Convenience & C-Stores: Reserve items for quick pickup | `https://mcp.bizplug.ai/plugin/convenience-stores` |
 
 ### Property & auto

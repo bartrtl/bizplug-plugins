@@ -1,6 +1,6 @@
 # Industry plug-ins
 
-BizPlug has a standard plug-in for each of 81 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
+BizPlug has a standard plug-in for each of 82 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
 
 This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is proposed with an issue, never a pull request: the packages in `plugins/` are generated from the BizPlug website, so a pull request that adds one would be overwritten by the next update.
 
@@ -35,7 +35,7 @@ Browse a catalog with prices, send a pickup or delivery order, check its status.
 
 - Tools, as Restaurants & Food Service names them: `browse_menu` (Browse and prices), `place_order` (Place the order), `get_order_status` (Order status). The tool names differ from industry to industry.
 - Data the engine adds: `catalog.csv` (required).
-- 13 industries: Restaurants & Food Service, Coffee Shops & Cafes, Food Delivery, Ghost & Cloud Kitchens, Meal Kits & Subscriptions, Grocery & Supermarkets, Convenience & C-Stores, Retail & E-commerce, Fashion & Apparel, Electronics & Gadgets, Furniture & Home Goods, Beauty E-commerce, Subscription Boxes.
+- 14 industries: Restaurants & Food Service, Coffee Shops & Cafes, Florists & Flower Delivery, Food Delivery, Ghost & Cloud Kitchens, Meal Kits & Subscriptions, Grocery & Supermarkets, Convenience & C-Stores, Retail & E-commerce, Fashion & Apparel, Electronics & Gadgets, Furniture & Home Goods, Beauty E-commerce, Subscription Boxes.
 
 ### `stay`
 
@@ -86,7 +86,7 @@ A few industries switch on an option that adds tools, menu options and data file
 | `visits` | The business may publish its locations, with tours and day passes. The business confirms each one. | `get_visit_options`, `book_tour`, `request_day_pass` | `locations.csv` | Coworking & Offices |
 | `show` | A show or conference that published its programme gets an event guide (agenda, speakers, exhibitors and sponsors, enquiries) instead of the venue's menu. | `get_agenda`, `find_speakers`, `find_exhibitors`, `send_event_enquiry` | `sessions.csv`, `speakers.csv`, `exhibitors.csv`, `sponsors.csv` | Events & Conferences |
 
-24 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
+25 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
 
 ### Groups
 
@@ -95,7 +95,7 @@ The website groups the industries like this:
 | Group | Industries | For example |
 | --- | --- | --- |
 | Business essentials | 6 | Events & Conferences, Hospitality & Hotels, Marketing Agencies, Nonprofits & Charities, ... |
-| Retail & food | 15 | Retail & E-commerce, Restaurants & Food Service, Coffee Shops & Cafes, Bars & Nightlife, ... |
+| Retail & food | 16 | Retail & E-commerce, Restaurants & Food Service, Coffee Shops & Cafes, Bars & Nightlife, ... |
 | Property & auto | 3 | Real Estate, Local & Home Services, Automotive & Dealerships |
 | Health & wellness | 13 | Healthcare & Clinics, Fitness & Gyms, Beauty & Salons, Dental Practices, ... |
 | Community & public | 13 | Education & Schools, Logistics & Delivery, Government & Public Sector, Utilities & Energy, ... |
@@ -103,11 +103,11 @@ The website groups the industries like this:
 | Finance & B2B | 12 | Financial Services & Banking, Insurance, Legal Services, Lending & Mortgages, ... |
 | Home & trades | 9 | HVAC & Heating/Cooling, Plumbing, Electricians, Cleaning Services, ... |
 
-Added since the first 80: Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
+Added since the first 80: Florists & Flower Delivery (`florists`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
 
 ## Propose a new industry
 
-1. Check that the industry is not already here: see the tables in the [README](README.md#the-81-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
+1. Check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
 2. Open the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form and fill it in.
 3. The BizPlug team replies in the issue, and may ask questions there.
 

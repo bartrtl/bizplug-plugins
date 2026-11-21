@@ -53,6 +53,7 @@ export const industryFunctions: IndustryFunction[] = [
   // Food and retail: order engine
   r("restaurants", "order", "Order ahead and takeaway", ["browse_menu", "place_order", "get_order_status"], "menu item"),
   r("coffee-shops", "order", "Mobile order-ahead for pickup", ["get_menu", "place_pickup_order", "get_order_status"], "drink or snack"),
+  r("florists", "order", "Bouquets for pickup or delivery", ["browse_bouquets", "order_flowers", "get_flower_order_status"], "bouquet", { note: "Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value." }),
   r("food-delivery", "order", "Delivery orders", ["browse_menu", "place_delivery_order", "get_delivery_status"], "menu item"),
   r("ghost-kitchens", "order", "Order from a cloud-kitchen brand", ["browse_brand_menus", "place_order", "get_order_status"], "dish"),
   r("meal-kits", "order", "Pick a plan and order a weekly box", ["list_plans_and_meals", "request_box_order", "get_box_status"], "meal plan or kit"),

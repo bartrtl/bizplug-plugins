@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-florists",
+  "version": "0.36.0",
+  "description": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "homepage": "https://bizplug.ai/industries/florists",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Florists & Flower Delivery",
+        "shortDescription": "Bouquets for pickup or delivery for florists & flower delivery businesses.",
+        "longDescription": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Bouquets for pickup or delivery",
+          "Can you deliver white roses downtown tomorrow morning, and what does it cost?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/florists",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Bouquets for pickup or delivery",
+            "expect": "Calls browse_bouquets and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Can you deliver white roses downtown tomorrow morning, and what does it cost?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls order_flowers only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

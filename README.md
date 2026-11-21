@@ -4,7 +4,7 @@
 
 Published by **Bart Cant - msg2ai**.
 
-The standard BizPlug plug-in for each of 81 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
+The standard BizPlug plug-in for each of 82 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
 
 This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
@@ -113,7 +113,7 @@ Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/
 
 ## Version 0.36.0
 
-All 81 plug-ins share one version. What changed in each:
+All 82 plug-ins share one version. What changed in each:
 
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
@@ -168,7 +168,7 @@ The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on h
 | [gener8tor Charlotte Startups for Investors](plugins/gener8tor-charlotte) | Startup directory | 2026-11-15 | Find the gBETA Charlotte startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/gener8tor-charlotte` |
 | [Web Summit Qatar Startups for Investors](plugins/websummit-qatar) | Startup directory | 2026-11-14 | Find Web Summit Qatar 2026 startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/websummit-qatar` |
 
-## The 81 industry plug-ins
+## The 82 industry plug-ins
 
 The standard plug-in of each industry, as on https://bizplug.ai/plugins/industries. A business gets its own copy, built from its profile.
 
@@ -201,6 +201,7 @@ The standard plug-in of each industry, as on https://bizplug.ai/plugins/industri
 | [Furniture & Home Goods](plugins/furniture) | Browse pieces and request an order | `https://mcp.bizplug.ai/plugin/furniture` |
 | [Beauty E-commerce](plugins/beauty-ecommerce) | Shop products and place an order | `https://mcp.bizplug.ai/plugin/beauty-ecommerce` |
 | [Subscription Boxes](plugins/subscriptions) | Choose a box and start a subscription request | `https://mcp.bizplug.ai/plugin/subscriptions` |
+| [Florists & Flower Delivery](plugins/florists) | Bouquets for pickup or delivery | `https://mcp.bizplug.ai/plugin/florists` |
 | [Convenience & C-Stores](plugins/convenience-stores) | Reserve items for quick pickup | `https://mcp.bizplug.ai/plugin/convenience-stores` |
 
 ### Property & auto
