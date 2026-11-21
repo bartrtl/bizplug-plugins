@@ -1930,7 +1930,7 @@ let extraKey = "";
 export const pluginWidgetHtml = () => PLUGIN_HTML;
 /**
  * Content-addressed: a changed card gets a new URI, so ChatGPT never shows a stale copy. It changes with a deploy
- * and when the team adds, changes or switches off a layout (withExtraLayouts); `let`, so importers read the current one.
+ * and when the layouts in use change (withLayouts); `let`, so importers read the current one.
  */
 export let PLUGIN_WIDGET_URI = uriOf(PLUGIN_HTML);
 /** Any plug-in card URI ever published; ChatGPT keeps old URIs for hours and they read the current card. */
@@ -1943,17 +1943,31 @@ export const isPluginWidgetUri = (uri: unknown): uri is string => typeof uri ===
 export let PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
 
 /**
- * Builds the card again with the layouts the team added in /admin/portal (card-layouts-store.ts), when they differ
- * from the ones it has. Called before the card or its address is used (plugin-mcp.ts serve, /preview/card).
+ * Builds the card again with exactly these layout packages, when they differ from the ones it has: the layouts at
+ * least one business has selected (card-layouts-store.ts, `cardPackages`). A layout nobody selected is only a
+ * listing; its code is not in the card. Called before the card or its address is used (plugin-mcp.ts serve).
+ * Until the first call the card carries every built-in layout, so nothing depends on the call having happened.
  */
-export function withExtraLayouts(extra: LayoutPackage[]): void {
-  const key = createHash("sha256").update(JSON.stringify(extra)).digest("hex");
+export function withLayouts(packages: LayoutPackage[]): void {
+  const key = createHash("sha256").update(JSON.stringify(packages)).digest("hex");
   if (key === extraKey) return;
   extraKey = key;
-  const ids = new Set(LAYOUT_PACKAGES.map((l) => l.meta.id));
-  PLUGIN_HTML = buildCard([...LAYOUT_PACKAGES, ...extra.filter((l) => !ids.has(l.meta.id))]);
+  PLUGIN_HTML = buildCard(uniquePackages(packages));
   PLUGIN_WIDGET_URI = uriOf(PLUGIN_HTML);
   PLUGIN_APP_URI = PLUGIN_WIDGET_URI.replace(/\.html$/, ".app.html");
+}
+const uniquePackages = (packages: LayoutPackage[]) => packages.filter((l, i) => packages.findIndex((x) => x.meta.id === l.meta.id) === i);
+
+let oneOff: { key: string; html: string } | null = null;
+/**
+ * The card with these packages, without changing the card plug-ins serve: for /preview/card, which draws a layout
+ * that may not be in the card yet because nobody selected it. The last one built is kept.
+ */
+export function cardHtmlWith(packages: LayoutPackage[]): string {
+  const key = createHash("sha256").update(JSON.stringify(packages)).digest("hex");
+  if (key === extraKey) return PLUGIN_HTML;
+  if (oneOff?.key !== key) oneOff = { key, html: buildCard(uniquePackages(packages)) };
+  return oneOff.html;
 }
 export const isPluginAppUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.app\.html$/.test(uri);
 
