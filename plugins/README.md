@@ -1,6 +1,6 @@
 # Plug-in packages
 
-BizPlug's plug-ins, one folder each: the 81 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in).
+BizPlug's plug-ins, one folder each: the 81 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in). To propose a new industry, see [INDUSTRIES.md](../INDUSTRIES.md).
 
 ## What is in a package
 

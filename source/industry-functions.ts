@@ -9,6 +9,21 @@
 export type Engine = "order" | "stay" | "appt" | "quote" | "track";
 export type Span = "nights" | "days" | "single";
 
+/** The five engines in plain words, as the public INDUSTRIES.md lists them (scripts/plugins-industries-page.ts). */
+export const ENGINES: Record<Engine, string> = {
+  order: "Browse a catalog with prices, send a pickup or delivery order, check its status.",
+  stay: "Check what is free for dates and party size with the total price, send a booking request, check its status.",
+  appt: "Find open times on a day, request an appointment, check its status.",
+  quote: "Work out an estimate from published price rules, request a quote or a visit, check its status.",
+  track: "Look up a reference the customer already has, send a new request, check its status.",
+};
+/** How a stay-engine industry is booked. */
+export const SPANS: Record<Span, string> = {
+  nights: "by the night",
+  days: "by the day, first and last day both counted",
+  single: "for one date",
+};
+
 export type IndustryFunction = {
   slug: string;
   engine: Engine;

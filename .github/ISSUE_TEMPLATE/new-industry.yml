@@ -1,0 +1,104 @@
+name: Propose a new industry
+description: A new industry plug-in for BizPlug, generated for every business in that industry
+title: "New industry: "
+labels: ["new industry"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md) first, and check that the industry is not one of the 81 already there. Issues are public: no customers' personal data, passwords or other secrets.
+  - type: input
+    id: name
+    attributes:
+      label: Industry name
+      description: As businesses would look for it.
+      placeholder: Bicycle shops & repair
+    validations:
+      required: true
+  - type: dropdown
+    id: group
+    attributes:
+      label: Group
+      options:
+        - "Business essentials"
+        - "Retail & food"
+        - "Property & auto"
+        - "Health & wellness"
+        - "Community & public"
+        - "Travel & leisure"
+        - "Finance & B2B"
+        - "Home & trades"
+    validations:
+      required: true
+  - type: dropdown
+    id: engine
+    attributes:
+      label: Engine
+      description: The engine that fits what customers mainly want to do. See INDUSTRIES.md for each one.
+      options:
+        - "order: Browse a catalog with prices, send a pickup or delivery order, check its status."
+        - "stay: Check what is free for dates and party size with the total price, send a booking request, check its status."
+        - "appt: Find open times on a day, request an appointment, check its status."
+        - "quote: Work out an estimate from published price rules, request a quote or a visit, check its status."
+        - "track: Look up a reference the customer already has, send a new request, check its status."
+        - "Not sure"
+    validations:
+      required: true
+  - type: input
+    id: noun
+    attributes:
+      label: What is booked, ordered or requested
+      description: One short noun.
+      placeholder: repair service
+    validations:
+      required: true
+  - type: input
+    id: ask
+    attributes:
+      label: A sample customer question
+      placeholder: Can you fix a flat tyre today, and what does it cost?
+    validations:
+      required: true
+  - type: textarea
+    id: covers
+    attributes:
+      label: What customers ask about
+      description: The topics the plug-in should answer from the business's own profile.
+      placeholder: services and prices, opening hours, rentals, repairs
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: The three steps
+      description: The look-up, the request and the status check, in customer words.
+      placeholder: |
+        Look-up: see repair times on a day
+        Request: book a repair
+        Status: check the repair with its reference
+    validations:
+      required: true
+  - type: textarea
+    id: rules
+    attributes:
+      label: Rules
+      description: Anything the plug-in must never do or say in this industry (optional).
+  - type: textarea
+    id: who
+    attributes:
+      label: Who would use it
+      description: Kinds of businesses, or a business you know (optional).
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything no engine does
+      description: If the industry needs something none of the engines does, describe it (optional).
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before you send it
+      options:
+        - label: I checked that this industry is not already in INDUSTRIES.md or the README.
+          required: true
+        - label: BizPlug may use this proposal to build and publish an industry plug-in here.
+          required: true

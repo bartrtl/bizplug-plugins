@@ -13,6 +13,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Contact: info@bizplug.ai
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Industry plug-ins, and how to propose a new industry: [INDUSTRIES.md](INDUSTRIES.md)
 - Card themes, and how to propose one: [THEMES.md](THEMES.md)
 - Menu layouts, with desktop and mobile pictures, and how to code one: [LAYOUTS.md](LAYOUTS.md)
 - Contribute a plug-in, a theme or a layout: [Contribute](#contribute-plug-ins-themes-and-layouts)
@@ -23,6 +24,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 README.md            this page: what is here, every plug-in, and how to contribute
 SETUP.md             set up, configure and test a plug-in
 CONTRIBUTING.md      what a valid plug-in contains, and how to contribute one
+INDUSTRIES.md        what an industry plug-in is made of, and how to propose a new industry
 THEMES.md            the card's colour themes, and how to add one
 LAYOUTS.md           the card's menu layouts, with pictures, and how to build one
 plugins/             BizPlug's plug-in packages, one folder each (plugins/README.md)
@@ -35,7 +37,7 @@ source/              the files the packages are generated from, copied from the 
 assets/              the publisher's logo
 .github/
   pull_request_template.md   the checklist every pull request starts with
-  ISSUE_TEMPLATE/            forms to propose a theme or a layout without a pull request
+  ISSUE_TEMPLATE/            forms to propose a new industry, or a theme or a layout without a pull request
   workflows/                 the checks that run on pull requests
 ```
 
@@ -101,6 +103,8 @@ The **Check contributions** and **Check card themes** workflows run the checks o
 4. Open a pull request against `main`. Its description starts with a checklist ([`.github/pull_request_template.md`](.github/pull_request_template.md)): keep the part for your kind of contribution, paste the check's output, and add a screenshot.
 5. The checks run on the pull request, and the BizPlug team reviews it: on real cards, in dark and light mode, for a theme or a layout, and in ChatGPT for a plug-in. Changes are asked for in the pull request.
 6. Once approved, it is merged into `main` and stays in this repository, credited to you, through every release.
+
+A new **industry plug-in** is not a pull request: propose it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form ([INDUSTRIES.md](INDUSTRIES.md)), and the team adds it to the generated packages.
 
 Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
