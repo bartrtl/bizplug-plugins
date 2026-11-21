@@ -1,0 +1,39 @@
+name: Check contributions
+
+on:
+  pull_request:
+    paths: ["community/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check every contributed plug-in and layout the pull request adds or changes
+        run: |
+          base="origin/${{ github.base_ref }}"
+          other=$(git diff --name-only "$base...HEAD" | grep -v '^community/' || true)
+          if [ -n "$other" ]; then echo "A contribution changes only files in community/ (themes go in a pull request of their own). Also changed:"; echo "$other"; exit 1; fi
+          if git diff --name-only "$base...HEAD" | grep -q '^community/README.md$'; then echo "community/README.md is generated: leave it out."; exit 1; fi
+          fail=0
+          for d in $(git diff --name-only --diff-filter=AM "$base...HEAD" -- 'community/layouts/*' | cut -d/ -f1-3 | sort -u); do
+            [ -d "$d" ] || continue
+            echo "Layout $d"; npx --yes tsx layouts/check-layout.ts "$d" || fail=1
+          done
+          for d in $(git diff --name-only --diff-filter=AM "$base...HEAD" -- 'community/plugins/*' | cut -d/ -f1-3 | sort -u); do
+            [ -d "$d" ] || continue
+            echo "Plug-in $d"
+            for f in plugin.json mcp.json README.md; do [ -f "$d/$f" ] || { echo "  missing $f"; fail=1; }; done
+            for f in plugin.json mcp.json; do [ -f "$d/$f" ] && { node -e "JSON.parse(require('fs').readFileSync('$d/$f','utf8'))" || { echo "  $f is not valid JSON"; fail=1; }; }; done
+            if find "$d" -name '.env*' -o -name '*.pem' -o -name '*.key' | grep -q .; then echo "  remove secret files (.env, .pem, .key)"; fail=1; fi
+            if grep -rIlE '(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)' "$d"; then echo "  the files above look like they hold a secret"; fail=1; fi
+          done
+          exit $fail

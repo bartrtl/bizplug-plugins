@@ -65,6 +65,6 @@ Theme files are the one part of this repository you change directly: add your th
 
 Not on GitHub, or prefer not to open a pull request? Use the [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml) form instead, with the JSON and the check's output, and the team adds the file for you.
 
-Everything else in this repository is generated from the BizPlug website, so a pull request that changes anything outside `themes/<id>.json` would be overwritten.
+Everything else in this repository is generated from the BizPlug website, so a theme's pull request changes nothing outside `themes/<id>.json`. Plug-ins and menu layouts are contributed by pull request too, in `community/`: see [Contribute](README.md#contribute-plug-ins-themes-and-layouts).
 
 Questions: info@bizplug.ai.

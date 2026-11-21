@@ -2,23 +2,26 @@
 
 BizPlug lists plug-ins (MCP servers) that work next to the BizPlug industry plug-ins in ChatGPT. This page explains how to submit one and what it must contain to be valid. It is generated with the rest of the repository, so please do not edit it by hand.
 
-## How to submit
+## How to contribute
 
-This repository is generated from the BizPlug website on every release, so a pull request that adds a folder under `plugins/` would be overwritten. Submit through the website instead:
+Add your plug-in to this repository with a pull request:
 
 1. Build your plug-in with the components below, and check it in ChatGPT developer mode (see [SETUP.md](SETUP.md#setup)).
-2. Fill in the submission form at https://bizplug.ai/marketplace#submit: the tool's name and website, your MCP server URL or repository, whether you host it or BizPlug should, the industries it is for, and what it does.
-3. We review the tools, descriptions and data handling with you, and agree the terms of the listing before anything goes live.
-4. Once accepted, your plug-in is either hosted by BizPlug or connected from your own endpoint, so it works next to the industry plug-ins.
+2. Fork this repository and add your package as `community/plugins/<name>/`, with the layout below. Do not add it under `plugins/`: that folder is generated from the BizPlug website on every release, while `community/` is kept as you wrote it.
+3. Open a pull request against `main` that adds only that folder, and fill in its checklist: who hosts the server, your website and contact, and a screenshot in ChatGPT. The **Check contributions** workflow checks that the package has its files, valid JSON and no secrets.
+4. We review the tools, descriptions, test cases and data handling in the pull request, and merge it once approved. It then stays in this repository, credited to you.
+5. To be listed in the BizPlug marketplace as well, tick that box in the checklist: we agree the terms of the listing with you before anything goes live, and your plug-in is either hosted by BizPlug or connected from your own endpoint.
+
+Not on GitHub? Fill in the submission form at https://bizplug.ai/marketplace#submit instead: the tool's name and website, your MCP server URL or repository, whether you host it or BizPlug should, the industries it is for, and what it does.
 
 Questions: info@bizplug.ai.
 
 ## What a valid plug-in contains
 
-A plug-in is a folder with the same layout as the packages in `plugins/`. Use [`plugins/coffee-shops`](plugins/coffee-shops) as a working example.
+A plug-in is a folder in `community/plugins/` with the same layout as the packages in `plugins/`. Use [`plugins/coffee-shops`](plugins/coffee-shops) as a working example.
 
 ```
-<your-plugin>/
+community/plugins/<name>/
   plugin.json        required: who it is from, what it does, and how it is reviewed
   mcp.json           required: where the MCP server lives and how it authenticates
   README.md          required: what the plug-in does and each of its tools

@@ -19,7 +19,7 @@ Layouts are open source. This page is also how to build one.
 
 ## Build a layout
 
-A layout is a folder `layouts/<id>/`:
+A layout is a folder: `community/layouts/<id>/` for yours, `layouts/<id>/` for the ones that come with the website:
 
 | File | What it holds |
 |---|---|
@@ -75,12 +75,12 @@ A layout never runs code of its own in the card: `render` is called again whenev
 - **Pictures.** The card shows images only from BizPlug's own site, which is where `ctx.business.logo` and `banner` already point. Draw anything else with CSS or SVG.
 - **People.** Make every control a `<button>` or a link, at least 40 px tall to tap, with a visible focus.
 
-### Try it and propose it
+### Try it and contribute it
 
-1. Copy `layouts/_template/` to `layouts/<your-id>/`, and set the same `id` in `layout.json` and in every `.lay-<id>` selector.
-2. `npx tsx layouts/preview.ts layouts/<your-id>` writes an HTML page per sample business and mode: open them and resize the window to 680 and 390 px. It uses this repository's copy of the card (`layouts/card.html`) and the sample businesses in `layouts/samples/`.
+1. Copy `layouts/_template/` to `community/layouts/<your-id>/`, and set the same `id` in `layout.json` and in every `.lay-<id>` selector. The rest of `layouts/` is generated from the BizPlug website on every release; `community/` is kept as you wrote it.
+2. `npx tsx layouts/preview.ts community/layouts/<your-id>` writes an HTML page per sample business and mode: open them and resize the window to 680 and 390 px. It uses this repository's copy of the card (`layouts/card.html`) and the sample businesses in `layouts/samples/`.
 3. Take the two preview pictures: the sample hotel at 680 px in dark mode (`preview-desktop.png`) and the sample café at 390 px (`preview-mobile.png`).
-4. `npx tsx layouts/check-layout.ts layouts/<your-id>`.
-5. Propose it with the [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml) form, with a link to your folder. This repository is generated from the BizPlug website on every release, so a pull request here would be overwritten.
+4. `npx tsx layouts/check-layout.ts community/layouts/<your-id>`.
+5. Open a pull request against `main` that adds only `community/layouts/<your-id>/`, and fill in its checklist with the check's output. The **Check contributions** workflow runs the same check. Not on GitHub? Use the [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml) form instead, with a link to your folder.
 
-We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the issue. Once accepted, the BizPlug team adds it in BizPlug's admin with you as its author: it is checked again there, and it appears on https://bizplug.ai/layouts and in every business's portal within a few minutes, with no release. The layouts listed above are the ones that come with the website; [https://bizplug.ai/layouts](https://bizplug.ai/layouts) lists every layout on offer.
+We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the pull request. Once approved, it is merged and stays in this repository, credited to you. To offer it to businesses, the BizPlug team adds it in BizPlug's admin with you as its author: it is checked again there, and appears on https://bizplug.ai/layouts and in every business's portal within a few minutes, with no release. The layouts listed above are the ones that come with the website; [https://bizplug.ai/layouts](https://bizplug.ai/layouts) lists every layout on offer.

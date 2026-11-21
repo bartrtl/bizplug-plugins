@@ -15,6 +15,29 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Card themes, and how to propose one: [THEMES.md](THEMES.md)
 - Menu layouts, with desktop and mobile pictures, and how to code one: [LAYOUTS.md](LAYOUTS.md)
+- Contribute a plug-in, a theme or a layout: [Contribute](#contribute-plug-ins-themes-and-layouts)
+
+## Repository layout
+
+```
+README.md            this page: what is here, every plug-in, and how to contribute
+SETUP.md             set up, configure and test a plug-in
+CONTRIBUTING.md      what a valid plug-in contains, and how to contribute one
+THEMES.md            the card's colour themes, and how to add one
+LAYOUTS.md           the card's menu layouts, with pictures, and how to build one
+plugins/             BizPlug's plug-in packages, one folder each (plugins/README.md)
+themes/              one JSON file per card theme, and check-theme.ts (themes/README.md)
+layouts/             BizPlug's menu layouts, the template, check-layout.ts, preview.ts and sample businesses
+community/           what collaborators contributed (community/README.md)
+  plugins/<name>/      a contributed plug-in package
+  layouts/<id>/        a contributed menu layout
+source/              the files the packages are generated from, copied from the BizPlug website (read only)
+assets/              the publisher's logo
+.github/
+  pull_request_template.md   the checklist every pull request starts with
+  ISSUE_TEMPLATE/            forms to propose a theme or a layout without a pull request
+  workflows/                 the checks that run on pull requests
+```
 
 ## What is in a package
 
@@ -58,9 +81,28 @@ An industry URL serves every business in that industry, so the assistant asks wh
 
 Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
 
-## Submit a plug-in
+## Contribute: plug-ins, themes and layouts
 
-Plug-ins from other companies can be listed in the BizPlug marketplace next to the industry plug-ins. Do not open a pull request here: this repository is generated, so submit through https://bizplug.ai/marketplace#submit. [CONTRIBUTING.md](CONTRIBUTING.md) explains the process and the components a valid plug-in must have: an MCP server over streamable HTTP, `plugin.json`, `mcp.json`, a README, review test cases, and a privacy policy and terms.
+Collaborators can add three kinds of work to this repository with a pull request:
+
+| What | Add in your pull request | Check before you open it | Once merged |
+| --- | --- | --- | --- |
+| A **card theme** (five colours) | `themes/<id>.json` ([themes/README.md](themes/README.md), [THEMES.md](THEMES.md)) | `npx tsx themes/check-theme.ts themes/<id>.json` | Offered to every business in the BizPlug portal within about ten minutes |
+| A **menu layout** (how the card's menu is drawn) | `community/layouts/<id>/` ([LAYOUTS.md](LAYOUTS.md)) | `npx tsx layouts/check-layout.ts community/layouts/<id>` | In this repository for anyone to use; offered in the portal once the team adds it in BizPlug's admin with you as its author |
+| A **plug-in** (an MCP server of your own) | `community/plugins/<name>/` ([CONTRIBUTING.md](CONTRIBUTING.md)) | It works in ChatGPT developer mode ([SETUP.md](SETUP.md#setup)) | In this repository for anyone to use; listed in the BizPlug marketplace once its listing is agreed with you |
+
+The **Check contributions** and **Check card themes** workflows run the checks on every pull request.
+
+### How to open a pull request
+
+1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch, for example `theme/harbour`, `layout/magazine` or `plugin/acme-bookings`.
+2. Add only the files of your contribution, in the folder the table names. Everything else is generated from the BizPlug website on every release (the packages in `plugins/`, `layouts/`, `source/` and the pages at the top), so a change there would be overwritten; the checks fail a pull request that changes it.
+3. Run the check for your kind of contribution and fix what it reports.
+4. Open a pull request against `main`. Its description starts with a checklist ([`.github/pull_request_template.md`](.github/pull_request_template.md)): keep the part for your kind of contribution, paste the check's output, and add a screenshot.
+5. The checks run on the pull request, and the BizPlug team reviews it: on real cards, in dark and light mode, for a theme or a layout, and in ChatGPT for a plug-in. Changes are asked for in the pull request.
+6. Once approved, it is merged into `main` and stays in this repository, credited to you, through every release.
+
+Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
 ## Version 0.34.0
 
