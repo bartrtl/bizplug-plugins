@@ -336,12 +336,16 @@ function mcpHost(init) {
     theme: ctx.theme === "light" ? "light" : "dark",
     sendFollowUpMessage: (o) => quiet(request("ui/message", { role: "user", content: [{ type: "text", text: String((o && o.prompt) || "").slice(0, 8000) }] })),
     notifyIntrinsicHeight: tellHeight,
+    // Who the customer is talking to, for the card's own words ("Ask Claude for more").
+    assistant: /claude/i.test(String((init && init.hostInfo && init.hostInfo.name) || "")) ? "Claude" : "the assistant",
   };
   // Without these the card falls back to the chat (tools) and to a plain new tab (links).
   if (caps.serverTools) host.callTool = (name, args) => request("tools/call", { name, arguments: args || {} });
   if (caps.openLinks) host.openExternal = (o) => quiet(request("ui/open-link", { url: o.href }));
   return host;
 }
+// The assistant the card runs in, by name where the host says it: ChatGPT, Claude, or "the assistant".
+const AI = () => (window.openai ? "ChatGPT" : (mcp && mcp.assistant) || "the assistant");
 // Views: menu, form (one option's inputs), asked (what went to the chat), and from 0.3.0 the results:
 // catalog, availability, slots, estimate, status, contact, request (details before sending), sent, whatsapp.
 const state = { plugin: null, options: [], view: "loading", open: null, data: {}, f: {}, cart: {}, pick: null, business: "", busy: false, error: "", asked: "",
@@ -1034,7 +1038,7 @@ function memberView() {
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
       (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask ChatGPT what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>" +
     (more && state.fly === state.sel ? memberFly(m) : "");
 }
@@ -1056,8 +1060,8 @@ function companyFly(m, biz, sub, badge, listName) {
     ((m.highlights || []).length ? '<div class="qlabel" style="margin-top:12px">Highlights</div><ul class="hl">' + m.highlights.map((h) => "<li>" + esc(h) + "</li>").join("") + "</ul>" : "") +
     (m.address ? '<div class="qlabel" style="margin-top:12px">Address</div><div class="bl" style="margin-top:3px">' + esc(m.address) + "</div>" : "") +
     (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
-    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ChatGPT for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" +
-    '<div class="note">Ask ChatGPT for more continues in the chat, where ChatGPT may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div></div></div>";
+    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" +
+    '<div class="note">Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div></div></div>";
 }
 // ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
 // What the business published, with links to its own pages. Nothing is sent from these screens.
@@ -1341,7 +1345,7 @@ function exhibitorView() {
   return top(x.name) + hero +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || li ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask ChatGPT what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the details ' + esc(biz) + " lists. You contact " + esc(x.name) + " yourself.</div>" +
     (more && state.fly === state.sel ? companyFly(x, biz, [label, x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list") : "");
 }
@@ -1377,7 +1381,7 @@ function payBox(s) {
   state.payRef = s.reference;
   return '<div class="pay"><div class="amt"><div><span>To pay' + (pay.testMode ? '<span class="tag">TEST</span>' : "") + "</span><b>" + esc(pay.total) + "</b></div><span>" + esc(pay.provider) + " checkout</span></div>" +
     '<div class="actions"><button class="primary" data-href="' + esc(pay.url) + '">Pay now</button>' + (opt("status") && !pay.door ? '<button class="btn" data-act="paid">I\u2019ve paid</button>' : "") + "</div>" +
-    "<p>You pay on " + esc(pay.provider) + "\u2019s page, in the business\u2019s name. Card details are never entered in ChatGPT." + (pay.testMode ? " Test mode: no real money; use the test card 4242 4242 4242 4242." : "") + " The page stays open for 30 minutes.</p></div>";
+    "<p>You pay on " + esc(pay.provider) + "\u2019s page, in the business\u2019s name. Card details are never entered in the chat." + (pay.testMode ? " Test mode: no real money; use the test card 4242 4242 4242 4242." : "") + " The page stays open for 30 minutes.</p></div>";
 }
 function sentView() {
   const s = state.data.sent || { lines: [] };
