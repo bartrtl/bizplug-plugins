@@ -36,6 +36,9 @@
 //   result (view "visit") is a summary, the message to send as text and Continue on WhatsApp, and no name or
 //   email is asked; otherwise the form asks for them and the result is the usual sent request. A look-up of the
 //   locations from the chat (view "visits") lists them with a button into each form.
+//   From 0.35.0 a social media post that is a YouTube video (post.video) plays on its own screen in the card:
+//   YouTube's player in an iframe to youtube-nocookie.com, built only when the customer taps the post. It is the
+//   only thing the card ever frames, and the only time the card makes the customer's browser contact another site.
 // Every value shown comes from a tool's structuredContent, never from its text, which is written for the assistant. Served as
 // text/html+skybridge like the guide card (guide-widget.ts); the URI is content-addressed.
 //   From 0.23.0 the same card also runs in an MCP Apps host (Claude), served there as text/html;profile=mcp-app
@@ -225,6 +228,24 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .soc .sc .bd{padding:10px 12px 12px}
 .soc .sc .bd b{font-size:13.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .soc .sc .bd p{-webkit-line-clamp:2;font-size:12.5px}
+/* 0.35.0: a YouTube video plays in the card; a Short is upright, as a tile and as a player. */
+.soc .play{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;border-radius:50%;background:rgba(0,0,0,.62);box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.soc .play::after{content:"";position:absolute;left:21px;top:15px;border-style:solid;border-width:11px 0 11px 17px;border-color:transparent transparent transparent #fff}
+.soc .sc .play{width:40px;height:40px;margin:-20px 0 0 -20px}
+.soc .sc .play::after{left:16px;top:12px;border-width:8px 0 8px 13px}
+.soc .feat.short{display:flex;align-items:stretch}
+.soc .feat.short .pic{flex:none;width:42%;max-width:190px;aspect-ratio:9/16}
+.soc .feat.short .bd{flex:1;min-width:0;align-self:center}
+.soc.vids .rail{align-items:flex-start}
+.soc .sc.short{width:150px}
+.soc .sc.short .pic{aspect-ratio:9/16}
+.soc .player{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;margin:10px 0 2px}
+.soc .player.short{aspect-ratio:9/16;width:min(100%,290px);margin-left:auto;margin-right:auto}
+.soc .player img,.soc .player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.soc .player img{object-fit:cover}
+.soc .player .ph{all:unset;cursor:pointer;position:absolute;inset:0}
+.soc .vbd{padding:10px 2px 12px}
+.soc .vbd p{-webkit-line-clamp:6}
 .stay h4{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:16px 0 8px;font-weight:650}
 .calhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .calhd b{font-size:15px}
@@ -354,7 +375,9 @@ const state = { plugin: null, options: [], view: "loading", open: null, data: {}
   // 0.12.0: every member business seen, by id, for a member's own screen.
   mem: {},
   // 0.18.0, event guide: every speaker and exhibitor seen, by id, and the session that is open.
-  spk: {}, exh: {}, ses: "" };
+  spk: {}, exh: {}, ses: "",
+  // 0.35.0: the YouTube video that is open, and whether this host refused its player.
+  vid: null, vidBlocked: false };
 const p = () => state.plugin || {};
 function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName }); } catch (e) {} }
 function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; }
@@ -1138,17 +1161,38 @@ function socialView() {
   const d = state.data.social || { follow: [], posts: [], networks: [] };
   const o = opt("social");
   const on = state.socNet || "";
-  const posts = (d.posts || []).filter((x) => !on || x.network === on);
-  const date = (x) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(x.date || ""); return m ? Number(m[3]) + " " + MON[Number(m[2]) - 1] + " " + m[1] : ""; };
-  const pic = (x, big) => '<div class="pic" style="--nc:' + netColor(x.network) + '">' + (x.image ? '<img src="' + esc(x.image) + '" alt="" loading="lazy" data-soc-img>' : '<span class="big">' + esc((NET[x.network] || ["•"])[0]) + "</span>") + netBadge(x.network) + (x.pinned ? '<span class="pin">Pinned</span>' : "") + "</div>";
-  const body = (x) => '<div class="bd"><div class="kd">' + esc(x.name) + (date(x) ? " · " + esc(date(x)) : "") + "</div>" + (x.title ? "<b>" + esc(x.title) + "</b>" : "") + (x.text && x.text !== x.title ? "<p>" + esc(x.text) + "</p>" : "") + "</div>";
+  const all = d.posts || [];
+  const posts = all.filter((x) => !on || x.network === on);
+  const pic = (x, big) => '<div class="pic" style="--nc:' + netColor(x.network) + '">' + (x.image ? '<img src="' + esc(x.image) + '" alt="" loading="lazy" data-soc-img>' : '<span class="big">' + esc((NET[x.network] || ["•"])[0]) + "</span>") + netBadge(x.network) + (x.pinned ? '<span class="pin">Pinned</span>' : "") + (videoOf(x) ? '<span class="play"></span>' : "") + "</div>";
+  // 0.35.0: a YouTube video opens on its own screen in the card (data-vid); every other post opens on its network.
+  const tap = (x) => (videoOf(x) ? 'data-vid="' + all.indexOf(x) + '" aria-label="Play ' + esc(x.title || "the video") + '"' : 'data-href="' + esc(x.url) + '"');
+  const short = (x) => (videoOf(x) && x.video.short ? " short" : "");
   const follow = (d.follow || []).length ? '<div class="qlabel">Follow ' + esc(d.business || "") + '</div><div class="follow">' + d.follow.map((f) => '<button class="fl" data-href="' + esc(f.url) + '">' + netBadge(f.network) + esc(f.name) + "</button>").join("") + "</div>" : "";
   const filters = (d.networks || []).length > 1 ? '<div class="qs" style="margin:2px 0 6px">' + chip("All", "data-soc", "", !on) + d.networks.map((n) => chip(esc(n.name) + " <small>" + n.count + "</small>", "data-soc", n.network, on === n.network)).join("") + "</div>" : "";
   const first = posts[0];
-  const feat = first ? '<button class="feat" data-href="' + esc(first.url) + '">' + pic(first, true) + body(first) + "</button>" : '<div class="empty">No recent posts to show right now.</div>';
-  const rail = posts.length > 1 ? '<div class="qlabel">More posts</div><div class="rail" style="margin-top:6px">' + posts.slice(1).map((x) => '<button class="sc" data-href="' + esc(x.url) + '">' + pic(x) + body(x) + "</button>").join("") + "</div>" : "";
-  return top(o ? o.title : "Social media") + '<div class="soc">' + follow + filters + feat + rail + "</div>" +
-    '<div class="note">From ' + esc(d.business || "the business") + "&rsquo;s own accounts. Each post opens on its network.</div>" + links("social");
+  const feat = first ? '<button class="feat' + short(first) + '" ' + tap(first) + ">" + pic(first, true) + socBody(first) + "</button>" : '<div class="empty">No recent posts to show right now.</div>';
+  const rail = posts.length > 1 ? '<div class="qlabel">More posts</div><div class="rail" style="margin-top:6px">' + posts.slice(1).map((x) => '<button class="sc' + short(x) + '" ' + tap(x) + ">" + pic(x) + socBody(x) + "</button>").join("") + "</div>" : "";
+  return top(o ? o.title : "Social media") + '<div class="soc' + (all.some(videoOf) ? " vids" : "") + '">' + follow + filters + feat + rail + "</div>" +
+    '<div class="note">From ' + esc(d.business || "the business") + "&rsquo;s own accounts. " + (all.some(videoOf) ? "A YouTube video plays here when you tap it; every other post opens on its network." : "Each post opens on its network.") + "</div>" + links("social");
+}
+// 0.35.0: the video a post is, when the plug-in named one: an id of exactly 11 characters, nothing else.
+const videoOf = (x) => (x && x.video && /^[A-Za-z0-9_-]{11}$/.test(String(x.video.id || "")) ? x.video : null);
+const socDate = (x) => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(x.date || ""); return m ? Number(m[3]) + " " + MON[Number(m[2]) - 1] + " " + m[1] : ""; };
+const socBody = (x, cls) => '<div class="' + (cls || "bd") + '"><div class="kd">' + esc(x.name) + (videoOf(x) && x.video.short ? " Short" : "") + (socDate(x) ? " · " + esc(socDate(x)) : "") + "</div>" + (x.title ? "<b>" + esc(x.title) + "</b>" : "") + (x.text && x.text !== x.title ? "<p>" + esc(x.text) + "</p>" : "") + "</div>";
+// The video's own screen: the player, built by render() only here, after the customer tapped the post. Until then
+// the card has asked YouTube for nothing. Open on YouTube is always next to it, and where the host refuses the
+// player (vidBlocked) the picture stays, as a link to the video.
+function videoView() {
+  const x = state.vid, v = videoOf(x);
+  if (!v) return socialView();
+  const o = opt("social");
+  const thumb = x.image ? '<img src="' + esc(x.image) + '" alt="" data-soc-img>' : "";
+  return top(o ? o.title : "Social media") + '<div class="soc">' +
+    '<div class="player' + (v.short ? " short" : "") + '"' + (state.vidBlocked ? "" : ' data-player="' + esc(v.id) + '"') + ">" + thumb +
+    (state.vidBlocked ? '<button class="ph" data-href="' + esc(x.url) + '" aria-label="Open on YouTube"><span class="play"></span></button>' : "") + "</div>" +
+    socBody(x, "bd vbd") +
+    '<div class="actions"><button class="btn" data-href="' + esc(x.url) + '">Open on YouTube</button></div></div>' +
+    '<div class="note">' + (state.vidBlocked ? "This video cannot play inside the card here. Open it on YouTube." : "The player is YouTube&rsquo;s own and loads from YouTube. If it does not play here, open it on YouTube.") + "</div>";
 }
 function collabView() {
   return '<div class="form">' + top("Find a collaborator") + '<div class="hint">Say what you need, what you can offer, or both, to see the members whose entries match.</div>' +
@@ -1646,7 +1690,10 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
+  const playing = app.querySelector(".player iframe");
+  if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   app.innerHTML = (ownHead ? "" : header()) + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
@@ -1732,6 +1779,21 @@ function render() {
   on('[data-act="request"]', () => guard(() => run(request && request.tool, requestArgs(), request ? request.title : "Send my request")));
   // 0.30.0: Social media filters, and a picture that does not load gives way to the network's colour.
   on("[data-soc]", (b) => { state.socNet = b.dataset.soc || ""; render(); });
+  // 0.35.0: a tapped YouTube video opens on its own screen, and only there is YouTube's player built: an iframe to
+  // youtube-nocookie.com for that one video. Going back draws the card again, which removes it.
+  on("[data-vid]", (b) => { const x = ((state.data.social || {}).posts || [])[Number(b.dataset.vid)]; if (!videoOf(x)) return; state.vid = x; state.view = "video"; state.error = ""; render(); });
+  const slot = app.querySelector(".player[data-player]");
+  if (slot && /^[A-Za-z0-9_-]{11}$/.test(slot.dataset.player)) {
+    const f = document.createElement("iframe");
+    f.dataset.vid = slot.dataset.player;
+    f.title = (state.vid && state.vid.title) || "YouTube video";
+    f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
+    f.allowFullscreen = true;
+    // YouTube's player refuses a page that sends no referrer.
+    f.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    f.src = "https://www.youtube-nocookie.com/embed/" + slot.dataset.player + "?playsinline=1&rel=0&autoplay=1";
+    slot.appendChild(f);
+  }
   // 0.32.0: Forms: choose a form, then open it with the answers filled in, without a call to the server.
   on("[data-form]", (b) => { state.formSel = b.dataset.form; state.error = ""; render(); });
   on('[data-act="openform"]', () => {
@@ -1901,6 +1963,11 @@ window.addEventListener("message", (e) => {
   if (m.method === "ping" || m.method === "ui/resource-teardown") post({ id: m.id, result: {} });
   else post({ id: m.id, error: { code: -32601, message: "Method not found" } });
 });
+// 0.35.0: a host that does not allow YouTube's player says so with this event; the picture and the link stay.
+document.addEventListener("securitypolicyviolation", (e) => {
+  if (state.view !== "video" || state.vidBlocked || !/youtube-nocookie\.com/.test(String(e.blockedURI || ""))) return;
+  state.vidBlocked = true; render();
+});
 render();
 // An MCP Apps host sends the tool's result only after this handshake. ChatGPT serves the card with window.openai.
 if (!window.openai && window.parent !== window) {
@@ -1975,17 +2042,28 @@ export function cardHtmlWith(packages: LayoutPackage[]): string {
 }
 export const isPluginAppUri = (uri: unknown): uri is string => typeof uri === "string" && /^ui:\/\/bizplug\/plugin-[0-9a-z]+\.app\.html$/.test(uri);
 
+/**
+ * 0.35.0: where YouTube's player comes from. A card may frame it only when its resource says so (frameDomains,
+ * and frame_domains for ChatGPT's older key); nothing else is ever framed.
+ */
+export const VIDEO_FRAME_ORIGIN = "https://www.youtube-nocookie.com";
+/**
+ * The card's address. A plug-in that may play videos (`frames`) reads the same card under its own address, because
+ * a host keeps a card's permissions with its address: a plug-in that starts to play videos must be read again.
+ */
+export const pluginCardUri = (app = false, frames = false) => (app ? PLUGIN_APP_URI : PLUGIN_WIDGET_URI).replace(/^(ui:\/\/bizplug\/plugin-[0-9a-f]+)/, frames ? "$1yt" : "$1");
+
 /** tools/list _meta for show_menu: the card it renders in. With `app`, the card for an MCP Apps host. */
-export const pluginCardToolMeta = (app = false) => ({
-  ui: { resourceUri: app ? PLUGIN_APP_URI : PLUGIN_WIDGET_URI },
-  "openai/outputTemplate": app ? PLUGIN_APP_URI : PLUGIN_WIDGET_URI,
+export const pluginCardToolMeta = (app = false, frames = false) => ({
+  ui: { resourceUri: pluginCardUri(app, frames) },
+  "openai/outputTemplate": pluginCardUri(app, frames),
   "openai/widgetAccessible": true,
   "openai/toolInvocation/invoking": "Opening the menu",
   "openai/toolInvocation/invoked": "Menu ready",
 });
 
 /** tools/list _meta for a tool whose result the card draws (plug-in version 0.3.0 and later). */
-export const pluginResultToolMeta = (invoking: string, invoked: string, app = false) => ({ ...pluginCardToolMeta(app), "openai/toolInvocation/invoking": invoking, "openai/toolInvocation/invoked": invoked });
+export const pluginResultToolMeta = (invoking: string, invoked: string, app = false, frames = false) => ({ ...pluginCardToolMeta(app, frames), "openai/toolInvocation/invoking": invoking, "openai/toolInvocation/invoked": invoked });
 /** tools/list _meta for a tool the card may call but whose result stays in the chat. */
 export const pluginCallableToolMeta = { "openai/widgetAccessible": true };
 
@@ -1994,13 +2072,17 @@ export const pluginCallableToolMeta = { "openai/widgetAccessible": true };
  * which BizPlug's own site serves (card-banner.ts).
  */
 const IMAGE_ORIGINS = [...CARD_IMAGE_ORIGINS, ...siteOrigins()];
-/** resources/read _meta: no network (images load from IMAGE_ORIGINS), links open outside; the description ChatGPT's model sees with the card. */
-export const pluginWidgetMeta = {
-  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS } },
+/**
+ * resources/read _meta: no network (images load from IMAGE_ORIGINS), links open outside; the description ChatGPT's
+ * model sees with the card. With `frames` (0.35.0, a business whose social media has YouTube videos) the card may
+ * also frame YouTube's player, and nothing else; without it the host allows no frame at all.
+ */
+export const pluginWidgetMeta = (frames = false) => ({
+  ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS, ...(frames ? { frameDomains: [VIDEO_FRAME_ORIGIN] } : {}) } },
   "openai/widgetPrefersBorder": true,
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
-  "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin, "https://checkout.stripe.com"] },
-};
+  "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, ...(frames ? { frame_domains: [VIDEO_FRAME_ORIGIN] } : {}), redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin, "https://checkout.stripe.com"] },
+});
 /** resources/read _meta for an MCP Apps host: a border, no network, images from IMAGE_ORIGINS only, as in ChatGPT. */
-export const pluginAppMeta = { ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS } } };
+export const pluginAppMeta = (frames = false) => ({ ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS, ...(frames ? { frameDomains: [VIDEO_FRAME_ORIGIN] } : {}) } } });

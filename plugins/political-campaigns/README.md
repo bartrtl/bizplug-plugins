@@ -1,6 +1,6 @@
 # BizPlug Political Campaigns & Advocacy
 
-Version 0.34.0. Volunteer and event sign-ups for political campaigns & advocacy businesses.
+Version 0.35.0. Volunteer and event sign-ups for political campaigns & advocacy businesses.
 
 - Main function: Volunteer and event sign-ups
 - MCP server URL: `https://mcp.bizplug.ai/plugin/political-campaigns` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.34.0. Volunteer and event sign-ups for political campaigns & advocacy 
 
 ## Changes
 
+- **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
 - **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
 - **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.
 - **0.32.0** (20 November 2026): Forms: your own forms in Google Forms, Microsoft Forms, Typeform, Jotform, Tally and other tools, offered at the right moment and opened with what the customer already said filled in.
