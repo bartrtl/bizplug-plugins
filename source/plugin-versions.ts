@@ -584,7 +584,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
     date: "2026-11-20",
     summary: "Forms: your own forms in Google Forms, Microsoft Forms, Typeform, Jotform, Tally and other tools, offered at the right moment and opened with what the customer already said filled in.",
     notes: [
-      "Add your forms under Integrations, Forms: an application, a registration, a survey or an intake form, from Google Forms, Microsoft Forms, Typeform, Jotform, Tally, Fillout, Cognito Forms, HubSpot, Zoho Forms, Paperform, Formstack, Wufoo or Airtable.",
+      "Add your forms on your plug-in's Forms tab, under Forms you already have: an application, a registration, a survey or an intake form, from Google Forms, Microsoft Forms, Typeform, Jotform, Tally, Fillout, Cognito Forms, HubSpot, Zoho Forms, Paperform, Formstack, Wufoo or Airtable.",
       "Your card gets a Forms button, and the assistant offers the right form when a customer wants to apply, register or give feedback.",
       "Put {name}, {email}, {phone}, {date} or {details} in the form's prefilled link, and the form opens with those answers filled in. The customer checks it and submits it on the form tool's own page; BizPlug keeps nothing.",
     ],
