@@ -348,7 +348,7 @@ export function getPlugin(slug: string) {
 }
 
 /** Who publishes the plug-in packages, as each package's `author`. */
-export const PLUGIN_AUTHOR = { name: "Bart Cant - Rethink Labs", email: siteConfig.email, url: siteConfig.url };
+export const PLUGIN_AUTHOR = { name: "Bart Cant - msg2ai", email: siteConfig.email, url: siteConfig.url };
 /** The logo every industry plug-in package carries, under public/. */
 export const PLUGIN_LOGO = "logo.png";
 /** BizPlug's lime, for surfaces that tint a plug-in with its brand colour. */

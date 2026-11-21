@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The solar & clean energy plug-in from BizPlug. Main function: rough system estimate and site survey request. It works from the business's own published profile, covering savings estimates, incentives and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Estimates are rough published ranges, never a guarantee of savings or output. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

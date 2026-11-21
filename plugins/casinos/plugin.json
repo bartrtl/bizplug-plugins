@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The casinos & gaming plug-in from BizPlug. Main function: hotel rooms and show tickets (no wagering). It works from the business's own published profile, covering hours, dining, events and age policies, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never place, take or discuss wagers or odds. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

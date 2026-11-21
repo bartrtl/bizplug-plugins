@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The healthcare & clinics plug-in from BizPlug. Main function: find and request appointments. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

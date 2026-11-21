@@ -1,8 +1,8 @@
-<img src="assets/rethink-labs-logo.png" alt="Rethink Labs" width="96" align="right">
+<img src="assets/msg2ai-logo.png" alt="msg2ai" width="160" align="right">
 
 # BizPlug plug-ins for ChatGPT
 
-Published by **Bart Cant - Rethink Labs**.
+Published by **Bart Cant - msg2ai**.
 
 The standard BizPlug plug-in for each of 81 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
 
@@ -156,14 +156,14 @@ A business's own plug-in stays on the version it was published with until the bu
 
 ## Plug-ins on the platform
 
-The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on https://bizplug.ai/plugins. The startup directories have their package in `plugins/`; the others are built from a business's own profile. Names belong to their owners and show whose published information a plug-in is built on; BizPlug is not affiliated with or endorsed by them, except Rethink Labs, the company behind BizPlug. Businesses that list their own plug-in from the portal are on the website only.
+The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on https://bizplug.ai/plugins. The startup directories have their package in `plugins/`; the others are built from a business's own profile. Names belong to their owners and show whose published information a plug-in is built on; BizPlug is not affiliated with or endorsed by them, except msg2ai, the company behind BizPlug, and the plug-ins listed under msg2ai. Businesses that list their own plug-in from the portal are on the website only.
 
 | Plug-in | Kind | Added | What it does | MCP server URL |
 | --- | --- | --- | --- | --- |
-| Rethink Labs | Rethink Labs | 2026-11-18 | AI and blockchain consulting for businesses. Ask about the services and book an AI discovery call. | `https://mcp.bizplug.ai/plugin/consulting/rethink-labs` |
-| msg2ai | Rethink Labs | 2026-11-18 | AI messaging for hotels, vacation rentals and events: AI Ambassador, ChatGPT apps and WhatsApp concierges. | `https://mcp.bizplug.ai/plugin/consulting/msg2ai` |
-| AI Ambassador | Rethink Labs | 2026-11-18 | An AI assistant that answers guests and attendees around the clock on WhatsApp, SMS and RCS. | `https://mcp.bizplug.ai/plugin/consulting/ai-ambassador` |
-| ActionNotes.ai | Rethink Labs | 2026-11-18 | AI note-taking for conferences: contacts, conversations and commitments, with follow-ups. | `https://mcp.bizplug.ai/plugin/consulting/actionnotes` |
+| Rethink Labs | msg2ai | 2026-11-18 | AI and blockchain consulting for businesses. Ask about the services and book an AI discovery call. | `https://mcp.bizplug.ai/plugin/consulting/rethink-labs` |
+| msg2ai | msg2ai | 2026-11-18 | AI messaging for hotels, vacation rentals and events: AI Ambassador, ChatGPT apps and WhatsApp concierges. | `https://mcp.bizplug.ai/plugin/consulting/msg2ai` |
+| AI Ambassador | msg2ai | 2026-11-18 | An AI assistant that answers guests and attendees around the clock on WhatsApp, SMS and RCS. | `https://mcp.bizplug.ai/plugin/consulting/ai-ambassador` |
+| ActionNotes.ai | msg2ai | 2026-11-18 | AI note-taking for conferences: contacts, conversations and commitments, with follow-ups. | `https://mcp.bizplug.ai/plugin/consulting/actionnotes` |
 | Doha Metro Guide | City guide | 2026-11-15 | Plan Doha Metro journeys and find what to see and do near each station. | `https://mcp.bizplug.ai/plugin/public-transit/doha-metro` |
 | [gener8tor Charlotte Startups for Investors](plugins/gener8tor-charlotte) | Startup directory | 2026-11-15 | Find the gBETA Charlotte startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/gener8tor-charlotte` |
 | [Web Summit Qatar Startups for Investors](plugins/websummit-qatar) | Startup directory | 2026-11-14 | Find Web Summit Qatar 2026 startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/websummit-qatar` |
@@ -295,4 +295,4 @@ The standard plug-in of each industry, as on https://bizplug.ai/plugins/industri
 
 ---
 
-Published by Bart Cant - Rethink Labs under the [MIT License](LICENSE). BizPlug is built and run by msg2ai (https://msg2.ai) and is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.
+Published by Bart Cant - msg2ai under the [MIT License](LICENSE). BizPlug is built and run by msg2ai (https://msg2.ai) and is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.

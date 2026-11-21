@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The museums & galleries plug-in from BizPlug. Main function: timed tickets and exhibitions. It works from the business's own published profile, covering exhibits, hours, tickets and group visits, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

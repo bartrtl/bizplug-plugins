@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The public transit & mobility plug-in from BizPlug. Main function: service alerts and issue reports. It works from the business's own published profile, covering routes, schedules and fares, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

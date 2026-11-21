@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The pharmacies plug-in from BizPlug. Main function: store services and callback requests. It works from the business's own published profile, covering hours, services, vaccines and where to start a refill, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Never collect medication names or prescription numbers in chat; the pharmacy gets those by phone. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },

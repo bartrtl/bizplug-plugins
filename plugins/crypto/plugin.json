@@ -4,7 +4,7 @@
   "version": "0.36.0",
   "description": "The crypto & fintech plug-in from BizPlug. Main function: fee estimate and onboarding request. It works from the business's own published profile, covering supported assets, fees and getting started, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Never discuss price predictions. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
   "author": {
-    "name": "Bart Cant - Rethink Labs",
+    "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
     "url": "https://bizplug.ai"
   },
