@@ -23,4 +23,4 @@ A layout has `layout.json`, `layout.js`, `layout.css`, `preview-desktop.png` and
 5. The checks run on the pull request, and the BizPlug team reviews it: on real cards, in dark and light mode, for a theme or a layout, and in ChatGPT for a plug-in. Changes are asked for in the pull request.
 6. Once approved, it is merged into `main` and stays in this repository, credited to you, through every release.
 
-What merging does and does not do: your work is published here for anyone to read and use. A layout is offered to businesses in the BizPlug portal once the team adds it in BizPlug's admin, and a plug-in is listed in the BizPlug marketplace once its listing (who hosts it, its privacy policy and terms) is agreed with you.
+Everything here is published under the repository's [MIT License](../LICENSE), like the rest of it. What merging does and does not do: your work is published here for anyone to read and use. A layout is offered to businesses in the BizPlug portal once the team adds it in BizPlug's admin, and a plug-in is listed in the BizPlug marketplace once its listing (who hosts it, its privacy policy and terms) is agreed with you.

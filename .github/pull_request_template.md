@@ -1,5 +1,7 @@
 <!-- Thank you for contributing. Keep the section for your kind of contribution and delete the others. -->
 
+- [ ] My contribution is my own work, and I agree it is published under this repository's [MIT License](../LICENSE)
+
 ## What this adds
 
 <!-- One or two sentences: the plug-in, theme or layout, and who it is for. -->

@@ -22,6 +22,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 
 ```
 README.md            this page: what is here, every plug-in, and how to contribute
+LICENSE              MIT: everything here, contributions included
 SETUP.md             set up, configure and test a plug-in
 CONTRIBUTING.md      what a valid plug-in contains, and how to contribute one
 INDUSTRIES.md        what an industry plug-in is made of, and how to propose a new industry
@@ -105,6 +106,8 @@ The **Check contributions** and **Check card themes** workflows run the checks o
 6. Once approved, it is merged into `main` and stays in this repository, credited to you, through every release.
 
 A new **industry plug-in** is not a pull request: propose it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form ([INDUSTRIES.md](INDUSTRIES.md)), and the team adds it to the generated packages.
+
+By opening a pull request you agree that your contribution is published under this repository's [MIT License](LICENSE).
 
 Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
@@ -292,4 +295,4 @@ The standard plug-in of each industry, as on https://bizplug.ai/plugins/industri
 
 ---
 
-Published by Bart Cant - Rethink Labs. BizPlug is built and run by msg2ai (https://msg2.ai) and is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.
+Published by Bart Cant - Rethink Labs under the [MIT License](LICENSE). BizPlug is built and run by msg2ai (https://msg2.ai) and is not affiliated with OpenAI. ChatGPT is a trademark of OpenAI.
