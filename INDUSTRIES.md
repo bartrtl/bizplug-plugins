@@ -21,7 +21,7 @@ plugins/<slug>/
   data/AGENT_INSTRUCTIONS.md   how a person or an AI agent collects that data
 ```
 
-The definitions are in [`source/`](source): `industry-functions.ts` (each industry's engine, tool names and options), `plugins.ts` (tools, menu and test cases), `plugin-data.ts` (data files and columns) and `plugin-examples.ts` (the example rows).
+Every tool with its inputs, engine by engine, and how to call a plug-in yourself on a sample business, is in [TOOLS.md](TOOLS.md). The definitions are in [`source/`](source): `industry-functions.ts` (each industry's engine, tool names and options), `plugins.ts` (tools, menu and test cases), `plugin-data.ts` (data files and columns) and `plugin-examples.ts` (the example rows).
 
 ### Built from an engine
 

@@ -14,6 +14,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
 - Industry plug-ins, and how to propose a new industry: [INDUSTRIES.md](INDUSTRIES.md)
+- Every tool with its inputs, and how to call a plug-in yourself: [TOOLS.md](TOOLS.md) ([tools.json](tools.json))
 - Card themes, and how to propose one: [THEMES.md](THEMES.md)
 - Menu layouts, with desktop and mobile pictures, and how to code one: [LAYOUTS.md](LAYOUTS.md)
 - Contribute a plug-in, a theme or a layout: [Contribute](#contribute-plug-ins-themes-and-layouts)
@@ -26,6 +27,7 @@ LICENSE              MIT: everything here, contributions included
 SETUP.md             set up, configure and test a plug-in
 CONTRIBUTING.md      what a valid plug-in contains, and how to contribute one
 INDUSTRIES.md        what an industry plug-in is made of, and how to propose a new industry
+TOOLS.md             every tool with its inputs, and how to call a plug-in yourself; tools.json, the same as data
 THEMES.md            the card's colour themes, and how to add one
 LAYOUTS.md           the card's menu layouts, with pictures, and how to build one
 plugins/             BizPlug's plug-in packages, one folder each (plugins/README.md)
