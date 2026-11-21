@@ -29,11 +29,13 @@ INDUSTRIES.md        what an industry plug-in is made of, and how to propose a n
 THEMES.md            the card's colour themes, and how to add one
 LAYOUTS.md           the card's menu layouts, with pictures, and how to build one
 plugins/             BizPlug's plug-in packages, one folder each (plugins/README.md)
-themes/              one JSON file per card theme, and check-theme.ts (themes/README.md)
+themes/              one JSON file per card theme, check-theme.ts and preview.ts (themes/README.md)
+industries/          check-industry.ts and an example, for proposing a new industry (INDUSTRIES.md)
 layouts/             BizPlug's menu layouts, the template, check-layout.ts, preview.ts and sample businesses
 community/           what collaborators contributed (community/README.md)
   plugins/<name>/      a contributed plug-in package
   layouts/<id>/        a contributed menu layout
+  industries/<slug>.json   a proposed new industry, until its package is in plugins/
 source/              the files the packages are generated from, copied from the BizPlug website (read only)
 assets/              the publisher's logo
 .github/
@@ -84,9 +86,9 @@ An industry URL serves every business in that industry, so the assistant asks wh
 
 Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
 
-## Contribute: plug-ins, themes and layouts
+## Contribute: plug-ins, themes, layouts and industries
 
-Collaborators can add three kinds of work to this repository with a pull request:
+Collaborators can add four kinds of work to this repository with a pull request:
 
 | What | Add in your pull request | Check before you open it | Once merged |
 | --- | --- | --- | --- |
@@ -94,18 +96,22 @@ Collaborators can add three kinds of work to this repository with a pull request
 | A **menu layout** (how the card's menu is drawn) | `community/layouts/<id>/` ([LAYOUTS.md](LAYOUTS.md)) | `npx tsx layouts/check-layout.ts community/layouts/<id>` | In this repository for anyone to use; offered in the portal once the team adds it in BizPlug's admin with you as its author |
 | A **plug-in** (an MCP server of your own) | `community/plugins/<name>/` ([CONTRIBUTING.md](CONTRIBUTING.md)) | It works in ChatGPT developer mode ([SETUP.md](SETUP.md#setup)) | In this repository for anyone to use; listed in the BizPlug marketplace once its listing is agreed with you |
 
+| A **new industry** (a proposal for an industry plug-in) | `community/industries/<slug>.json` ([INDUSTRIES.md](INDUSTRIES.md#propose-a-new-industry)) | `npx tsx industries/check-industry.ts community/industries/<slug>.json` | The proposal is accepted; the team then adds the industry, its package appears in `plugins/<slug>/` and the proposal file is removed |
+
 The **Check contributions** and **Check card themes** workflows run the checks on every pull request.
 
 ### How to open a pull request
 
-1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch, for example `theme/harbour`, `layout/magazine` or `plugin/acme-bookings`.
+1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch, for example `theme/harbour`, `layout/magazine`, `industry/bicycle-shops` or `plugin/acme-bookings`.
 2. Add only the files of your contribution, in the folder the table names. Everything else is generated from the BizPlug website on every release (the packages in `plugins/`, `layouts/`, `source/` and the pages at the top), so a change there would be overwritten; the checks fail a pull request that changes it.
 3. Run the check for your kind of contribution and fix what it reports.
 4. Open a pull request against `main`. Its description starts with a checklist ([`.github/pull_request_template.md`](.github/pull_request_template.md)): keep the part for your kind of contribution, paste the check's output, and add a screenshot.
 5. The checks run on the pull request, and the BizPlug team reviews it: on real cards, in dark and light mode, for a theme or a layout, and in ChatGPT for a plug-in. Changes are asked for in the pull request.
 6. Once approved, it is merged into `main` and stays in this repository, credited to you, through every release.
 
-A new **industry plug-in** is not a pull request: propose it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form ([INDUSTRIES.md](INDUSTRIES.md)), and the team adds it to the generated packages.
+On your first pull request to this repository, GitHub may wait for a maintainer to approve running the checks (it says so on the pull request). They run as soon as someone on the team approves them.
+
+Not sure which engine a new industry needs? Use the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form instead, and the team works it out with you.
 
 By opening a pull request you agree that your contribution is published under this repository's [MIT License](LICENSE).
 

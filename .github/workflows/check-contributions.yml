@@ -17,13 +17,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check every contributed plug-in and layout the pull request adds or changes
+      - name: Check every contributed plug-in, layout and industry proposal the pull request adds or changes
         run: |
           base="origin/${{ github.base_ref }}"
           other=$(git diff --name-only "$base...HEAD" | grep -v '^community/' || true)
           if [ -n "$other" ]; then echo "A contribution changes only files in community/ (themes go in a pull request of their own). Also changed:"; echo "$other"; exit 1; fi
           if git diff --name-only "$base...HEAD" | grep -q '^community/README.md$'; then echo "community/README.md is generated: leave it out."; exit 1; fi
           fail=0
+          for f in $(git diff --name-only --diff-filter=AM "$base...HEAD" -- 'community/industries/*'); do
+            echo "Industry proposal $f"; npx --yes tsx industries/check-industry.ts "$f" || fail=1
+          done
           for d in $(git diff --name-only --diff-filter=AM "$base...HEAD" -- 'community/layouts/*' | cut -d/ -f1-3 | sort -u); do
             [ -d "$d" ] || continue
             echo "Layout $d"; npx --yes tsx layouts/check-layout.ts "$d" || fail=1

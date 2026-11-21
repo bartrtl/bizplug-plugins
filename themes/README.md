@@ -12,7 +12,7 @@ A card theme is five colours for a plug-in's card in ChatGPT. A business picks o
 | [`orchid.json`](orchid.json) | Orchid | BizPlug |
 | [`christmas.json`](christmas.json) | Christmas | BizPlug |
 
-`check-theme.ts` checks a theme the way BizPlug does: valid colours, a unique id, and readable contrast.
+`check-theme.ts` checks a theme the way BizPlug does: valid colours, a unique id, and readable contrast. `preview.ts` draws it on the real card with the sample businesses.
 
 ```json
 {
@@ -29,6 +29,7 @@ A card theme is five colours for a plug-in's card in ChatGPT. A business picks o
 1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch.
 2. Add `themes/<id>.json`, named after its `id`. Copy a file from this folder to start.
 3. From the root of your copy: `npx tsx themes/check-theme.ts themes/<id>.json`. Fix what it reports.
+   Then `npx tsx themes/preview.ts themes/<id>.json` draws the sample businesses' cards in your colours, in dark and light mode: open the pages it prints and take a screenshot.
 4. Open a pull request against `main` that adds only that file, and fill in its checklist. The **Check card themes** workflow runs the same check, and fails if the pull request changes anything outside `themes/`.
 5. The BizPlug team looks at it on real cards, in dark and light mode, and may ask for changes in the pull request.
 6. Once merged, the file stays here credited to you, and the theme is offered to every business in the portal within about ten minutes, with no release needed.

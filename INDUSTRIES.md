@@ -2,7 +2,7 @@
 
 BizPlug has a standard plug-in for each of 82 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
 
-This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is proposed with an issue, never a pull request: the packages in `plugins/` are generated from the BizPlug website, so a pull request that adds one would be overwritten by the next update.
+This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is proposed with a pull request that adds a short proposal file, or with an issue form ([below](#propose-a-new-industry)). Never add a package to `plugins/` yourself: those folders are generated from the BizPlug website, so one added by hand would be overwritten by the next update.
 
 ## What an industry plug-in is
 
@@ -27,7 +27,7 @@ The definitions are in [`source/`](source): `industry-functions.ts` (each indust
 
 Every industry runs on one of 5 engines. The engine decides the plug-in's three main tools (a look-up, a request and a status check), its menu and the data a business provides. An industry adds its own words: its name, the tool names, what is ordered, booked or requested, a sample customer question, and what the plug-in covers.
 
-Every plug-in also has `show_menu`, `get_business_info`, `get_contact`, `open_form`, and its data files always include `business.csv`, `services.csv`, `faqs.csv`, `social.csv`. A customer's request is always sent to the business, which confirms it; nothing is charged in the chat.
+Every plug-in also has `show_menu`, `get_business_info`, `get_contact`, and its data files always include `business.csv`, `services.csv`, `faqs.csv`, `social.csv`. A business that publishes forms of its own (a Google Form, for example) also gets `open_form`, which offers those forms with what the customer already said filled in; without forms, the tool is not listed. A customer's request is always sent to the business, which confirms it; nothing is charged in the chat.
 
 ### `order`
 
@@ -107,11 +107,61 @@ Added since the first 80: Florists & Flower Delivery (`florists`, 2026-11-21), C
 
 ## Propose a new industry
 
-1. Check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
-2. Open the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form and fill it in.
-3. The BizPlug team replies in the issue, and may ask questions there.
+First check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one. Then propose it in one of two ways.
 
-What the form asks for:
+### With a pull request
+
+1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch, for example `industry/bicycle-shops`.
+2. Add `community/industries/<slug>.json` in the format below, named after its `slug`. Copy [`industries/example.json`](industries/example.json) to start.
+3. Check it from the root of your copy: `npx tsx industries/check-industry.ts community/industries/<slug>.json`.
+4. Open a pull request against `main` that adds only that file, and fill in the industry part of its checklist. The **Check contributions** workflow runs the same check.
+5. The BizPlug team discusses it in the pull request and merges it once the proposal is agreed. Merging accepts the proposal: it does not create the plug-in yet (see [After a proposal is accepted](#after-a-proposal-is-accepted)).
+
+```json
+{
+  "slug": "bicycle-shops",
+  "name": "Bicycle Shops & Repair",
+  "group": "Retail & food",
+  "engine": "appt",
+  "title": "Repair bookings",
+  "tools": {
+    "lookup": "find_repair_slots",
+    "request": "book_repair",
+    "status": "get_repair_status"
+  },
+  "noun": "repair",
+  "ask": "Can you fix a flat tyre today, and what does it cost?",
+  "covers": "repairs and prices, bikes for sale, rentals and opening hours",
+  "rule": "Never give safety advice on a repair; the mechanic checks the bike.",
+  "example": {
+    "business": "Spoke & Chain",
+    "item": "Flat tyre repair",
+    "price": "15.00"
+  },
+  "who": "Independent bike shops with a repair workshop.",
+  "author": "Your name or company"
+}
+```
+
+| Field | What to give |
+| --- | --- |
+| `slug` | Lower case with hyphens. It becomes the address `mcp.bizplug.ai/plugin/<slug>` and the folder `plugins/<slug>/` |
+| `name` | The industry's name as businesses would look for it |
+| `group` | One of the groups above |
+| `engine` | One of the 5 engines above: `order`, `stay`, `appt`, `quote`, `track` |
+| `title` | The plug-in's main function, short |
+| `tools` | The names of the look-up, the request and the status check: lower case with underscores, saying what each does |
+| `noun` | What is ordered, booked or requested, one short noun |
+| `ask` | One question a customer would ask |
+| `covers` | The topics the plug-in answers from the business's profile |
+| `rule` | Optional: what the plug-in must never do or say in this industry |
+| `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
+| `example` | Optional: a made-up business and one thing it offers, with a price |
+| `who`, `author` | Optional: who would use it; and who the proposal is credited to |
+
+### With an issue
+
+Not on GitHub, or not sure of the engine? Open the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form and fill it in. The team replies in the issue and may ask questions there. What the form asks for:
 
 | Field | What to give | Example |
 | --- | --- | --- |
@@ -127,15 +177,15 @@ What the form asks for:
 
 A good proposal fits one of the 5 engines. If it needs something no engine does, say what in the form: the team then decides whether it needs a new option, which takes longer.
 
-Please do not put customers' personal data, passwords or other secrets in an issue: issues are public.
+Please do not put customers' personal data, passwords or other secrets in a proposal: issues and pull requests are public.
 
 ## After a proposal is accepted
 
-1. The BizPlug team adds the industry to the website's data files: its name, group and copy, its engine and tool names, an example row for each template, and its page on bizplug.ai.
+1. The BizPlug team adds the industry to the website's data files, from your proposal: its name, group and copy, its engine and tool names, an example row for each template, and its page on bizplug.ai.
 2. The packages are generated again, and the change is reviewed and merged on the website's repository.
-3. On that merge, this repository is generated again: the new `plugins/<slug>/` package appears, and the README and this page list it.
+3. On that merge, this repository is generated again: the new `plugins/<slug>/` package appears, the README and this page list it, and a proposal file in `community/industries/` for that slug is removed, since the package replaces it.
 4. Once the website with the new industry is deployed, its MCP server URL answers, and businesses in that industry can add the plug-in in the BizPlug portal (https://bizplug.ai/portal).
 
-The team links the change in the issue and closes it. If an industry is not added, the team says why in the issue.
+The team links the change in the pull request or the issue. If an industry is not added, the team says why there.
 
 Questions: info@bizplug.ai.

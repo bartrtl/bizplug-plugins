@@ -1,0 +1,23 @@
+{
+  "slug": "bicycle-shops",
+  "name": "Bicycle Shops & Repair",
+  "group": "Retail & food",
+  "engine": "appt",
+  "title": "Repair bookings",
+  "tools": {
+    "lookup": "find_repair_slots",
+    "request": "book_repair",
+    "status": "get_repair_status"
+  },
+  "noun": "repair",
+  "ask": "Can you fix a flat tyre today, and what does it cost?",
+  "covers": "repairs and prices, bikes for sale, rentals and opening hours",
+  "rule": "Never give safety advice on a repair; the mechanic checks the bike.",
+  "example": {
+    "business": "Spoke & Chain",
+    "item": "Flat tyre repair",
+    "price": "15.00"
+  },
+  "who": "Independent bike shops with a repair workshop.",
+  "author": "Your name or company"
+}
