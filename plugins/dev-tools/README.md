@@ -1,6 +1,6 @@
 # BizPlug Developer Tools
 
-Version 0.35.0. Book a technical demo or onboarding for developer tools businesses.
+Version 0.36.0. Book a technical demo or onboarding for developer tools businesses.
 
 - Main function: Book a technical demo or onboarding
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dev-tools` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.35.0. Book a technical demo or onboarding for developer tools business
 
 ## Changes
 
+- **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
 - **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
 - **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.

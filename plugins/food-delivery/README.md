@@ -1,6 +1,6 @@
 # BizPlug Food Delivery
 
-Version 0.35.0. Delivery orders for food delivery businesses.
+Version 0.36.0. Delivery orders for food delivery businesses.
 
 - Main function: Delivery orders
 - MCP server URL: `https://mcp.bizplug.ai/plugin/food-delivery` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.35.0. Delivery orders for food delivery businesses.
 
 ## Changes
 
+- **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
 - **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
 - **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.
