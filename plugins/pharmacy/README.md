@@ -1,6 +1,6 @@
 # BizPlug Pharmacies
 
-Version 0.36.0. Store services and callback requests for pharmacies businesses.
+Version 0.37.0. Store services and callback requests for pharmacies businesses.
 
 - Main function: Store services and callback requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pharmacy` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.36.0. Store services and callback requests for pharmacies businesses.
 
 ## Changes
 
+- **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
 - **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.

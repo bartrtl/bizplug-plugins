@@ -27,6 +27,7 @@ Columns (first row of the file, exactly these names):
 - `region`: State or country, text.  Example: NC
 - `hours`: Opening hours, text. As shown to customers. Example: Mon-Fri 09:00-17:00; Sat 10:00-14:00
 - `currency`: Currency, text. ISO code for the prices in the other files. Example: USD
+- `delivery_fee`: Delivery fee, number. Number only, in your currency. Added to every delivery order and its checkout; pickup orders never carry it. Leave empty if delivery is free or you price it yourself. Example: 5
 - `notify_email`: Requests go to, email. The team inbox that should receive requests from ChatGPT (not shown to customers). Example: orders@example.com
 
 How to collect it:

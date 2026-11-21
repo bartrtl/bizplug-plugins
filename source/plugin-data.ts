@@ -50,7 +50,7 @@ export type PluginDataSpec = {
 const col = (key: string, label: string, required: boolean, type: ColumnType, example: string, help: string): DataColumn => ({ key, label, required, type, example, help });
 
 // Shared by every plug-in. Examples come from plugin-examples.ts so each industry sees its own kind of business.
-const businessDataset = (name: string, ex?: IndustryExample, software = false): Dataset => ({
+const businessDataset = (name: string, ex?: IndustryExample, software = false, orders = false): Dataset => ({
   id: "business",
   file: "business.csv",
   title: "Business details",
@@ -72,6 +72,8 @@ const businessDataset = (name: string, ex?: IndustryExample, software = false): 
     col("region", "State or country", false, "text", "NC", ""),
     col("hours", "Opening hours", false, "text", "Mon-Fri 09:00-17:00; Sat 10:00-14:00", "As shown to customers."),
     col("currency", "Currency", false, "text", "USD", "ISO code for the prices in the other files."),
+    // Order plug-ins (0.37.0): the fee a delivery order carries.
+    ...(orders ? [col("delivery_fee", "Delivery fee", false, "number", "5", "Number only, in your currency. Added to every delivery order and its checkout; pickup orders never carry it. Leave empty if delivery is free or you price it yourself.")] : []),
     col("notify_email", "Requests go to", false, "email", "orders@example.com", "The team inbox that should receive requests from ChatGPT (not shown to customers)."),
     // Software products (plug-in 0.15.0): the product's own pages, for Pricing, Help & guides, Support and Contact.
     ...(software
@@ -603,7 +605,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
     engine: fn.engine,
     functionTitle: fn.title,
     datasets: [
-      businessDataset(ind.name, ex, Boolean(fn.software)),
+      businessDataset(ind.name, ex, Boolean(fn.software), fn.engine === "order"),
       // 0.18.0: a show or conference publishes its programme instead of a venue's spaces.
       ...engineDatasets(fn.engine, fn.noun, ex).map((d) => (fn.show && d.id === "inventory" ? { ...d, unless: SHOW_FILES } : d)),
       servicesDataset(ex),

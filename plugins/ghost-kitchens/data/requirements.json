@@ -118,6 +118,14 @@
           "help": "ISO code for the prices in the other files."
         },
         {
+          "key": "delivery_fee",
+          "label": "Delivery fee",
+          "required": false,
+          "type": "number",
+          "example": "5",
+          "help": "Number only, in your currency. Added to every delivery order and its checkout; pickup orders never carry it. Leave empty if delivery is free or you price it yourself."
+        },
+        {
           "key": "notify_email",
           "label": "Requests go to",
           "required": false,
