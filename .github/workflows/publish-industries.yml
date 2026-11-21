@@ -1,0 +1,27 @@
+name: Publish contributed industries
+
+on:
+  push:
+    branches: [main]
+    paths: ["community/industries/**"]
+
+permissions: {}
+
+concurrency:
+  group: publish-industries
+  cancel-in-progress: true
+
+jobs:
+  build-website:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask the website to build again with the industries on main
+        env:
+          HOOK: ${{ secrets.BIZPLUG_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$HOOK" ]; then
+            echo "::warning::The BIZPLUG_DEPLOY_HOOK secret is not set: the change goes live with the website's next deployment."
+            exit 0
+          fi
+          curl -fsS -X POST "$HOOK" > /dev/null
+          echo "The website is building again. The change is live when that build is."

@@ -1,6 +1,7 @@
 // Example values for the CSV templates, per industry, so an events venue sees venue spaces and a dentist sees
 // dental visits instead of one generic example per engine. Every business here is made up; numbers are
 // illustrative only. plugin-data.ts reads these; `pnpm plugins:check` fails if an industry has none.
+import { contributions, kebab, type Contribution } from "@/lib/contributed-industries";
 import type { Engine } from "@/lib/industry-functions";
 
 type OrderItem = { id: string; name: string; price: string; category: string; description: string };
@@ -116,6 +117,31 @@ export const INDUSTRY_EXAMPLES: Record<string, IndustryExample> = {
   "public-transit": track("Riverton Area Transit", { ref: "ALERT-77", status: "Detour", note: "Route 7 detours around Main St until Friday" }, "Paratransit", ["How much is a fare?", "2.20 dollars a ride, with free transfers for 90 minutes."]),
   pharmacy: track("Corner Pharmacy", { ref: "CB-5512", status: "Callback scheduled", note: "A pharmacist will call this afternoon" }, "Flu shots", ["Do you offer flu shots?", "Yes, walk-ins are welcome during pharmacy hours."]),
 };
+
+/** The template example of a contributed industry, from the `example` in its file: its item first, plain values for the rest. */
+function contributedExample(c: Contribution): IndustryExample | undefined {
+  if (!c.example) return undefined;
+  const { business, item } = c.example;
+  const price = Number(c.example.price) > 0 ? c.example.price : undefined; // a price of 0 is no price
+  const id = kebab(item);
+  const faq: [string, string] = ["What are your opening hours?", "Monday to Saturday, 9am to 6pm."];
+  switch (c.engine) {
+    case "order":
+      return order(business, { id, name: item, price: price ?? "10.00", category: "General", description: "" }, c.title, faq);
+    case "stay":
+      return stay(business, { id, name: item, rate: price ?? "100", capacity: "2", description: "" }, c.title, faq);
+    case "appt":
+      return appt(business, { id, name: item, duration_min: "60", price: price ?? "", description: "" }, c.title, faq);
+    case "quote":
+      return quote(business, { id, name: item, base: price ?? "100", per_unit: "", unit: "", minimum: "", note: "" }, c.title, faq);
+    case "track":
+      return track(business, { ref: "REQ-1042", status: "In progress", note: item }, c.title, faq);
+  }
+}
+for (const c of contributions) {
+  const example = INDUSTRY_EXAMPLES[c.slug] ? undefined : contributedExample(c);
+  if (example) INDUSTRY_EXAMPLES[c.slug] = example;
+}
 
 export function exampleFor(industry: string, engine: Engine): IndustryExample | undefined {
   const ex = INDUSTRY_EXAMPLES[industry];

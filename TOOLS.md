@@ -561,6 +561,6 @@ Sends something to the business: once sent, it cannot be taken back. Industries:
 
 ## For a new industry
 
-A new industry reuses its engine's three tools with names of its own, so it has exactly the inputs of that engine above, plus the tools every plug-in has. To propose one, see [INDUSTRIES.md](INDUSTRIES.md#propose-a-new-industry).
+A new industry reuses its engine's three tools with names of its own, so it has exactly the inputs of that engine above, plus the tools every plug-in has. To add one, see [INDUSTRIES.md](INDUSTRIES.md#add-a-new-industry).
 
 Questions: info@bizplug.ai.

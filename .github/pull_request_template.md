@@ -27,7 +27,8 @@
 - [ ] `npx tsx industries/check-industry.ts community/industries/<slug>.json` passes (output below)
 - [ ] I tried the preview from the bot's comment, in ChatGPT or with `npx tsx industries/test-industry.ts <this pull request's number>`
 - [ ] The industry is not already in [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md), and no existing industry fits it
-- [ ] BizPlug may use this proposal to build and publish an industry plug-in
+- [ ] Everything the file says is true of the plug-in (it answers from the business's profile and sends requests the business confirms)
+- [ ] I understand that merging publishes this industry on BizPlug, and BizPlug may publish it
 
 ## Plug-in: `community/plugins/<name>/`
 
@@ -47,4 +48,4 @@
 
 ## Screenshot
 
-<!-- The card with your theme or layout, or your plug-in answering in ChatGPT. Not needed for an industry proposal. -->
+<!-- The card with your theme or layout, or your plug-in answering in ChatGPT. Not needed for an industry file. -->

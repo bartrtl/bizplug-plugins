@@ -1,6 +1,6 @@
 # Community contributions
 
-Plug-ins, menu layouts and industry proposals that collaborators added to this repository with a pull request. Everything in `community/` is kept as its authors wrote it: the release that rewrites the rest of the repository never changes it. Card themes are contributed in [`themes/`](../themes) instead.
+Plug-ins, menu layouts and industries that collaborators added to this repository with a pull request. Everything in `community/` is kept as its authors wrote it: the release that rewrites the rest of the repository never changes it. Card themes are contributed in [`themes/`](../themes) instead.
 
 ## Plug-ins: `community/plugins/<name>/`
 
@@ -14,11 +14,11 @@ None yet: yours can be the first.
 
 A layout has `layout.json`, `layout.js`, `layout.css`, `preview-desktop.png` and `preview-mobile.png`. Start from [`layouts/_template/`](../layouts/_template), and see [LAYOUTS.md](../LAYOUTS.md) for what `render(ctx)` gets and the rules.
 
-## Industry proposals: `community/industries/<slug>.json`
+## Industries: `community/industries/<slug>.json`
 
-None open.
+None yet: yours can be the first.
 
-A proposal for a new industry plug-in, in the format of [`industries/example.json`](../industries/example.json) ([INDUSTRIES.md](../INDUSTRIES.md#propose-a-new-industry)). Once the team adds the industry, its package appears in [`plugins/<slug>/`](../plugins) and the proposal is removed from here.
+One file per industry, in the format of [`industries/example.json`](../industries/example.json) ([INDUSTRIES.md](../INDUSTRIES.md#add-a-new-industry)). A file here is a live industry on BizPlug: the website reads these files each time it is built, and the generated package is in [`plugins/<slug>/`](../plugins). Changing a file changes the industry, and removing one takes it down.
 
 ## Add yours
 

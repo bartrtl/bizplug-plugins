@@ -2,7 +2,7 @@
 
 BizPlug has a standard plug-in for each of 82 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
 
-This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is proposed with a pull request that adds a short proposal file, or with an issue form ([below](#propose-a-new-industry)). Never add a package to `plugins/` yourself: those folders are generated from the BizPlug website, so one added by hand would be overwritten by the next update.
+This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is added with a pull request here that adds one file, `community/industries/<slug>.json`: once it is merged, that file is the industry ([below](#add-a-new-industry)). Never add a package to `plugins/` yourself: those folders are generated from the BizPlug website, so one added by hand would be overwritten by the next update.
 
 ## What an industry plug-in is
 
@@ -105,9 +105,13 @@ The website groups the industries like this:
 
 Added since the first 80: Florists & Flower Delivery (`florists`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
 
-## Propose a new industry
+## Add a new industry
 
-First check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one. Then propose it in one of two ways.
+A new industry is one file in this repository, `community/industries/<slug>.json`. You open a pull request that adds it; when the pull request is merged, the file is the industry: BizPlug serves its plug-in, gives it a page on the website and offers it to businesses in the portal. Nobody rebuilds it by hand, and the file stays here as its source: a later pull request that changes the file changes the industry.
+
+An industry added this way runs on one of the engines above, with no option. If it needs something no engine does (a new tool, menu option or data file), say so in an issue instead: that is built by the BizPlug team.
+
+First check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
 
 ### With a pull request
 
@@ -120,7 +124,7 @@ git clone https://github.com/msg2ai/bizplug-plugins && cd bizplug-plugins
 npx tsx industries/test-industry.ts --plugin https://mcp.bizplug.ai/plugin/coffee-shops/demo-cafe
 ```
 
-**2. Write your proposal.** Fork the repository (if your fork is older, update it first with **Sync fork** on its GitHub page; syncing from the command line asks for the `workflow` permission, `gh auth refresh -s workflow`, because this repository's workflows change), create a branch (for example `industry/bicycle-shops`) and add `community/industries/<slug>.json`, named after its `slug`, in the format below. Copy [`industries/example.json`](industries/example.json) to start.
+**2. Write your industry file.** Fork the repository (if your fork is older, update it first with **Sync fork** on its GitHub page; syncing from the command line asks for the `workflow` permission, `gh auth refresh -s workflow`, because this repository's workflows change), create a branch (for example `industry/bicycle-shops`) and add `community/industries/<slug>.json`, named after its `slug`, in the format below. Copy [`industries/example.json`](industries/example.json) to start.
 
 **3. Check it** from the root of your copy, and fix what it reports:
 
@@ -133,7 +137,7 @@ npx tsx industries/check-industry.ts community/industries/<slug>.json
 - The **Check contributions** workflow runs the same check.
 - The **Test industry proposals** workflow builds your industry as a real plug-in on the test server, at `https://mcp-test.bizplug.ai/plugin/proposal/<pull request number>`, runs the test below against it, and posts the result as a comment on your pull request. Each push updates the comment. On your first pull request, GitHub may wait for a maintainer to approve the workflows.
 
-**5. Try your industry yourself.** The address in the comment is a working plug-in for a sample business made from your proposal, with your `example` item first. Nothing it does reaches anyone: a sample business never sends a request.
+**5. Try your industry yourself.** The address in the comment is a working plug-in for a sample business made from your file, with your `example` item first. Nothing it does reaches anyone: a sample business never sends a request.
 
 - In ChatGPT: open Settings, then Apps & Connectors, turn on developer mode, create a connector with that address, and ask it what it can do. Try your `ask` question.
 - From your terminal, the same test the workflow runs:
@@ -144,7 +148,7 @@ npx tsx industries/test-industry.ts <pull request number>
 
 It lists the tools and checks each step: the tool list and definitions, the menu, the look-up (with your example first), a request and its reference, the status of that reference, a request with nothing filled in (it must be refused), and the business's information and contact details. Paste its output in your pull request.
 
-**6. Review and merge.** The BizPlug team discusses the proposal in the pull request and merges it once it is agreed. Merging accepts the proposal; the team then adds the industry to the website (see [After a proposal is accepted](#after-a-proposal-is-accepted)), and your preview stays available while the pull request is open.
+**6. Review and merge.** The BizPlug team reviews the file in the pull request and merges it once it is agreed. Merging is the release: see [After your pull request is merged](#after-your-pull-request-is-merged). Your preview stays available while the pull request is open.
 
 ```json
 {
@@ -168,7 +172,43 @@ It lists the tools and checks each step: the tool list and definitions, the menu
     "price": "15.00"
   },
   "who": "Independent bike shops with a repair workshop.",
-  "author": "Your name or company"
+  "author": "Your name or company",
+  "icon": "Bike",
+  "accent": "lime",
+  "page": {
+    "headline": "Repair bookings without the phone ringing in the workshop",
+    "problem": "A mechanic with a bike on the stand cannot answer the phone. A plug-in shows your repairs with their prices and the times you take bookings, and sends the repair request to your shop to confirm.",
+    "valueProps": [
+      "Repairs with prices::Your published repairs, how long each takes and what it costs.",
+      "Times you take bookings::Open times within your published hours.",
+      "Requests to the workshop::Repair, day and time arrive ready to confirm."
+    ],
+    "moments": [
+      "The flat tyre::A repair requested for this afternoon.",
+      "The service before a trip::A full service requested for Saturday.",
+      "The rental question::Answered from your profile.",
+      "Did you get my booking?::A reference check instead of a call."
+    ],
+    "journeys": [
+      "See repairs and prices",
+      "Find a time",
+      "Book a repair",
+      "Check the booking"
+    ],
+    "faqs": [
+      "Does it say what is wrong with the bike?::No. It never gives safety advice on a repair; the mechanic checks the bike.",
+      "Is the repair confirmed in the chat?::No. Your shop confirms every booking."
+    ]
+  },
+  "chat": {
+    "business": "Spoke & Chain",
+    "answer": [
+      "🔧|Flat tyre repair|30 min|$15.00",
+      "@Today: 14:00, *15:30, 16:00"
+    ],
+    "confirm": "15:30, please.",
+    "sent": "Flat tyre repair · Today 15:30 · $15.00"
+  }
 }
 ```
 
@@ -185,12 +225,21 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `covers` | The topics the plug-in answers from the business's profile |
 | `rule` | Optional: what the plug-in must never do or say in this industry |
 | `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
-| `example` | Optional: a made-up business and one thing it offers, with a price |
-| `who`, `author` | Optional: who would use it; and who the proposal is credited to |
+| `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
+| `who` | Optional: who would use it |
+| `author` | Who the industry is credited to |
+| `icon`, `accent` | Optional: the industry's icon on the website (`AppWindow`, `Armchair`, `Award`, `Baby`, `Bike`, `Bitcoin`, `Bone`, `BookOpen`, `Boxes`, `Brain`, `Briefcase`, `Bug`, `Building`, `Building2`, `Bus`, `Calculator`, `Camera`, `Car`, `CarFront`, `ChefHat`, `Church`, `Code`, `Coffee`, `CookingPot`, `Dices`, `Droplets`, `Dumbbell`, `Eye`, `FerrisWheel`, `FileText`, `Flower`, `Gavel`, `Gem`, `GraduationCap`, `HandCoins`, `Handshake`, `Heart`, `HeartHandshake`, `HeartPulse`, `Hotel`, `Landmark`, `Lightbulb`, `Lock`, `Megaphone`, `Palette`, `PawPrint`, `Pill`, `Plane`, `PlaneTakeoff`, `RadioTower`, `Repeat`, `Salad`, `School`, `Scissors`, `ShieldCheck`, `Ship`, `Shirt`, `ShoppingBag`, `ShoppingCart`, `Smartphone`, `Sofa`, `Sparkles`, `SprayCan`, `Stethoscope`, `Store`, `Sun`, `Ticket`, `Trees`, `TrendingUp`, `Trophy`, `Truck`, `UserPlus`, `Users`, `Utensils`, `UtensilsCrossed`, `Vote`, `Wind`, `Wine`, `Wrench`, `Zap`) and its colour (`lime`, `mint`, `aqua`, `amber`, `sky`). Without them it gets a plain icon |
+| `added` | Optional: the day it was added, as YYYY-MM-DD. Without it, the day the file was first merged |
+| `page` | Optional: the words of the industry's page on the website. `headline`, `problem` (one paragraph), 3 `valueProps`, 4 `moments` and 2 `faqs` written as `"Title::description"`, and 4 short `journeys` (the steps a customer takes). Without it the page uses the engine's general words |
+| `chat` | Optional: the worked example on that page. `business`, `ask` (defaults to the field above), `answer` (1 to 8 lines, below), `confirm` (what the customer answers) and `sent` (what the business receives). Without it the page shows a plain example made from `example` |
+
+Each line of `chat.answer` is one element of the plug-in's answer: an option as `emoji|name|detail|price` (detail and price may be empty; `*` in front marks the one the customer picks), open times as `@Friday: 17:00, *19:00`, a status as `!reference|what|state|detail` with progress as `#Step>*Step>Step`, or a short note as `~text`.
+
+What you write must be true of the plug-in: it answers from the business's published profile and sends requests the business confirms. Do not promise live availability, payment in the chat, or anything else the engine does not do; the description of each engine above says what it does.
 
 ### With an issue
 
-Not on GitHub, or not sure of the engine? Open the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form and fill it in. The team replies in the issue and may ask questions there. What the form asks for:
+Not on GitHub, or not sure of the engine? Open the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form and fill it in. The team replies in the issue and may ask questions there; an industry that fits an engine is then added as a file here, like any other. What the form asks for:
 
 | Field | What to give | Example |
 | --- | --- | --- |
@@ -208,13 +257,14 @@ A good proposal fits one of the 5 engines. If it needs something no engine does,
 
 Please do not put customers' personal data, passwords or other secrets in a proposal: issues and pull requests are public.
 
-## After a proposal is accepted
+## After your pull request is merged
 
-1. The BizPlug team adds the industry to the website's data files, from your proposal: its name, group and copy, its engine and tool names, an example row for each template, and its page on bizplug.ai.
-2. The packages are generated again, and the change is reviewed and merged on the website's repository.
-3. On that merge, this repository is generated again: the new `plugins/<slug>/` package appears, the README and this page list it, and a proposal file in `community/industries/` for that slug is removed, since the package replaces it.
-4. Once the website with the new industry is deployed, its MCP server URL answers, and businesses in that industry can add the plug-in in the BizPlug portal (https://bizplug.ai/portal).
+1. The **Publish contributed industries** workflow asks the BizPlug website to build again. Each build reads the industry files on `main` and checks them with the same check as your pull request; a file that fails is left out.
+2. When that build is live, usually a few minutes later, the industry is on the website: its plug-in answers at `https://mcp.bizplug.ai/plugin/<slug>`, it has a page at https://bizplug.ai/industries/<slug>, and businesses can add it in the BizPlug portal (https://bizplug.ai/portal). A sample business answers at `.../plugin/<slug>/demo-sample`, so you can try it; it never sends a request.
+3. With the next update of this repository, its package appears in `plugins/<slug>/`, and the README and this page list it with your name. The file in `community/industries/` stays: it is the industry's source.
 
-The team links the change in the pull request or the issue. If an industry is not added, the team says why there.
+To change the industry, open a pull request that changes its file. To take it down, open one that removes the file; a business that already has a plug-in in that industry would lose it, so the team agrees that with those businesses first.
+
+If the workflow says the `BIZPLUG_DEPLOY_HOOK` secret is not set, the industry goes live with the website's next deployment instead of straight away.
 
 Questions: info@bizplug.ai.

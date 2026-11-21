@@ -19,5 +19,41 @@
     "price": "15.00"
   },
   "who": "Independent bike shops with a repair workshop.",
-  "author": "Your name or company"
+  "author": "Your name or company",
+  "icon": "Bike",
+  "accent": "lime",
+  "page": {
+    "headline": "Repair bookings without the phone ringing in the workshop",
+    "problem": "A mechanic with a bike on the stand cannot answer the phone. A plug-in shows your repairs with their prices and the times you take bookings, and sends the repair request to your shop to confirm.",
+    "valueProps": [
+      "Repairs with prices::Your published repairs, how long each takes and what it costs.",
+      "Times you take bookings::Open times within your published hours.",
+      "Requests to the workshop::Repair, day and time arrive ready to confirm."
+    ],
+    "moments": [
+      "The flat tyre::A repair requested for this afternoon.",
+      "The service before a trip::A full service requested for Saturday.",
+      "The rental question::Answered from your profile.",
+      "Did you get my booking?::A reference check instead of a call."
+    ],
+    "journeys": [
+      "See repairs and prices",
+      "Find a time",
+      "Book a repair",
+      "Check the booking"
+    ],
+    "faqs": [
+      "Does it say what is wrong with the bike?::No. It never gives safety advice on a repair; the mechanic checks the bike.",
+      "Is the repair confirmed in the chat?::No. Your shop confirms every booking."
+    ]
+  },
+  "chat": {
+    "business": "Spoke & Chain",
+    "answer": [
+      "🔧|Flat tyre repair|30 min|$15.00",
+      "@Today: 14:00, *15:30, 16:00"
+    ],
+    "confirm": "15:30, please.",
+    "sent": "Flat tyre repair · Today 15:30 · $15.00"
+  }
 }

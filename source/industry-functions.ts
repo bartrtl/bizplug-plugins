@@ -6,6 +6,7 @@
 //   appt  : find open slots, request an appointment, check status
 //   quote : get a price estimate from published rules, request a quote or visit, check status
 //   track : look up a reference, submit a request, check status
+import { contributions, functionOf } from "@/lib/contributed-industries";
 import { isPreviewSlug, previewFunctions } from "@/lib/preview-registry";
 export type Engine = "order" | "stay" | "appt" | "quote" | "track";
 export type Span = "nights" | "days" | "single";
@@ -143,6 +144,9 @@ export const industryFunctions: IndustryFunction[] = [
   r("public-transit", "track", "Service alerts and issue reports", ["lookup_service_alerts", "report_issue", "get_issue_status"], "service alert or report"),
   r("pharmacy", "track", "Store services and callback requests", ["lookup_refill_status", "request_callback", "get_callback_status"], "callback request", { note: NO_ADVICE + " Never collect medication names or prescription numbers in chat; the pharmacy gets those by phone." }),
 ];
+
+// Industries contributed in the public plug-in repository (contributed-industries.ts); a built-in row wins.
+for (const c of contributions) if (!industryFunctions.some((f) => f.slug === c.slug)) industryFunctions.push(functionOf(c));
 
 export const functionBySlug = new Map(industryFunctions.map((f) => [f.slug, f]));
 export const getFunction = (slug: string) => functionBySlug.get(slug) ?? (isPreviewSlug(slug) ? previewFunctions.get(slug) : undefined);
