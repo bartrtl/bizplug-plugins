@@ -35,5 +35,5 @@ body:
       options:
         - label: I wrote this layout, and it may be published under this repository's licence.
           required: true
-        - label: I checked it at 390 and 680 px wide, in dark and light mode, with both sample businesses.
+        - label: I checked it at 390 and 680 px wide, in dark and light mode, with both sample businesses, with and without a banner and logo.
           required: true

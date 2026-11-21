@@ -1,0 +1,75 @@
+{
+  "view": "menu",
+  "title": "Demo Cafe (sample profile)",
+  "subtitle": "Mobile order-ahead for pickup",
+  "options": [
+    {
+      "tool": "get_menu",
+      "kind": "lookup",
+      "title": "Browse and prices",
+      "description": "See what is on offer, with prices.",
+      "example": "What do you have, and how much is it?"
+    },
+    {
+      "tool": "place_pickup_order",
+      "kind": "request",
+      "title": "Place the order",
+      "description": "Send your order. The business confirms it and takes payment itself.",
+      "example": "I'd like to order for pickup"
+    },
+    {
+      "tool": "get_business_info",
+      "kind": "question",
+      "title": "Ask a question",
+      "description": "Answers from the business's own information: menu, hours, specials and catering orders.",
+      "example": "What time do you open, and do you have oat milk?"
+    },
+    {
+      "tool": "get_order_status",
+      "kind": "status",
+      "title": "Order status",
+      "description": "Check an order with its reference.",
+      "example": "What's the status of my order?"
+    },
+    {
+      "tool": "get_contact",
+      "kind": "contact",
+      "title": "Contact the business",
+      "description": "Phone, email, website and opening hours.",
+      "example": "How do I contact the business?"
+    }
+  ],
+  "plugin": {
+    "title": "Demo Cafe (sample profile)",
+    "subtitle": "Mobile order-ahead for pickup",
+    "bound": true,
+    "inCard": true,
+    "nav": true,
+    "stayCal": false,
+    "quick": {
+      "categories": [
+        {
+          "name": "Coffee",
+          "count": 2
+        },
+        {
+          "name": "Bakery",
+          "count": 1
+        }
+      ]
+    },
+    "businessName": "Demo Cafe (sample profile)",
+    "sample": true,
+    "engine": "order",
+    "span": null,
+    "noun": "drink or snack",
+    "needsContact": true,
+    "theme": null,
+    "contact": {
+      "title": "Contact BizPlug",
+      "description": "Questions about this plug-in, or one like it for your business.",
+      "whatsapp": "https://wa.me/17047372724?text=Hi%20BizPlug%2C%20I'm%20using%20the%20Demo%20Cafe%20(sample%20profile)%20plug-in%20in%20ChatGPT%20and%20would%20like%20to%20know%20more.",
+      "email": "mailto:info@bizplug.ai"
+    }
+  }
+}

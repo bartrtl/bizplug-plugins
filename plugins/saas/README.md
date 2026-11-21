@@ -1,6 +1,6 @@
 # BizPlug SaaS & Software
 
-Version 0.31.0. Book a product demo for saas & software businesses.
+Version 0.34.0. Book a product demo for saas & software businesses.
 
 - Main function: Book a product demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/saas` (streamable HTTP, no sign-in)
@@ -27,6 +27,7 @@ Version 0.31.0. Book a product demo for saas & software businesses.
 | `get_demo_status` | Look up the status of a request by its reference. |
 | `get_business_info` | Answer a general question about this saas & software business using only its published profile: features, integrations, plans pages and demo requests. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
+| `open_form` | Open one of this saas & software business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 | `get_features` | List or search what this software product does, from the features it published: each with what it does, the plan that includes it and the guide that explains it. Creates nothing. |
 | `get_pricing` | Return the product's plans as it published them, or only its pricing page when the product shows no plans here. Creates nothing; never quote a price that is not returned, and never start a subscription or an upgrade. |
 | `search_help` | Search the product's published help articles and guides by words or topic, and return each with its link. Creates nothing. |
@@ -34,6 +35,9 @@ Version 0.31.0. Book a product demo for saas & software businesses.
 
 ## Changes
 
+- **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
+- **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.
+- **0.32.0** (20 November 2026): Forms: your own forms in Google Forms, Microsoft Forms, Typeform, Jotform, Tally and other tools, offered at the right moment and opened with what the customer already said filled in.
 - **0.31.0** (20 November 2026): Menu layouts: choose how your card's menu is organised, from the Ask bar, App and Story layouts or one from the open-source layout directory.
 - **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.

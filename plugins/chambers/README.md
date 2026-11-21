@@ -1,6 +1,6 @@
 # BizPlug Chambers of Commerce & Business Associations
 
-Version 0.31.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
+Version 0.34.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
@@ -16,6 +16,7 @@ Version 0.31.0. Chamber information, membership enquiries and member businesses 
 - **Look up a reference**: Look up the status of a reference you already have.
 - **Request status**: Check a request with its reference.
 - **Members**: The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.
+- **Forms**: The business's own forms, such as an application, a registration or a survey, opened with what you already said filled in.
 - **Social media**: The latest posts from the business's social media, with their pictures, and where to follow it.
 - **Contact the business**: Phone, email, website and opening hours.
 
@@ -29,11 +30,15 @@ Version 0.31.0. Chamber information, membership enquiries and member businesses 
 | `get_enquiry_status` | Look up the status of a request by its reference. |
 | `get_business_info` | Answer a general question about this chambers of commerce & business associations business using only its published profile: membership levels and benefits, events, programs, committees, advocacy and member businesses. Creates nothing. If the profile does not cover the question, say so and use get_contact. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
+| `open_form` | Open one of this chambers of commerce & business associations business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 | `find_members` | Find the member businesses of this chambers of commerce & business associations business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. Share only what the business lists for a member. |
 | `write_to_member` | Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with find_members. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. |
 
 ## Changes
 
+- **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
+- **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.
+- **0.32.0** (20 November 2026): Forms: your own forms in Google Forms, Microsoft Forms, Typeform, Jotform, Tally and other tools, offered at the right moment and opened with what the customer already said filled in.
 - **0.31.0** (20 November 2026): Menu layouts: choose how your card's menu is organised, from the Ask bar, App and Story layouts or one from the open-source layout directory.
 - **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.

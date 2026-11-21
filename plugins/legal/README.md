@@ -1,6 +1,6 @@
 # BizPlug Legal Services
 
-Version 0.31.0. Book an initial consultation for legal services businesses.
+Version 0.34.0. Book an initial consultation for legal services businesses.
 
 - Main function: Book an initial consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/legal` (streamable HTTP, no sign-in)
@@ -13,6 +13,7 @@ Version 0.31.0. Book an initial consultation for legal services businesses.
 - **Request the appointment**: Ask for an open time. The business confirms the appointment.
 - **Ask a question**: Answers from the business's own information: practice areas, fees and consultation requests.
 - **Request status**: Check a request with its reference.
+- **Forms**: The business's own forms, such as an application, a registration or a survey, opened with what you already said filled in.
 - **Social media**: The latest posts from the business's social media, with their pictures, and where to follow it.
 - **Contact the business**: Phone, email, website and opening hours.
 
@@ -26,9 +27,13 @@ Version 0.31.0. Book an initial consultation for legal services businesses.
 | `get_consult_status` | Look up the status of a request by its reference. |
 | `get_business_info` | Answer a general question about this legal services business using only its published profile: practice areas, fees and consultation requests. Creates nothing. If the profile does not cover the question, say so and use get_contact. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
+| `open_form` | Open one of this legal services business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 
 ## Changes
 
+- **0.34.0** (21 November 2026): Agent mode: other companies' AI agents can use your plug-in without a card, and must show the customer a preview before a request is sent.
+- **0.33.0** (21 November 2026): Your own forms: build short forms in the portal, and customers fill them in on your card or ask the assistant to.
+- **0.32.0** (20 November 2026): Forms: your own forms in Google Forms, Microsoft Forms, Typeform, Jotform, Tally and other tools, offered at the right moment and opened with what the customer already said filled in.
 - **0.31.0** (20 November 2026): Menu layouts: choose how your card's menu is organised, from the Ask bar, App and Story layouts or one from the open-source layout directory.
 - **0.30.0** (20 November 2026): Social media on the card: the business's latest posts with their pictures, from its feeds and the posts it pins, and where to follow it.
 - **0.29.0** (20 November 2026): The booking calendar for car rental, tickets, desks and venues, with prices that change by day.

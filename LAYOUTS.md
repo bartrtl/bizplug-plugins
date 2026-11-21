@@ -6,7 +6,7 @@ Layouts are open source. This page is also how to build one.
 
 ## The layouts
 
-The pictures show the sample hotel on a computer and the sample chamber of commerce on a phone.
+The pictures show BizPlug's generic sample businesses, with no logo or photos: the sample hotel on a computer and the sample café on a phone.
 
 ### Tiles (standard)
 
@@ -121,7 +121,7 @@ A layout never runs code of its own in the card: `render` is called again whenev
 
 1. Copy `layouts/_template/` to `layouts/<your-id>/`, and set the same `id` in `layout.json` and in every `.lay-<id>` selector.
 2. `npx tsx layouts/preview.ts layouts/<your-id>` writes an HTML page per sample business and mode: open them and resize the window to 680 and 390 px. It uses this repository's copy of the card (`layouts/card.html`) and the sample businesses in `layouts/samples/`.
-3. Take the two preview pictures: the hotel at 680 px in dark mode (`preview-desktop.png`) and the chamber at 390 px (`preview-mobile.png`).
+3. Take the two preview pictures: the sample hotel at 680 px in dark mode (`preview-desktop.png`) and the sample café at 390 px (`preview-mobile.png`).
 4. `npx tsx layouts/check-layout.ts layouts/<your-id>`.
 5. Propose it with the [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml) form, with a link to your folder. This repository is generated from the BizPlug website on every release, so a pull request here would be overwritten.
 

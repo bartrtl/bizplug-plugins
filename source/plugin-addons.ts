@@ -7,7 +7,7 @@ import type { Engine, Span } from "@/lib/industry-functions";
 import { CUSTOMER_LINKS, type CustomerLinkKey } from "@/lib/customer-links";
 
 export type AddonStatus = "included" | "setup" | "custom";
-export type AddonGroup = "requests" | "chat" | "payments" | "calendars" | "reviews" | "social" | "access";
+export type AddonGroup = "requests" | "chat" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
 
 export type Addon = {
   id: string;
@@ -53,6 +53,7 @@ export const ADDON_STATUS_NOTE: Record<AddonStatus, string> = {
 export const ADDON_GROUP_LABEL: Record<AddonGroup, string> = {
   requests: "Where your requests go",
   chat: "Chat with your customers",
+  forms: "Forms",
   payments: "Payment pages",
   calendars: "Calendars and booking pages",
   reviews: "Directions and reviews",
@@ -280,6 +281,20 @@ const LINK_ADDONS: Addon[] = (Object.keys(CUSTOMER_LINKS) as CustomerLinkKey[]).
 
 // Offered where the plug-in is about availability.
 const calendarLimit = "Your plug-in does not read your calendar: it works from the availability in the files you upload, and your business confirms every request itself.";
+// 0.32.0: the business's own forms (form-links.ts), set up by the client alone in one tile.
+const FORMS: Addon = {
+  id: "forms", name: "Forms", group: "forms", status: "included",
+  what: "Your own forms (Google Forms, Microsoft Forms, Typeform, Jotform, Tally and more) on your card and offered by the assistant, opened with what the customer already said filled in.",
+  needs: ["A form in a form tool, and its share or prefilled link"],
+  value: "Applications, registrations and surveys start from the chat, already filled in with what the customer said.",
+  steps: [
+    "Make the form in your form tool as usual, and copy its share link.",
+    "To have answers filled in, use the form's prefilled link and put {name}, {email}, {phone}, {date} or {details} where an answer goes (in Google Forms: Get pre-filled link; Typeform: hidden fields; Tally, Jotform and Fillout: the field name after ?).",
+    "Add it here with a name and when to offer it, and press Open to try it. Your plug-in offers it from version 0.32.0.",
+  ],
+  link: { label: "How to add your forms", href: "/how-to/plug-in/forms" },
+};
+
 const calendarLink = { label: "How to connect a calendar or booking tool", href: "/how-to/requests/calendars" };
 const CALENDARS: Addon[] = [
   {
@@ -378,7 +393,7 @@ export function addonsFor(engine: Engine, span?: Span): Addon[] {
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 

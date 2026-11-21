@@ -85,6 +85,7 @@ const ICONS: Record<string, string> = {
   speakers: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
   exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
   enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
+  form: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   committees: '<circle cx="12" cy="6" r="2.5"/><circle cx="5" cy="17" r="2.5"/><circle cx="19" cy="17" r="2.5"/><path d="M12 8.5v3M12 11.5l-5 3.5M12 11.5l5 3.5"/>',
   news: '<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 16h3"/>',
@@ -375,6 +376,7 @@ function receive(sc) {
   else {
     state.data[sc.view] = sc[sc.view];
     if (sc.view === "availability" && sc.availability) { state.f.start = sc.availability.start || state.f.start; state.f.end = sc.availability.end || ""; state.f.guests = String(sc.availability.guests || ""); }
+    if (sc.view === "forms" && sc.forms) state.formSel = sc.forms.open || "";
     if (sc.view === "slots" && sc.slots) { state.f.date = sc.slots.date; if (sc.slots.service) state.f.what = sc.slots.service.id; }
     // Up to 0.3.0 a new list starts a new order; from 0.4.0 the order is kept while browsing categories.
     if (sc.view === "catalog") { if (!nav()) state.cart = {}; ((sc.catalog || {}).items || []).forEach((x) => { state.items[x.id] = x; }); }
@@ -1100,6 +1102,30 @@ function newsView() {
     (rest.length ? '<div class="qlabel">Latest</div><div class="list" style="margin-top:6px">' + rest.map(row).join("") + "</div>" : "") +
     '<div class="note">Published by ' + esc(d.business || "the business") + ". Links open its own pages.</div>" + links("news");
 }
+// ---- 0.32.0: Forms (form-links.ts): the business's own forms, filled in here and opened on the form tool's page ----
+const FORM_LABELS = { name: ["Your name", "text"], email: ["Your email", "email"], phone: ["Your phone", "tel"], date: ["Date", "date"], details: ["Details", "textarea"] };
+const fillFormUrl = (url, values) => url.replace(/\{(name|email|phone|date|details)\}/g, (m, k) => encodeURIComponent(String(values[k] || "").trim().slice(0, k === "details" ? 1000 : 200)));
+function formsData() {
+  const d = state.data.forms || {};
+  return { items: d.items || p().forms || [], open: d.open || "", link: d.link || "" };
+}
+function formsView() {
+  const d = formsData(), o = opt("forms");
+  const sel = d.items.filter((f) => f.id === state.formSel)[0];
+  if (sel) {
+    const fields = sel.fields || [];
+    const filled = d.open === sel.id && d.link;
+    return '<div class="form">' + top(sel.title) + '<div class="hint">' + esc(sel.purpose || (sel.tool ? "A form in " + sel.tool + "." : "")) + "</div>" +
+      (fields.length && !filled ? fields.map((k) => field("form_" + k, FORM_LABELS[k][0], { type: FORM_LABELS[k][1], optional: true })).join("") : "") + errLine() +
+      '<div class="actions">' + (filled ? '<button class="primary" data-href="' + esc(d.link) + '">Open the form</button>' : primary(fields.length ? "Open the form, filled in" : "Open the form", "openform")) + "</div>" +
+      '<div class="note">' + (fields.length ? "What you type here is put into the form for you. " : "") + "You check the form and submit it on " + (sel.tool ? "the " + esc(sel.tool) + " page" : "the form's own page") + "; nothing is sent from here.</div></div>";
+  }
+  if (!d.items.length) return top(o ? o.title : "Forms") + '<div class="empty">This business has not published forms here.</div>';
+  return top(o ? o.title : "Forms") + '<div class="list">' + d.items.map((f) =>
+    '<div class="it"><div class="nm"><b>' + esc(f.title) + "</b>" + (f.tool ? '<span class="tag">' + esc(f.tool) + "</span>" : "") + "</div>" +
+    (f.purpose ? '<div class="bl">' + esc(f.purpose) + "</div>" : "") +
+    '<div class="acts">' + ((f.fields || []).length ? '<button class="btn go" data-form="' + esc(f.id) + '">Fill in</button>' : '<button class="btn go" data-href="' + esc(f.url) + '">Open the form</button>') + "</div></div>").join("") + "</div>" + links("forms");
+}
 // ---- 0.30.0: Social media (social-feed.ts) ----
 const NET = { instagram: ["IG", "#e1306c"], linkedin: ["in", "#0a66c2"], facebook: ["f", "#1877f2"], x: ["X", "#2b2b2b"], tiktok: ["TT", "#fe2c55"], youtube: ["▶", "#ff0033"], threads: ["@", "#2b2b2b"], bluesky: ["B", "#1185fe"], mastodon: ["M", "#6364ff"], podcast: ["P", "#8940fa"], blog: ["B", "#4b5563"], substack: ["S", "#ff6719"], medium: ["M", "#2b2b2b"], whatsapp: ["W", "#25d366"], pinterest: ["P", "#e60023"] };
 const netBadge = (n) => { const x = NET[n] || ["•", "#666"]; return '<span class="nb" style="--nc:' + x[1] + '">' + esc(x[0]) + "</span>"; };
@@ -1381,6 +1407,41 @@ function requestArgs() {
   delete base.notes;
   return Object.assign(base, { topic: v("topic"), message: v("message") });
 }
+// ---- The business's own forms (version 0.33.0, custom-forms.ts) ----
+// plugin.customForms holds each form's title and fields; the card draws them as plain text and inputs, and sends the
+// form with the form's own tool. The server checks every answer again.
+const cform = (key) => (p().customForms || []).find((x) => x.key === key) || null;
+const CF_INPUT = { number: "number", date: "date", time: "time" };
+function cformView() {
+  const f = cform(state.cf);
+  if (!f) return menuView();
+  const fields = (f.fields || []).map((x) => {
+    const k = "c_" + f.key + "_" + x.key, opt = x.required ? "" : " <small>(optional)</small>";
+    if (x.type === "select" || x.type === "boolean") {
+      const choices = x.type === "boolean" ? ["Yes", "No"] : x.options || [];
+      return '<div class="qlabel">' + esc(x.label) + opt + '</div><div class="qs">' + choices.map((o) => chip(esc(o), 'data-csel="' + esc(k) + '" data-val', o, v(k) === o)).join("") + "</div>";
+    }
+    return field(k, x.label, { type: x.type === "textarea" ? "textarea" : CF_INPUT[x.type] || "text", optional: !x.required });
+  }).join("");
+  return '<div class="form">' + top(f.title) + '<div class="hint">' + esc(f.when) + "</div>" +
+    '<div class="row">' + field("name", "Your name") + field("email", "Your email", { type: "email" }) + "</div>" + field("phone", "Phone", { type: "tel", optional: true }) +
+    fields + errLine() + '<div class="actions">' + primary("Send", "cform") + "</div>" +
+    '<div class="note">' + esc(p().businessName || p().title || "The business") + " replies by email. Nothing is booked, held or charged here.</div></div>";
+}
+function cformArgs(f) {
+  need(v("name"), "Add your name so the business can reply.");
+  need(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v("email")), "Add a valid email so the business can reply.");
+  const args = clean({ name: v("name"), email: v("email"), phone: v("phone") });
+  (f.fields || []).forEach((x) => {
+    const val = v("c_" + f.key + "_" + x.key);
+    if (x.required) need(val, "Fill in: " + x.label + ".");
+    if (!val) return;
+    if (x.type === "boolean") args[x.key] = val === "Yes";
+    else if (x.type === "number") { const n = Number(val); need(Number.isFinite(n), x.label + " must be a number."); args[x.key] = n; }
+    else args[x.key] = val;
+  });
+  return args;
+}
 // ---- Account menu (version 0.19.0) ----
 // The business's own server declares these entries (plugin.account); the card only draws them. "form" asks for
 // fields and runs a tool, "list" shows a tool's items and opens one, "chat" hands over to the chat.
@@ -1539,6 +1600,8 @@ function openOption(i) {
   if (!o) return;
   state.error = ""; state.hint = "";
   if (o.kind === "account") { openAccount(o.key, ""); return; }
+  // 0.33.0: one of the business's own forms. Where the card cannot run tools, the chat fills it in.
+  if (o.kind === "customform") { if (!inCard() || !cform(o.key)) { ask(o.example); return; } state.cf = o.key; state.view = "cform"; render(); return; }
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
   // 0.27.0: a hotel's Availability and price opens the booking screen on this month's calendar.
   if (o.kind === "lookup" && p().stayCal && inCard()) { const q = state.sq || {}; run(o.tool, clean({ adults: q.adults || 2, children: q.children || 0, rooms: q.rooms || 1, start: q.start && q.end ? q.start : "", end: q.start && q.end ? q.end : "" }), o.example); return; }
@@ -1554,6 +1617,7 @@ function openOption(i) {
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
   // 0.25.0: committees, and news, events and newsletter, each on its own screen.
+  if (o.kind === "forms") { state.formSel = ""; state.data.forms = { items: p().forms || [] }; state.view = "forms"; render(); return; }
   if (o.kind === "committees" || o.kind === "news" || o.kind === "social") { state.socNet = ""; run(o.tool, { section: o.kind }, o.example); return; }
   // 0.4.0: the business's published information and its questions and answers show in the card first.
   if (o.kind === "question" && nav() && inCard()) { state.open = i; run(o.tool, {}, "", () => { state.view = "form"; render(); }); return; }
@@ -1578,7 +1642,7 @@ function render() {
   applyTheme(theme);
   if (nav()) track();
   const app = document.getElementById("app");
-  const views = { mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   app.innerHTML = (ownHead ? "" : header()) + body + (state.view === "menu" ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + contactBar() : "");
@@ -1664,6 +1728,14 @@ function render() {
   on('[data-act="request"]', () => guard(() => run(request && request.tool, requestArgs(), request ? request.title : "Send my request")));
   // 0.30.0: Social media filters, and a picture that does not load gives way to the network's colour.
   on("[data-soc]", (b) => { state.socNet = b.dataset.soc || ""; render(); });
+  // 0.32.0: Forms: choose a form, then open it with the answers filled in, without a call to the server.
+  on("[data-form]", (b) => { state.formSel = b.dataset.form; state.error = ""; render(); });
+  on('[data-act="openform"]', () => {
+    const f = formsData().items.filter((x) => x.id === state.formSel)[0];
+    if (!f) return;
+    const values = {}; (f.fields || []).forEach((k) => (values[k] = v("form_" + k)));
+    openLink(fillFormUrl(f.url, values));
+  });
   app.querySelectorAll("img[data-soc-img]").forEach((img) => img.addEventListener("error", () => img.remove(), { once: true }));
   // ---- Browsing (version 0.4.0) ----
   on('[data-act="back"]', () => goBack());
@@ -1714,6 +1786,17 @@ function render() {
     if (it.mode === "list") busyDo(() => loadList(it)); else render();
   });
   on("[data-asel]", (b) => { state.f["a_" + b.dataset.asel] = b.dataset.val; render(); });
+  // 0.33.0: a form's choice (tap again to clear it), and its Send button.
+  on("[data-csel]", (b) => { state.f[b.dataset.csel] = state.f[b.dataset.csel] === b.dataset.val ? "" : b.dataset.val; state.error = ""; render(); });
+  on('[data-act="cform"]', () => guard(() => {
+    const f = cform(state.cf);
+    if (!f || state.busy) return;
+    const args = cformArgs(f);
+    run(f.key, args, "Please send \u201c" + f.title + "\u201d for me.").then(() => {
+      // Once sent, the form's own answers are cleared; the name and email stay for the next one.
+      if (state.view === "sent") { (f.fields || []).forEach((x) => { state.f["c_" + f.key + "_" + x.key] = ""; }); save(); }
+    });
+  }));
   on("[data-arow]", (b) => {
     const it = acct.item, row = acct.rows[Number(b.dataset.arow)];
     if (!it || !row || !it.open) return;

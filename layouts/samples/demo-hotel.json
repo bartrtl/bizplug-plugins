@@ -1,6 +1,6 @@
 {
   "view": "menu",
-  "title": "Corniche Lantern Hotel",
+  "title": "Demo Hotel (sample profile)",
   "subtitle": "Room availability, rates and booking requests",
   "options": [
     {
@@ -40,29 +40,26 @@
     }
   ],
   "plugin": {
-    "title": "Corniche Lantern Hotel",
+    "title": "Demo Hotel (sample profile)",
     "subtitle": "Room availability, rates and booking requests",
     "bound": true,
     "inCard": true,
     "nav": true,
     "stayCal": true,
     "quick": {
-      "maxGuests": 6
+      "maxGuests": 4
     },
-    "businessName": "Corniche Lantern Hotel",
-    "sample": false,
+    "businessName": "Demo Hotel (sample profile)",
+    "sample": true,
     "engine": "stay",
     "span": "nights",
     "noun": "room type",
-    "needsContact": false,
+    "needsContact": true,
     "theme": null,
-    "banner": "https://bizplug.ai/banner/hospitality/corniche-lantern-hotel?v=64fc00373f",
-    "logo": "https://bizplug.ai/logo/hospitality/corniche-lantern-hotel?v=fef6936fba",
-    "logoWide": false,
     "contact": {
       "title": "Contact BizPlug",
       "description": "Questions about this plug-in, or one like it for your business.",
-      "whatsapp": "https://wa.me/17047372724?text=Hi%20BizPlug%2C%20I'm%20using%20the%20Corniche%20Lantern%20Hotel%20plug-in%20in%20ChatGPT%20and%20would%20like%20to%20know%20more.",
+      "whatsapp": "https://wa.me/17047372724?text=Hi%20BizPlug%2C%20I'm%20using%20the%20Demo%20Hotel%20(sample%20profile)%20plug-in%20in%20ChatGPT%20and%20would%20like%20to%20know%20more.",
       "email": "mailto:info@bizplug.ai"
     }
   }

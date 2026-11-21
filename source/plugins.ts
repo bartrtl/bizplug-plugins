@@ -7,7 +7,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.31.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.34.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -30,7 +30,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -38,7 +38,7 @@ export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" 
  * published its programme (from 0.18.0), and "venue" options the menu of a venue; plugin-mcp.ts shows one of the two.
  * `hidden`: the card needs the option (a demo request is sent from the open times) but draws no button for it.
  */
-export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean; /** 0.19.0, kind "account": which entry of the business's account menu this is, and its icon. */ key?: string; icon?: string };
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean; /** 0.19.0, kind "account": which entry of the business's account menu this is, and its icon. 0.32.0, kind "form": the form's tool name. */ key?: string; icon?: string };
 
 export type IndustryPlugin = {
   slug: string;
@@ -66,6 +66,8 @@ const lower = (s: string) => s.toLowerCase();
 export const MEMBERS_TOOL = "find_members";
 /** 0.21.0 (`memberMessages`): drafts a first message from the person to one member; nothing is sent (members.ts). */
 export const MEMBER_MESSAGE_TOOL = "write_to_member";
+/** 0.32.0 (`formLinks`, form-links.ts): one of the business's own forms, as a link prefilled with what the customer said. */
+export const FORM_TOOL = "open_form";
 
 /** Software products (`software` in industry-functions.ts), from plug-in version 0.15.0 (software.ts). */
 export const SOFTWARE_TOOLS = { features: "get_features", pricing: "get_pricing", guides: "search_help", support: "request_support" } as const;
@@ -209,6 +211,8 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
     ...(fn.members
       ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]
       : []),
+    // 0.32.0, every industry: the business's own forms (applications, registrations, surveys), when it saved some.
+    { tool: FORM_TOOL, kind: "forms", title: "Forms", description: "The business's own forms, such as an application, a registration or a survey, opened with what you already said filled in.", example: "I would like to apply." },
     // 0.30.0, every industry: the business's social media, shown only for a business that published it.
     { tool: "get_business_info", kind: "social", title: "Social media", description: "The latest posts from the business's social media, with their pictures, and where to follow it.", example: "What has the business posted lately?" },
     { tool: "get_contact", kind: "contact", title: "Contact the business", description: "Phone, email, website and opening hours.", example: "How do I contact the business?" },
@@ -243,6 +247,13 @@ export function buildPlugin(i: Industry): IndustryPlugin {
       name: "get_contact",
       title: "Contact details",
       description: "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+      readOnly: true,
+    },
+    // 0.32.0, every industry: the business's own forms (form-links.ts). Offered only when it saved some (plugin-mcp.ts).
+    {
+      name: FORM_TOOL,
+      title: "Open a form",
+      description: `Open one of this ${noun} business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page.`,
       readOnly: true,
     },
     ...(fn.members
