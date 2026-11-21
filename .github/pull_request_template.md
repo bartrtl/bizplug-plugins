@@ -25,6 +25,7 @@
 
 - [ ] Only `community/industries/<slug>.json` is added, and the file name matches its `slug`
 - [ ] `npx tsx industries/check-industry.ts community/industries/<slug>.json` passes (output below)
+- [ ] I tried the preview from the bot's comment, in ChatGPT or with `npx tsx industries/test-industry.ts <this pull request's number>`
 - [ ] The industry is not already in [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md), and no existing industry fits it
 - [ ] BizPlug may use this proposal to build and publish an industry plug-in
 

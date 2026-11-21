@@ -111,11 +111,40 @@ First check that the industry is not already here: see the tables in the [README
 
 ### With a pull request
 
-1. Fork https://github.com/msg2ai/bizplug-plugins and create a branch, for example `industry/bicycle-shops`.
-2. Add `community/industries/<slug>.json` in the format below, named after its `slug`. Copy [`industries/example.json`](industries/example.json) to start.
-3. Check it from the root of your copy: `npx tsx industries/check-industry.ts community/industries/<slug>.json`.
-4. Open a pull request against `main` that adds only that file, and fill in the industry part of its checklist. The **Check contributions** workflow runs the same check.
-5. The BizPlug team discusses it in the pull request and merges it once the proposal is agreed. Merging accepts the proposal: it does not create the plug-in yet (see [After a proposal is accepted](#after-a-proposal-is-accepted)).
+You need a GitHub account, Git, and Node.js 18 or later. Nothing else: no account with BizPlug, no keys, no server of your own.
+
+**1. Look at what your industry will get.** Pick the engine that fits what customers mainly want to do (the engines are above). [TOOLS.md](TOOLS.md) shows that engine's three tools and their exact inputs: your industry gets the same inputs under tool names you choose. Try an industry on the same engine first, on its sample business, which answers like a real one and never sends anything:
+
+```bash
+git clone https://github.com/msg2ai/bizplug-plugins && cd bizplug-plugins
+npx tsx industries/test-industry.ts --plugin https://mcp.bizplug.ai/plugin/coffee-shops/demo-cafe
+```
+
+**2. Write your proposal.** Fork the repository (if your fork is older, update it first with **Sync fork** on its GitHub page; syncing from the command line asks for the `workflow` permission, `gh auth refresh -s workflow`, because this repository's workflows change), create a branch (for example `industry/bicycle-shops`) and add `community/industries/<slug>.json`, named after its `slug`, in the format below. Copy [`industries/example.json`](industries/example.json) to start.
+
+**3. Check it** from the root of your copy, and fix what it reports:
+
+```bash
+npx tsx industries/check-industry.ts community/industries/<slug>.json
+```
+
+**4. Open a pull request** against `main` that adds only that file, and fill in the industry part of its checklist. Two things then happen on their own:
+
+- The **Check contributions** workflow runs the same check.
+- The **Test industry proposals** workflow builds your industry as a real plug-in on the test server, at `https://mcp-test.bizplug.ai/plugin/proposal/<pull request number>`, runs the test below against it, and posts the result as a comment on your pull request. Each push updates the comment. On your first pull request, GitHub may wait for a maintainer to approve the workflows.
+
+**5. Try your industry yourself.** The address in the comment is a working plug-in for a sample business made from your proposal, with your `example` item first. Nothing it does reaches anyone: a sample business never sends a request.
+
+- In ChatGPT: open Settings, then Apps & Connectors, turn on developer mode, create a connector with that address, and ask it what it can do. Try your `ask` question.
+- From your terminal, the same test the workflow runs:
+
+```bash
+npx tsx industries/test-industry.ts <pull request number>
+```
+
+It lists the tools and checks each step: the tool list and definitions, the menu, the look-up (with your example first), a request and its reference, the status of that reference, a request with nothing filled in (it must be refused), and the business's information and contact details. Paste its output in your pull request.
+
+**6. Review and merge.** The BizPlug team discusses the proposal in the pull request and merges it once it is agreed. Merging accepts the proposal; the team then adds the industry to the website (see [After a proposal is accepted](#after-a-proposal-is-accepted)), and your preview stays available while the pull request is open.
 
 ```json
 {

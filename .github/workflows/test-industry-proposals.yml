@@ -1,0 +1,68 @@
+name: Test industry proposals
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths: ["community/industries/**"]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: industry-proposal-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # The base branch only: nothing from the pull request is checked out or run.
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Wait for the preview and test it
+        env:
+          PR: ${{ github.event.pull_request.number }}
+          SHA: ${{ github.event.pull_request.head.sha }}
+          HOST: https://mcp-test.bizplug.ai
+        # The preview reports the commit it read, so the test waits for this push's version.
+        run: |
+          url="$HOST/plugin/proposal/$PR"
+          # GitHub's answers are cached on the server for two minutes: try for up to five.
+          for i in $(seq 1 20); do
+            code=$(curl -s -o preview.json -w '%{http_code}' "$url" || echo 000)
+            if [ "$code" = 200 ] && node -e "const p=require('./preview.json'); process.exit(p.pullRequest && p.pullRequest.sha === process.env.SHA ? 0 : 1)"; then break; fi
+            if [ "$code" = 422 ] || [ "$code" = 400 ]; then break; fi
+            sleep 15
+          done
+          echo "$code" > preview.code
+          if [ "$code" = 200 ]; then npx --yes tsx industries/test-industry.ts "$PR" --host "$HOST" --json > result.json || true; fi
+      - name: Comment on the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          HOST: https://mcp-test.bizplug.ai
+        run: |
+          node -e '
+            const fs = require("fs");
+            const code = fs.readFileSync("preview.code", "utf8").trim();
+            const url = process.env.HOST + "/plugin/proposal/" + process.env.PR;
+            let body = "<!-- bizplug-proposal-test -->\n## Industry preview\n\n";
+            if (code !== "200") {
+              let why = "The preview did not answer (HTTP " + code + ").";
+              try { why = JSON.parse(fs.readFileSync("preview.json", "utf8")).error || why; } catch {}
+              body += "The proposal could not be previewed yet:\n\n```\n" + why + "\n```\n\nFix the file and push again; this comment is updated.";
+            } else {
+              const r = JSON.parse(fs.readFileSync("result.json", "utf8") || "{}");
+              const mark = (ok) => ok === true ? "✓" : ok === false ? "✗" : "–";
+              body += "**" + (r.passed ? "All checks passed." : "Some checks failed.") + "** " + (r.plugin || "") + ", engine `" + (r.engine || "?") + "`, sample business (nothing is sent).\n\n";
+              body += "Try it yourself: add **" + url + "** as a connector in ChatGPT developer mode, or run `npx tsx industries/test-industry.ts " + process.env.PR + "`.\n\n";
+              body += "| | Step | Result |\n| --- | --- | --- |\n" + (r.checks || []).map((c) => "| " + mark(c.ok) + " | " + c.step + " | " + String(c.detail).replace(/\|/g, "\\|") + " |").join("\n") + "\n";
+            }
+            fs.writeFileSync("comment.md", body);
+          '
+          id=$(gh api "repos/$REPO/issues/$PR/comments" --paginate -q '.[] | select(.body | startswith("<!-- bizplug-proposal-test -->")) | .id' | head -1)
+          if [ -n "$id" ]; then gh api -X PATCH "repos/$REPO/issues/comments/$id" -F body=@comment.md > /dev/null; else gh pr comment "$PR" --repo "$REPO" --body-file comment.md; fi

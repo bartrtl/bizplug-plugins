@@ -32,7 +32,7 @@ THEMES.md            the card's colour themes, and how to add one
 LAYOUTS.md           the card's menu layouts, with pictures, and how to build one
 plugins/             BizPlug's plug-in packages, one folder each (plugins/README.md)
 themes/              one JSON file per card theme, check-theme.ts and preview.ts (themes/README.md)
-industries/          check-industry.ts and an example, for proposing a new industry (INDUSTRIES.md)
+industries/          check-industry.ts, test-industry.ts and an example, for proposing and testing a new industry (INDUSTRIES.md)
 layouts/             BizPlug's menu layouts, the template, check-layout.ts, preview.ts and sample businesses
 community/           what collaborators contributed (community/README.md)
   plugins/<name>/      a contributed plug-in package
@@ -98,7 +98,7 @@ Collaborators can add four kinds of work to this repository with a pull request:
 | A **menu layout** (how the card's menu is drawn) | `community/layouts/<id>/` ([LAYOUTS.md](LAYOUTS.md)) | `npx tsx layouts/check-layout.ts community/layouts/<id>` | In this repository for anyone to use; offered in the portal once the team adds it in BizPlug's admin with you as its author |
 | A **plug-in** (an MCP server of your own) | `community/plugins/<name>/` ([CONTRIBUTING.md](CONTRIBUTING.md)) | It works in ChatGPT developer mode ([SETUP.md](SETUP.md#setup)) | In this repository for anyone to use; listed in the BizPlug marketplace once its listing is agreed with you |
 
-| A **new industry** (a proposal for an industry plug-in) | `community/industries/<slug>.json` ([INDUSTRIES.md](INDUSTRIES.md#propose-a-new-industry)) | `npx tsx industries/check-industry.ts community/industries/<slug>.json` | The proposal is accepted; the team then adds the industry, its package appears in `plugins/<slug>/` and the proposal file is removed |
+| A **new industry** (a proposal for an industry plug-in) | `community/industries/<slug>.json` ([INDUSTRIES.md](INDUSTRIES.md#propose-a-new-industry)) | `npx tsx industries/check-industry.ts community/industries/<slug>.json`; once the pull request is open, a workflow previews it on the test server and comments the results of `industries/test-industry.ts` | The proposal is accepted; the team then adds the industry, its package appears in `plugins/<slug>/` and the proposal file is removed |
 
 The **Check contributions** and **Check card themes** workflows run the checks on every pull request.
 
