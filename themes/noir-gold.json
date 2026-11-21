@@ -1,0 +1,13 @@
+{
+  "id": "noir-gold",
+  "name": "Noir Gold",
+  "description": "Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms.",
+  "author": "Bart Cant",
+  "colors": {
+    "a1": "#fde68a",
+    "a2": "#d4a24c",
+    "ink": "#1a1406",
+    "bg": "#121110",
+    "glow": "rgba(253,230,138,.12)"
+  }
+}
