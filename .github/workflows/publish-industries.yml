@@ -45,7 +45,8 @@ jobs:
           is_live() {
             want=$(jq -S 'del(.added)' "$1") || return 1
             slug=$(jq -r '.slug' "$1")
-            have=$(curl -fsS "$SITE/api/industries/contributed" | jq -S --arg s "$slug" '.industries[] | select(.slug == $s) | del(.added)') || return 1
+            # -L: the site's bare address redirects to www. A reply that is not the list counts as not live yet.
+            have=$(curl -fsSL "$SITE/api/industries/contributed" | jq -S --arg s "$slug" '.industries[] | select(.slug == $s) | del(.added)' 2>/dev/null) || return 1
             [ "$want" = "$have" ]
           }
           all_live() { for f in $files; do is_live "$f" || return 1; done; }

@@ -16,7 +16,7 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 | --- | --- |
 | `order` | `coffee-shops/demo-cafe`, `florists/demo-florist` |
 | `stay` | `events/demo-venue`, `hospitality/demo-hotel` |
-| `appt` | `beauty/demo-salon` |
+| `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
 | `quote` | `hvac/demo-hvac` |
 | `track` | `property-management/demo-pm` |
 
@@ -206,7 +206,7 @@ Read-only.
 
 ### `appt`: Find open times on a day, request an appointment, check its status.
 
-The inputs below are Healthcare & Clinics's. Every appt industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/beauty/demo-salon`.
+The inputs below are Healthcare & Clinics's. Every appt industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/beauty/demo-salon`, `https://mcp.bizplug.ai/plugin/restaurant-reservations/demo-sample`.
 
 #### `find_appointment_slots` (look-up: Open times)
 
@@ -239,7 +239,7 @@ Read-only.
 | --- | --- | --- | --- |
 | `reference` | string | yes | The reference returned when the request was made, e.g. BP-7K2Q9D. |
 
-<details><summary>Tool names of the 32 appt industries</summary>
+<details><summary>Tool names of the 33 appt industries</summary>
 
 | Industry | Look-up | Request | Status |
 | --- | --- | --- | --- |
@@ -275,6 +275,7 @@ Read-only.
 | Recruiting & Staffing | `find_call_slots` | `request_intro_call` | `get_call_status` |
 | HR & Internal Comms | `find_demo_slots` | `request_demo` | `get_demo_status` |
 | Religious Organizations | `find_event_slots` | `request_rsvp` | `get_rsvp_status` |
+| Restaurant Reservations | `find_table_times` | `request_table_booking` | `get_reservation_status` |
 
 </details>
 

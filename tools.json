@@ -22153,6 +22153,257 @@
           }
         }
       ]
+    },
+    "restaurant-reservations": {
+      "name": "Restaurant Reservations",
+      "engine": "appt",
+      "url": "https://mcp.bizplug.ai/plugin/restaurant-reservations",
+      "tools": [
+        {
+          "name": "show_menu",
+          "title": "Menu",
+          "description": "Return this plug-in's menu: what the customer can do here, each with a short title, a one-line description and a question to try. Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option; where there is no card, show the options exactly as returned (same titles, same order). Creates nothing.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "find_table_times",
+          "title": "Open times",
+          "description": "List bookable table reservation options and the open times on a day, from the business's published hours. Creates nothing. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "service": {
+                "type": "string",
+                "description": "Optional table reservation id or name."
+              },
+              "date": {
+                "type": "string",
+                "description": "Day to look at (defaults to the next open day), as YYYY-MM-DD."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "request_table_booking",
+          "title": "Request the appointment",
+          "description": "Send a request for a table reservation at an open time to the business. Use only once the customer has picked a time. The business confirms the appointment. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat.",
+          "readOnly": false,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "service": {
+                "type": "string",
+                "description": "The table reservation id or name."
+              },
+              "date": {
+                "type": "string",
+                "description": "Requested day, as YYYY-MM-DD."
+              },
+              "time": {
+                "type": "string",
+                "description": "Requested start time as HH:MM (24h), from the slots result."
+              },
+              "name": {
+                "type": "string",
+                "description": "Customer's name."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email the business can reply to."
+              },
+              "phone": {
+                "type": "string",
+                "description": "Optional phone number."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Anything else the business should know."
+              }
+            },
+            "required": [
+              "business",
+              "service",
+              "date",
+              "time",
+              "name",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "get_reservation_status",
+          "title": "Request status",
+          "description": "Look up the status of a request by its reference.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "reference": {
+                "type": "string",
+                "description": "The reference returned when the request was made, e.g. BP-7K2Q9D."
+              }
+            },
+            "required": [
+              "business",
+              "reference"
+            ]
+          }
+        },
+        {
+          "name": "get_business_info",
+          "title": "Business information",
+          "description": "Answer a general question about this restaurant reservations business using only its published profile: tables and party sizes, opening hours, menus, dietary options and private dining. Creates nothing. If the profile does not cover the question, say so and use get_contact. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "question": {
+                "type": "string",
+                "description": "The customer's question, in their words."
+              },
+              "section": {
+                "type": "string",
+                "enum": [
+                  "committees",
+                  "news",
+                  "social"
+                ],
+                "description": "Optional: \"committees\" for the business's committees, \"news\" for its news, events and newsletter, \"social\" for its latest social media posts and where to follow it. Leave out for everything else."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_contact",
+          "title": "Contact details",
+          "description": "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "open_form",
+          "title": "Open a form",
+          "description": "Open one of this restaurant reservations business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page.",
+          "readOnly": true,
+          "when": "Only when the business linked forms of its own.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "form": {
+                "type": "string",
+                "description": "The form's id or title, from the business's forms."
+              },
+              "name": {
+                "type": "string",
+                "description": "The customer's name, when they gave it."
+              },
+              "email": {
+                "type": "string",
+                "description": "The customer's email, when they gave it."
+              },
+              "phone": {
+                "type": "string",
+                "description": "The customer's phone, when they gave it."
+              },
+              "date": {
+                "type": "string",
+                "description": "A date the form asks for, as YYYY-MM-DD, when the customer gave it."
+              },
+              "details": {
+                "type": "string",
+                "description": "What the customer said the form is about, in their words."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "form"
+            ]
+          }
+        }
+      ]
     }
   }
 }

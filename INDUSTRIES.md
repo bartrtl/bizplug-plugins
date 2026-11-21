@@ -1,6 +1,6 @@
 # Industry plug-ins
 
-BizPlug has a standard plug-in for each of 82 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
+BizPlug has a standard plug-in for each of 83 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
 
 This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is added with a pull request here that adds one file, `community/industries/<slug>.json`: once it is merged, that file is the industry ([below](#add-a-new-industry)). Never add a package to `plugins/` yourself: those folders are generated from the BizPlug website, so one added by hand would be overwritten by the next update.
 
@@ -56,7 +56,7 @@ Find open times on a day, request an appointment, check its status.
 
 - Tools, as Healthcare & Clinics names them: `find_appointment_slots` (Open times), `request_appointment` (Request the appointment), `get_appointment_status` (Request status). The tool names differ from industry to industry.
 - Data the engine adds: `bookable.csv` (required), `open-hours.csv` (required).
-- 32 industries: Healthcare & Clinics, Dental Practices, Optometry & Eye Care, Dermatology & Skin, Chiropractic & PT, Mental Health & Therapy, Veterinary & Pet Care, Med Spas & Aesthetics, Beauty & Salons, Fitness & Gyms, Automotive & Dealerships, Home Health & Hospice, Senior Care & Communities, Real Estate, Legal Services, Tax & Accounting, Financial Services & Banking, Wealth & Investing, Lending & Mortgages, Tutoring & Test Prep, Childcare & Daycare, Photography & Creative, Education & Schools, Universities & Colleges, Consulting & Professional Services, Marketing Agencies, SaaS & Software, Developer Tools, Cybersecurity, Recruiting & Staffing, HR & Internal Comms, Religious Organizations.
+- 33 industries: Healthcare & Clinics, Dental Practices, Optometry & Eye Care, Dermatology & Skin, Chiropractic & PT, Mental Health & Therapy, Veterinary & Pet Care, Med Spas & Aesthetics, Beauty & Salons, Fitness & Gyms, Automotive & Dealerships, Home Health & Hospice, Senior Care & Communities, Real Estate, Legal Services, Tax & Accounting, Financial Services & Banking, Wealth & Investing, Lending & Mortgages, Tutoring & Test Prep, Childcare & Daycare, Photography & Creative, Education & Schools, Universities & Colleges, Consulting & Professional Services, Marketing Agencies, SaaS & Software, Developer Tools, Cybersecurity, Recruiting & Staffing, HR & Internal Comms, Religious Organizations, Restaurant Reservations.
 
 ### `quote`
 
@@ -86,7 +86,7 @@ A few industries switch on an option that adds tools, menu options and data file
 | `visits` | The business may publish its locations, with tours and day passes. The business confirms each one. | `get_visit_options`, `book_tour`, `request_day_pass` | `locations.csv` | Coworking & Offices |
 | `show` | A show or conference that published its programme gets an event guide (agenda, speakers, exhibitors and sponsors, enquiries) instead of the venue's menu. | `get_agenda`, `find_speakers`, `find_exhibitors`, `send_event_enquiry` | `sessions.csv`, `speakers.csv`, `exhibitors.csv`, `sponsors.csv` | Events & Conferences |
 
-25 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
+26 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
 
 ### Groups
 
@@ -95,7 +95,7 @@ The website groups the industries like this:
 | Group | Industries | For example |
 | --- | --- | --- |
 | Business essentials | 6 | Events & Conferences, Hospitality & Hotels, Marketing Agencies, Nonprofits & Charities, ... |
-| Retail & food | 16 | Retail & E-commerce, Restaurants & Food Service, Coffee Shops & Cafes, Bars & Nightlife, ... |
+| Retail & food | 17 | Retail & E-commerce, Restaurants & Food Service, Coffee Shops & Cafes, Bars & Nightlife, ... |
 | Property & auto | 3 | Real Estate, Local & Home Services, Automotive & Dealerships |
 | Health & wellness | 13 | Healthcare & Clinics, Fitness & Gyms, Beauty & Salons, Dental Practices, ... |
 | Community & public | 13 | Education & Schools, Logistics & Delivery, Government & Public Sector, Utilities & Energy, ... |
@@ -103,7 +103,15 @@ The website groups the industries like this:
 | Finance & B2B | 12 | Financial Services & Banking, Insurance, Legal Services, Lending & Mortgages, ... |
 | Home & trades | 9 | HVAC & Heating/Cooling, Plumbing, Electricians, Cleaning Services, ... |
 
-Added since the first 80: Florists & Flower Delivery (`florists`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
+Added since the first 80: Florists & Flower Delivery (`florists`, 2026-11-21), Restaurant Reservations (`restaurant-reservations`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
+
+## Contributed industries
+
+Added by pull request in this repository; each file in [`community/industries/`](community/industries) is its industry's source.
+
+| Industry | Contributed by | File |
+| --- | --- | --- |
+| Restaurant Reservations | Bart Cant | [`restaurant-reservations.json`](community/industries/restaurant-reservations.json) |
 
 ## Add a new industry
 
@@ -111,7 +119,7 @@ A new industry is one file in this repository, `community/industries/<slug>.json
 
 An industry added this way runs on one of the engines above, with no option. If it needs something no engine does (a new tool, menu option or data file), say so in an issue instead: that is built by the BizPlug team.
 
-First check that the industry is not already here: see the tables in the [README](README.md#the-82-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
+First check that the industry is not already here: see the tables in the [README](README.md#the-83-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
 
 ### With a pull request
 
