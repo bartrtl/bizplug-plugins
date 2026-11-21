@@ -1,0 +1,44 @@
+{
+  "slug": "restaurant-reservations",
+  "name": "Restaurant Reservations",
+  "group": "Retail & food",
+  "engine": "appt",
+  "title": "Table reservations",
+  "tools": { "lookup": "find_table_times", "request": "request_table_booking", "status": "get_reservation_status" },
+  "noun": "table reservation",
+  "ask": "Do you have a table for four on Friday at 7pm?",
+  "covers": "tables and party sizes, opening hours, menus, dietary options and private dining",
+  "rule": "Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat.",
+  "example": { "business": "Magnolia Kitchen", "item": "Table for 4" },
+  "who": "Sit-down restaurants that take table bookings and want them separate from takeaway orders: the existing Restaurants & Food Service plug-in is for orders.",
+  "author": "Bart Cant",
+  "icon": "Utensils",
+  "accent": "amber",
+  "added": "2026-11-21",
+  "page": {
+    "headline": "Table requests that arrive ready to confirm",
+    "problem": "A host seating a full room cannot pick up the phone, and a guest who gets no answer books somewhere else. A plug-in shows your table sizes and the times you take bookings, answers the questions guests ask first, and sends the reservation request to your team to confirm.",
+    "valueProps": [
+      "Tables by party size::The table sizes you publish, with how long a sitting lasts.",
+      "Times you take bookings::Times within your published opening hours, one sitting apart.",
+      "Requests to your host::Table, day, time and notes arrive ready to confirm."
+    ],
+    "moments": [
+      "Friday at 7pm::A table for four requested during the dinner rush.",
+      "The vegetarian guest::Your published dietary options, answered before they book.",
+      "The birthday dinner::A private dining request sent to your team.",
+      "Is my table confirmed?::A reference check instead of a call."
+    ],
+    "journeys": ["See tables and opening hours", "Find a time", "Request a table", "Check the reservation status"],
+    "faqs": [
+      "Is the table confirmed in the chat?::No. Your team confirms every reservation. The times come from your published hours, not a live reservation system.",
+      "Does it take deposits?::No. It never takes a deposit or card details. Your team arranges those when confirming."
+    ]
+  },
+  "chat": {
+    "business": "Magnolia Kitchen",
+    "answer": ["🍽️|Table for 4|Dining room, 2 hours|", "@Friday: 17:00, *19:00, 21:00", "~The restaurant confirms every reservation."],
+    "confirm": "7pm, and one of us is vegetarian.",
+    "sent": "Table for 4 · Fri 19:00 · Note: one vegetarian guest"
+  }
+}
