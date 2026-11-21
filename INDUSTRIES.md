@@ -261,7 +261,8 @@ Please do not put customers' personal data, passwords or other secrets in a prop
 
 1. The **Publish contributed industries** workflow asks the BizPlug website to build again. Each build reads the industry files on `main` and checks them with the same check as your pull request; a file that fails is left out.
 2. When that build is live, usually a few minutes later, the industry is on the website: its plug-in answers at `https://mcp.bizplug.ai/plugin/<slug>`, it has a page at https://bizplug.ai/industries/<slug>, and businesses can add it in the BizPlug portal (https://bizplug.ai/portal). A sample business answers at `.../plugin/<slug>/demo-sample`, so you can try it; it never sends a request.
-3. With the next update of this repository, its package appears in `plugins/<slug>/`, and the README and this page list it with your name. The file in `community/industries/` stays: it is the industry's source.
+3. The workflow waits for that build and then comments on your pull request that the industry is live, with its addresses. If the build has not picked the change up after 20 minutes, the comment says so.
+4. With the next update of this repository, its package appears in `plugins/<slug>/`, and the README and this page list it with your name. The file in `community/industries/` stays: it is the industry's source.
 
 To change the industry, open a pull request that changes its file. To take it down, open one that removes the file; a business that already has a plug-in in that industry would lose it, so the team agrees that with those businesses first.
 

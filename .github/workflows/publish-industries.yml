@@ -5,17 +5,19 @@ on:
     branches: [main]
     paths: ["community/industries/**"]
 
-permissions: {}
-
-concurrency:
-  group: publish-industries
-  cancel-in-progress: true
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
   build-website:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - name: Ask the website to build again with the industries on main
+        id: build
         env:
           HOOK: ${{ secrets.BIZPLUG_DEPLOY_HOOK }}
         run: |
@@ -24,4 +26,61 @@ jobs:
             exit 0
           fi
           curl -fsS -X POST "$HOOK" > /dev/null
+          echo "started=true" >> "$GITHUB_OUTPUT"
           echo "The website is building again. The change is live when that build is."
+      - name: Tell the contributor when it is live
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          STARTED: ${{ steps.build.outputs.started }}
+          SITE: https://bizplug.ai
+          MCP: https://mcp.bizplug.ai
+        run: |
+          files=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'community/industries/*.json')
+          if [ -z "$files" ]; then echo "No industry file was added or changed."; exit 0; fi
+          pr=$(gh api "repos/$REPO/commits/$SHA/pulls" -q '.[0].number' 2>/dev/null || true)
+          if [ -z "$pr" ]; then echo "This push has no pull request to comment on."; exit 0; fi
+          # A file is live when the site carries it exactly as it is on main (the site may add the day it was added).
+          is_live() {
+            want=$(jq -S 'del(.added)' "$1") || return 1
+            slug=$(jq -r '.slug' "$1")
+            have=$(curl -fsS "$SITE/api/industries/contributed" | jq -S --arg s "$slug" '.industries[] | select(.slug == $s) | del(.added)') || return 1
+            [ "$want" = "$have" ]
+          }
+          all_live() { for f in $files; do is_live "$f" || return 1; done; }
+          live=no
+          if [ "$STARTED" = "true" ]; then
+            # A build takes a few minutes: look every 30 seconds for up to 20 minutes.
+            for i in $(seq 1 40); do
+              if all_live; then live=yes; break; fi
+              sleep 30
+            done
+          fi
+          {
+            echo "<!-- bizplug-industry-live -->"
+            if [ "$live" = "yes" ]; then
+              echo "## Live on BizPlug"
+              echo
+              for f in $files; do
+                slug=$(jq -r '.slug' "$f"); name=$(jq -r '.name' "$f")
+                echo "**$name** is live:"
+                echo
+                echo "- Its page: $SITE/industries/$slug"
+                echo "- Its plug-in, for every business in the industry: $MCP/plugin/$slug"
+                echo "- A sample business to try, which never sends a request: $MCP/plugin/$slug/demo-sample"
+                echo "- Businesses can add it in the portal: $SITE/portal"
+                echo
+              done
+              echo "Its package appears in plugins/ with this repository's next update. To change the industry, open a pull request that changes its file."
+            elif [ "$STARTED" = "true" ]; then
+              echo "## Merged, not live yet"
+              echo
+              echo "The website was asked to build again, but after 20 minutes it does not carry this change. It goes live when a build does. If the file was left out, the build log names why; the BizPlug team can check it."
+            else
+              echo "## Merged"
+              echo
+              echo "The industry goes live with the website's next deployment."
+            fi
+          } > comment.md
+          gh pr comment "$pr" --repo "$REPO" --body-file comment.md
