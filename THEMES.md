@@ -13,6 +13,7 @@ This page is generated with the rest of the repository, so please do not edit it
 | [Forest](themes/forest.json) | `forest` | Leaf green to teal on dark pine. Fresh and natural: gardens, outdoor, health and sustainable brands. | BizPlug | `#86efac` → `#2dd4bf` on `#0b1a14` |
 | [Orchid](themes/orchid.json) | `orchid` | Pink to violet on deep indigo. Bold and stylish: beauty, fashion, nightlife and creative studios. | BizPlug | `#f0abfc` → `#a78bfa` on `#140f24` |
 | [Christmas](themes/christmas.json) | `christmas` | Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events. | BizPlug | `#f87171` → `#4ade80` on `#0c1a12` |
+| [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` |
 
 Each theme is in `themes/<id>.json`. The built-in ones are also in [`source/card-themes.ts`](source/card-themes.ts); the others were added here by pull request, and the BizPlug portal and plug-in server read them from this repository's `main` branch.
 
