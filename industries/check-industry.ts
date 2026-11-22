@@ -13,7 +13,8 @@ import { basename } from "node:path";
  * (industry-proposal.ts) and the sync that makes merged files industries (scripts/sync-industries.ts).
  *
  * A file that passes is a complete industry: the fields the plug-in is built from, and optionally the words of its
- * page on the website (`page`), a worked chat example (`chat`), an icon, an accent and the day it was added.
+ * page on the website (`page`), a worked chat example (`chat`), an icon, an accent, the day it was added, and how
+ * its author is credited (`authorUrl`, `github`).
  * Everything in it is text that is shown or read, never code.
  */
 type IndustryFileRules = {
@@ -52,6 +53,10 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
   text("rule", 300, false);
   text("who", 300, false);
   text("author", 80);
+  // How the contributor is credited on the website (/contributors, the industry's page): an https link of their
+  // own and their GitHub username. Both optional, both public.
+  if (p.authorUrl !== undefined && !(typeof p.authorUrl === "string" && /^https:\/\/[^\s"'<>]{3,200}$/.test(p.authorUrl))) out.push("authorUrl must be an https address (your site or profile).");
+  if (p.github !== undefined && !(typeof p.github === "string" && /^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(p.github))) out.push("github must be your GitHub username, without @ or a link.");
   if (typeof p.ask === "string" && !p.ask.trim().endsWith("?")) out.push("ask must be a question a customer would ask, ending with ?.");
   if (!rules.groups.includes(String(p.group))) out.push(`group must be one of: ${rules.groups.join(", ")}.`);
   if (!rules.engines.includes(String(p.engine))) out.push(`engine must be one of: ${rules.engines.join(", ")}.`);
@@ -132,7 +137,7 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
       for (const k of Object.keys(c)) if (!["business", "ask", "answer", "confirm", "sent"].includes(k)) out.push(`chat has an unknown key: ${k}.`);
     }
   }
-  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "icon", "accent", "added", "page", "chat"];
+  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat"];
   for (const k of Object.keys(p)) if (!known.includes(k)) out.push(`unknown field: ${k}.`);
   if (/(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)/.test(JSON.stringify(p))) out.push("the file looks like it holds a secret: remove it.");
   return out;

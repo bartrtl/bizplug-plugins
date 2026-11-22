@@ -181,6 +181,8 @@ It lists the tools and checks each step: the tool list and definitions, the menu
   },
   "who": "Independent bike shops with a repair workshop.",
   "author": "Your name or company",
+  "authorUrl": "https://www.example.com",
+  "github": "your-github-username",
   "icon": "Bike",
   "accent": "lime",
   "page": {
@@ -235,7 +237,8 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
-| `author` | Who the industry is credited to |
+| `author` | Who the industry is credited to: your name or your company's |
+| `authorUrl`, `github` | Optional: your own https link (site or profile) and your GitHub username. With them, the credit on the industry's page and on [bizplug.ai/contributors](https://bizplug.ai/contributors) links to you. They are public, like the rest of the file |
 | `icon`, `accent` | Optional: the industry's icon on the website (`AppWindow`, `Armchair`, `Award`, `Baby`, `Bike`, `Bitcoin`, `Bone`, `BookOpen`, `Boxes`, `Brain`, `Briefcase`, `Bug`, `Building`, `Building2`, `Bus`, `Calculator`, `Camera`, `Car`, `CarFront`, `ChefHat`, `Church`, `Code`, `Coffee`, `CookingPot`, `Dices`, `Droplets`, `Dumbbell`, `Eye`, `FerrisWheel`, `FileText`, `Flower`, `Gavel`, `Gem`, `GraduationCap`, `HandCoins`, `Handshake`, `Heart`, `HeartHandshake`, `HeartPulse`, `Hotel`, `Landmark`, `Lightbulb`, `Lock`, `Megaphone`, `Palette`, `PawPrint`, `Pill`, `Plane`, `PlaneTakeoff`, `RadioTower`, `Repeat`, `Salad`, `School`, `Scissors`, `ShieldCheck`, `Ship`, `Shirt`, `ShoppingBag`, `ShoppingCart`, `Smartphone`, `Sofa`, `Sparkles`, `SprayCan`, `Stethoscope`, `Store`, `Sun`, `Ticket`, `Trees`, `TrendingUp`, `Trophy`, `Truck`, `UserPlus`, `Users`, `Utensils`, `UtensilsCrossed`, `Vote`, `Wind`, `Wine`, `Wrench`, `Zap`) and its colour (`lime`, `mint`, `aqua`, `amber`, `sky`). Without them it gets a plain icon |
 | `added` | Optional: the day it was added, as YYYY-MM-DD. Without it, the day the file was first merged |
 | `page` | Optional: the words of the industry's page on the website. `headline`, `problem` (one paragraph), 3 `valueProps`, 4 `moments` and 2 `faqs` written as `"Title::description"`, and 4 short `journeys` (the steps a customer takes). Without it the page uses the engine's general words |

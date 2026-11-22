@@ -29,7 +29,7 @@ A theme is five colours, the ones the card reads (see [`source/widgets/plugin-wi
 | `bg` | The card's background in ChatGPT's dark mode (light mode uses white) | `#rrggbb`, lower case |
 | `glow` | A soft light in the card's corner | `rgba(r,g,b,alpha)`, alpha .25 or less |
 
-With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `business`, and not one already used), a `name` (up to 24 characters), a one-sentence `description` of the look and the kind of business it suits (up to 160 characters), and an `author`: the name or company it is credited to.
+With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `business`, and not one already used), a `name` (up to 24 characters), a one-sentence `description` of the look and the kind of business it suits (up to 160 characters), and an `author`: the name or company it is credited to. Optionally add `authorUrl` (your own https link, a site or a profile) and `github` (your GitHub username): the credit in the portal and on [bizplug.ai/contributors](https://bizplug.ai/contributors) then links to you. Everything in the file is public.
 
 ```json
 {

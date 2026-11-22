@@ -4,7 +4,7 @@
  * run on their own layout before proposing it. No imports, so the same file runs in both places.
  *
  * A layout package is a folder `layouts/<id>/` with:
- * - layout.json: { id, name, author: { name, url? }, summary, suits, ownHeader? }
+ * - layout.json: { id, name, author: { name, url?, github? }, summary, suits, ownHeader? }
  * - layout.css: styles, every selector scoped under `.lay-<id>`, and every @keyframes named `lay-<id>-<name>`
  * - layout.js: `function render(ctx) { ... return html; }`: a pure function from the card's data to an HTML string
  *
@@ -12,7 +12,7 @@
  * the attributes the card handles (data-open, data-ask, data-href, data-lay, data-lay-filter and friends), and the
  * card removes scripts and inline event handlers from what it returns.
  */
-export type LayoutMeta = { id: string; name: string; author: { name: string; url?: string }; summary: string; suits: string; ownHeader?: boolean };
+export type LayoutMeta = { id: string; name: string; author: { name: string; url?: string; github?: string }; summary: string; suits: string; ownHeader?: boolean };
 
 const ID = /^[a-z][a-z0-9-]{1,30}$/;
 /** Checked on the whole file, strings included: what a layout must never write into its HTML. */
@@ -61,6 +61,7 @@ export function layoutProblems(dir: string, metaText: string, css: string, js: s
   for (const k of ["name", "summary", "suits"] as const) if (typeof meta[k] !== "string" || !meta[k].trim()) out.push(`layout.json: ${k} is required.`);
   if (!meta.author || typeof meta.author.name !== "string" || !meta.author.name.trim()) out.push("layout.json: author.name is required.");
   if (meta.author?.url && !/^https:\/\//.test(meta.author.url)) out.push("layout.json: author.url must be an https address.");
+  if (meta.author?.github !== undefined && !/^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(String(meta.author.github))) out.push("layout.json: author.github must be a GitHub username, without @ or a link.");
   if (js.length > LIMITS.js) out.push(`layout.js is ${js.length} characters; at most ${LIMITS.js}.`);
   if (css.length > LIMITS.css) out.push(`layout.css is ${css.length} characters; at most ${LIMITS.css}.`);
   if (!/^\s*(\/\/[^\n]*\n|\/\*[\s\S]*?\*\/|\s)*function render\s*\(\s*ctx\s*\)/.test(js)) out.push("layout.js must start with `function render(ctx) {` (comments before it are fine).");

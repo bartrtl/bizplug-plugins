@@ -24,6 +24,10 @@ export type CardTheme = {
   description: string;
   /** Who made it: "BizPlug", or the person or company that proposed it in the public repository. */
   author: string;
+  /** Optional: the author's own https link (site or profile); the credit links to it. */
+  authorUrl?: string;
+  /** Optional: the author's GitHub username, shown with the credit. */
+  github?: string;
   colors: CardThemeColors;
 };
 
@@ -154,7 +158,9 @@ export function cardThemeListProblems(list: CardTheme[] = CARD_THEMES): string[]
     seen.add(t.id);
     if (!t.name.trim() || t.name.length > 24) out.push(`${t.id}: the name must be 1 to 24 characters.`);
     if (!t.description.trim() || t.description.length > 160) out.push(`${t.id}: the description must be 1 to 160 characters.`);
-    if (!t.author.trim()) out.push(`${t.id}: the author is missing.`);
+    if (!t.author.trim() || t.author.length > 80) out.push(`${t.id}: the author must be 1 to 80 characters.`);
+    if (t.authorUrl !== undefined && !/^https:\/\/[^\s"'<>]{3,200}$/.test(String(t.authorUrl))) out.push(`${t.id}: authorUrl must be an https address (your site or profile).`);
+    if (t.github !== undefined && !/^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(String(t.github))) out.push(`${t.id}: github must be your GitHub username, without @ or a link.`);
     for (const p of themeProblems(t.colors)) out.push(`${t.id}: ${p}`);
   }
   return out;

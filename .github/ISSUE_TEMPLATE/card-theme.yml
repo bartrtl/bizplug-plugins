@@ -19,6 +19,8 @@ body:
           "name": "Harbour",
           "description": "Sea blue to sand on dark slate. Calm and clear: marinas, seafood restaurants and coastal stays.",
           "author": "Your name or company",
+          "authorUrl": "https://www.example.com",
+          "github": "your-github-username",
           "colors": { "a1": "#7dd3fc", "a2": "#fcd9a8", "ink": "#0b1620", "bg": "#0d1a24", "glow": "rgba(125,211,252,.14)" }
         }
     validations:

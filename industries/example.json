@@ -20,6 +20,8 @@
   },
   "who": "Independent bike shops with a repair workshop.",
   "author": "Your name or company",
+  "authorUrl": "https://www.example.com",
+  "github": "your-github-username",
   "icon": "Bike",
   "accent": "lime",
   "page": {
