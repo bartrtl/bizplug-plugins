@@ -1,6 +1,6 @@
 # BizPlug Cruise Lines
 
-Version 0.37.0. Sailing availability and cabin pricing for cruise lines businesses.
+Version 0.38.0. Sailing availability and cabin pricing for cruise lines businesses.
 
 - Main function: Sailing availability and cabin pricing
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cruise-lines` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.37.0. Sailing availability and cabin pricing for cruise lines business
 
 ## Changes
 
+- **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.

@@ -44,6 +44,7 @@
 //   From 0.23.0 the same card also runs in an MCP Apps host (Claude), served there as text/html;profile=mcp-app
 //   under its own URI: with no window.openai it does the ui/initialize handshake and makes the same calls as
 //   JSON-RPC messages to the host (tools/call, ui/message, ui/open-link, ui/notifications/size-changed).
+import { CARD_UI } from "@/lib/widgets/card-ui-languages";
 import { createHash } from "node:crypto";
 import { brand } from "@/lib/brand";
 import { siteConfig, siteOrigins } from "@/lib/seo";
@@ -106,7 +107,9 @@ const CSS = String.raw`
 html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,sans-serif}
 #app{padding:18px;position:relative;overflow:hidden}
 .glow{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
-.head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}.banner{display:block;width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:1.91/1;object-fit:cover;background:rgba(255,255,255,.04);border-bottom:2px solid var(--a2,rgba(255,255,255,.1));position:relative}
+.head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}
+.langs{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 12px;justify-content:flex-end}.lang{font:inherit;font-size:12px;line-height:1;padding:7px 10px;border-radius:999px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;cursor:pointer;opacity:.8}.lang.on{background:var(--a1,#888);color:var(--ink,#111);border-color:transparent;opacity:1;font-weight:600}
+[dir=rtl] .head,[dir=rtl] .tile,[dir=rtl] .contact{direction:rtl}[dir=rtl] input,[dir=rtl] textarea{text-align:right}.banner{display:block;width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:1.91/1;object-fit:cover;background:rgba(255,255,255,.04);border-bottom:2px solid var(--a2,rgba(255,255,255,.1));position:relative}
 .head>svg{width:26px;height:36px;flex:none}
 .head .t{font-weight:700;font-size:17px;letter-spacing:-.01em}
 .head .s{color:var(--muted);font-size:13px}
@@ -355,6 +358,8 @@ function mcpHost(init) {
   const caps = (init && init.hostCapabilities) || {}, ctx = (init && init.hostContext) || {};
   const host = {
     theme: ctx.theme === "light" ? "light" : "dark",
+    // 0.38.0: the host's language (BCP 47), for the card's languages.
+    locale: typeof ctx.locale === "string" ? ctx.locale : "",
     sendFollowUpMessage: (o) => quiet(request("ui/message", { role: "user", content: [{ type: "text", text: String((o && o.prompt) || "").slice(0, 8000) }] })),
     notifyIntrinsicHeight: tellHeight,
     // Who the customer is talking to, for the card's own words ("Ask Claude for more").
@@ -377,10 +382,12 @@ const state = { plugin: null, options: [], view: "loading", open: null, data: {}
   // 0.18.0, event guide: every speaker and exhibitor seen, by id, and the session that is open.
   spk: {}, exh: {}, ses: "",
   // 0.35.0: the YouTube video that is open, and whether this host refused its player.
-  vid: null, vidBlocked: false };
+  vid: null, vidBlocked: false,
+  // 0.38.0: the language the customer chose on the card, and whether the menu was already asked for in the host's.
+  lang: "", langAsked: false };
 const p = () => state.plugin || {};
-function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName }); } catch (e) {} }
-function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; }
+function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName, lang: state.lang }); } catch (e) {} }
+function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; if (ws && ws.lang) state.lang = ws.lang; }
 const opt = (kind) => state.options.find((o) => o.kind === kind) || null;
 // The card runs tools itself from version 0.3.0, once it knows which business it is working for.
 const inCard = () => Boolean(p().inCard && oa() && oa().callTool && (p().bound || state.business));
@@ -388,6 +395,47 @@ const biz = () => (p().bound || !state.business ? {} : { business: state.busines
 // From 0.4.0 the card is browsed by tapping (see the top of this file).
 const nav = () => Boolean(p().nav);
 const quick = () => (nav() && p().quick) || {};
+// ---- 0.38.0: card languages (card-languages.ts). The business's data comes translated from the server when a call
+// carries \`language\`; the card's own words are swapped after each draw from UI_LANG (card-ui-languages.ts). ----
+const UI_LANG = __UI_LANG__;
+const langs = () => p().languages || [];
+// The customer's choice, else the host's language when the card offers it, else English.
+function curLang() {
+  const ls = langs();
+  if (ls.length < 2) return "en";
+  if (state.lang && ls.some((l) => l.code === state.lang)) return state.lang;
+  const host = String((oa() && oa().locale) || navigator.language || "").slice(0, 2).toLowerCase();
+  return ls.some((l) => l.code === host) ? host : "en";
+}
+const withLang = (args) => { const l = curLang(); return l === "en" ? args : Object.assign({}, args, { language: l }); };
+function langBar() {
+  const ls = langs();
+  if (ls.length < 2 || !state.plugin) return "";
+  const c = curLang();
+  return '<div class="langs" role="group" aria-label="Language">' + ls.map((l) => '<button class="lang' + (l.code === c ? " on" : "") + '" data-lang="' + esc(l.code) + '" lang="' + esc(l.code) + '" dir="' + esc(l.dir) + '">' + esc(l.label) + "</button>").join("") + "</div>";
+}
+// The card's own words in the language: a text, placeholder or label that is exactly one in the dictionary.
+function translateCard(root) {
+  const l = curLang(), lc = langs().find((x) => x.code === l), dict = UI_LANG[l];
+  document.documentElement.lang = l;
+  document.documentElement.dir = lc && lc.dir === "rtl" ? "rtl" : "ltr";
+  if (!dict) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach((n) => {
+    if (n.parentElement && n.parentElement.closest(".langs,script,style")) return;
+    const t = n.nodeValue.trim();
+    if (t && dict[t]) n.nodeValue = n.nodeValue.replace(t, dict[t]);
+  });
+  root.querySelectorAll("[placeholder],[aria-label],[title]").forEach((el) => ["placeholder", "aria-label", "title"].forEach((a) => { const v = (el.getAttribute(a) || "").trim(); if (v && dict[v]) el.setAttribute(a, dict[v]); }));
+}
+// A new language: the menu again from the server, now with the business's data in it.
+function setLang(code) {
+  state.lang = code; state.langAsked = true; save();
+  if (!inCard()) { render(); return; }
+  state.hist = []; state.data = {}; state.view = "menu";
+  run("show_menu", {}, "");
+}
 
 function receive(sc) {
   if (!sc || typeof sc !== "object") return;
@@ -416,6 +464,9 @@ function receive(sc) {
     state.view = sc.view;
   }
   state.busy = false; state.error = "";
+  // 0.38.0: a menu drawn in English for a customer whose ChatGPT or Claude speaks one of the card's languages is
+  // asked for again in that language, once.
+  if (!state.langAsked && (sc.view === "menu" || !sc.view) && curLang() !== "en" && inCard()) { state.langAsked = true; setLang(curLang()); return; }
   render();
 }
 function pickStructured(res) {
@@ -457,7 +508,7 @@ async function run(tool, args, fallbackPrompt, onNone) {
   if (!inCard() || !tool) { ask(fallbackPrompt); return; }
   state.busy = true; state.error = ""; render();
   try {
-    const sc = pickStructured(await oa().callTool(tool, Object.assign({}, biz(), args)));
+    const sc = pickStructured(await oa().callTool(tool, withLang(Object.assign({}, biz(), args))));
     state.busy = false;
     if (sc) receive(sc); else if (onNone) onNone(); else ask(fallbackPrompt);
   } catch (e) {
@@ -1499,7 +1550,7 @@ const aitem = (key) => aitems().find((x) => x.key === key) || null;
 const at = (o, path) => String(path || "").split(".").reduce((x, k) => (x == null ? undefined : x[k]), o);
 const shown = (x, as) => {
   if (x == null || typeof x === "object") return "";
-  if (as === "date") { const d = new Date(x); if (!isNaN(d.getTime())) return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }); }
+  if (as === "date") { const d = new Date(x); if (!isNaN(d.getTime())) return d.toLocaleDateString(curLang(), { day: "numeric", month: "short", year: "numeric" }); }
   return String(x);
 };
 const canCall = () => Boolean(p().inCard && oa() && oa().callTool);
@@ -1700,7 +1751,7 @@ function render() {
   // when it fails, so the menu says so above its buttons: at the bottom of a tall card it is out of sight, and without
   // the error line a refused call looked like a tap that did nothing. The picker carries its own error line.
   const menuStatus = state.view === "menu" && state.plugin ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + (picker() ? "" : errLine()) : "";
-  app.innerHTML = (ownHead ? "" : header()) + menuStatus + body + (state.view === "menu" ? contactBar() : "");
+  app.innerHTML = (ownHead ? "" : header()) + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "");
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
@@ -1714,6 +1765,7 @@ function render() {
   const lookup = opt("lookup"), request = opt("request"), status = opt("status");
   const guard = (fn) => { try { fn(); } catch (e) { state.error = (e && e.message) || "Check the form."; render(); } };
   on("[data-open]", (b) => openOption(Number(b.dataset.open)));
+  on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
   on("[data-ask]", (b) => { if (b.dataset.ask) ask(b.dataset.ask); });
   // 0.31.0: a layout's own state (a tab, an open panel): data-lay="key:value"; an empty value clears the key.
@@ -1938,6 +1990,7 @@ function render() {
     el.addEventListener("input", () => { state.f[el.dataset.f] = el.value; });
     el.addEventListener("keydown", (e) => { if (e.key === "Enter" && el.tagName !== "TEXTAREA") { e.preventDefault(); const b = el.dataset.enter ? app.querySelector('[data-act="' + el.dataset.enter + '"]') : app.querySelector(".primary"); if (b) b.click(); } });
   });
+  translateCard(app);
   try { oa() && oa().notifyIntrinsicHeight && oa().notifyIntrinsicHeight(document.body.scrollHeight); } catch (e) {}
 }
 
@@ -1991,7 +2044,7 @@ if (!window.openai && window.parent !== window) {
  */
 function buildCard(packages: LayoutPackage[]): string {
   const code = packages.map((l) => `LAYOUTS[${JSON.stringify(l.meta.id)}] = (function () {\n"use strict";\n${l.js}\nreturn { render: render, own: ${l.meta.ownHeader ? "true" : "false"} };\n})();`).join("\n");
-  const script = SCRIPT_SRC.replace("__LAYOUTS__", () => code).replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`));
+  const script = SCRIPT_SRC.replace("__LAYOUTS__", () => code).replace("__ICONS__", JSON.stringify(ICONS)).replace("__MARK__", JSON.stringify(MARK)).replace("__MAIL__", JSON.stringify(`${siteConfig.url}/connect/email`)).replace("__UI_LANG__", () => JSON.stringify(CARD_UI));
   // 0.31.0: the layouts' own styles, each scoped under .lay-<id> (layout-check.ts), after the card's. A style
   // closing tag in a layout's CSS would end the style element, so it is taken out.
   const layoutCss = ".lay [hidden]{display:none!important}\n.lay svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}\n" + packages.map((l) => l.css.replace(/<\/style/gi, "")).join("\n");

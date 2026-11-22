@@ -1,6 +1,6 @@
 # BizPlug Cybersecurity
 
-Version 0.37.0. Book a security assessment call for cybersecurity businesses.
+Version 0.38.0. Book a security assessment call for cybersecurity businesses.
 
 - Main function: Book a security assessment call
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cybersecurity` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.37.0. Book a security assessment call for cybersecurity businesses.
 
 ## Changes
 
+- **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.

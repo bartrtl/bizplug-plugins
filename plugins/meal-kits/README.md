@@ -1,6 +1,6 @@
 # BizPlug Meal Kits & Subscriptions
 
-Version 0.37.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
+Version 0.38.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
 
 - Main function: Pick a plan and order a weekly box
 - MCP server URL: `https://mcp.bizplug.ai/plugin/meal-kits` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.37.0. Pick a plan and order a weekly box for meal kits & subscriptions
 
 ## Changes
 
+- **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
 - **0.35.0** (21 November 2026): YouTube videos play inside the card: tap a video in Social media and it plays there, with YouTube Shorts shown upright.
