@@ -10,7 +10,7 @@ Add your plug-in to this repository with a pull request:
 2. Fork this repository and add your package as `community/plugins/<name>/`, with the layout below. Do not add it under `plugins/`: that folder is generated from the BizPlug website on every release, while `community/` is kept as you wrote it.
 3. Open a pull request against `main` that adds only that folder, and fill in its checklist: who hosts the server, your website and contact, and a screenshot in ChatGPT. The **Check contributions** workflow checks that the package has its files, valid JSON and no secrets.
 4. We review the tools, descriptions, test cases and data handling in the pull request, and merge it once approved. It then stays in this repository, credited to you.
-5. To be listed in the BizPlug marketplace as well, tick that box in the checklist: we agree the terms of the listing with you before anything goes live, and your plug-in is either hosted by BizPlug or connected from your own endpoint.
+5. Once merged, it is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, from its `plugin.json` and `mcp.json`: its name, descriptions, author, links and server address. A business that adds it to its plug-in asks the BizPlug team to set it up with it; it stays your server, at your own endpoint, unless we agree with you to host it.
 
 Not on GitHub? Fill in the submission form at https://bizplug.ai/marketplace#submit instead: the tool's name and website, your MCP server URL or repository, whether you host it or BizPlug should, the industries it is for, and what it does.
 

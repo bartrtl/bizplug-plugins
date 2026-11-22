@@ -38,7 +38,7 @@
 - [ ] No secrets (API keys, tokens) are in the package
 - Hosting: <!-- my own endpoint, or hosted by BizPlug -->
 - Website and contact: <!-- -->
-- [ ] I would also like it listed in the BizPlug marketplace
+- [ ] I understand that once merged it is listed in the BizPlug marketplace, with its name, descriptions, author, links and server address
 
 ## Check output
 

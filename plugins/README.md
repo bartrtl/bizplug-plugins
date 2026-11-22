@@ -164,6 +164,6 @@ A plug-in of your own (an MCP server you built) is added in `community/plugins/<
 2. Check that it works in ChatGPT developer mode with your MCP server URL ([SETUP.md](../SETUP.md#setup)).
 3. Open a pull request against `main` that adds only that folder, and fill in its checklist: who hosts the server, your privacy policy and terms, and a screenshot in ChatGPT. The **Check contributions** workflow checks the package.
 4. We review the tools, descriptions, test cases and data handling in the pull request, and merge it once approved.
-5. To be listed in the BizPlug marketplace as well, say so in the pull request: we agree the listing with you there, hosted by BizPlug or connected from your own endpoint.
+5. Once merged, it is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, from its `plugin.json` and `mcp.json`. A business that adds it asks the BizPlug team to set it up with its plug-in, at your own endpoint unless we agree with you to host it.
 
 Not on GitHub? Submit at https://bizplug.ai/marketplace#submit instead.

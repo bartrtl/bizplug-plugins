@@ -63,7 +63,7 @@ Theme files are the one part of this repository you change directly: add your th
 3. See it on the real card: `npx tsx themes/preview.ts themes/<id>.json` writes the sample businesses' cards in your colours, in dark and light mode, and prints where. Open them in a browser at about 680 and 390 px wide and take a screenshot.
 4. Open a pull request that adds only that file, with your screenshot. The **Check card themes** workflow runs the same check on it.
 5. The BizPlug team looks at it on real cards, in dark and light mode, and may suggest changes in the pull request.
-6. Once it is merged into `main`, the theme is offered in the BizPlug portal to every business within about ten minutes, with no release needed, and it is listed on this page after the next update. Removing the file removes it from the portal: a business that picked it gets its standard look again.
+6. Once it is merged into `main`, the theme is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, with no release needed (the three featured themes are offered on every business's plug-in, any other once a business adds it), and it is listed on this page after the next update. Removing the file removes it from the portal: a business that picked it gets its standard look again.
 
 Not on GitHub, or prefer not to open a pull request? Use the [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml) form instead, with the JSON and the check's output, and the team adds the file for you.
 
