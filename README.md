@@ -124,10 +124,11 @@ By opening a pull request you agree that your contribution is published under th
 
 Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
-## Version 0.38.0
+## Version 0.39.0
 
 All 83 plug-ins share one version. What changed in each:
 
+- **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.
 - **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.

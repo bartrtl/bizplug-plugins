@@ -1,6 +1,6 @@
 # BizPlug Nonprofits & Charities
 
-Version 0.38.0. Volunteer and donation requests for nonprofits & charities businesses.
+Version 0.39.0. Volunteer and donation requests for nonprofits & charities businesses.
 
 - Main function: Volunteer and donation requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/nonprofits` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.38.0. Volunteer and donation requests for nonprofits & charities busin
 
 ## Changes
 
+- **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.
 - **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.
 - **0.36.0** (21 November 2026): Your forms come first: when a customer wants to do what one of your forms is for, the assistant opens that form instead of sending you a request.
