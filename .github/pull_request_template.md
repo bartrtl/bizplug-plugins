@@ -26,7 +26,8 @@
 - [ ] Only `community/industries/<slug>.json` is added, and the file name matches its `slug`
 - [ ] `npx tsx industries/check-industry.ts community/industries/<slug>.json` passes (output below)
 - [ ] I tried the preview from the bot's comment, in ChatGPT or with `npx tsx industries/test-industry.ts <this pull request's number>`
-- [ ] The industry is not already in [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md), and no existing industry fits it
+- [ ] The industry is not already in [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md), and no existing industry fits it: a business that fits one uses that industry's plug-in under its own name
+- The closest existing industry, and what a customer does in mine that it cannot: <!-- e.g. Fitness & Gyms (fitness): ... -->
 - [ ] Everything the file says is true of the plug-in (it answers from the business's profile and sends requests the business confirms)
 - [ ] I understand that merging publishes this industry on BizPlug, and BizPlug may publish it
 

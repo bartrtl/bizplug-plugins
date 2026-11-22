@@ -39,7 +39,7 @@ community/           what collaborators contributed (community/README.md)
   layouts/<id>/        a contributed menu layout
   industries/<slug>.json   a contributed industry: the file is its source (INDUSTRIES.md)
 source/              the files the packages are generated from, copied from the BizPlug website (read only)
-assets/              the publisher's logo
+assets/              the publisher's logo, and the step-by-step contribution videos
 .github/
   pull_request_template.md   the checklist every pull request starts with
   ISSUE_TEMPLATE/            forms to propose a new industry, or a theme or a layout without a pull request
@@ -100,6 +100,12 @@ Collaborators can add four kinds of work to this repository with a pull request:
 | A **new industry** (an industry plug-in on one of the engines) | `community/industries/<slug>.json` ([INDUSTRIES.md](INDUSTRIES.md#add-a-new-industry)) | `npx tsx industries/check-industry.ts community/industries/<slug>.json`; once the pull request is open, a workflow previews it on the test server and comments the results of `industries/test-industry.ts` | The file is the industry: the website is built again with it, and its plug-in, its page and its place in the portal go live with that build. Its package appears in `plugins/<slug>/` with this repository's next update |
 
 The **Check contributions** and **Check card themes** workflows run the checks on every pull request.
+
+Step-by-step videos, with every command and what it prints:
+
+- [Add a card theme to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme) (1:04)
+- [Add a menu layout to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout) (1:20)
+- [Add a new industry to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry) (1:31)
 
 ### How to open a pull request
 

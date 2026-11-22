@@ -77,6 +77,10 @@ A layout never runs code of its own in the card: `render` is called again whenev
 
 ### Try it and contribute it
 
+[![Add a menu layout to BizPlug, step by step (1:20, video)](assets/videos/add-a-menu-layout-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout)
+
+**Watch it step by step** (1:20, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout), or [download the video](assets/videos/add-a-menu-layout.mp4). It shows every command below and what it prints.
+
 1. Copy `layouts/_template/` to `community/layouts/<your-id>/`, and set the same `id` in `layout.json` and in every `.lay-<id>` selector. The rest of `layouts/` is generated from the BizPlug website on every release; `community/` is kept as you wrote it.
 2. `npx tsx layouts/preview.ts community/layouts/<your-id>` writes an HTML page per sample business and mode: open them and resize the window to 680 and 390 px. It uses this repository's copy of the card (`layouts/card.html`) and the sample businesses in `layouts/samples/`.
 3. Take the two preview pictures: the sample hotel at 680 px in dark mode (`preview-desktop.png`) and the sample café at 390 px (`preview-mobile.png`).

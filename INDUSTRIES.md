@@ -119,9 +119,22 @@ A new industry is one file in this repository, `community/industries/<slug>.json
 
 An industry added this way runs on one of the engines above, with no option. If it needs something no engine does (a new tool, menu option or data file), say so in an issue instead: that is built by the BizPlug team.
 
-First check that the industry is not already here: see the tables in the [README](README.md#the-83-industry-plug-ins). If yours is close to an existing one, a business can usually use that one.
+### First: does an existing industry fit?
+
+Most businesses already have their industry here, often under another name. An industry is a kind of plug-in, not a business: every business that uses one gets its own plug-in, with its own name, summary, services, prices, hours, colours and menu layout, built from its own profile. So a dog groomer uses Veterinary & Pet Care or Beauty & Salons, a yoga studio uses Fitness & Gyms, and a vegan restaurant uses Restaurants & Food Service; none of them needs a new industry.
+
+A new industry is right only when the existing ones would be wrong for its customers: what they mainly do (order, book dates, book a time, ask for a quote, follow a request) or the words of the plug-in (what is booked or ordered, its tools, its rules) do not fit any industry here. A different name, a niche, a city or a type of customer is not enough.
+
+1. Look through the tables in the [README](README.md#the-83-industry-plug-ins) and the groups above, and search this page for the words your customers use.
+2. Run the check below on your file: it lists the existing industries that look most like yours. Read each one's package in `plugins/<slug>/` and try it on its sample business.
+3. If one fits, there is nothing to add here: the business signs up at https://bizplug.ai/portal, picks that industry, and gets its own plug-in. Close to fitting but missing something (a field, a tool, a menu option)? Ask for it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form, saying which industry it is for. The team then decides whether to add it to that industry, where every business in it would get it.
+4. If none fits, say in your pull request which one is closest and what a customer does in yours that it cannot. The team does not merge an industry that an existing one already covers.
 
 ### With a pull request
+
+[![Add a new industry to BizPlug, step by step (1:31, video)](assets/videos/add-a-new-industry-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry)
+
+**Watch it step by step** (1:31, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry), or [download the video](assets/videos/add-a-new-industry.mp4). It shows every command below and what it prints.
 
 You need a GitHub account, Git, and Node.js 18 or later. Nothing else: no account with BizPlug, no keys, no server of your own.
 
@@ -134,7 +147,7 @@ npx tsx industries/test-industry.ts --plugin https://mcp.bizplug.ai/plugin/coffe
 
 **2. Write your industry file.** Fork the repository (if your fork is older, update it first with **Sync fork** on its GitHub page; syncing from the command line asks for the `workflow` permission, `gh auth refresh -s workflow`, because this repository's workflows change), create a branch (for example `industry/bicycle-shops`) and add `community/industries/<slug>.json`, named after its `slug`, in the format below. Copy [`industries/example.json`](industries/example.json) to start.
 
-**3. Check it** from the root of your copy, and fix what it reports:
+**3. Check it** from the root of your copy, and fix what it reports. When it passes, it also lists the existing industries most like yours, as a warning: read them again before you go on.
 
 ```bash
 npx tsx industries/check-industry.ts community/industries/<slug>.json

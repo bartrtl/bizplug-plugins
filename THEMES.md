@@ -58,6 +58,10 @@ With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `bu
 
 Theme files are the one part of this repository you change directly: add your theme with a pull request.
 
+[![Add a card theme to BizPlug, step by step (1:04, video)](assets/videos/add-a-card-theme-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme)
+
+**Watch it step by step** (1:04, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme), or [download the video](assets/videos/add-a-card-theme.mp4). It shows every command below and what it prints.
+
 1. Write your theme as `themes/<id>.json`, in the format above and named after its `id`. Copy one from `themes/` to start.
 2. Check it, from the root of a copy of this repository: `npx tsx themes/check-theme.ts themes/<id>.json`. It runs the same check BizPlug runs and prints what to fix, or the contrast of each pair.
 3. See it on the real card: `npx tsx themes/preview.ts themes/<id>.json` writes the sample businesses' cards in your colours, in dark and light mode, and prints where. Open them in a browser at about 680 and 390 px wide and take a screenshot.

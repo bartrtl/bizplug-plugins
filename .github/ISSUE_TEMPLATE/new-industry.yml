@@ -44,6 +44,16 @@ body:
         - "Not sure"
     validations:
       required: true
+  - type: textarea
+    id: closest
+    attributes:
+      label: The closest existing industry, and why it does not fit
+      description: Most businesses fit an existing industry under their own name, with their own services and prices. Name the closest one in INDUSTRIES.md and what a customer does in yours that it cannot.
+      placeholder: |
+        Closest: Automotive & Dealerships (automotive).
+        It books car service; a bike repair is booked the same way, but its tools, rules and words are about cars.
+    validations:
+      required: true
   - type: input
     id: noun
     attributes:
