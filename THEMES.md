@@ -1,24 +1,24 @@
 # Card themes
 
-A BizPlug plug-in shows its menu, forms and results in ChatGPT as a **card**. A card theme sets the card's colours. A business picks one in the BizPlug portal when it adds a plug-in, or later on its plug-in's page; without one, the card uses the standard look (soft grey on dark navy), or the business's own colours. A theme changes only the colours, never what the plug-in does, so it works on every plug-in version. The industry-wide plug-ins keep BizPlug's own colours.
+A BizPlug plug-in shows its menu, forms and results in ChatGPT as a **card**. A card theme sets the card's colours, and may decorate it with bands, stickers and motion. A business picks one in the BizPlug portal when it adds a plug-in, or later on its plug-in's page; without one, the card uses the standard look (soft grey on dark navy), or the business's own colours. A theme changes only the colours, never what the plug-in does, so it works on every plug-in version. The industry-wide plug-ins keep BizPlug's own colours.
 
 This page is generated with the rest of the repository, so please do not edit it by hand. The theme files in `themes/` are the exception: that is where a new theme is added (below).
 
 ## The themes
 
-| Theme | id | The look | By | Colours |
-| --- | --- | --- | --- | --- |
-| [Ocean](themes/ocean.json) | `ocean` | Cyan to blue on deep navy. Calm and clear: travel, wellness, marine and professional services. | BizPlug | `#67e8f9` → `#60a5fa` on `#071a2b` |
-| [Sunset](themes/sunset.json) | `sunset` | Amber to coral on a warm dark plum. Friendly and lively: restaurants, cafés, bakeries and events. | BizPlug | `#fcd34d` → `#fb7185` on `#1c1016` |
-| [Forest](themes/forest.json) | `forest` | Leaf green to teal on dark pine. Fresh and natural: gardens, outdoor, health and sustainable brands. | BizPlug | `#86efac` → `#2dd4bf` on `#0b1a14` |
-| [Orchid](themes/orchid.json) | `orchid` | Pink to violet on deep indigo. Bold and stylish: beauty, fashion, nightlife and creative studios. | BizPlug | `#f0abfc` → `#a78bfa` on `#140f24` |
-| [Belgium](themes/belgium.json) | `belgium` | Yellow to soft red on black, after the flag of Belgium. For cafés, chocolatiers, events and tourism bureaus there. | Bart Cant - Rethink Labs | `#fde047` → `#f87171` on `#0d0d0d` |
-| [Christmas](themes/christmas.json) | `christmas` | Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events. | Bart Cant - Rethink Labs | `#f87171` → `#4ade80` on `#0c1a12` |
-| [Jamaica](themes/jamaica.json) | `jamaica` | Gold to green on black, after the flag of Jamaica. For resorts, tours, restaurants and tourism bureaus there. | Bart Cant - Rethink Labs | `#fde047` → `#4ade80` on `#0b0f0a` |
-| [Mexico](themes/mexico.json) | `mexico` | Green to off-white on deep red, after the flag of Mexico. For restaurants, hotels, tours and tourism bureaus there. | Bart Cant - Rethink Labs | `#4ade80` → `#f5f5f4` on `#2a0c0c` |
-| [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` |
-| [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | BizPlug | `#f8eef1` → `#f0a3b8` on `#240812` |
-| [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | BizPlug | `#fca5a5` → `#93c5fd` on `#0a1a3a` |
+| Theme | id | The look | By | Colours | Decorations |
+| --- | --- | --- | --- | --- | --- |
+| [Ocean](themes/ocean.json) | `ocean` | Cyan to blue on deep navy. Calm and clear: travel, wellness, marine and professional services. | BizPlug | `#67e8f9` → `#60a5fa` on `#071a2b` | None |
+| [Sunset](themes/sunset.json) | `sunset` | Amber to coral on a warm dark plum. Friendly and lively: restaurants, cafés, bakeries and events. | BizPlug | `#fcd34d` → `#fb7185` on `#1c1016` | None |
+| [Forest](themes/forest.json) | `forest` | Leaf green to teal on dark pine. Fresh and natural: gardens, outdoor, health and sustainable brands. | BizPlug | `#86efac` → `#2dd4bf` on `#0b1a14` | None |
+| [Orchid](themes/orchid.json) | `orchid` | Pink to violet on deep indigo. Bold and stylish: beauty, fashion, nightlife and creative studios. | BizPlug | `#f0abfc` → `#a78bfa` on `#140f24` | None |
+| [Belgium](themes/belgium.json) | `belgium` | Yellow to soft red on black, after the flag of Belgium. For cafés, chocolatiers, events and tourism bureaus there. | Bart Cant - Rethink Labs | `#fde047` → `#f87171` on `#0d0d0d` | Header and footer bands, 2 stickers, animated |
+| [Christmas](themes/christmas.json) | `christmas` | Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events. | Bart Cant - Rethink Labs | `#f87171` → `#4ade80` on `#0c1a12` | Header and footer bands, 2 stickers, animated |
+| [Jamaica](themes/jamaica.json) | `jamaica` | Gold to green on black, after the flag of Jamaica. For resorts, tours, restaurants and tourism bureaus there. | Bart Cant - Rethink Labs | `#fde047` → `#4ade80` on `#0b0f0a` | Header, divider and footer bands, 1 sticker, animated |
+| [Mexico](themes/mexico.json) | `mexico` | Green to off-white on deep red, after the flag of Mexico. For restaurants, hotels, tours and tourism bureaus there. | Bart Cant - Rethink Labs | `#4ade80` → `#f5f5f4` on `#2a0c0c` | Header and footer bands, 1 sticker, animated |
+| [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` | None |
+| [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | BizPlug | `#f8eef1` → `#f0a3b8` on `#240812` | None |
+| [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | BizPlug | `#fca5a5` → `#93c5fd` on `#0a1a3a` | None |
 
 Each theme is in `themes/<id>.json`. The built-in ones are also in [`source/card-themes.ts`](source/card-themes.ts); the others were added here by pull request, and the BizPlug portal and plug-in server read them from this repository's `main` branch.
 
