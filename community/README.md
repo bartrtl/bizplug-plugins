@@ -10,7 +10,7 @@ A plug-in package has the same layout as the ones in [`plugins/`](../plugins): a
 
 ## Menu layouts: `community/layouts/<id>/`
 
-None yet: yours can be the first.
+- [`sports/`](layouts/sports)
 
 A layout has `layout.json`, `layout.js`, `layout.css`, `preview-desktop.png` and `preview-mobile.png`. Start from [`layouts/_template/`](../layouts/_template), and see [LAYOUTS.md](../LAYOUTS.md) for what `render(ctx)` gets and the rules.
 
