@@ -414,11 +414,14 @@ function langBar() {
   const c = curLang();
   return '<div class="langs" role="group" aria-label="Language">' + ls.map((l) => '<button class="lang' + (l.code === c ? " on" : "") + '" data-lang="' + esc(l.code) + '" lang="' + esc(l.code) + '" dir="' + esc(l.dir) + '">' + esc(l.label) + "</button>").join("") + "</div>";
 }
+// One of the card's own words in the card's language, for a text built around a name ("Reach <business>").
+const tr = (s) => (UI_LANG[curLang()] || {})[s] || s;
 // The card's own words in the language: a text, placeholder or label that is exactly one in the dictionary.
 function translateCard(root) {
   const l = curLang(), lc = langs().find((x) => x.code === l), dict = UI_LANG[l];
   document.documentElement.lang = l;
-  document.documentElement.dir = lc && lc.dir === "rtl" ? "rtl" : "ltr";
+  const rtl = Boolean(lc && lc.dir === "rtl");
+  document.documentElement.dir = rtl ? "rtl" : "ltr";
   if (!dict) return;
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), nodes = [];
   while (walker.nextNode()) nodes.push(walker.currentNode);
@@ -426,6 +429,9 @@ function translateCard(root) {
     if (n.parentElement && n.parentElement.closest(".langs,script,style")) return;
     const t = n.nodeValue.trim();
     if (t && dict[t]) n.nodeValue = n.nodeValue.replace(t, dict[t]);
+    // Text left in English (or a name) inside a right-to-left card is laid out in its own direction, so its
+    // punctuation stays at its end ("What times are open?", not "?What times are open").
+    else if (rtl && n.parentElement && /[A-Za-z]/.test(t) && !/[\u0590-\u08FF]/.test(t) && !n.parentElement.hasAttribute("dir")) n.parentElement.setAttribute("dir", "auto");
   });
   root.querySelectorAll("[placeholder],[aria-label],[title]").forEach((el) => ["placeholder", "aria-label", "title"].forEach((a) => { const v = (el.getAttribute(a) || "").trim(); if (v && dict[v]) el.setAttribute(a, dict[v]); }));
 }
@@ -802,12 +808,12 @@ function menuView() {
   // 0.31.0: the business's own layout, when it picked one (a business's card only; the industry-wide card keeps the tiles).
   const lay = !pick && p().bound ? activeLayout() : "";
   const drawn = lay ? layoutMenu(lay) : "";
-  if (drawn) return drawn + actionBar((a) => a.where === "contact", p().businessName || p().title ? "Reach " + (p().businessName || p().title) : "");
+  if (drawn) return drawn + actionBar((a) => a.where === "contact", p().businessName || p().title ? tr("Reach") + " " + (p().businessName || p().title) : "");
   return pick + '<div class="grid">' + opts.map((o, i) =>
     '<button class="tile' + (i === 0 ? " hero" : "") + (i > 0 && opts.length % 2 === 0 && i === opts.length - 1 ? " wide" : "") + '" data-open="' + state.options.indexOf(o) + '"><span class="ic">' + icon(o.icon || o.kind) + "</span><span>" +
     '<div class="tt">' + esc(o.title) + (i === 0 ? '<span class="badge">Start here</span>' : "") + '</div><div class="dd">' + esc(o.description) + "</div></span></button>").join("") + "</div>" +
     (p().bound || pick ? "" : '<div class="note">This plug-in serves every business in its industry: the assistant will ask which business you mean.</div>') +
-    actionBar((a) => a.where === "contact", p().businessName || p().title ? "Reach " + (p().businessName || p().title) : "");
+    actionBar((a) => a.where === "contact", p().businessName || p().title ? tr("Reach") + " " + (p().businessName || p().title) : "");
 }
 function formView() {
   const o = state.options[state.open];
