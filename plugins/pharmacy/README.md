@@ -1,6 +1,6 @@
 # BizPlug Pharmacies
 
-Version 0.42.0. Store services and callback requests for pharmacies businesses.
+Version 0.43.0. Store services and callback requests for pharmacies businesses.
 
 - Main function: Store services and callback requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pharmacy` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.42.0. Store services and callback requests for pharmacies businesses.
 
 ## Changes
 
+- **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.
 - **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.
 - **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.
 - **0.40.0** (22 November 2026): Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.

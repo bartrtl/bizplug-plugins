@@ -46,6 +46,7 @@
     "inCard": true,
     "nav": true,
     "stayCal": true,
+    "listing": "panel",
     "quick": {
       "maxGuests": 4
     },

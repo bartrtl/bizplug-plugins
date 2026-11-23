@@ -46,6 +46,7 @@
     "inCard": true,
     "nav": true,
     "stayCal": false,
+    "listing": "panel",
     "quick": {
       "categories": [
         {

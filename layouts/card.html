@@ -648,7 +648,7 @@ function receive(sc) {
     if (sc.view === "catalog") { if (!nav()) state.cart = {}; ((sc.catalog || {}).items || []).forEach((x) => { state.items[x.id] = x; }); }
     if (nav() && (sc.view === "sent" || sc.view === "whatsapp")) state.cart = {};
     if (sc.view === "info") state.faq = -1;
-    if (sc.view === "events") { state.ev = ""; if (sc.events && !sc.events.open) { state.f.ecat = sc.events.category || ""; state.f.eq = sc.events.query || ""; } }
+    if (sc.view === "events") { state.ev = ""; state.efly = ""; if (sc.events && !sc.events.open) { state.f.ecat = sc.events.category || ""; state.f.eq = sc.events.query || ""; } }
     if (sc.view === "speakers" && sc.speakers) { (sc.speakers.items || []).forEach((x) => { state.spk[x.id] = x; }); state.f.pq = sc.speakers.query || ""; }
     if (sc.view === "exhibitors" && sc.exhibitors) { (sc.exhibitors.items || []).forEach((x) => { state.exh[x.id] = x; }); state.f.xq = sc.exhibitors.query || ""; }
     if (sc.view === "agenda" && sc.agenda) { state.ses = ""; state.f.aq = sc.agenda.query || ""; }
@@ -1186,10 +1186,34 @@ function decorSvg(s) {
   return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : "") + '><g><path d="' + d + '" ' + (s.line ? 'fill="none" stroke="' + s.color + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"' : 'fill="' + s.color + '"') + "/></g></svg>";
 }
 // 0.42.0: the events screen (events-list.ts): a month of events with category tabs and search, and one event's screen.
+// 0.43.0: on a computer, an event's own page and its details open in a panel beside the list; on a phone the page
+// opens as before and the details take the screen.
+// How a listing's Details open (listing-details.ts): "panel" (the default), "chat" or "off"; "" on an older version.
+const listMode = () => p().listing || "";
+const listWide = () => Boolean(listMode()) && window.innerWidth >= 640;
+const listPanel = () => listWide() && listMode() !== "chat";
+const evPrompt = (e) => "Tell me more about " + e.name + (e.url ? " (" + e.url + ")" : "") + ", " + e.when + (e.place ? " at " + e.place : "") + ": what to expect, how to get tickets or take part, how to get there, and anything else worth knowing before going. You may use what you know and search the web; tell me which parts are not from " + (p().businessName || p().title || "the business") + "'s calendar.";
+function evFly(e) {
+  const biz = p().businessName || p().title || "the business";
+  const prompt = evPrompt(e), ask = listMode() === "panel";
+  return '<div class="fly" data-act="eflyx"><div class="sheet" role="dialog" aria-label="' + esc(e.name) + '">' +
+    '<div class="bar-top"><span class="kd">Event</span><button class="link" data-act="eflyx">Close ✕</button></div>' +
+    '<div style="margin-top:10px">' + evTags(e) + '<div class="enm" style="font-size:18px;font-weight:700;line-height:1.25">' + esc(e.name) + "</div></div>" +
+    '<div class="qlabel" style="margin-top:12px">When</div><div class="bl" style="margin-top:3px">' + esc(e.when) + "</div>" +
+    (e.place ? '<div class="qlabel" style="margin-top:12px">Where</div><div class="bl" style="margin-top:3px">' + esc(e.place) + "</div>" : "") +
+    (e.free || e.price ? '<div class="qlabel" style="margin-top:12px">Price</div><div class="bl" style="margin-top:3px">' + (e.free ? "Free entry" : esc(e.price) + " per person") + "</div>" : "") +
+    (e.blurb ? '<p class="about">' + esc(e.blurb) + "</p>" : "") +
+    '<div class="actions" style="margin-top:14px">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">' + esc(e.urlLabel || "Open its page") + "</button>" : "") +
+    (e.mapsUrl ? '<button class="btn" data-href="' + esc(e.mapsUrl) + '">Directions</button>' : "") + (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") + "</div>" +
+    (ask ? '<button class="primary morebtn" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + " for more</button>" +
+      '<div class="note">Ask ' + esc(AI()) + " for more continues in the chat, where " + esc(AI()) + " may add what it knows or finds on the web. That part does not come from " + esc(biz) + "&rsquo;s calendar; check anything important on the event&rsquo;s own page.</div>"
+      : '<div class="note">As listed by ' + esc(biz) + ". Check anything important on the event&rsquo;s own page.</div>") + "</div></div>";
+}
 function evButtons(e, detail) {
-  return '<div class="acts">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">' + esc(e.urlLabel || "Open its page") + "</button>" : (opt("request") ? '<button class="btn go" data-pick-stay="' + esc(e.id) + '" data-name="' + esc(e.name) + '" data-total="' + esc(e.price || "") + '">' + esc(opt("request").title) + "</button>" : "")) +
+  const fly = !detail && listPanel(), chat = !detail && listWide() && listMode() === "chat";
+  return '<div class="acts">' + (e.url ? '<button class="btn go" ' + (fly ? 'data-efly="' + esc(e.id) + '"' : 'data-href="' + esc(e.url) + '"') + ">" + esc(e.urlLabel || "Open its page") + "</button>" : (opt("request") ? '<button class="btn go" data-pick-stay="' + esc(e.id) + '" data-name="' + esc(e.name) + '" data-total="' + esc(e.price || "") + '">' + esc(opt("request").title) + "</button>" : "")) +
     (e.mapsUrl ? '<button class="btn" data-href="' + esc(e.mapsUrl) + '">Directions</button>' : "") +
-    (detail ? (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") : '<button class="btn" data-ev="' + esc(e.id) + '">Details</button>') + "</div>";
+    (detail ? (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") : (chat ? '<button class="btn" data-ask="' + esc(evPrompt(e)) + '">Details</button>' : '<button class="btn" ' + (fly ? "data-efly" : "data-ev") + '="' + esc(e.id) + '">Details</button>')) + "</div>";
 }
 function evTags(e) {
   return '<div class="etags">' + (e.category ? '<span class="ecat">' + esc(e.category) + "</span>" : "") + (e.status ? '<span class="estat">' + esc(e.status) + "</span>" : "") + (e.free ? '<span class="efree">Free</span>' : "") + "</div>";
@@ -1214,7 +1238,8 @@ function eventsScreen() {
   const search = (d.events || []).length > 6 ? '<div class="esearch"><input id="f-eq" placeholder="Search events" value="' + esc(state.f.eq || "") + '"><button class="btn" data-esearch="1">Search</button></div>' : "";
   const rows = list.length ? list.map((e) => '<div class="ev">' + evDate(e) + "<div>" + evTags(e) + '<div class="enm">' + esc(e.name) + '</div><div class="ewh">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + (e.price ? " · " + esc(e.price) : "") + "</div>" + evButtons(e, false) + "</div></div>").join("")
     : '<div class="empty">' + ((d.events || []).length ? "No event matches. Try another category or search." : "No events listed in " + esc(d.monthLabel || "this month") + ".") + "</div>";
-  return top(lookup ? lookup.title : "Events") + month + tabs + search + (state.busy ? '<div class="note">Loading…</div>' : "") + errLine() + rows;
+  const flown = state.efly ? (d.events || []).filter((e) => e.id === state.efly)[0] : null;
+  return top(lookup ? lookup.title : "Events") + month + tabs + search + (state.busy ? '<div class="note">Loading…</div>' : "") + errLine() + rows + (flown ? evFly(flown) : "");
 }
 function decorTop() {
   const d = decor();
@@ -1612,7 +1637,8 @@ function membersView() {
     ? '<div class="stats"><div class="stat"><b>' + d.total + "</b><span>members</span></div>" + (inds.length ? '<div class="stat"><b>' + inds.length + "</b><span>industries</span></div>" : "") + (locs.length > 1 ? '<div class="stat"><b>' + locs.length + "</b><span>areas</span></div>" : "") + "</div>"
     : "";
   return head.replace('<div class="find">', stats + '<div class="find">') + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
-    '<div class="note">These are the details ' + esc(d.business || "the business") + " lists for its members. You contact a member directly; nobody introduces you or passes a message on.</div>" + links("members");
+    '<div class="note">These are the details ' + esc(d.business || "the business") + " lists for its members. You contact a member directly; nobody introduces you or passes a message on.</div>" + links("members") +
+    (state.fly && state.mem[state.fly] && listPanel() ? memberFly(state.mem[state.fly], "member") : "");
 }
 function memberView() {
   const m = state.mem[state.sel];
@@ -1630,19 +1656,21 @@ function memberView() {
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
       (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-ask="' + esc("Tell me more about " + m.name + (web ? " (" + m.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + ((state.data.members || {}).business || "the business") + "'s member list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>" +
     (more && state.fly === state.sel ? memberFly(m) : "");
 }
 const hostOf = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } };
 // 0.26.0: the More about panel. What the business lists for the member; anything more comes from the chat, and says so.
-function memberFly(m) {
+function memberFly(m, profile) {
   const biz = (state.data.members || {}).business || "the business";
-  return companyFly(m, biz, [m.industry, m.location].filter(Boolean).join(" · "), m.level, "member list");
+  return companyFly(m, biz, [m.industry, m.location].filter(Boolean).join(" · "), m.level, "member list", profile);
 }
 // The More about panel for a member (0.26.0), an exhibitor or a sponsor (0.28.0): what the business lists for the
 // company; anything more comes from the chat, and says so.
-function companyFly(m, biz, sub, badge, listName) {
+function companyFly(m, biz, sub, badge, listName, profile) {
+  // 0.43.0: opened straight from a list on a computer, the panel also leads to the company's own screen; "off" drops Ask for more.
+  const ask = listMode() !== "off";
   const sites = (m.sources || []).map(hostOf).filter((h, i, a) => h && a.indexOf(h) === i);
   const prompt = "Tell me more about " + m.name + (/^https:\/\//.test(m.website || "") ? " (" + m.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s " + listName + ".";
   return '<div class="fly" data-act="mflyx"><div class="sheet" role="dialog" aria-label="More about ' + esc(m.name) + '">' +
@@ -1652,8 +1680,10 @@ function companyFly(m, biz, sub, badge, listName) {
     ((m.highlights || []).length ? '<div class="qlabel" style="margin-top:12px">Highlights</div><ul class="hl">' + m.highlights.map((h) => "<li>" + esc(h) + "</li>").join("") + "</ul>" : "") +
     (m.address ? '<div class="qlabel" style="margin-top:12px">Address</div><div class="bl" style="margin-top:3px">' + esc(m.address) + "</div>" : "") +
     (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
-    '<div class="actions" style="margin-top:14px"><button class="primary" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" +
-    '<div class="note">Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div></div></div>";
+    '<div class="actions" style="margin-top:14px">' + (ask ? '<button class="primary" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' : "") + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") +
+      (profile ? '<button class="btn" data-profile="' + profile + '">Contact details</button>' : "") + "</div>" +
+    (ask ? '<div class="note">Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div>"
+      : '<div class="note">As listed by ' + esc(biz) + ". Check anything important with the company.</div>") + "</div></div>";
 }
 // ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
 // What the business published, with links to its own pages. Nothing is sent from these screens.
@@ -1940,7 +1970,8 @@ function exhibitorsView() {
     ? '<div class="it mb"><button class="rowb" data-exh="' + esc(x.id) + '">' + mlogo(x) + "<div>" + text(x) + "</div></button></div>"
     : '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '">' + text(x) + "</button></div>").join("") + "</div>" +
     (d.more ? '<div class="note">' + d.more + " more: search or choose a category.</div>" : "") + errLine() +
-    '<div class="note">As listed by ' + esc(d.business || "the event") + ". You contact a company directly; nobody introduces you or passes a message on.</div>" + links("exhibitors");
+    '<div class="note">As listed by ' + esc(d.business || "the event") + ". You contact a company directly; nobody introduces you or passes a message on.</div>" + links("exhibitors") +
+    (state.fly && state.exh[state.fly] && listPanel() ? (function (x) { return companyFly(x, d.business || "the event", [x.kind === "sponsor" ? "Sponsor" : "Exhibitor", x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list", "exh"); })(state.exh[state.fly]) : "");
 }
 function exhibitorView() {
   const x = state.exh[state.sel];
@@ -1958,7 +1989,7 @@ function exhibitorView() {
   return top(x.name) + hero +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || li ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" data-act="mfly"><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-ask="' + esc("Tell me more about " + x.name + (web ? " (" + x.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s exhibitor and sponsor list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the details ' + esc(biz) + " lists. You contact " + esc(x.name) + " yourself.</div>" +
     (more && state.fly === state.sel ? companyFly(x, biz, [label, x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list") : "");
 }
@@ -2290,6 +2321,8 @@ function render() {
   on("[data-emonth]", (b) => { if (b.dataset.emonth) { state.f.ecat = ""; state.f.eq = ""; run(lookup && lookup.tool, { month: b.dataset.emonth }, "Show me the events in " + b.dataset.emonth + "."); } });
   on("[data-ecat]", (b) => { state.f.ecat = b.dataset.ecat || ""; render(); });
   on("[data-esearch]", () => { const i = document.getElementById("f-eq"); state.f.eq = i ? i.value.trim() : ""; render(); });
+  on("[data-efly]", (b) => { state.efly = b.dataset.efly || ""; render(); });
+  app.querySelectorAll('[data-act="eflyx"]').forEach((el) => el.addEventListener("click", (e) => { if (e.target === el) { state.efly = ""; render(); } }));
   on("[data-ev]", (b) => { state.ev = b.dataset.ev || ""; if (!state.ev && state.data.events) state.data.events.open = ""; state.view = "events"; render(); });
   on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
@@ -2416,7 +2449,8 @@ function render() {
   on("[data-spk]", (b) => { state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
   on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
   on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });
-  on("[data-exh]", (b) => { state.sel = b.dataset.exh; state.fly = ""; state.view = "exhibitor"; state.error = ""; render(); });
+  on("[data-exh]", (b) => { state.sel = b.dataset.exh; if (listPanel()) { state.fly = state.sel; render(); return; } state.fly = ""; state.view = "exhibitor"; state.error = ""; render(); });
+  on("[data-profile]", (b) => { state.fly = ""; state.view = b.dataset.profile === "exh" ? "exhibitor" : "member"; state.error = ""; render(); });
   on("[data-etopic]", (b) => { state.f.etopic = b.dataset.etopic; render(); });
   on('[data-act="enquiry"]', () => guard(() => {
     const o = opt("enquiry");
@@ -2497,7 +2531,7 @@ function render() {
   on('[data-act="mfind"]', () => findMembers());
   on("[data-mind]", (b) => findMembers({ industry: b.dataset.mind }));
   on("[data-mloc]", (b) => findMembers({ location: b.dataset.mloc }));
-  on("[data-member]", (b) => { state.sel = b.dataset.member; state.fly = ""; state.view = "member"; state.error = ""; render(); });
+  on("[data-member]", (b) => { state.sel = b.dataset.member; if (listPanel()) { state.fly = state.sel; render(); return; } state.fly = ""; state.view = "member"; state.error = ""; render(); });
   on('[data-act="collab"]', () => { state.view = "collab"; state.error = ""; render(); });
   on('[data-act="mwrite"]', () => { state.fly = ""; state.view = "mwrite"; state.error = ""; render(); });
   // 0.26.0: open and close the More about panel; a tap on the dimmed backdrop closes it too.
