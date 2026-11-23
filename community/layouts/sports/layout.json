@@ -1,0 +1,8 @@
+{
+  "id": "sports",
+  "name": "Sports",
+  "author": { "name": "Bart Cant - Rethink Labs" },
+  "summary": "A sports hero: the name in slanted capitals on a dark striped panel with a finish-line band, a big start button and the other options as slanted tabs. Wears the card's own colours.",
+  "suits": "Sports calendars, clubs, races, stadiums, gyms and event venues.",
+  "ownHeader": true
+}
