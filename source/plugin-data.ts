@@ -461,6 +461,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("capacity", "Capacity", false, "number", it.capacity, "Most guests or people."),
             col("description", "Description", false, "text", it.description, ""),
             col("day_rates", "Weekday rates", false, "text", "fri:" + it.rate + ";sat:" + it.rate, "Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0."),
+            col("per", "Booked once", false, "text", "", "Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking."),
           ],
           collect: [
             "Copy each bookable option and its standard published rate from the website or booking engine.",

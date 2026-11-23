@@ -187,6 +187,14 @@
           "type": "text",
           "example": "fri:18;sat:18",
           "help": "Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0."
+        },
+        {
+          "key": "per",
+          "label": "Booked once",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking."
         }
       ],
       "collect": [

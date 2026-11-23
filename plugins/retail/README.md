@@ -1,6 +1,6 @@
 # BizPlug Retail & E-commerce
 
-Version 0.40.0. Product search and reserve in store for retail & e-commerce businesses.
+Version 0.41.0. Product search and reserve in store for retail & e-commerce businesses.
 
 - Main function: Product search and reserve in store
 - MCP server URL: `https://mcp.bizplug.ai/plugin/retail` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.40.0. Product search and reserve in store for retail & e-commerce busi
 
 ## Changes
 
+- **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.
 - **0.40.0** (22 November 2026): Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.
 - **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.
 - **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.

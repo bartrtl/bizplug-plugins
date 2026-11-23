@@ -958,14 +958,14 @@ function stayScreen() {
       const chips = [r.view ? r.view + " view" : "", r.bed, r.max ? "Up to " + r.max + " people" : ""].filter(Boolean).map((c) => '<span class="chip">' + esc(c) + "</span>").join("") +
         (r.left != null && r.left <= 3 ? '<span class="chip left">Only ' + r.left + " left</span>" : "") + (r.amenities || []).map((c) => '<span class="chip">' + esc(c) + "</span>").join("");
       const nights = w.breakdown && r.nightly && r.nightly.length > 1 ? "<details><summary>" + esc(w.breakdown) + "</summary>" + r.nightly.map((n) => "<div><span>" + esc(shortDay(n.date)) + "</span><span>" + esc(n.rate) + "</span></div>").join("") + "</details>" : "";
-      return '<div class="it room"><div class="nm"><b>' + esc(r.name) + '</b><span class="pr">' + esc(r.total) + '</span></div><div class="per">' + esc(r.avgNightly) + " " + (sp === "single" && s.unit !== "person" ? "per booking" : w.per) + (q.rooms > 1 && sp === "nights" ? " · " + q.rooms + " rooms" : "") + "</div>" +
+      return '<div class="it room"><div class="nm"><b>' + esc(r.name) + '</b><span class="pr">' + esc(r.total) + '</span></div><div class="per">' + esc(r.avgNightly) + " " + (r.per ? "per " + r.per + ", once for your stay" : (sp === "single" && s.unit !== "person" ? "per booking" : w.per) + (q.rooms > 1 && sp === "nights" ? " · " + q.rooms + " rooms" : "")) + "</div>" +
         (r.blurb ? '<div class="bl">' + esc(r.blurb) + "</div>" : "") + (chips ? '<div class="chips">' + chips + "</div>" : "") + nights + '<div class="acts">' + btn + "</div></div>";
     }).join("") + "</div>";
     const out = [s.soldOut && s.soldOut.length ? "Full on these dates: " + s.soldOut.join(", ") + "." : "", s.tooSmall && s.tooSmall.length ? "Too small for your party: " + s.tooSmall.join(", ") + "." : "", s.tooShort && s.tooShort.length ? "Needs a longer stay: " + s.tooShort.join(", ") + "." : ""].filter(Boolean).join(" ");
-    rooms = "<h4>" + esc(w.list) + "</h4>" + rooms + (out ? '<div class="note">' + esc(out) + "</div>" : "");
+    rooms = "<h4>" + esc(s.rooms.some((r) => r.per) ? "Stays and activities" : w.list) + "</h4>" + rooms + (out ? '<div class="note">' + esc(out) + "</div>" : "");
   }
   const how = s.book === "pay" ? "Book & pay opens " + (s.checkout ? s.checkout.label : "the hotel") + "'s secure page; the room is held for 30 minutes while you pay. Card details are never entered here."
-    : s.book === "whatsapp" ? "Book on WhatsApp opens the hotel's concierge with your visit code; nothing is booked until you pay there."
+    : s.book === "whatsapp" ? (sp === "nights" && !s.rooms.some((r) => r.per) ? "Book on WhatsApp opens the hotel's concierge with your visit code; nothing is booked until you pay there." : "Book on WhatsApp opens a chat with " + (p().businessName || "the business") + "; nothing is booked or paid until it is confirmed there.")
     : (sp === "nights" ? "The hotel" : (p().businessName || "The business")) + " confirms your request by email; nothing is held or charged here." + (sp !== "nights" ? " Prices can differ by day." : "");
   const policies = '<div class="pol">' + (pol.checkIn ? "Check-in from " + esc(pol.checkIn) + " · check-out by " + esc(pol.checkOut) + ". " : "") + (pol.cancellation ? esc(pol.cancellation) + " " : "") + esc(how) + "</div>";
   const concierge = s.concierge ? '<div class="actions" style="margin-top:12px"><button class="btn wa" data-href="' + esc(s.concierge) + '">' + icon("whatsapp") + "Questions? Chat with the concierge</button></div>" : "";

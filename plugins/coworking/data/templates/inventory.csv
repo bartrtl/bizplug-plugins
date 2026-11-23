@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates
-dedicated-desk,Dedicated desk,35,1,"Your own desk, per day",fri:35;sat:35
+id,name,rate,capacity,description,day_rates,per
+dedicated-desk,Dedicated desk,35,1,"Your own desk, per day",fri:35;sat:35,

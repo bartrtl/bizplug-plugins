@@ -44,6 +44,7 @@ Columns (first row of the file, exactly these names):
 - `capacity`: Capacity, number. Most guests or people. Example: 250
 - `description`: Description, text.  Example: 250 standing or 180 seated, per day
 - `day_rates`: Weekday rates, text. Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0. Example: fri:2500;sat:2500
+- `per`: Booked once, text. Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking. Example: 
 
 How to collect it:
 1. Copy each bookable option and its standard published rate from the website or booking engine.

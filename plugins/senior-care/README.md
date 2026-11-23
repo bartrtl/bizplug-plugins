@@ -1,6 +1,6 @@
 # BizPlug Senior Care & Communities
 
-Version 0.40.0. Schedule community tours for senior care & communities businesses.
+Version 0.41.0. Schedule community tours for senior care & communities businesses.
 
 - Main function: Schedule community tours
 - MCP server URL: `https://mcp.bizplug.ai/plugin/senior-care` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.40.0. Schedule community tours for senior care & communities businesse
 
 ## Changes
 
+- **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.
 - **0.40.0** (22 November 2026): Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.
 - **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.
 - **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
