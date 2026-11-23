@@ -340,6 +340,12 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .lg.mono,.ic.mono{background:linear-gradient(135deg,var(--a1),var(--a2));color:var(--ink);font-weight:800;font-size:15px;letter-spacing:.02em;padding:0}
 .lg.big{width:84px;height:84px;border-radius:20px;padding:9px}
 .lg.big.mono{font-size:28px}
+.lgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:560px){.lgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width:860px){.lgrid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.ltile{all:unset;box-sizing:border-box;cursor:pointer;display:grid;justify-items:center;align-content:start;gap:8px;text-align:center;padding:16px 10px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line);min-width:0}
+.ltile:hover,.ltile:focus-visible{border-color:var(--a2)}.ltile .lg{width:60px;height:60px;border-radius:14px}.ltile .lg.mono{font-size:19px}
+.ltile b{font-size:13.5px;line-height:1.25;overflow-wrap:anywhere}.ltile .lcat{font-size:11.5px;color:var(--muted);line-height:1.3}.ltile .lvl{margin:0}
+[data-style=sport] .ltile{border-radius:10px}
 .it.mb{display:grid;grid-template-columns:46px 1fr;gap:12px;align-items:center}
 .it.mb .rowb{display:contents}
 .stats{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 2px}
@@ -1238,13 +1244,17 @@ function membersView() {
   const logos = items.some((x) => "logo" in x);
   const text = (x) => '<div class="nm"><b>' + esc(x.name) + (x.level ? '<span class="lvl">' + esc(x.level) + "</span>" : "") + '</b><span class="qlabel">' + esc(x.industry) + "</span></div>" +
     (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "") + (x.why ? '<div class="bl clamp">' + esc(x.why) + "</div>" : "");
-  const rows = items.map((x) => logos
+  // 0.45.0: a grid of tiles, each with the member's logo (or initials), its name, its level and its category.
+  const grid = Boolean(p().listingGrid);
+  const rows = grid
+    ? items.map((x) => '<button class="ltile" data-member="' + esc(x.id) + '">' + mlogo(x) + "<b>" + esc(x.name) + "</b>" + (x.level ? '<span class="lvl">' + esc(x.level) + "</span>" : "") + '<span class="lcat">' + esc(x.industry || "") + "</span></button>").join("")
+    : items.map((x) => logos
     ? '<div class="it mb"><button class="rowb" data-member="' + esc(x.id) + '">' + mlogo(x) + "<div>" + text(x) + "</div></button></div>"
     : '<div class="it"><button class="rowb" data-member="' + esc(x.id) + '">' + text(x) + "</button></div>").join("");
   const stats = logos && !d.query && !d.industry && !d.location && d.total
     ? '<div class="stats"><div class="stat"><b>' + d.total + "</b><span>members</span></div>" + (inds.length ? '<div class="stat"><b>' + inds.length + "</b><span>industries</span></div>" : "") + (locs.length > 1 ? '<div class="stat"><b>' + locs.length + "</b><span>areas</span></div>" : "") + "</div>"
     : "";
-  return head.replace('<div class="find">', stats + '<div class="find">') + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
+  return head.replace('<div class="find">', stats + '<div class="find">') + '<div class="' + (grid ? "lgrid" : "list") + '">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
     '<div class="note">These are the details ' + esc(d.business || "the business") + " lists for its members. You contact a member directly; nobody introduces you or passes a message on.</div>" + links("members") +
     (state.fly && state.mem[state.fly] && listPanel() ? memberFly(state.mem[state.fly], "member") : "");
 }
@@ -1574,9 +1584,12 @@ function exhibitorsView() {
   // 0.28.0: each company with its logo, or its initials.
   const text = (x) => '<div class="nm"><b>' + esc(x.name) + (x.stand ? '<span class="lvl">Stand ' + esc(x.stand) + "</span>" : "") + '</b><span class="qlabel">' + esc(x.kind === "sponsor" ? x.role || x.category : x.category) + "</span></div>" +
     (x.description ? '<div class="bl clamp">' + esc(x.description) + "</div>" : "");
-  return head + '<div class="list">' + items.map((x) => "logo" in x
+  // 0.45.0: a grid of tiles: logo (or initials), name, stand and category.
+  return head + (p().listingGrid
+    ? '<div class="lgrid">' + items.map((x) => '<button class="ltile" data-exh="' + esc(x.id) + '">' + mlogo(x) + "<b>" + esc(x.name) + "</b>" + (x.stand ? '<span class="lvl">Stand ' + esc(x.stand) + "</span>" : "") + '<span class="lcat">' + esc((x.kind === "sponsor" ? x.role || x.category : x.category) || "") + "</span></button>").join("") + "</div>"
+    : '<div class="list">' + items.map((x) => "logo" in x
     ? '<div class="it mb"><button class="rowb" data-exh="' + esc(x.id) + '">' + mlogo(x) + "<div>" + text(x) + "</div></button></div>"
-    : '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '">' + text(x) + "</button></div>").join("") + "</div>" +
+    : '<div class="it"><button class="rowb" data-exh="' + esc(x.id) + '">' + text(x) + "</button></div>").join("") + "</div>") +
     (d.more ? '<div class="note">' + d.more + " more: search or choose a category.</div>" : "") + errLine() +
     '<div class="note">As listed by ' + esc(d.business || "the event") + ". You contact a company directly; nobody introduces you or passes a message on.</div>" + links("exhibitors") +
     (state.fly && state.exh[state.fly] && listPanel() ? (function (x) { return companyFly(x, d.business || "the event", [x.kind === "sponsor" ? "Sponsor" : "Exhibitor", x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list", "exh"); })(state.exh[state.fly]) : "");

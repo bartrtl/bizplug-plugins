@@ -1,6 +1,6 @@
 # BizPlug Developer Tools
 
-Version 0.44.0. Book a technical demo or onboarding for developer tools businesses.
+Version 0.45.0. Book a technical demo or onboarding for developer tools businesses.
 
 - Main function: Book a technical demo or onboarding
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dev-tools` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.44.0. Book a technical demo or onboarding for developer tools business
 
 ## Changes
 
+- **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.
 - **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.
 - **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.

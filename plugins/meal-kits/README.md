@@ -1,6 +1,6 @@
 # BizPlug Meal Kits & Subscriptions
 
-Version 0.44.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
+Version 0.45.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
 
 - Main function: Pick a plan and order a weekly box
 - MCP server URL: `https://mcp.bizplug.ai/plugin/meal-kits` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.44.0. Pick a plan and order a weekly box for meal kits & subscriptions
 
 ## Changes
 
+- **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.
 - **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.
 - **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.
