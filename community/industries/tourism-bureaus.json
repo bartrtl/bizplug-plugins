@@ -1,0 +1,62 @@
+{
+  "slug": "tourism-bureaus",
+  "name": "Tourism Bureaus & Destinations",
+  "group": "Travel & leisure",
+  "engine": "stay",
+  "title": "Places to stay and things to do, with booking requests",
+  "tools": {
+    "lookup": "find_stays_and_activities",
+    "request": "book_stay_or_activity",
+    "status": "get_booking_status"
+  },
+  "noun": "stay or activity",
+  "span": "nights",
+  "ask": "What is there to do in March, and where can we stay for four nights?",
+  "covers": "places to stay, activities and tours, when to visit, getting around, events and visitor information",
+  "rule": "Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat.",
+  "example": {
+    "business": "Visit Coral Bay",
+    "item": "Harbour View Hotel",
+    "price": "180.00"
+  },
+  "who": "Tourism bureaus, destination marketing organisations and visitor centres that list partner hotels and activities for one destination. One hotel uses Hospitality & Hotels; one tour operator uses Travel & Tourism.",
+  "author": "BizPlug",
+  "icon": "Landmark",
+  "accent": "aqua",
+  "added": "2026-11-23",
+  "page": {
+    "headline": "Your destination, planned and booked from one chat",
+    "problem": "A visitor planning a trip asks where to stay, what to do and how to book, and gets the answers from ten different sites. A plug-in answers from what your bureau publishes, shows your partner hotels and activities for the visitor's dates, and sends each booking to you to confirm.",
+    "valueProps": [
+      "Stays and activities together::Partner hotels by the night, and activities and transfers priced once for the stay.",
+      "Answers from your bureau::When to visit, getting around and events, from the information you publish.",
+      "Bookings you confirm::Each request arrives with the dates, the party and what was chosen. On request, bookings continue in your WhatsApp chat instead."
+    ],
+    "moments": [
+      "Four nights in March::The partner hotels free for those dates, with the total.",
+      "A day on the reef::A snorkel trip for the family, priced per person.",
+      "Getting from the airport::Your published transfer options and what they cost.",
+      "Is it confirmed?::A reference check instead of an email."
+    ],
+    "journeys": [
+      "Ask about the destination",
+      "See stays and activities for the dates",
+      "Send a booking",
+      "Check its status"
+    ],
+    "faqs": [
+      "Is anything booked in the chat?::No. Your bureau or its partner confirms every booking. Availability comes from the dates you publish as taken, not from a live reservation system.",
+      "Can bookings go to WhatsApp?::Yes, when it is set up with the BizPlug team: the visitor then gets a link to your WhatsApp chat and the message to send, and you confirm the day, the price and how to pay there. Otherwise requests reach you by email."
+    ]
+  },
+  "chat": {
+    "business": "Visit Coral Bay",
+    "answer": [
+      "*🏨|Harbour View Hotel|4 nights, up to 3 people|$720",
+      "🤿|Reef snorkel trip|Per person, once for the stay|$60",
+      "~The bureau confirms every booking."
+    ],
+    "confirm": "The Harbour View, please.",
+    "sent": "Harbour View Hotel · 12 to 16 March · 2 people"
+  }
+}
