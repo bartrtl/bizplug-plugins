@@ -1,6 +1,6 @@
 # BizPlug Car Rental
 
-Version 0.43.0. Vehicle availability and rental price for car rental businesses.
+Version 0.44.0. Vehicle availability and rental price for car rental businesses.
 
 - Main function: Vehicle availability and rental price
 - MCP server URL: `https://mcp.bizplug.ai/plugin/car-rental` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.43.0. Vehicle availability and rental price for car rental businesses.
 
 ## Changes
 
+- **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.
 - **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.
 - **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.

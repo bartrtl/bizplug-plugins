@@ -116,6 +116,12 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .stk svg.flow path,.dwalk svg.flow path{stroke-dasharray:2.5 2.5;animation:dec-fw 1s linear infinite}
 .dwalk{position:relative;height:38px;margin:-14px -18px 6px;overflow:hidden;pointer-events:none}.dwalk.big{height:54px}
 .dwalk svg{position:absolute;bottom:0;left:-40px;animation:dec-wk 22s linear infinite}.dwalk svg g{animation:dec-bob .7s ease-in-out infinite;transform-origin:50% 100%}
+.efeat{margin:0 0 14px}.efeat .qlabel{margin-bottom:6px}
+.erail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 2px 8px;scrollbar-width:thin}
+.efc{all:unset;box-sizing:border-box;cursor:pointer;flex:none;width:min(260px,78%);scroll-snap-align:start;display:grid;gap:8px;align-content:start;padding:14px;border-radius:16px;border:1px solid transparent;color:var(--fg);background:linear-gradient(var(--bg),var(--bg)) padding-box,linear-gradient(110deg,var(--a1),var(--a2)) border-box}
+.efc:hover,.efc:focus-visible{filter:brightness(1.08)}.efc .etop{display:flex;align-items:center;gap:10px}.efc .edate{width:50px;padding:7px 4px}
+.efc .enm{font-size:15px;font-weight:700;line-height:1.25}.efc .ewh{font-size:12.5px;color:var(--muted)}
+[data-style=sport] .efc{border-radius:10px}[data-style=sport] .efc .enm{font-style:italic;font-weight:800;text-transform:uppercase}
 .emon{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px}.emon b{font-size:15px}
 .etabs{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none}.etabs::-webkit-scrollbar{display:none}
 .etab{all:unset;cursor:pointer;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--fg)}
@@ -816,9 +822,18 @@ function evDate(e) {
   const mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getUTCMonth()];
   return '<div class="edate"><b>' + d.getUTCDate() + (same ? "" : "+") + "</b><small>" + mon + "</small></div>";
 }
+// 0.44.0: the events the business features, as a row of large cards to swipe or click through.
+function evFeatured(d) {
+  const list = d.featured || [];
+  if (!list.length) return "";
+  return '<div class="efeat"><div class="qlabel">Featured</div><div class="erail">' + list.map((e) =>
+    '<button class="efc" ' + (listPanel() ? "data-efly" : listWide() && listMode() === "chat" ? 'data-ask="' + esc(evPrompt(e)) + '" data-x' : "data-ev") + '="' + esc(e.id) + '">' +
+    '<div class="etop">' + evDate(e) + "<div>" + evTags(e) + "</div></div>" + '<div class="enm">' + esc(e.name) + '</div><div class="ewh">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + "</div></button>").join("") + "</div></div>";
+}
+const evAll = (d) => (d.events || []).concat((d.featured || []).filter((f) => !(d.events || []).some((e) => e.id === f.id)));
 function eventsScreen() {
   const d = state.data.events || { events: [], categories: [] }, lookup = opt("lookup");
-  const one = (d.events || []).filter((e) => e.id === (state.ev || d.open))[0];
+  const one = evAll(d).filter((e) => e.id === (state.ev || d.open))[0];
   if (one) {
     return top(lookup ? lookup.title : "Events") + '<div class="edetail"><div class="ev"><div>' + evTags(one) + '<div class="enm">' + esc(one.name) + '</div><div class="ewh">' + esc(one.when) + (one.place ? " · " + esc(one.place) : "") + (one.price ? " · " + esc(one.price) + " per person" : "") + "</div>" +
       (one.blurb ? '<div class="ebl">' + esc(one.blurb) + "</div>" : "") + evButtons(one, true) + '</div></div></div><div class="actions"><button class="btn" data-ev="">← All events</button></div>';
@@ -831,8 +846,8 @@ function eventsScreen() {
   const search = (d.events || []).length > 6 ? '<div class="esearch"><input id="f-eq" placeholder="Search events" value="' + esc(state.f.eq || "") + '"><button class="btn" data-esearch="1">Search</button></div>' : "";
   const rows = list.length ? list.map((e) => '<div class="ev">' + evDate(e) + "<div>" + evTags(e) + '<div class="enm">' + esc(e.name) + '</div><div class="ewh">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + (e.price ? " · " + esc(e.price) : "") + "</div>" + evButtons(e, false) + "</div></div>").join("")
     : '<div class="empty">' + ((d.events || []).length ? "No event matches. Try another category or search." : "No events listed in " + esc(d.monthLabel || "this month") + ".") + "</div>";
-  const flown = state.efly ? (d.events || []).filter((e) => e.id === state.efly)[0] : null;
-  return top(lookup ? lookup.title : "Events") + month + tabs + search + (state.busy ? '<div class="note">Loading…</div>' : "") + errLine() + rows + (flown ? evFly(flown) : "");
+  const flown = state.efly ? evAll(d).filter((e) => e.id === state.efly)[0] : null;
+  return top(lookup ? lookup.title : "Events") + evFeatured(d) + month + tabs + search + (state.busy ? '<div class="note">Loading…</div>' : "") + errLine() + rows + (flown ? evFly(flown) : "");
 }
 function decorTop() {
   const d = decor();

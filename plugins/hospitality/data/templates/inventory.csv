@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
-deluxe-king,Deluxe King Room,189,2,"King bed, city view",fri:189;sat:189,,,,,,,,,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url
+deluxe-king,Deluxe King Room,189,2,"King bed, city view",fri:189;sat:189,,,,,,,,,,

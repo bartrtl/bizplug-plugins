@@ -229,6 +229,14 @@
           "help": "Optional: where the event is held."
         },
         {
+          "key": "featured",
+          "label": "Event: featured",
+          "required": false,
+          "type": "boolean",
+          "example": "",
+          "help": "Optional, from plug-in version 0.44.0: true puts the event in the Featured row above your events calendar. Feature a few, not all."
+        },
+        {
           "key": "free",
           "label": "Event: free entry",
           "required": false,

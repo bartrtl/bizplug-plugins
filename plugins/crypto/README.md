@@ -1,6 +1,6 @@
 # BizPlug Crypto & Fintech
 
-Version 0.43.0. Fee estimate and onboarding request for crypto & fintech businesses.
+Version 0.44.0. Fee estimate and onboarding request for crypto & fintech businesses.
 
 - Main function: Fee estimate and onboarding request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/crypto` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.43.0. Fee estimate and onboarding request for crypto & fintech busines
 
 ## Changes
 
+- **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.
 - **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.
 - **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.

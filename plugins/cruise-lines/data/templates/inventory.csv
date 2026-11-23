@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
-balcony-7n-caribbean,"Balcony cabin, 7-night Caribbean",1299,2,"Per person, double occupancy",fri:1299;sat:1299,,,,,,,,,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url
+balcony-7n-caribbean,"Balcony cabin, 7-night Caribbean",1299,2,"Per person, double occupancy",fri:1299;sat:1299,,,,,,,,,,

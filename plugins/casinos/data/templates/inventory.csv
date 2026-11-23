@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
-resort-double-queen,"Resort room, two queens",159,4,"Two queen beds, pool view",fri:159;sat:159,,,,,,,,,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url
+resort-double-queen,"Resort room, two queens",159,4,"Two queen beds, pool view",fri:159;sat:159,,,,,,,,,,

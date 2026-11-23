@@ -49,6 +49,7 @@ Columns (first row of the file, exactly these names):
 - `end`: Event: last day, date. Optional: the event's last day, as YYYY-MM-DD. Leave empty for a one-day event. Example: 
 - `category`: Event: category, text. Optional: the tab the event is filed under, in your own words, such as Football or Workshops. Example: 
 - `place`: Event: place, text. Optional: where the event is held. Example: 
+- `featured`: Event: featured, boolean. Optional, from plug-in version 0.44.0: true puts the event in the Featured row above your events calendar. Feature a few, not all. Example: 
 - `free`: Event: free entry, boolean. Optional: true when entry is free. Example: 
 - `url`: Event: its own page, url. Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request. Example: 
 - `url_label`: Event: what the page is, text. Optional: Tickets or Website. Example: 

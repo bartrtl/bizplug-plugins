@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
-dedicated-desk,Dedicated desk,35,1,"Your own desk, per day",fri:35;sat:35,,,,,,,,,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url
+dedicated-desk,Dedicated desk,35,1,"Your own desk, per day",fri:35;sat:35,,,,,,,,,,

@@ -466,6 +466,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("end", "Event: last day", false, "date", "", "Optional: the event's last day, as YYYY-MM-DD. Leave empty for a one-day event."),
             col("category", "Event: category", false, "text", "", "Optional: the tab the event is filed under, in your own words, such as Football or Workshops."),
             col("place", "Event: place", false, "text", "", "Optional: where the event is held."),
+            col("featured", "Event: featured", false, "boolean", "", "Optional, from plug-in version 0.44.0: true puts the event in the Featured row above your events calendar. Feature a few, not all."),
             col("free", "Event: free entry", false, "boolean", "", "Optional: true when entry is free."),
             col("url", "Event: its own page", false, "url", "", "Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request."),
             col("url_label", "Event: what the page is", false, "text", "", "Optional: Tickets or Website."),
