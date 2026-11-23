@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-day-pass-adult,"1-day pass, adult",69,1,All rides and shows,fri:69;sat:69,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+day-pass-adult,"1-day pass, adult",69,1,All rides and shows,fri:69;sat:69,,,,,,,,,

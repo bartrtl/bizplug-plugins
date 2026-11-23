@@ -44,6 +44,14 @@ Columns (first row of the file, exactly these names):
 - `description`: Description, text.  Example: Bottle service, minimum spend
 - `day_rates`: Weekday rates, text. Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0. Example: fri:300;sat:300
 - `per`: Booked once, text. Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking. Example: 
+- `start`: Event: first day, date. Optional, from plug-in version 0.42.0, and only where bookings are for one date: the first day of an event with fixed dates, as YYYY-MM-DD. A list with events is shown as an events calendar, month by month. Example: 
+- `end`: Event: last day, date. Optional: the event's last day, as YYYY-MM-DD. Leave empty for a one-day event. Example: 
+- `category`: Event: category, text. Optional: the tab the event is filed under, in your own words, such as Football or Workshops. Example: 
+- `place`: Event: place, text. Optional: where the event is held. Example: 
+- `free`: Event: free entry, boolean. Optional: true when entry is free. Example: 
+- `url`: Event: its own page, url. Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request. Example: 
+- `url_label`: Event: what the page is, text. Optional: Tickets or Website. Example: 
+- `maps_url`: Event: directions, url. Optional: a directions link (https). Example: 
 
 How to collect it:
 1. Copy each bookable option and its standard published rate from the website or booking engine.

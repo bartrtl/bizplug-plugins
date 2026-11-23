@@ -195,6 +195,70 @@
           "type": "text",
           "example": "",
           "help": "Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking."
+        },
+        {
+          "key": "start",
+          "label": "Event: first day",
+          "required": false,
+          "type": "date",
+          "example": "",
+          "help": "Optional, from plug-in version 0.42.0, and only where bookings are for one date: the first day of an event with fixed dates, as YYYY-MM-DD. A list with events is shown as an events calendar, month by month."
+        },
+        {
+          "key": "end",
+          "label": "Event: last day",
+          "required": false,
+          "type": "date",
+          "example": "",
+          "help": "Optional: the event's last day, as YYYY-MM-DD. Leave empty for a one-day event."
+        },
+        {
+          "key": "category",
+          "label": "Event: category",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: the tab the event is filed under, in your own words, such as Football or Workshops."
+        },
+        {
+          "key": "place",
+          "label": "Event: place",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: where the event is held."
+        },
+        {
+          "key": "free",
+          "label": "Event: free entry",
+          "required": false,
+          "type": "boolean",
+          "example": "",
+          "help": "Optional: true when entry is free."
+        },
+        {
+          "key": "url",
+          "label": "Event: its own page",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request."
+        },
+        {
+          "key": "url_label",
+          "label": "Event: what the page is",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: Tickets or Website."
+        },
+        {
+          "key": "maps_url",
+          "label": "Event: directions",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: a directions link (https)."
         }
       ],
       "collect": [

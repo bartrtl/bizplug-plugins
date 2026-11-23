@@ -15,6 +15,7 @@ A card theme is five colours for a plug-in's card in ChatGPT. A business picks o
 | [`jamaica.json`](jamaica.json) | Jamaica | Bart Cant - Rethink Labs |
 | [`mexico.json`](mexico.json) | Mexico | Bart Cant - Rethink Labs |
 | [`noir-gold.json`](noir-gold.json) | Noir Gold | Bart Cant |
+| [`qatar-sports.json`](qatar-sports.json) | Qatar Sports | Bart Cant - Rethink Labs |
 | [`qatar.json`](qatar.json) | Qatar | Bart Cant - Rethink Labs |
 | [`usa.json`](usa.json) | USA | Bart Cant - Rethink Labs |
 

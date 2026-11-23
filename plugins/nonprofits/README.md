@@ -1,6 +1,6 @@
 # BizPlug Nonprofits & Charities
 
-Version 0.41.0. Volunteer and donation requests for nonprofits & charities businesses.
+Version 0.42.0. Volunteer and donation requests for nonprofits & charities businesses.
 
 - Main function: Volunteer and donation requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/nonprofits` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.41.0. Volunteer and donation requests for nonprofits & charities busin
 
 ## Changes
 
+- **0.42.0** (23 November 2026): An events calendar: events with fixed dates, month by month, with categories, search and each event's own links.
 - **0.41.0** (23 November 2026): Book on WhatsApp for more than hotel nights: bookings by the day or for one date, and activities next to rooms.
 - **0.40.0** (22 November 2026): Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.
 - **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.

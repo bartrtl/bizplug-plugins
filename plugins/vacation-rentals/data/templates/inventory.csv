@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-dune-cottage,Dune Cottage,245,4,"2 bedrooms, 2 baths, five minutes to the beach",fri:245;sat:245,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+dune-cottage,Dune Cottage,245,4,"2 bedrooms, 2 baths, five minutes to the beach",fri:245;sat:245,,,,,,,,,

@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-asheville-day-trip,Asheville day trip,129,14,"Small-group van tour, lunch included, per traveller",fri:129;sat:129,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+asheville-day-trip,Asheville day trip,129,14,"Small-group van tour, lunch included, per traveller",fri:129;sat:129,,,,,,,,,

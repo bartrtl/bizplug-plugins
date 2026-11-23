@@ -18,6 +18,7 @@ This page is generated with the rest of the repository, so please do not edit it
 | [Mexico](themes/mexico.json) | `mexico` | Green to off-white on deep red, after the flag of Mexico. For restaurants, hotels, tours and tourism bureaus there. | Bart Cant - Rethink Labs | `#4ade80` → `#f5f5f4` on `#2a0c0c` | Header and footer bands, 1 sticker, animated |
 | [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` | None |
 | [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | Bart Cant - Rethink Labs | `#f8eef1` → `#f0a3b8` on `#240812` | Header and footer bands, 1 sticker, animated |
+| [Qatar Sports](themes/qatar-sports.json) | `qatar-sports` | Yellow-green on carbon with Qatar's maroon and a finish-line band, in a slanted sports style. For sports calendars, clubs, races and venues. | Bart Cant - Rethink Labs | `#d4ff3a` → `#e2ff7a` on `#0c0e11` | Header, divider and footer bands, sport style |
 | [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | Bart Cant - Rethink Labs | `#fca5a5` → `#93c5fd` on `#0a1a3a` | Header, divider and footer bands, 3 stickers, animated |
 
 Each theme is in `themes/<id>.json`. The built-in ones are also in [`source/card-themes.ts`](source/card-themes.ts); the others were added here by pull request, and the BizPlug portal and plug-in server read them from this repository's `main` branch.
@@ -67,8 +68,10 @@ A theme may also decorate the card with `decor`: a band above the content (`head
 
 | Part | Fields |
 | --- | --- |
-| A band (`header`, `divider`, `footer`) | `pattern`: `stripes`, `lines`, `serrated`, `dots` (stripes side by side, lines stacked, a serrated edge of the first colour over the second, or a row of dots). `colors`: 1 to 5 lower-case `#rrggbb` colours (exactly 2 for `serrated`). `motion`, optional: `shimmer`, `twinkle` |
+| A band (`header`, `divider`, `footer`) | `pattern`: `stripes`, `lines`, `serrated`, `dots`, `slant` (stripes side by side, lines stacked, a serrated edge of the first colour over the second, a row of dots, or slanted bands like a finish line). `colors`: 1 to 5 lower-case `#rrggbb` colours (exactly 2 for `serrated`). `motion`, optional: `shimmer`, `twinkle` |
 | A sticker | `shape`: `star`, `heart`, `diamond`, `circle`, `leaf`, `sun`; or `path`: your own outline as SVG path data on a 24 by 24 grid (letters, digits, spaces, commas, dots and minus signs, up to 1500 characters). `color`: one `#rrggbb` colour. Optional: `line` (true draws the outline as a line), `large` (true draws it larger) and `motion`: `twinkle`, `float`, `spin`, `flow`, `walk` (`flow` moves along a line; `walk` crosses the top of the card) |
+
+`decor` may also name a `style` for the card's own shapes: `sport` (slanted tabs and tags, titles in upper-case italics, a scoreboard date on events).
 
 Motion stops for people who turn motion off on their device. A sticker you draw must be your own drawing: no logos, coats of arms or official emblems.
 

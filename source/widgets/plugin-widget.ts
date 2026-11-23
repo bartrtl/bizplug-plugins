@@ -116,6 +116,25 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .stk svg.flow path,.dwalk svg.flow path{stroke-dasharray:2.5 2.5;animation:dec-fw 1s linear infinite}
 .dwalk{position:relative;height:38px;margin:-14px -18px 6px;overflow:hidden;pointer-events:none}.dwalk.big{height:54px}
 .dwalk svg{position:absolute;bottom:0;left:-40px;animation:dec-wk 22s linear infinite}.dwalk svg g{animation:dec-bob .7s ease-in-out infinite;transform-origin:50% 100%}
+.emon{display:flex;align-items:center;justify-content:space-between;margin:2px 0 10px}.emon b{font-size:15px}
+.etabs{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:none}.etabs::-webkit-scrollbar{display:none}
+.etab{all:unset;cursor:pointer;flex:0 0 auto;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:600;color:var(--fg)}
+.etab.on{background:linear-gradient(110deg,var(--a1),var(--a2));color:var(--ink);border-color:transparent}
+.esearch{display:flex;gap:8px;margin-bottom:12px}.esearch input{flex:1;min-width:0;font:inherit;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:9px 12px;outline:none}
+.ev{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:12px;border:1px solid var(--line);border-radius:16px;background:var(--card);margin-bottom:10px}
+.edate{width:56px;text-align:center;border-radius:12px;background:var(--card2,rgba(255,255,255,.06));padding:9px 4px;align-self:start}
+.edate b{display:block;font-size:20px;line-height:1}.edate small{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-top:4px}
+.ev .enm{font-size:14.5px;font-weight:700;line-height:1.25}.ev .ewh{font-size:12.5px;color:var(--muted);margin-top:3px}.ev .ebl{font-size:12.5px;color:var(--muted);margin-top:6px}
+.etags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.ecat,.estat,.efree{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+.ecat{background:linear-gradient(110deg,var(--a1),var(--a2));color:var(--ink)}.estat,.efree{border:1px solid var(--line);color:var(--fg)}
+.ev .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.edetail .ev{grid-template-columns:1fr}
+[data-style=sport] .head .t,[data-style=sport] .bar-top h3,[data-style=sport] .ev .enm,[data-style=sport] .emon b{font-style:italic;font-weight:800;text-transform:uppercase;letter-spacing:.01em}
+[data-style=sport] .etab{border-radius:6px;transform:skewX(-10deg);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:0 2px}
+[data-style=sport] .ecat,[data-style=sport] .estat,[data-style=sport] .efree{border-radius:4px;text-transform:uppercase;letter-spacing:.07em;font-weight:800}[data-style=sport] .ecat{transform:skewX(-10deg)}
+[data-style=sport] .ev{border-radius:10px;border-inline-start:4px solid var(--a1)}:root[data-theme=light][data-style=sport] .ev{border-inline-start-color:var(--a2)}
+[data-style=sport] .edate{border-radius:6px;background:#101317;color:#fff;border-bottom:3px solid var(--a1)}[data-style=sport] .edate small{color:rgba(255,255,255,.7)}
+[data-style=sport] .btn,[data-style=sport] .primary{border-radius:8px;text-transform:uppercase;letter-spacing:.05em;font-weight:700;font-size:12.5px}
+[data-style=sport] .tile,[data-style=sport] .it{border-radius:10px}
 @keyframes dec-shim{from{background-position:120% 0}to{background-position:-120% 0}}@keyframes dec-tw{0%,100%{opacity:1}50%{opacity:.45}}
 @keyframes dec-fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes dec-sp{to{transform:rotate(360deg)}}
 @keyframes dec-fw{to{stroke-dashoffset:-5}}@keyframes dec-wk{from{left:-40px}to{left:100%}}@keyframes dec-bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-1px)}}
@@ -477,6 +496,7 @@ function receive(sc) {
     if (sc.view === "catalog") { if (!nav()) state.cart = {}; ((sc.catalog || {}).items || []).forEach((x) => { state.items[x.id] = x; }); }
     if (nav() && (sc.view === "sent" || sc.view === "whatsapp")) state.cart = {};
     if (sc.view === "info") state.faq = -1;
+    if (sc.view === "events") { state.ev = ""; if (sc.events && !sc.events.open) { state.f.ecat = sc.events.category || ""; state.f.eq = sc.events.query || ""; } }
     if (sc.view === "speakers" && sc.speakers) { (sc.speakers.items || []).forEach((x) => { state.spk[x.id] = x; }); state.f.pq = sc.speakers.query || ""; }
     if (sc.view === "exhibitors" && sc.exhibitors) { (sc.exhibitors.items || []).forEach((x) => { state.exh[x.id] = x; }); state.f.xq = sc.exhibitors.query || ""; }
     if (sc.view === "agenda" && sc.agenda) { state.ses = ""; state.f.aq = sc.agenda.query || ""; }
@@ -746,6 +766,7 @@ function decorBand(b, cls) {
   const stops = (deg) => "linear-gradient(" + deg + "," + c.map((x, i) => x + " " + (100 * i / n).toFixed(2) + "% " + (100 * (i + 1) / n).toFixed(2) + "%").join(",") + ")";
   const bg = b.pattern === "lines" ? stops("180deg")
     : b.pattern === "serrated" && n >= 2 ? "conic-gradient(from -45deg at 50% 100%," + c[0] + " 90deg,transparent 0) 0 100%/12px 55% repeat-x,linear-gradient(" + c[0] + "," + c[0] + ") 0 0/100% 46% no-repeat," + c[1]
+    : b.pattern === "slant" ? "repeating-linear-gradient(115deg," + c.map((x, i) => x + " " + i * 10 + "px " + (i + 1) * 10 + "px").join(",") + ")"
     : b.pattern === "dots" ? c.map((x, i) => "radial-gradient(circle at 7px 50%," + x + " 0 3px,transparent 3.6px) " + i * 14 + "px 0/" + n * 14 + "px 100% repeat-x").join(",")
     : stops("90deg");
   return '<span class="dec ' + cls + (b.motion === "shimmer" || b.motion === "twinkle" ? " " + b.motion : "") + '" aria-hidden="true" style="background:' + bg + '"></span>';
@@ -756,6 +777,37 @@ function decorSvg(s) {
   const m = ["twinkle", "float", "spin", "flow"].indexOf(s.motion) >= 0 ? s.motion : "";
   const cls = [m, s.large ? "big" : ""].filter(Boolean).join(" ");
   return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : "") + '><g><path d="' + d + '" ' + (s.line ? 'fill="none" stroke="' + s.color + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"' : 'fill="' + s.color + '"') + "/></g></svg>";
+}
+// 0.42.0: the events screen (events-list.ts): a month of events with category tabs and search, and one event's screen.
+function evButtons(e, detail) {
+  return '<div class="acts">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">' + esc(e.urlLabel || "Open its page") + "</button>" : (opt("request") ? '<button class="btn go" data-pick-stay="' + esc(e.id) + '" data-name="' + esc(e.name) + '" data-total="' + esc(e.price || "") + '">' + esc(opt("request").title) + "</button>" : "")) +
+    (e.mapsUrl ? '<button class="btn" data-href="' + esc(e.mapsUrl) + '">Directions</button>' : "") +
+    (detail ? (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") : '<button class="btn" data-ev="' + esc(e.id) + '">Details</button>') + "</div>";
+}
+function evTags(e) {
+  return '<div class="etags">' + (e.category ? '<span class="ecat">' + esc(e.category) + "</span>" : "") + (e.status ? '<span class="estat">' + esc(e.status) + "</span>" : "") + (e.free ? '<span class="efree">Free</span>' : "") + "</div>";
+}
+function evDate(e) {
+  const d = new Date(e.start + "T00:00:00Z"), same = e.end === e.start;
+  const mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getUTCMonth()];
+  return '<div class="edate"><b>' + d.getUTCDate() + (same ? "" : "+") + "</b><small>" + mon + "</small></div>";
+}
+function eventsScreen() {
+  const d = state.data.events || { events: [], categories: [] }, lookup = opt("lookup");
+  const one = (d.events || []).filter((e) => e.id === (state.ev || d.open))[0];
+  if (one) {
+    return top(lookup ? lookup.title : "Events") + '<div class="edetail"><div class="ev"><div>' + evTags(one) + '<div class="enm">' + esc(one.name) + '</div><div class="ewh">' + esc(one.when) + (one.place ? " · " + esc(one.place) : "") + (one.price ? " · " + esc(one.price) + " per person" : "") + "</div>" +
+      (one.blurb ? '<div class="ebl">' + esc(one.blurb) + "</div>" : "") + evButtons(one, true) + '</div></div></div><div class="actions"><button class="btn" data-ev="">← All events</button></div>';
+  }
+  const cat = state.f.ecat || "", q = (state.f.eq || "").toLowerCase();
+  const list = (d.events || []).filter((e) => (!cat || e.category === cat) && (!q || (e.name + " " + e.category + " " + e.place + " " + e.blurb).toLowerCase().indexOf(q) >= 0));
+  const month = '<div class="emon"><button class="calnav" data-emonth="' + esc(d.prev || "") + '"' + (d.prev ? "" : " disabled") + ' aria-label="Previous month">‹</button><b>' + esc(d.monthLabel || "") + '</b><button class="calnav" data-emonth="' + esc(d.next || "") + '"' + (d.next ? "" : " disabled") + ' aria-label="Next month">›</button></div>';
+  const cats = (d.categories || []).filter((c) => c.count > 0);
+  const tabs = cats.length > 1 ? '<div class="etabs"><button class="etab' + (cat ? "" : " on") + '" data-ecat="">All</button>' + cats.map((c) => '<button class="etab' + (cat === c.name ? " on" : "") + '" data-ecat="' + esc(c.name) + '">' + esc(c.name) + "</button>").join("") + "</div>" : "";
+  const search = (d.events || []).length > 6 ? '<div class="esearch"><input id="f-eq" placeholder="Search events" value="' + esc(state.f.eq || "") + '"><button class="btn" data-esearch="1">Search</button></div>' : "";
+  const rows = list.length ? list.map((e) => '<div class="ev">' + evDate(e) + "<div>" + evTags(e) + '<div class="enm">' + esc(e.name) + '</div><div class="ewh">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + (e.price ? " · " + esc(e.price) : "") + "</div>" + evButtons(e, false) + "</div></div>").join("")
+    : '<div class="empty">' + ((d.events || []).length ? "No event matches. Try another category or search." : "No events listed in " + esc(d.monthLabel || "this month") + ".") + "</div>";
+  return top(lookup ? lookup.title : "Events") + month + tabs + search + (state.busy ? '<div class="note">Loading…</div>' : "") + errLine() + rows;
 }
 function decorTop() {
   const d = decor();
@@ -1761,6 +1813,8 @@ function openOption(i) {
   // 0.33.0: one of the business's own forms. Where the card cannot run tools, the chat fills it in.
   if (o.kind === "customform") { if (!inCard() || !cform(o.key)) { ask(o.example); return; } state.cf = o.key; state.view = "cform"; render(); return; }
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
+  // 0.42.0: a list of events opens on this month's events.
+  if (o.kind === "lookup" && p().events && inCard()) { state.f.ecat = ""; state.f.eq = ""; run(o.tool, {}, o.example); return; }
   // 0.27.0: a hotel's Availability and price opens the booking screen on this month's calendar.
   if (o.kind === "lookup" && p().stayCal && inCard()) { const q = state.sq || {}; run(o.tool, clean({ adults: q.adults || 2, children: q.children || 0, rooms: q.rooms || 1, start: q.start && q.end ? q.start : "", end: q.start && q.end ? q.end : "" }), o.example); return; }
   // 0.15.0: software products. Features, Pricing and Help open with their results; Support opens its form.
@@ -1789,6 +1843,8 @@ function openOption(i) {
 }
 
 function applyTheme(mode) {
+  // A picked theme's named style (card-themes.ts): "sport" slants the tabs and tags.
+  if (decor() && decor().style === "sport") document.documentElement.dataset.style = "sport"; else delete document.documentElement.dataset.style;
   const t = p().theme, root = document.documentElement.style;
   if (!t) return;
   root.setProperty("--a1", t.a1); root.setProperty("--a2", t.a2); root.setProperty("--ink", t.ink); root.setProperty("--glow", t.glow);
@@ -1803,7 +1859,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -1824,6 +1880,10 @@ function render() {
   const lookup = opt("lookup"), request = opt("request"), status = opt("status");
   const guard = (fn) => { try { fn(); } catch (e) { state.error = (e && e.message) || "Check the form."; render(); } };
   on("[data-open]", (b) => openOption(Number(b.dataset.open)));
+  on("[data-emonth]", (b) => { if (b.dataset.emonth) { state.f.ecat = ""; state.f.eq = ""; run(lookup && lookup.tool, { month: b.dataset.emonth }, "Show me the events in " + b.dataset.emonth + "."); } });
+  on("[data-ecat]", (b) => { state.f.ecat = b.dataset.ecat || ""; render(); });
+  on("[data-esearch]", () => { const i = document.getElementById("f-eq"); state.f.eq = i ? i.value.trim() : ""; render(); });
+  on("[data-ev]", (b) => { state.ev = b.dataset.ev || ""; if (!state.ev && state.data.events) state.data.events.open = ""; state.view = "events"; render(); });
   on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
   on("[data-ask]", (b) => { if (b.dataset.ask) ask(b.dataset.ask); });

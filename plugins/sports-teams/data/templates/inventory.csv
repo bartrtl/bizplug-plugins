@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-lower-bowl-sideline,"Lower bowl, sideline",85,1,"Sections 101 to 110, per seat",fri:85;sat:85,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+lower-bowl-sideline,"Lower bowl, sideline",85,1,"Sections 101 to 110, per seat",fri:85;sat:85,,,,,,,,,

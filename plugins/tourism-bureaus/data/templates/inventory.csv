@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-harbour-view-hotel,Harbour View Hotel,180.00,2,,fri:180.00;sat:180.00,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+harbour-view-hotel,Harbour View Hotel,180.00,2,,fri:180.00;sat:180.00,,,,,,,,,

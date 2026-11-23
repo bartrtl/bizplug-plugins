@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per
-main-hall,Main Hall,2500,250,"250 standing or 180 seated, per day",fri:2500;sat:2500,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,free,url,url_label,maps_url
+main-hall,Main Hall,2500,250,"250 standing or 180 seated, per day",fri:2500;sat:2500,,,,,,,,,

@@ -23,7 +23,9 @@ export type CardThemeColors = { a1: string; a2: string; ink: string; bg: string;
  * no image. A sticker is one of the named shapes, or its own outline as SVG path data on a 24 by 24 grid, drawn in
  * one colour. Motion is one of the named ones and stops for people who turn motion off on their device.
  */
-export const DECOR_PATTERNS = ["stripes", "lines", "serrated", "dots"] as const;
+export const DECOR_PATTERNS = ["stripes", "lines", "serrated", "dots", "slant"] as const;
+/** A named look for the card's own shapes: `sport` slants the tabs and tags and sets titles in upper-case italics. */
+export const DECOR_STYLES = ["sport"] as const;
 export const DECOR_BAND_MOTIONS = ["shimmer", "twinkle"] as const;
 export const DECOR_SHAPES = ["star", "heart", "diamond", "circle", "leaf", "sun"] as const;
 export const DECOR_STICKER_MOTIONS = ["twinkle", "float", "spin", "flow", "walk"] as const;
@@ -40,7 +42,7 @@ export type DecorSticker = {
   large?: boolean;
   motion?: (typeof DECOR_STICKER_MOTIONS)[number];
 };
-export type CardDecor = { header?: DecorBand; divider?: DecorBand; footer?: DecorBand; stickers?: DecorSticker[] };
+export type CardDecor = { header?: DecorBand; divider?: DecorBand; footer?: DecorBand; stickers?: DecorSticker[]; style?: (typeof DECOR_STYLES)[number] };
 
 export type CardTheme = {
   /** Lower-case letters and hyphens. Stored on the client's plug-in, so never rename one. */
@@ -178,7 +180,8 @@ export function decorProblems(d: unknown): string[] {
   if (d === undefined) return [];
   if (!isObj(d)) return ["decor must be an object with header, divider, footer and stickers."];
   const out: string[] = [];
-  for (const k of Object.keys(d)) if (!["header", "divider", "footer", "stickers"].includes(k)) out.push(`decor.${k} is not a decoration: use header, divider, footer or stickers.`);
+  for (const k of Object.keys(d)) if (!["header", "divider", "footer", "stickers", "style"].includes(k)) out.push(`decor.${k} is not a decoration: use header, divider, footer, stickers or style.`);
+  if (d.style !== undefined && !oneOf(DECOR_STYLES, d.style)) out.push(`decor.style must be one of ${DECOR_STYLES.join(", ")}.`);
   for (const k of ["header", "divider", "footer"] as const) {
     const b = d[k];
     if (b === undefined) continue;
@@ -214,6 +217,7 @@ export function cleanDecor(d: unknown): CardDecor | undefined {
   const out: CardDecor = {};
   for (const k of ["header", "divider", "footer"] as const) { const b = band(d[k]); if (b) out[k] = b; }
   if (Array.isArray(d.stickers)) out.stickers = (d.stickers as Record<string, unknown>[]).map((x) => ({ ...(x.shape ? { shape: x.shape as DecorSticker["shape"] } : { path: x.path as string }), color: x.color as string, ...(x.line ? { line: true } : {}), ...(x.large ? { large: true } : {}), ...(x.motion ? { motion: x.motion as DecorSticker["motion"] } : {}) }));
+  if (d.style) out.style = d.style as CardDecor["style"];
   return Object.keys(out).length ? out : undefined;
 }
 
@@ -234,6 +238,7 @@ export function bandBackground(b: DecorBand): string {
   const stops = (deg: string) => `linear-gradient(${deg},${c.map((x, i) => `${x} ${((100 * i) / n).toFixed(2)}% ${((100 * (i + 1)) / n).toFixed(2)}%`).join(",")})`;
   if (b.pattern === "lines") return stops("180deg");
   if (b.pattern === "serrated" && n >= 2) return `conic-gradient(from -45deg at 50% 100%,${c[0]} 90deg,transparent 0) 0 100%/12px 55% repeat-x,linear-gradient(${c[0]},${c[0]}) 0 0/100% 46% no-repeat,${c[1]}`;
+  if (b.pattern === "slant") return `repeating-linear-gradient(115deg,${c.map((x, i) => `${x} ${i * 10}px ${(i + 1) * 10}px`).join(",")})`;
   if (b.pattern === "dots") return c.map((x, i) => `radial-gradient(circle at 7px 50%,${x} 0 3px,transparent 3.6px) ${i * 14}px 0/${n * 14}px 100% repeat-x`).join(",");
   return stops("90deg");
 }
@@ -247,6 +252,7 @@ export function decorSummary(d: CardDecor | undefined): string {
   const parts = [
     bands.length ? `${bands.length > 1 ? `${bands.slice(0, -1).join(", ")} and ${bands[bands.length - 1]}` : bands[0]} band${bands.length > 1 ? "s" : ""}` : "",
     stickers ? `${stickers} sticker${stickers > 1 ? "s" : ""}` : "",
+    d.style ? `${d.style} style` : "",
     moving ? "animated" : "",
   ].filter(Boolean).join(", ");
   return parts.charAt(0).toUpperCase() + parts.slice(1);
