@@ -1,0 +1,63 @@
+{
+  "slug": "activity-calendar",
+  "name": "Activity Calendar",
+  "group": "Travel & leisure",
+  "engine": "stay",
+  "title": "Activities by date, with places per person",
+  "tools": {
+    "lookup": "check_activity_calendar",
+    "request": "request_activity_places",
+    "status": "get_activity_request_status"
+  },
+  "noun": "activity",
+  "span": "single",
+  "perGuest": true,
+  "ask": "What is on this Saturday, and are there places for three?",
+  "covers": "the activities on offer, their dates and prices, who they suit, what to bring and where to meet",
+  "rule": "Never say a place is booked or held: the organiser confirms every request. Never take payment or card details in the chat.",
+  "example": {
+    "business": "Riverside Activities",
+    "item": "Sunset kayak tour",
+    "price": "45.00"
+  },
+  "who": "Organisers that run activities on set dates: outdoor and adventure providers, workshops and classes, community and resort activity programmes. A tour operator selling trips uses Travel & Tourism.",
+  "author": "BizPlug",
+  "icon": "Sun",
+  "accent": "lime",
+  "added": "2026-11-23",
+  "page": {
+    "headline": "Your activity calendar, answered and requested in the chat",
+    "problem": "People ask what is on and whether there is room, usually when nobody is at the desk. A plug-in shows your activities on a calendar with the price per person for each date, answers what to bring and where to meet, and sends the request for places to you to confirm.",
+    "valueProps": [
+      "A calendar of what is on::Each open date with its lowest price per person.",
+      "Prices by date::A weekday, weekend or holiday rate, as you publish it.",
+      "Requests you confirm::The activity, the date and the number of people, ready to confirm."
+    ],
+    "moments": [
+      "This Saturday::The activities open that day, with the price for three.",
+      "The school holiday::Dates you marked as full are shown as full.",
+      "What do I bring?::Your own answers, from the information you publish.",
+      "Did we get in?::A reference check instead of a call."
+    ],
+    "journeys": [
+      "Open the calendar",
+      "Pick a date and the number of people",
+      "Request places",
+      "Check the request"
+    ],
+    "faqs": [
+      "Are places held in the chat?::No. You confirm every request. Dates are full when you publish them as taken; it is not a live booking system.",
+      "Does it take payment?::No. It never takes payment or card details. You arrange payment when confirming."
+    ]
+  },
+  "chat": {
+    "business": "Riverside Activities",
+    "answer": [
+      "*🛶|Sunset kayak tour|Saturday, per person|$45",
+      "🧗|Climbing taster|Saturday, per person|$30",
+      "~The organiser confirms every request."
+    ],
+    "confirm": "The kayak tour for three.",
+    "sent": "Sunset kayak tour · Sat · 3 people"
+  }
+}
