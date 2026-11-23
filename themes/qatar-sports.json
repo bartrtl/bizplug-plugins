@@ -1,0 +1,19 @@
+{
+  "id": "qatar-sports",
+  "name": "Qatar Sports",
+  "description": "Yellow-green on carbon with Qatar's maroon and a finish-line band, in a slanted sports style. For sports calendars, clubs, races and venues.",
+  "author": "Bart Cant - Rethink Labs",
+  "colors": {
+    "a1": "#d4ff3a",
+    "a2": "#e2ff7a",
+    "ink": "#101317",
+    "bg": "#0c0e11",
+    "glow": "rgba(138,21,56,.25)"
+  },
+  "decor": {
+    "style": "sport",
+    "header": { "pattern": "slant", "colors": ["#d4ff3a", "#101317", "#ffffff", "#101317"] },
+    "divider": { "pattern": "stripes", "colors": ["#8a1538", "#d4ff3a"] },
+    "footer": { "pattern": "slant", "colors": ["#8a1538", "#101317"] }
+  }
+}
