@@ -1,0 +1,13 @@
+{
+  "id": "usa",
+  "name": "USA",
+  "description": "Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#fca5a5",
+    "a2": "#93c5fd",
+    "ink": "#0b1730",
+    "bg": "#0a1a3a",
+    "glow": "rgba(252,165,165,.14)"
+  }
+}
