@@ -185,7 +185,7 @@ Read-only.
 | --- | --- | --- | --- |
 | `reference` | string | yes | The reference returned when the request was made, e.g. BP-7K2Q9D. |
 
-<details><summary>Tool names of the 14 stay industries</summary>
+<details><summary>Tool names of the 15 stay industries</summary>
 
 | Industry | Look-up | Request | Status |
 | --- | --- | --- | --- |
@@ -199,6 +199,7 @@ Read-only.
 | Theme Parks & Attractions | `check_ticket_availability` | `request_tickets` | `get_ticket_request_status` |
 | Museums & Galleries | `check_ticket_availability` | `request_tickets` | `get_ticket_request_status` |
 | Sports Teams & Venues | `check_seat_availability` | `request_tickets` | `get_ticket_request_status` |
+| Vacation Rentals | `check_rental_availability` | `request_booking` | `get_booking_status` |
 | Car Rental | `check_vehicle_availability` | `request_reservation` | `get_reservation_status` |
 | Coworking & Offices | `check_space_availability` | `request_space_booking` | `get_booking_status` |
 | Activity Calendar | `check_activity_calendar` | `request_activity_places` | `get_activity_request_status` |

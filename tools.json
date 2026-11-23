@@ -17074,6 +17074,324 @@
         }
       ]
     },
+    "vacation-rentals": {
+      "name": "Vacation Rentals",
+      "engine": "stay",
+      "url": "https://mcp.bizplug.ai/plugin/vacation-rentals",
+      "tools": [
+        {
+          "name": "show_menu",
+          "title": "Menu",
+          "description": "Return this plug-in's menu: what the customer can do here, each with a short title, a one-line description and a question to try. Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option; where there is no card, show the options exactly as returned (same titles, same order). Creates nothing.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "check_rental_availability",
+          "title": "Availability and price",
+          "description": "Check which home options are free for the customer's dates and party size, with the published rate and total price. Creates nothing.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "start": {
+                "type": "string",
+                "description": "Check-in date, as YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Check-out date, as YYYY-MM-DD."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of people."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "month": {
+                "type": "string",
+                "description": "YYYY-MM: the calendar month to show, when no dates are chosen yet."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "request_booking",
+          "title": "Request the booking",
+          "description": "Send a booking request for the chosen home and dates to the business. Use only once the customer has chosen an option. The business confirms; nothing is held or charged in chat.",
+          "readOnly": false,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "option": {
+                "type": "string",
+                "description": "The home id chosen from the availability result."
+              },
+              "start": {
+                "type": "string",
+                "description": "Check-in date, as YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Check-out date, as YYYY-MM-DD."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of people."
+              },
+              "name": {
+                "type": "string",
+                "description": "Customer's name."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email the business can reply to."
+              },
+              "phone": {
+                "type": "string",
+                "description": "Optional phone number."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Anything else the business should know."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business",
+              "option",
+              "start",
+              "name",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "get_booking_status",
+          "title": "Booking status",
+          "description": "Look up the status of a booking request by its reference.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "reference": {
+                "type": "string",
+                "description": "The reference returned when the request was made, e.g. BP-7K2Q9D."
+              }
+            },
+            "required": [
+              "business",
+              "reference"
+            ]
+          }
+        },
+        {
+          "name": "get_business_info",
+          "title": "Business information",
+          "description": "Answer a general question about this vacation rentals business using only its published profile: homes and who they sleep, nightly rates, house rules, check-in and the local area. Creates nothing. If the profile does not cover the question, say so and use get_contact.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "question": {
+                "type": "string",
+                "description": "The customer's question, in their words."
+              },
+              "section": {
+                "type": "string",
+                "enum": [
+                  "committees",
+                  "news",
+                  "social"
+                ],
+                "description": "Optional: \"committees\" for the business's committees, \"news\" for its news, events and newsletter, \"social\" for its latest social media posts and where to follow it. Leave out for everything else."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_contact",
+          "title": "Contact details",
+          "description": "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "open_form",
+          "title": "Open a form",
+          "description": "Open one of this vacation rentals business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page.",
+          "readOnly": true,
+          "when": "Only when the business linked forms of its own.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "form": {
+                "type": "string",
+                "description": "The form's id or title, from the business's forms."
+              },
+              "name": {
+                "type": "string",
+                "description": "The customer's name, when they gave it."
+              },
+              "email": {
+                "type": "string",
+                "description": "The customer's email, when they gave it."
+              },
+              "phone": {
+                "type": "string",
+                "description": "The customer's phone, when they gave it."
+              },
+              "date": {
+                "type": "string",
+                "description": "A date the form asks for, as YYYY-MM-DD, when the customer gave it."
+              },
+              "details": {
+                "type": "string",
+                "description": "What the customer said the form is about, in their words."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "form"
+            ]
+          }
+        }
+      ]
+    },
     "car-rental": {
       "name": "Car Rental",
       "engine": "stay",

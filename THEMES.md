@@ -17,8 +17,8 @@ This page is generated with the rest of the repository, so please do not edit it
 | [Jamaica](themes/jamaica.json) | `jamaica` | Gold to green on black, after the flag of Jamaica. For resorts, tours, restaurants and tourism bureaus there. | Bart Cant - Rethink Labs | `#fde047` → `#4ade80` on `#0b0f0a` | Header, divider and footer bands, 1 sticker, animated |
 | [Mexico](themes/mexico.json) | `mexico` | Green to off-white on deep red, after the flag of Mexico. For restaurants, hotels, tours and tourism bureaus there. | Bart Cant - Rethink Labs | `#4ade80` → `#f5f5f4` on `#2a0c0c` | Header and footer bands, 1 sticker, animated |
 | [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` | None |
-| [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | BizPlug | `#f8eef1` → `#f0a3b8` on `#240812` | None |
-| [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | BizPlug | `#fca5a5` → `#93c5fd` on `#0a1a3a` | None |
+| [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | Bart Cant - Rethink Labs | `#f8eef1` → `#f0a3b8` on `#240812` | Header and footer bands, 1 sticker, animated |
+| [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | Bart Cant - Rethink Labs | `#fca5a5` → `#93c5fd` on `#0a1a3a` | Header, divider and footer bands, 3 stickers, animated |
 
 Each theme is in `themes/<id>.json`. The built-in ones are also in [`source/card-themes.ts`](source/card-themes.ts); the others were added here by pull request, and the BizPlug portal and plug-in server read them from this repository's `main` branch.
 

@@ -285,6 +285,7 @@ const RULES: IndustryFileRules = {
     "dev-tools",
     "airlines",
     "cruise-lines",
+    "vacation-rentals",
     "car-rental",
     "theme-parks",
     "museums",
@@ -752,6 +753,13 @@ const RULES: IndustryFileRules = {
       "group": "Travel & leisure",
       "engine": "stay",
       "about": "itineraries, inclusions, sailing dates and enquiries. What's included in the fare, and when does the next sailing leave?"
+    },
+    {
+      "slug": "vacation-rentals",
+      "name": "Vacation Rentals",
+      "group": "Travel & leisure",
+      "engine": "stay",
+      "about": "homes and who they sleep, nightly rates, house rules, check-in and the local area. Do you have a house on Seabrook Island for 4 people next weekend?"
     },
     {
       "slug": "car-rental",

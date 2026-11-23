@@ -1,0 +1,408 @@
+{
+  "industry": "vacation-rentals",
+  "name": "Vacation Rentals",
+  "engine": "stay",
+  "functionTitle": "Home availability, nightly rates and booking",
+  "datasets": [
+    {
+      "id": "business",
+      "file": "business.csv",
+      "title": "Business details",
+      "why": "What the plug-in says about the business and where customers can reach it.",
+      "required": true,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Business name",
+          "required": true,
+          "type": "text",
+          "example": "Marsh Point Rentals",
+          "help": "As customers know it."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": true,
+          "type": "text",
+          "example": "Marsh Point Rentals serves customers in and around Charlotte, NC.",
+          "help": "One or two sentences, in the business's own words."
+        },
+        {
+          "key": "email",
+          "label": "Public email",
+          "required": true,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The address customers may write to."
+        },
+        {
+          "key": "phone",
+          "label": "Public phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0100",
+          "help": "With country code."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Vacation Rentals in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
+          "key": "wordmark",
+          "label": "Wide logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo-wide.png",
+          "help": "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "123 Main St, Charlotte, NC 28202",
+          "help": "Street address, if customers visit."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Charlotte",
+          "help": ""
+        },
+        {
+          "key": "region",
+          "label": "State or country",
+          "required": false,
+          "type": "text",
+          "example": "NC",
+          "help": ""
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Mon-Fri 09:00-17:00; Sat 10:00-14:00",
+          "help": "As shown to customers."
+        },
+        {
+          "key": "currency",
+          "label": "Currency",
+          "required": false,
+          "type": "text",
+          "example": "USD",
+          "help": "ISO code for the prices in the other files."
+        },
+        {
+          "key": "notify_email",
+          "label": "Requests go to",
+          "required": false,
+          "type": "email",
+          "example": "orders@example.com",
+          "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        }
+      ],
+      "collect": [
+        "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
+        "Write the summary in the business's own words (one or two sentences). Do not add claims the business does not make.",
+        "Ask the owner which inbox should receive requests from ChatGPT and put it in notify_email."
+      ]
+    },
+    {
+      "id": "inventory",
+      "file": "inventory.csv",
+      "title": "What can be booked (homes)",
+      "why": "The options and published rates the plug-in prices from.",
+      "required": true,
+      "maxRows": 500,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id",
+          "required": true,
+          "type": "text",
+          "example": "dune-cottage",
+          "help": "Short, unique, lowercase with hyphens."
+        },
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Dune Cottage",
+          "help": ""
+        },
+        {
+          "key": "rate",
+          "label": "Published rate",
+          "required": true,
+          "type": "number",
+          "example": "245",
+          "help": "Per night, day or booking, as the business publishes it."
+        },
+        {
+          "key": "capacity",
+          "label": "Capacity",
+          "required": false,
+          "type": "number",
+          "example": "4",
+          "help": "Most guests or people."
+        },
+        {
+          "key": "description",
+          "label": "Description",
+          "required": false,
+          "type": "text",
+          "example": "2 bedrooms, 2 baths, five minutes to the beach",
+          "help": ""
+        },
+        {
+          "key": "day_rates",
+          "label": "Weekday rates",
+          "required": false,
+          "type": "text",
+          "example": "fri:245;sat:245",
+          "help": "Optional: a different rate on some weekdays, as day:rate separated by semicolons (sun, mon, tue, wed, thu, fri, sat). Shown on the booking calendar from plug-in version 0.29.0."
+        },
+        {
+          "key": "per",
+          "label": "Booked once",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, from plug-in version 0.41.0, and only where bookings are by the night: leave empty for a room priced per night. Write person or booking for something booked once for the stay, such as an activity or a transfer: the rate is then per person or per booking."
+        }
+      ],
+      "collect": [
+        "Copy each bookable option and its standard published rate from the website or booking engine.",
+        "Use the rate customers see before discounts. Note in faqs.csv whether taxes and fees are included."
+      ]
+    },
+    {
+      "id": "blocked",
+      "file": "blocked-dates.csv",
+      "title": "Dates not available",
+      "why": "Dates the plug-in should not offer for an option.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Option id",
+          "required": true,
+          "type": "text",
+          "example": "dune-cottage",
+          "help": "An id from inventory.csv."
+        },
+        {
+          "key": "start",
+          "label": "From",
+          "required": true,
+          "type": "date",
+          "example": "2026-12-24",
+          "help": "YYYY-MM-DD."
+        },
+        {
+          "key": "end",
+          "label": "To",
+          "required": true,
+          "type": "date",
+          "example": "2026-12-27",
+          "help": "YYYY-MM-DD, the day after the last blocked night or day."
+        }
+      ],
+      "collect": [
+        "Add closures and sold-out periods the owner knows about. This is not a live calendar; BizPlug confirms each request with the business."
+      ]
+    },
+    {
+      "id": "rates",
+      "file": "rates.csv",
+      "title": "Rates by date",
+      "why": "Seasons and holidays with their own rate (from plug-in version 0.29.0). A date range here wins over the weekday rates and the standard rate.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Option id",
+          "required": true,
+          "type": "text",
+          "example": "dune-cottage",
+          "help": "An id from inventory.csv."
+        },
+        {
+          "key": "start",
+          "label": "From",
+          "required": true,
+          "type": "date",
+          "example": "2026-12-20",
+          "help": "YYYY-MM-DD, the first day at this rate."
+        },
+        {
+          "key": "end",
+          "label": "To",
+          "required": true,
+          "type": "date",
+          "example": "2027-01-03",
+          "help": "YYYY-MM-DD, the last day at this rate."
+        },
+        {
+          "key": "rate",
+          "label": "Rate",
+          "required": true,
+          "type": "number",
+          "example": "245",
+          "help": "Per night, day or person, as in inventory.csv."
+        }
+      ],
+      "collect": [
+        "Copy the business's own published seasonal or holiday rates. Only rates customers can see; BizPlug confirms each request with the business."
+      ]
+    },
+    {
+      "id": "services",
+      "file": "services.csv",
+      "title": "Services list",
+      "why": "A short list of what the business offers, used in answers.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "service",
+          "label": "Service",
+          "required": true,
+          "type": "text",
+          "example": "Mid-stay cleaning",
+          "help": "One per row."
+        }
+      ],
+      "collect": [
+        "List the services from the website's services or about page, one per row, short names only."
+      ]
+    },
+    {
+      "id": "faqs",
+      "file": "faqs.csv",
+      "title": "Questions and answers",
+      "why": "The plug-in answers customer questions only from these, so it never guesses.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "question",
+          "label": "Question",
+          "required": true,
+          "type": "text",
+          "example": "Are pets allowed?",
+          "help": "How a customer would ask it."
+        },
+        {
+          "key": "answer",
+          "label": "Answer",
+          "required": true,
+          "type": "text",
+          "example": "Dogs are welcome in Dune Cottage for a $75 fee per stay.",
+          "help": "The business's answer, in full sentences."
+        }
+      ],
+      "collect": [
+        "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
+        "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    },
+    {
+      "id": "social",
+      "file": "social.csv",
+      "title": "Social media",
+      "why": "Where to follow you, and your latest posts with their pictures, shown under Social media in the plug-in. Feeds (YouTube, podcast, blog, Substack, Medium, Bluesky, Mastodon) are read automatically; for LinkedIn, Instagram, X, Facebook and TikTok you pin the posts you want shown. From plug-in version 0.35.0 a YouTube video plays inside the card.",
+      "required": false,
+      "maxRows": 60,
+      "columns": [
+        {
+          "key": "kind",
+          "label": "Kind",
+          "required": true,
+          "type": "text",
+          "example": "follow",
+          "help": "\"follow\" for a profile to follow, \"feed\" for a public feed BizPlug reads (YouTube channel, podcast or blog RSS, Substack, Medium, Bluesky or Mastodon profile), \"post\" for one post you pin."
+        },
+        {
+          "key": "network",
+          "label": "Network",
+          "required": false,
+          "type": "text",
+          "example": "instagram",
+          "help": "instagram, linkedin, facebook, x, tiktok, youtube, threads, bluesky, mastodon, podcast, blog, substack, medium, pinterest or whatsapp. Left empty, it is read from the address."
+        },
+        {
+          "key": "url",
+          "label": "Address",
+          "required": true,
+          "type": "url",
+          "example": "https://www.instagram.com/yourbusiness/",
+          "help": "The profile, the feed or the post, as an https address."
+        },
+        {
+          "key": "image",
+          "label": "Picture",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/post.jpg",
+          "help": "For a pinned post: its picture, an https PNG, JPEG or WebP image."
+        },
+        {
+          "key": "text",
+          "label": "Text",
+          "required": false,
+          "type": "text",
+          "example": "Our new menu is here.",
+          "help": "For a pinned post: its caption, or the first lines of it."
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "required": false,
+          "type": "text",
+          "example": "2026-11-20",
+          "help": "For a pinned post: YYYY-MM-DD."
+        }
+      ],
+      "collect": [
+        "Take the profiles from the links on the business's own website (header or footer).",
+        "Add a feed row for a YouTube channel, a podcast or blog RSS, a Substack, Medium, Bluesky or Mastodon profile; its latest posts appear by themselves.",
+        "Pin a few recent posts from LinkedIn, Instagram, X, Facebook or TikTok with their own picture and text: only posts the business published.",
+        "A pinned post may also be one of the business's own YouTube videos (a watch, youtu.be or Shorts address): it plays inside the card, and needs no picture."
+      ]
+    }
+  ],
+  "never": [
+    "Passwords, API keys or other secrets.",
+    "Card numbers, bank details or government ID numbers.",
+    "Customers' personal data (names, phone numbers, addresses, health or financial details)."
+  ]
+}

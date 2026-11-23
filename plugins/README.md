@@ -1,6 +1,6 @@
 # Plug-in packages
 
-BizPlug's plug-ins, one folder each: the 85 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in). To propose a new industry, see [INDUSTRIES.md](../INDUSTRIES.md).
+BizPlug's plug-ins, one folder each: the 86 industry plug-ins and 2 startup directories. These folders are generated from the BizPlug website on each release, so please do not change them. Plug-ins from collaborators are in [`community/plugins/`](../community); to add yours, see [Contribute a plug-in](#contribute-a-plug-in). To propose a new industry, see [INDUSTRIES.md](../INDUSTRIES.md).
 
 ## What is in a package
 
@@ -110,6 +110,7 @@ To try a plug-in first, add its MCP server URL as a connector in ChatGPT develop
 | [`travel/`](travel) | Travel & Tourism: Tour and trip availability with price per traveller | `https://mcp.bizplug.ai/plugin/travel` |
 | [`airlines/`](airlines) | Airlines: Flight status and support requests | `https://mcp.bizplug.ai/plugin/airlines` |
 | [`cruise-lines/`](cruise-lines) | Cruise Lines: Sailing availability and cabin pricing | `https://mcp.bizplug.ai/plugin/cruise-lines` |
+| [`vacation-rentals/`](vacation-rentals) | Vacation Rentals: Home availability, nightly rates and booking | `https://mcp.bizplug.ai/plugin/vacation-rentals` |
 | [`car-rental/`](car-rental) | Car Rental: Vehicle availability and rental price | `https://mcp.bizplug.ai/plugin/car-rental` |
 | [`theme-parks/`](theme-parks) | Theme Parks & Attractions: Ticket availability for a visit date | `https://mcp.bizplug.ai/plugin/theme-parks` |
 | [`museums/`](museums) | Museums & Galleries: Timed tickets and exhibitions | `https://mcp.bizplug.ai/plugin/museums` |

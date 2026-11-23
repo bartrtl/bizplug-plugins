@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-vacation-rentals",
+  "version": "0.41.0",
+  "description": "The vacation rentals plug-in from BizPlug. Main function: home availability, nightly rates and booking. It works from the business's own published profile, covering homes and who they sleep, nightly rates, house rules, check-in and the local area, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "homepage": "https://bizplug.ai/industries/vacation-rentals",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Vacation Rentals",
+        "shortDescription": "Home availability, nightly rates and booking for vacation rentals businesses.",
+        "longDescription": "The vacation rentals plug-in from BizPlug. Main function: home availability, nightly rates and booking. It works from the business's own published profile, covering homes and who they sleep, nightly rates, house rules, check-in and the local area, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Home availability, nightly rates and booking",
+          "Do you have a house on Seabrook Island for 4 people next weekend?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/vacation-rentals",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Home availability, nightly rates and booking",
+            "expect": "Calls check_rental_availability and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Do you have a house on Seabrook Island for 4 people next weekend?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_booking only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

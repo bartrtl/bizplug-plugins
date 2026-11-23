@@ -79,6 +79,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("theme-parks", "stay", "Ticket availability for a visit date", ["check_ticket_availability", "request_tickets", "get_ticket_request_status"], "ticket", { span: "single", perGuest: true }),
   r("museums", "stay", "Timed tickets and exhibitions", ["check_ticket_availability", "request_tickets", "get_ticket_request_status"], "ticket", { span: "single", perGuest: true }),
   r("sports-teams", "stay", "Seat availability and ticket requests", ["check_seat_availability", "request_tickets", "get_ticket_request_status"], "seat section", { span: "single", perGuest: true }),
+  r("vacation-rentals", "stay", "Home availability, nightly rates and booking", ["check_rental_availability", "request_booking", "get_booking_status"], "home", { span: "nights" }),
   r("car-rental", "stay", "Vehicle availability and rental price", ["check_vehicle_availability", "request_reservation", "get_reservation_status"], "vehicle class", { span: "days" }),
   r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days", members: true, visits: true }),
 
