@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-activity-calendar",
+  "version": "0.41.0",
+  "description": "The activity calendar plug-in from BizPlug. Main function: activities by date, with places per person. It works from the business's own published profile, covering the activities on offer, their dates and prices, who they suit, what to bring and where to meet, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never say a place is booked or held: the organiser confirms every request. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "homepage": "https://bizplug.ai/industries/activity-calendar",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Activity Calendar",
+        "shortDescription": "Activities by date, with places per person for activity calendar businesses.",
+        "longDescription": "The activity calendar plug-in from BizPlug. Main function: activities by date, with places per person. It works from the business's own published profile, covering the activities on offer, their dates and prices, who they suit, what to bring and where to meet, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never say a place is booked or held: the organiser confirms every request. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Activities by date, with places per person",
+          "What is on this Saturday, and are there places for three?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/activity-calendar",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Activities by date, with places per person",
+            "expect": "Calls check_activity_calendar and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What is on this Saturday, and are there places for three?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_activity_places only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

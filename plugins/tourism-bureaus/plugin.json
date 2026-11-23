@@ -1,0 +1,73 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-tourism-bureaus",
+  "version": "0.41.0",
+  "description": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://bizplug.ai"
+  },
+  "homepage": "https://bizplug.ai/industries/tourism-bureaus",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Tourism Bureaus & Destinations",
+        "shortDescription": "Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.",
+        "longDescription": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Places to stay and things to do, with booking requests",
+          "What is there to do in March, and where can we stay for four nights?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://bizplug.ai/industries/tourism-bureaus",
+        "privacyPolicyURL": "https://bizplug.ai/privacy",
+        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Places to stay and things to do, with booking requests",
+            "expect": "Calls find_stays_and_activities and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What is there to do in March, and where can we stay for four nights?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls book_stay_or_activity only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

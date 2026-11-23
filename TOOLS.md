@@ -15,7 +15,7 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 | Engine | Sample businesses |
 | --- | --- |
 | `order` | `coffee-shops/demo-cafe`, `florists/demo-florist` |
-| `stay` | `events/demo-venue`, `hospitality/demo-hotel` |
+| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `tourism-bureaus/demo-sample` |
 | `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
 | `quote` | `hvac/demo-hvac` |
 | `track` | `property-management/demo-pm` |
@@ -143,7 +143,7 @@ Read-only.
 
 ### `stay`: Check what is free for dates and party size with the total price, send a booking request, check its status.
 
-The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`.
+The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
 
 #### `check_room_availability` (look-up: Availability and price)
 
@@ -185,7 +185,7 @@ Read-only.
 | --- | --- | --- | --- |
 | `reference` | string | yes | The reference returned when the request was made, e.g. BP-7K2Q9D. |
 
-<details><summary>Tool names of the 12 stay industries</summary>
+<details><summary>Tool names of the 14 stay industries</summary>
 
 | Industry | Look-up | Request | Status |
 | --- | --- | --- | --- |
@@ -201,6 +201,8 @@ Read-only.
 | Sports Teams & Venues | `check_seat_availability` | `request_tickets` | `get_ticket_request_status` |
 | Car Rental | `check_vehicle_availability` | `request_reservation` | `get_reservation_status` |
 | Coworking & Offices | `check_space_availability` | `request_space_booking` | `get_booking_status` |
+| Activity Calendar | `check_activity_calendar` | `request_activity_places` | `get_activity_request_status` |
+| Tourism Bureaus & Destinations | `find_stays_and_activities` | `book_stay_or_activity` | `get_booking_status` |
 
 </details>
 

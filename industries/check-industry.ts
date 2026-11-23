@@ -880,11 +880,25 @@ const RULES: IndustryFileRules = {
       "about": "memberships, amenities and tour requests. What membership options do you have, and can I book a tour?"
     },
     {
+      "slug": "activity-calendar",
+      "name": "Activity Calendar",
+      "group": "Travel & leisure",
+      "engine": "stay",
+      "about": "the activities on offer, their dates and prices, who they suit, what to bring and where to meet. What is on this Saturday, and are there places for three?"
+    },
+    {
       "slug": "restaurant-reservations",
       "name": "Restaurant Reservations",
       "group": "Retail & food",
       "engine": "appt",
       "about": "tables and party sizes, opening hours, menus, dietary options and private dining. Do you have a table for four on Friday at 7pm?"
+    },
+    {
+      "slug": "tourism-bureaus",
+      "name": "Tourism Bureaus & Destinations",
+      "group": "Travel & leisure",
+      "engine": "stay",
+      "about": "places to stay, activities and tours, when to visit, getting around, events and visitor information. What is there to do in March, and where can we stay for four nights?"
     }
   ],
   "icons": [

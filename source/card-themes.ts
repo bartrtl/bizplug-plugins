@@ -97,21 +97,6 @@ export const CARD_THEMES: CardTheme[] = [
     author: "BizPlug",
     colors: { a1: "#f0abfc", a2: "#a78bfa", ink: "#1a1030", bg: "#140f24", glow: "rgba(240,171,252,.14)" },
   },
-  {
-    id: "christmas",
-    name: "Christmas",
-    description: "Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events.",
-    author: "Bart Cant - Rethink Labs",
-    colors: { a1: "#f87171", a2: "#4ade80", ink: "#1a0a0a", bg: "#0c1a12", glow: "rgba(248,113,113,.14)" },
-    decor: {
-      header: { pattern: "dots", colors: ["#f87171", "#fde047", "#4ade80", "#60a5fa"], motion: "twinkle" },
-      footer: { pattern: "dots", colors: ["#ffffff"], motion: "twinkle" },
-      stickers: [
-        { path: "M12 2l4 5h-2l4 5h-2.5l4.500 6H13v4h-2v-4H4l4.500-6H6l4-5H8z", color: "#4ade80" },
-        { shape: "star", color: "#fde047", motion: "twinkle" },
-      ],
-    },
-  },
 ];
 
 /** The shape of a theme id, built-in or from the public repository's themes/ (card-themes-remote.ts). */

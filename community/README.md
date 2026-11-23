@@ -16,7 +16,9 @@ A layout has `layout.json`, `layout.js`, `layout.css`, `preview-desktop.png` and
 
 ## Industries: `community/industries/<slug>.json`
 
+- [`activity-calendar.json`](industries/activity-calendar.json)
 - [`restaurant-reservations.json`](industries/restaurant-reservations.json)
+- [`tourism-bureaus.json`](industries/tourism-bureaus.json)
 
 One file per industry, in the format of [`industries/example.json`](../industries/example.json) ([INDUSTRIES.md](../INDUSTRIES.md#add-a-new-industry)). A file here is a live industry on BizPlug: the website reads these files each time it is built, and the generated package is in [`plugins/<slug>/`](../plugins). Changing a file changes the industry, and removing one takes it down.
 
