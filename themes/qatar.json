@@ -1,0 +1,13 @@
+{
+  "id": "qatar",
+  "name": "Qatar",
+  "description": "Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there.",
+  "author": "BizPlug",
+  "colors": {
+    "a1": "#f8eef1",
+    "a2": "#f0a3b8",
+    "ink": "#3d0a1e",
+    "bg": "#240812",
+    "glow": "rgba(240,163,184,.14)"
+  }
+}
