@@ -1,0 +1,45 @@
+{
+  "id": "belgium",
+  "name": "Belgium",
+  "description": "Yellow to soft red on black, after the flag of Belgium. For caf\u00e9s, chocolatiers, events and tourism bureaus there.",
+  "author": "Bart Cant - Rethink Labs",
+  "colors": {
+    "a1": "#fde047",
+    "a2": "#f87171",
+    "ink": "#1a1203",
+    "bg": "#0d0d0d",
+    "glow": "rgba(248,113,113,.12)"
+  },
+  "decor": {
+    "header": {
+      "pattern": "stripes",
+      "colors": [
+        "#000000",
+        "#fdda24",
+        "#ef3340"
+      ]
+    },
+    "footer": {
+      "pattern": "stripes",
+      "colors": [
+        "#000000",
+        "#fdda24",
+        "#ef3340"
+      ]
+    },
+    "stickers": [
+      {
+        "path": "M16.6 1.6a2.4 2.4 0 100 4.8 2.4 2.4 0 000-4.8zM14.4 7.4C15.300 6.800 17.500 6.800 18.300 7.500L20.600 10.300C21.100 10.900 21 11.700 20.400 12L19.700 12.300L19 11.300L19.100 13L19.500 16H17.800L17.300 13.600L16.800 16H15.100L15.200 13C14.300 11.200 13.900 9.200 14.400 7.400zM13 16h8.500v1.500h-1.300v5.500h-5.900v-5.500H13z",
+        "color": "#c9a227",
+        "large": true
+      },
+      {
+        "path": "M0 12.5C5 10 9.5 13.500 11 22",
+        "color": "#9bd3f5",
+        "line": true,
+        "large": true,
+        "motion": "flow"
+      }
+    ]
+  }
+}
