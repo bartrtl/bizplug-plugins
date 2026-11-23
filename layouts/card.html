@@ -4,6 +4,20 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Inter,sans-serif}
 #app{padding:18px;position:relative;overflow:hidden}
+.dec{display:block;position:relative;overflow:hidden;pointer-events:none}
+.dec.top{margin:-18px -18px 18px;height:10px}.dec.mid{margin:12px 0 14px;height:4px;border-radius:2px}.dec.bot{margin:18px -18px -18px;height:10px}
+.dec.shimmer::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.6) 50%,transparent 65%) 0 0/250% 100%;animation:dec-shim 5s linear infinite}
+.dec.twinkle{animation:dec-tw 2.4s ease-in-out infinite}
+.stk{position:absolute;top:16px;right:12px;display:flex;gap:2px;pointer-events:none;z-index:2}[dir=rtl] .stk{right:auto;left:14px}
+.stk svg,.dwalk svg{width:36px;height:36px;display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}.stk svg.big,.dwalk svg.big{width:52px;height:52px}.stk~.head{padding-inline-end:76px}.stk.n1~.head{padding-inline-end:40px}.stk.n3~.head{padding-inline-end:114px}.stk.big~.head{padding-inline-end:112px}
+.stk svg.twinkle{animation:dec-tw 2.4s ease-in-out infinite}.stk svg.float{animation:dec-fl 3.2s ease-in-out infinite}.stk svg.spin{animation:dec-sp 9s linear infinite}
+.stk svg.flow path,.dwalk svg.flow path{stroke-dasharray:2.5 2.5;animation:dec-fw 1s linear infinite}
+.dwalk{position:relative;height:38px;margin:-14px -18px 6px;overflow:hidden;pointer-events:none}.dwalk.big{height:54px}
+.dwalk svg{position:absolute;bottom:0;left:-40px;animation:dec-wk 22s linear infinite}.dwalk svg g{animation:dec-bob .7s ease-in-out infinite;transform-origin:50% 100%}
+@keyframes dec-shim{from{background-position:120% 0}to{background-position:-120% 0}}@keyframes dec-tw{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes dec-fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}@keyframes dec-sp{to{transform:rotate(360deg)}}
+@keyframes dec-fw{to{stroke-dashoffset:-5}}@keyframes dec-wk{from{left:-40px}to{left:100%}}@keyframes dec-bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg) translateY(-1px)}}
+@media (prefers-reduced-motion:reduce){.dec.shimmer::after{display:none}.dec.twinkle,.stk svg,.stk svg path,.dwalk svg,.dwalk svg g,.dwalk svg path{animation:none}.dwalk svg{left:14px}}
 .glow{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
 .head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}
 .langs{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 12px;justify-content:flex-end}.lang{font:inherit;font-size:12px;line-height:1;padding:7px 10px;border-radius:999px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;cursor:pointer;opacity:.8}.lang.on{background:var(--a1,#888);color:var(--ink,#111);border-color:transparent;opacity:1;font-weight:600}
@@ -1120,6 +1134,45 @@ async function chooseBiz(name) {
   } catch (e) { state.busy = false; state.error = "No business with that name was found here. Check the spelling, or ask in the chat."; render(); }
 }
 
+// A picked theme's decorations (CardDecor in card-themes.ts): bands above and below the content, a divider under the
+// business's name, and stickers. Named patterns, shapes and motions only; colours and path data are checked again here.
+const DEC_HEX = /^#[0-9a-f]{6}$/, DEC_PATH = /^[MmLlHhVvCcSsQqTtAaZz0-9 ,.\-]{3,1500}$/;
+const DEC_SHAPES = {
+  star: "M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z",
+  heart: "M12 21C6.5 17.2 3 13.6 3 9.4 3 6.6 5.1 4.5 7.8 4.5c1.7 0 3.2.8 4.2 2.2 1-1.4 2.5-2.2 4.2-2.2C18.9 4.5 21 6.6 21 9.4c0 4.2-3.5 7.8-9 11.6z",
+  diamond: "M12 2l8 10-8 10-8-10z",
+  circle: "M12 3a9 9 0 100 18 9 9 0 000-18z",
+  leaf: "M20.5 3.5C11 3 4.5 7.5 4.5 14.5c0 1.5.3 2.8.9 4L3 21l1.5 1.5 2.3-2.4c1.3.7 2.8 1.1 4.2 1.1 7.5 0 10.5-8 9.5-17.7z",
+  sun: "M12 7a5 5 0 100 10 5 5 0 000-10zM11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4L7 15.600l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z",
+};
+const decor = () => (p().bound && p().decor) || null;
+function decorBand(b, cls) {
+  if (!b || !Array.isArray(b.colors)) return "";
+  const c = b.colors.filter((x) => DEC_HEX.test(x)).slice(0, 5), n = c.length;
+  if (!n) return "";
+  const stops = (deg) => "linear-gradient(" + deg + "," + c.map((x, i) => x + " " + (100 * i / n).toFixed(2) + "% " + (100 * (i + 1) / n).toFixed(2) + "%").join(",") + ")";
+  const bg = b.pattern === "lines" ? stops("180deg")
+    : b.pattern === "serrated" && n >= 2 ? "conic-gradient(from -45deg at 50% 100%," + c[0] + " 90deg,transparent 0) 0 100%/12px 55% repeat-x,linear-gradient(" + c[0] + "," + c[0] + ") 0 0/100% 46% no-repeat," + c[1]
+    : b.pattern === "dots" ? c.map((x, i) => "radial-gradient(circle at 7px 50%," + x + " 0 3px,transparent 3.6px) " + i * 14 + "px 0/" + n * 14 + "px 100% repeat-x").join(",")
+    : stops("90deg");
+  return '<span class="dec ' + cls + (b.motion === "shimmer" || b.motion === "twinkle" ? " " + b.motion : "") + '" aria-hidden="true" style="background:' + bg + '"></span>';
+}
+function decorSvg(s) {
+  const d = s && (s.path && DEC_PATH.test(s.path) ? s.path : DEC_SHAPES[s.shape]);
+  if (!d || !DEC_HEX.test(s.color)) return "";
+  const m = ["twinkle", "float", "spin", "flow"].indexOf(s.motion) >= 0 ? s.motion : "";
+  const cls = [m, s.large ? "big" : ""].filter(Boolean).join(" ");
+  return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : "") + '><g><path d="' + d + '" ' + (s.line ? 'fill="none" stroke="' + s.color + '" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"' : 'fill="' + s.color + '"') + "/></g></svg>";
+}
+function decorTop() {
+  const d = decor();
+  if (!d) return "";
+  const all = Array.isArray(d.stickers) ? d.stickers.slice(0, 3) : [];
+  const still = all.filter((s) => s.motion !== "walk").map(decorSvg).join(""), walk = all.filter((s) => s.motion === "walk").map(decorSvg).join("");
+  return decorBand(d.header, "top") + (walk ? '<div class="dwalk' + (all.some((s) => s.motion === "walk" && s.large) ? " big" : "") + '" aria-hidden="true">' + walk + "</div>" : "") + (still ? '<div class="stk n' + all.filter((s) => s.motion !== "walk").length + (all.some((s) => s.motion !== "walk" && s.large) ? " big" : "") + '" aria-hidden="true">' + still + "</div>" : "");
+}
+const decorMid = () => (decor() ? decorBand(decor().divider, "mid") : "");
+const decorBottom = () => (decor() ? decorBand(decor().footer, "bot") : "");
 function header() {
   const d = p();
   // A business's card shows no BizPlug mark (BizPlug stays in the contact bar); the industry-wide one does.
@@ -2164,7 +2217,7 @@ function render() {
   // when it fails, so the menu says so above its buttons: at the bottom of a tall card it is out of sight, and without
   // the error line a refused call looked like a tap that did nothing. The picker carries its own error line.
   const menuStatus = state.view === "menu" && state.plugin ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + (picker() ? "" : errLine()) : "";
-  app.innerHTML = (ownHead ? "" : header()) + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "");
+  app.innerHTML = decorTop() + (ownHead ? "" : header() + decorMid()) + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "") + decorBottom();
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).

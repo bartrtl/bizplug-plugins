@@ -22,7 +22,7 @@ const out = join(tmpdir(), "bizplug-theme-preview", String(theme.id || "theme"))
 mkdirSync(out, { recursive: true });
 for (const sample of readdirSync(join("layouts", "samples")).filter((f) => f.endsWith(".json"))) {
   const data = JSON.parse(readFileSync(join("layouts", "samples", sample), "utf8"));
-  data.plugin = { ...data.plugin, bound: true, theme: theme.colors };
+  data.plugin = { ...data.plugin, bound: true, theme: theme.colors, decor: theme.decor };
   for (const mode of ["dark", "light"]) {
     const host = `window.openai = { toolOutput: ${JSON.stringify(data)}, theme: "${mode}", widgetState: null, setWidgetState() {}, openExternal() {}, sendFollowUpMessage() {}, notifyIntrinsicHeight() {}, callTool: async () => { throw new Error("preview"); } };`;
     const page = join(out, sample.replace(/\.json$/, "") + "-" + mode + ".html");

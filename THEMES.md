@@ -12,7 +12,7 @@ This page is generated with the rest of the repository, so please do not edit it
 | [Sunset](themes/sunset.json) | `sunset` | Amber to coral on a warm dark plum. Friendly and lively: restaurants, cafés, bakeries and events. | BizPlug | `#fcd34d` → `#fb7185` on `#1c1016` |
 | [Forest](themes/forest.json) | `forest` | Leaf green to teal on dark pine. Fresh and natural: gardens, outdoor, health and sustainable brands. | BizPlug | `#86efac` → `#2dd4bf` on `#0b1a14` |
 | [Orchid](themes/orchid.json) | `orchid` | Pink to violet on deep indigo. Bold and stylish: beauty, fashion, nightlife and creative studios. | BizPlug | `#f0abfc` → `#a78bfa` on `#140f24` |
-| [Christmas](themes/christmas.json) | `christmas` | Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events. | BizPlug | `#f87171` → `#4ade80` on `#0c1a12` |
+| [Christmas](themes/christmas.json) | `christmas` | Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events. | Bart Cant - Rethink Labs | `#f87171` → `#4ade80` on `#0c1a12` |
 | [Noir Gold](themes/noir-gold.json) | `noir-gold` | Pale gold to antique gold on near-black. Quiet and premium: fine dining, jewellers, luxury hotels and law firms. | Bart Cant | `#fde68a` → `#d4a24c` on `#121110` |
 | [Qatar](themes/qatar.json) | `qatar` | Off-white to rose on deep maroon, after the flag of Qatar. For hotels, events and tourism bureaus there. | BizPlug | `#f8eef1` → `#f0a3b8` on `#240812` |
 | [USA](themes/usa.json) | `usa` | Soft red to sky blue on deep navy, after the flag of the United States. For businesses and tourism bureaus there. | BizPlug | `#fca5a5` → `#93c5fd` on `#0a1a3a` |
@@ -21,7 +21,7 @@ Each theme is in `themes/<id>.json`. The built-in ones are also in [`source/card
 
 ## What a theme is
 
-A theme is five colours, the ones the card reads (see [`source/widgets/plugin-widget.ts`](source/widgets/plugin-widget.ts)):
+A theme is five colours, the ones the card reads, and optionally decorations (below) (see [`source/widgets/plugin-widget.ts`](source/widgets/plugin-widget.ts)):
 
 | Key | What it colours | Format |
 | --- | --- | --- |
@@ -48,6 +48,26 @@ With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `bu
   }
 }
 ```
+
+## Decorations (optional)
+
+A theme may also decorate the card with `decor`: a band above the content (`header`), a thin divider under the business's name (`divider`), a band below the content (`footer`) and up to three `stickers` in the top corner. They show on every screen of the card. A theme carries no code, no CSS and no image: it names patterns, shapes and motions from the lists below, and the card draws them.
+
+```json
+"decor": {
+  "header": { "pattern": "stripes", "colors": ["#000000", "#fdda24", "#ef3340"] },
+  "divider": { "pattern": "dots", "colors": ["#ffffff"], "motion": "twinkle" },
+  "footer": { "pattern": "stripes", "colors": ["#000000", "#fdda24", "#ef3340"] },
+  "stickers": [{ "shape": "star", "color": "#fde047", "motion": "twinkle" }]
+}
+```
+
+| Part | Fields |
+| --- | --- |
+| A band (`header`, `divider`, `footer`) | `pattern`: `stripes`, `lines`, `serrated`, `dots` (stripes side by side, lines stacked, a serrated edge of the first colour over the second, or a row of dots). `colors`: 1 to 5 lower-case `#rrggbb` colours (exactly 2 for `serrated`). `motion`, optional: `shimmer`, `twinkle` |
+| A sticker | `shape`: `star`, `heart`, `diamond`, `circle`, `leaf`, `sun`; or `path`: your own outline as SVG path data on a 24 by 24 grid (letters, digits, spaces, commas, dots and minus signs, up to 1500 characters). `color`: one `#rrggbb` colour. Optional: `line` (true draws the outline as a line), `large` (true draws it larger) and `motion`: `twinkle`, `float`, `spin`, `flow`, `walk` (`flow` moves along a line; `walk` crosses the top of the card) |
+
+Motion stops for people who turn motion off on their device. A sticker you draw must be your own drawing: no logos, coats of arms or official emblems.
 
 ## The rules
 

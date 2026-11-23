@@ -10,7 +10,7 @@ A card theme is five colours for a plug-in's card in ChatGPT. A business picks o
 | [`sunset.json`](sunset.json) | Sunset | BizPlug |
 | [`forest.json`](forest.json) | Forest | BizPlug |
 | [`orchid.json`](orchid.json) | Orchid | BizPlug |
-| [`christmas.json`](christmas.json) | Christmas | BizPlug |
+| [`christmas.json`](christmas.json) | Christmas | Bart Cant - Rethink Labs |
 | [`noir-gold.json`](noir-gold.json) | Noir Gold | Bart Cant |
 | [`qatar.json`](qatar.json) | Qatar | BizPlug |
 | [`usa.json`](usa.json) | USA | BizPlug |

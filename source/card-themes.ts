@@ -16,6 +16,32 @@
 /** The colours the card reads. a1 → a2 is the accent gradient, ink the text and icons on it, bg the dark background, glow a soft rgba of the accent. */
 export type CardThemeColors = { a1: string; a2: string; ink: string; bg: string; glow: string };
 
+/**
+ * Decorations a theme may add around the card's content: a band above it, a thin divider under the business's
+ * name, a band below it, and up to three stickers in the top corner. They are named shapes and colours that the
+ * card draws itself (widgets/plugin-widget.ts, `decorBand`, `decorStickers`): a theme carries no code, no CSS and
+ * no image. A sticker is one of the named shapes, or its own outline as SVG path data on a 24 by 24 grid, drawn in
+ * one colour. Motion is one of the named ones and stops for people who turn motion off on their device.
+ */
+export const DECOR_PATTERNS = ["stripes", "lines", "serrated", "dots"] as const;
+export const DECOR_BAND_MOTIONS = ["shimmer", "twinkle"] as const;
+export const DECOR_SHAPES = ["star", "heart", "diamond", "circle", "leaf", "sun"] as const;
+export const DECOR_STICKER_MOTIONS = ["twinkle", "float", "spin", "flow", "walk"] as const;
+export type DecorBand = { pattern: (typeof DECOR_PATTERNS)[number]; colors: string[]; motion?: (typeof DECOR_BAND_MOTIONS)[number] };
+export type DecorSticker = {
+  /** One of the named shapes, or `path` instead. */
+  shape?: (typeof DECOR_SHAPES)[number];
+  /** The sticker's own outline: SVG path data on a 24 by 24 grid (letters, digits, spaces, commas, dots and minus only). */
+  path?: string;
+  color: string;
+  /** Draw the outline as a line instead of filling it. `flow` moves along such a line; `walk` crosses the top of the card. */
+  line?: boolean;
+  /** Draw it larger, for a sticker with detail. */
+  large?: boolean;
+  motion?: (typeof DECOR_STICKER_MOTIONS)[number];
+};
+export type CardDecor = { header?: DecorBand; divider?: DecorBand; footer?: DecorBand; stickers?: DecorSticker[] };
+
 export type CardTheme = {
   /** Lower-case letters and hyphens. Stored on the client's plug-in, so never rename one. */
   id: string;
@@ -29,6 +55,8 @@ export type CardTheme = {
   /** Optional: the author's GitHub username, shown with the credit. */
   github?: string;
   colors: CardThemeColors;
+  /** Optional decorations around the card's content (CardDecor). */
+  decor?: CardDecor;
 };
 
 /** Where others read how to propose a theme (THEMES.md in the public plug-in repository). */
@@ -73,8 +101,16 @@ export const CARD_THEMES: CardTheme[] = [
     id: "christmas",
     name: "Christmas",
     description: "Holly red to pine green on a dark fir background. Festive for December: shops, markets, bakeries, cafés and holiday events.",
-    author: "BizPlug",
+    author: "Bart Cant - Rethink Labs",
     colors: { a1: "#f87171", a2: "#4ade80", ink: "#1a0a0a", bg: "#0c1a12", glow: "rgba(248,113,113,.14)" },
+    decor: {
+      header: { pattern: "dots", colors: ["#f87171", "#fde047", "#4ade80", "#60a5fa"], motion: "twinkle" },
+      footer: { pattern: "dots", colors: ["#ffffff"], motion: "twinkle" },
+      stickers: [
+        { path: "M12 2l4 5h-2l4 5h-2.5l4.500 6H13v4h-2v-4H4l4.500-6H6l4-5H8z", color: "#4ade80" },
+        { shape: "star", color: "#fde047", motion: "twinkle" },
+      ],
+    },
   },
 ];
 
@@ -148,6 +184,89 @@ export function themeProblems(c: Partial<Record<keyof CardThemeColors, unknown>>
   return out;
 }
 
+const PATH_DATA = /^[MmLlHhVvCcSsQqTtAaZz0-9 ,.\-]{3,1500}$/;
+const isObj = (v: unknown): v is Record<string, unknown> => typeof v === "object" && v !== null && !Array.isArray(v);
+const oneOf = (list: readonly string[], v: unknown) => typeof v === "string" && list.includes(v);
+
+/** What is wrong with a theme's decorations, or an empty list. Nothing in them is text, so there is no contrast rule. */
+export function decorProblems(d: unknown): string[] {
+  if (d === undefined) return [];
+  if (!isObj(d)) return ["decor must be an object with header, divider, footer and stickers."];
+  const out: string[] = [];
+  for (const k of Object.keys(d)) if (!["header", "divider", "footer", "stickers"].includes(k)) out.push(`decor.${k} is not a decoration: use header, divider, footer or stickers.`);
+  for (const k of ["header", "divider", "footer"] as const) {
+    const b = d[k];
+    if (b === undefined) continue;
+    if (!isObj(b)) { out.push(`decor.${k} must be an object with pattern and colors.`); continue; }
+    if (!oneOf(DECOR_PATTERNS, b.pattern)) out.push(`decor.${k}.pattern must be one of ${DECOR_PATTERNS.join(", ")}.`);
+    const n = b.pattern === "serrated" ? [2, 2] : [1, 5];
+    if (!Array.isArray(b.colors) || b.colors.length < n[0] || b.colors.length > n[1] || b.colors.some((c) => typeof c !== "string" || !HEX.test(c)))
+      out.push(`decor.${k}.colors must be ${n[0] === n[1] ? "2" : "1 to 5"} lower-case #rrggbb colours.`);
+    if (b.motion !== undefined && !oneOf(DECOR_BAND_MOTIONS, b.motion)) out.push(`decor.${k}.motion must be one of ${DECOR_BAND_MOTIONS.join(", ")}.`);
+  }
+  if (d.stickers !== undefined) {
+    if (!Array.isArray(d.stickers) || d.stickers.length < 1 || d.stickers.length > 3) out.push("decor.stickers must be a list of 1 to 3 stickers.");
+    else d.stickers.forEach((x, i) => {
+      if (!isObj(x)) { out.push(`decor.stickers[${i}] must be an object.`); return; }
+      const shape = x.shape !== undefined, path = x.path !== undefined;
+      if (shape === path) out.push(`decor.stickers[${i}] needs either shape or path, not both.`);
+      if (shape && !oneOf(DECOR_SHAPES, x.shape)) out.push(`decor.stickers[${i}].shape must be one of ${DECOR_SHAPES.join(", ")}.`);
+      if (path && (typeof x.path !== "string" || !PATH_DATA.test(x.path))) out.push(`decor.stickers[${i}].path must be SVG path data on a 24 by 24 grid: letters, digits, spaces, commas, dots and minus signs, up to 1500 characters.`);
+      if (typeof x.color !== "string" || !HEX.test(x.color)) out.push(`decor.stickers[${i}].color must be a lower-case #rrggbb colour.`);
+      if (x.line !== undefined && typeof x.line !== "boolean") out.push(`decor.stickers[${i}].line must be true or false.`);
+      if (x.large !== undefined && typeof x.large !== "boolean") out.push(`decor.stickers[${i}].large must be true or false.`);
+      if (x.motion !== undefined && !oneOf(DECOR_STICKER_MOTIONS, x.motion)) out.push(`decor.stickers[${i}].motion must be one of ${DECOR_STICKER_MOTIONS.join(", ")}.`);
+      if (x.motion === "flow" && x.line !== true) out.push(`decor.stickers[${i}]: flow moves along a line, so it needs "line": true.`);
+    });
+  }
+  return out;
+}
+
+/** A theme's decorations with only the fields the card reads, or undefined when it has none or they fail the check. */
+export function cleanDecor(d: unknown): CardDecor | undefined {
+  if (!isObj(d) || decorProblems(d).length) return undefined;
+  const band = (b: unknown): DecorBand | undefined => (isObj(b) ? { pattern: b.pattern as DecorBand["pattern"], colors: [...(b.colors as string[])], ...(b.motion ? { motion: b.motion as DecorBand["motion"] } : {}) } : undefined);
+  const out: CardDecor = {};
+  for (const k of ["header", "divider", "footer"] as const) { const b = band(d[k]); if (b) out[k] = b; }
+  if (Array.isArray(d.stickers)) out.stickers = (d.stickers as Record<string, unknown>[]).map((x) => ({ ...(x.shape ? { shape: x.shape as DecorSticker["shape"] } : { path: x.path as string }), color: x.color as string, ...(x.line ? { line: true } : {}), ...(x.large ? { large: true } : {}), ...(x.motion ? { motion: x.motion as DecorSticker["motion"] } : {}) }));
+  return Object.keys(out).length ? out : undefined;
+}
+
+/** The named sticker shapes as SVG path data on a 24 by 24 grid. The card has its own copy (plugin-widget.ts `DEC_SHAPES`): keep them the same. */
+export const DECOR_SHAPE_PATHS: Record<(typeof DECOR_SHAPES)[number], string> = {
+  star: "M12 2l2.9 6.6 7.1.7-5.4 4.8 1.6 7L12 17.4 5.8 21.1l1.6-7L2 9.3l7.1-.7z",
+  heart: "M12 21C6.5 17.2 3 13.6 3 9.4 3 6.6 5.1 4.5 7.8 4.5c1.7 0 3.2.8 4.2 2.2 1-1.4 2.5-2.2 4.2-2.2C18.9 4.5 21 6.6 21 9.4c0 4.2-3.5 7.8-9 11.6z",
+  diamond: "M12 2l8 10-8 10-8-10z",
+  circle: "M12 3a9 9 0 100 18 9 9 0 000-18z",
+  leaf: "M20.5 3.5C11 3 4.5 7.5 4.5 14.5c0 1.5.3 2.8.9 4L3 21l1.5 1.5 2.3-2.4c1.3.7 2.8 1.1 4.2 1.1 7.5 0 10.5-8 9.5-17.7z",
+  sun: "M12 7a5 5 0 100 10 5 5 0 000-10zM11 1h2v4h-2zM11 19h2v4h-2zM1 11h4v2H1zM19 11h4v2h-4zM4.2 5.6l1.4-1.4 2.8 2.8L7 8.4zM15.6 17l1.4-1.4 2.8 2.8-1.4 1.4zM4.2 18.4L7 15.600l1.4 1.4-2.8 2.8zM15.6 7l2.8-2.8 1.4 1.4L17 8.4z",
+};
+
+/** A band's CSS background, as the card draws it (plugin-widget.ts `decorBand`): keep the two the same. */
+export function bandBackground(b: DecorBand): string {
+  const c = b.colors.filter((x) => HEX.test(x)).slice(0, 5), n = c.length;
+  if (!n) return "transparent";
+  const stops = (deg: string) => `linear-gradient(${deg},${c.map((x, i) => `${x} ${((100 * i) / n).toFixed(2)}% ${((100 * (i + 1)) / n).toFixed(2)}%`).join(",")})`;
+  if (b.pattern === "lines") return stops("180deg");
+  if (b.pattern === "serrated" && n >= 2) return `conic-gradient(from -45deg at 50% 100%,${c[0]} 90deg,transparent 0) 0 100%/12px 55% repeat-x,linear-gradient(${c[0]},${c[0]}) 0 0/100% 46% no-repeat,${c[1]}`;
+  if (b.pattern === "dots") return c.map((x, i) => `radial-gradient(circle at 7px 50%,${x} 0 3px,transparent 3.6px) ${i * 14}px 0/${n * 14}px 100% repeat-x`).join(",");
+  return stops("90deg");
+}
+
+/** What a theme's decorations are, in a few words: "Header and footer bands, 2 stickers, animated". Empty without any. */
+export function decorSummary(d: CardDecor | undefined): string {
+  if (!d) return "";
+  const bands = [d.header ? "header" : "", d.divider ? "divider" : "", d.footer ? "footer" : ""].filter(Boolean);
+  const stickers = d.stickers?.length ?? 0;
+  const moving = [d.header, d.divider, d.footer].some((b) => b?.motion) || d.stickers?.some((s) => s.motion);
+  const parts = [
+    bands.length ? `${bands.length > 1 ? `${bands.slice(0, -1).join(", ")} and ${bands[bands.length - 1]}` : bands[0]} band${bands.length > 1 ? "s" : ""}` : "",
+    stickers ? `${stickers} sticker${stickers > 1 ? "s" : ""}` : "",
+    moving ? "animated" : "",
+  ].filter(Boolean).join(", ");
+  return parts.charAt(0).toUpperCase() + parts.slice(1);
+}
+
 /** Problems with the list itself: ids, names and every theme's colours. */
 export function cardThemeListProblems(list: CardTheme[] = CARD_THEMES): string[] {
   const out: string[] = [];
@@ -162,6 +281,7 @@ export function cardThemeListProblems(list: CardTheme[] = CARD_THEMES): string[]
     if (t.authorUrl !== undefined && !/^https:\/\/[^\s"'<>]{3,200}$/.test(String(t.authorUrl))) out.push(`${t.id}: authorUrl must be an https address (your site or profile).`);
     if (t.github !== undefined && !/^[A-Za-z0-9](?:[A-Za-z0-9]|-(?=[A-Za-z0-9])){0,38}$/.test(String(t.github))) out.push(`${t.id}: github must be your GitHub username, without @ or a link.`);
     for (const p of themeProblems(t.colors)) out.push(`${t.id}: ${p}`);
+    for (const p of decorProblems(t.decor)) out.push(`${t.id}: ${p}`);
   }
   return out;
 }

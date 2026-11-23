@@ -22,7 +22,7 @@ for (const f of readdirSync(dir).filter((x) => x.endsWith(".json"))) {
   } catch {}
 }
 const builtIn = CARD_THEMES.find((t) => t.id === theme.id);
-const problems = builtIn && JSON.stringify(builtIn) === JSON.stringify({ id: theme.id, name: theme.name, description: theme.description, author: theme.author, colors: theme.colors })
+const problems = builtIn && JSON.stringify(builtIn) === JSON.stringify({ id: theme.id, name: theme.name, description: theme.description, author: theme.author, colors: theme.colors, decor: theme.decor })
   ? cardThemeListProblems([theme])
   : cardThemeListProblems([...others, theme]).filter((p) => p.startsWith(theme.id + ":") || p.includes("used twice"));
 if (inFolder && basename(file) !== theme.id + ".json") problems.push(`The file must be named ${theme.id}.json, after its id.`);
