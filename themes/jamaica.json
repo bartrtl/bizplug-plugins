@@ -1,0 +1,49 @@
+{
+  "id": "jamaica",
+  "name": "Jamaica",
+  "description": "Gold to green on black, after the flag of Jamaica. For resorts, tours, restaurants and tourism bureaus there.",
+  "author": "Bart Cant - Rethink Labs",
+  "colors": {
+    "a1": "#fde047",
+    "a2": "#4ade80",
+    "ink": "#0a1407",
+    "bg": "#0b0f0a",
+    "glow": "rgba(253,224,71,.12)"
+  },
+  "decor": {
+    "header": {
+      "pattern": "stripes",
+      "colors": [
+        "#009b3a",
+        "#fed100",
+        "#000000",
+        "#fed100",
+        "#009b3a"
+      ]
+    },
+    "divider": {
+      "pattern": "stripes",
+      "colors": [
+        "#fed100",
+        "#009b3a"
+      ]
+    },
+    "footer": {
+      "pattern": "stripes",
+      "colors": [
+        "#009b3a",
+        "#fed100",
+        "#000000",
+        "#fed100",
+        "#009b3a"
+      ]
+    },
+    "stickers": [
+      {
+        "shape": "sun",
+        "color": "#fed100",
+        "motion": "spin"
+      }
+    ]
+  }
+}
