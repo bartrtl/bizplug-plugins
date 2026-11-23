@@ -1,6 +1,6 @@
 # BizPlug Tutoring & Test Prep
 
-Version 0.39.0. Book tutoring sessions and prep trials for tutoring & test prep businesses.
+Version 0.40.0. Book tutoring sessions and prep trials for tutoring & test prep businesses.
 
 - Main function: Book tutoring sessions and prep trials
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tutoring` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.39.0. Book tutoring sessions and prep trials for tutoring & test prep 
 
 ## Changes
 
+- **0.40.0** (22 November 2026): Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.
 - **0.39.0** (22 November 2026): More card languages: Hindi, Spanish, French, Bengali, Portuguese, Russian, Indonesian, Urdu, German, Italian and Dutch, next to Arabic, Korean and Japanese.
 - **0.38.0** (22 November 2026): Card languages: the card can be switched to Arabic, Korean or Japanese, with the business's own translations of its data.
 - **0.37.0** (21 November 2026): Delivery fees: an order plug-in adds the business's published delivery fee to a delivery order's total and checkout.

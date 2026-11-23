@@ -249,6 +249,14 @@ export type PluginFeatures = {
    * are offered, as in 0.38.0, even when the business provided translations for others.
    */
   moreCardLanguages: boolean;
+  /**
+   * 0.40.0: checkout for agents (agent-mode.ts \`agentCheckout\`). In agent mode, a sent request with a firm price on a
+   * business that takes payment online returns its own checkout link as \`sent.checkout\`, with the rules an agent must
+   * follow: the person it acts for approves and pays on the page or in a wallet of their own; the agent never enters
+   * payment details it was given; paid only when the status tool says so. The instructions and describe_business say
+   * how payment works. Without the flag an agent is told nothing is charged and gets no checkout guidance, as in 0.34.0.
+   */
+  agentCheckout: boolean;
 };
 
 export type PluginVersion = {
@@ -261,7 +269,7 @@ export type PluginVersion = {
   features: PluginFeatures;
 };
 
-const FULL_NAME_FEATURES: PluginFeatures = { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false };
+const FULL_NAME_FEATURES: PluginFeatures = { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: true, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false };
 const SOFTWARE_FEATURES: PluginFeatures = { ...FULL_NAME_FEATURES, softwareMenu: true, businessOnlyInstructions: true, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false };
 
 export const PLUGIN_VERSIONS: PluginVersion[] = [
@@ -270,7 +278,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
     date: "2026-11-15",
     summary: "The plug-in's tools for the industry, answers from the business's own information, and a text menu of what it can do.",
     notes: ["The plug-in's tools for your industry, questions answered from your own information, and a text menu of what it can do."],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: false, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.2.0",
@@ -280,7 +288,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A menu card in ChatGPT: your customers see a button for each thing they can do.",
       "Each button opens a short form (dates and party size, an item, a reference, a question or a request), so customers tap and fill in instead of typing everything.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: false, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.3.0",
@@ -290,7 +298,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Results show inside the card: prices, availability, open times, estimates and statuses, instead of only as text in the chat.",
       "Customers can go from a result straight to a request in the card: pick an option or a time, add their name and email, and send.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: false, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.4.0",
@@ -302,7 +310,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A list can be searched and filtered by category in the card, and each item or option opens on its own screen, with Back to return.",
       "Your published questions and answers show in the card, so common questions are answered with one tap. Other questions still go to the chat.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: false, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.5.0",
@@ -312,7 +320,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A WhatsApp button to your own number: save your WhatsApp number and a first message under Integrations on your plug-in page, and customers can open a chat with you from your contact details and after they send a request.",
       "Requests still reach you by email as before. WhatsApp is an extra way for a customer to reach you, and nothing is sent until they press send in WhatsApp.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: false, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.6.0",
@@ -322,7 +330,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "A Pay online button after a request, to your own payment page (for example a Stripe Payment Link). BizPlug takes no payment: the customer pays on your page.",
       "Book online, Get directions and Leave a review buttons with your contact details, each to a link you save under Integrations on your plug-in page.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: false, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.7.0",
@@ -334,7 +342,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The assistant knows which buttons you have and points to the right one at the right moment.",
       "Your Traction Dashboard counts how often each button is pressed, and where each request was delivered.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: false, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.8.0",
@@ -345,7 +353,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your payment page is also listed with your contact details, so a customer can find it before or without sending a request. It still shows after a request as before.",
       "The assistant never takes card details or payment in the chat. The customer pays on your page, and the money never passes through BizPlug.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: false, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.9.0",
@@ -356,7 +364,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "The price is taken from your published files, never from the chat. Your plug-in confirms each payment with the provider, you get an email when an order is paid, and you can refund it from Payments on your plug-in page.",
       "Test mode first: no real money. Live payments are switched on for your plug-in once BizPlug has approved it. You still confirm every request yourself.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: false, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.10.0",
@@ -366,7 +374,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Your plug-in tells ChatGPT who it is: your business's own summary as its description, and your website as its link.",
       "Nothing changes in how it answers customers or handles requests.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: false, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.11.0",
@@ -376,7 +384,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Each tool of your plug-in now states whether it only reads information or sends something that cannot be taken back. ChatGPT uses this to decide when to ask a customer to confirm.",
       "Sending a request is marked as an action that cannot be undone, so ChatGPT may ask the customer to confirm before it is sent. Nothing else changes.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: false, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.12.0",
@@ -387,7 +395,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "Find a collaborator: a person says what they need or what they can offer, and the plug-in shows the members whose entries match.",
       "Contact is direct: the plug-in shows the website, general email and phone number you list for each member, and the person writes or calls the member themselves. Neither you nor BizPlug introduces, forwards or vouches. Other plug-ins do not change.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: false, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.13.0",
@@ -398,7 +406,7 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
       "An I've paid button in the card asks your payment provider whether the payment went through and shows Paid or Waiting for payment, without the customer typing their reference.",
       "Card details are only ever entered on the payment provider's own page, never in ChatGPT.",
     ],
-    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
+    features: { visits: false, claudeCard: false, passwordSignIn: false, showcase: false, memberDetails: false, stayCalendar: false, eventDetails: false, dateCalendar: false, socialFeed: false, menuLayouts: false, formLinks: false, customForms: false, agentMode: false, socialVideo: false, formsFirst: false, deliveryFee: false, cardLanguages: false, moreCardLanguages: false, agentCheckout: false, menuCard: true, cardResults: true, cardNavigation: true, whatsappContact: true, businessLinks: true, quickActions: true, paymentAnswers: true, stripeCheckout: true, listingDetails: true, fullAnnotations: true, members: true, payCard: true, fullName: false, softwareMenu: false, businessOnlyInstructions: false, customerSignIn: false, appTools: false, accountMenu: false, accountSend: false, cardBanner: false, memberMessages: false, eventGuide: false },
   },
   {
     version: "0.14.0",
@@ -711,6 +719,18 @@ export const PLUGIN_VERSIONS: PluginVersion[] = [
     ],
     features: { ...SOFTWARE_FEATURES, customerSignIn: true, appTools: true, eventGuide: true, accountMenu: true, accountSend: true, cardBanner: true, memberMessages: true, visits: true, claudeCard: true, passwordSignIn: true, showcase: true, memberDetails: true, stayCalendar: true, eventDetails: true, dateCalendar: true, socialFeed: true, menuLayouts: true, formLinks: true, customForms: true, agentMode: true, socialVideo: true, formsFirst: true, deliveryFee: true, cardLanguages: true, moreCardLanguages: true },
   },
+  {
+    version: "0.40.0",
+    date: "2026-11-22",
+    summary: "Checkout for AI agents: an agent acting for a customer can take them to your own checkout, where the customer approves and pays.",
+    notes: [
+      "If you take payment online through Stripe or Checkout.com, an AI agent in agent mode (0.34.0) now gets your own checkout link, with the total, when it sends a request with a firm price for a customer.",
+      "The agent is told the rules with every link: the customer pays on your checkout page themselves, or approves the payment in a wallet of their own that asks them for each payment. The agent may not enter card details it was given, or pay an amount the customer has not approved.",
+      "The payment goes to your own account, as for any customer. Paying does not confirm the request: you still do. An order counts as paid only when Stripe or Checkout.com says so.",
+      "Nothing changes in ChatGPT or Claude, and without online payments nothing changes for your plug-in.",
+    ],
+    features: { ...SOFTWARE_FEATURES, customerSignIn: true, appTools: true, eventGuide: true, accountMenu: true, accountSend: true, cardBanner: true, memberMessages: true, visits: true, claudeCard: true, passwordSignIn: true, showcase: true, memberDetails: true, stayCalendar: true, eventDetails: true, dateCalendar: true, socialFeed: true, menuLayouts: true, formLinks: true, customForms: true, agentMode: true, socialVideo: true, formsFirst: true, deliveryFee: true, cardLanguages: true, moreCardLanguages: true, agentCheckout: true },
+  },
 ];
 
 export const LATEST_VERSION = PLUGIN_VERSIONS[PLUGIN_VERSIONS.length - 1].version;
@@ -774,6 +794,7 @@ const APPLIES: Partial<Record<keyof PluginFeatures, (c: UpgradeContext) => boole
   eventDetails: (c) => c.show,
   dateCalendar: (c) => c.dated,
   deliveryFee: (c) => c.orders,
+  agentCheckout: (c) => c.checkout,
 };
 
 export function versionMatters(v: PluginVersion, c: UpgradeContext): boolean {
