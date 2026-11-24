@@ -5,7 +5,7 @@ Version 0.46.0. Shipping rate estimate and pickup request for logistics & delive
 - Main function: Shipping rate estimate and pickup request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/logistics` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/logistics/<business>`
-- About this plug-in: https://bizplug.ai/industries/logistics
+- About this plug-in: https://www.bizplug.ai/industries/logistics
 
 ## What a customer can do
 

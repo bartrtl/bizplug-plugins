@@ -5,7 +5,7 @@ Version 0.46.0. Instant estimate and service visit request for hvac & heating/co
 - Main function: Instant estimate and service visit request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/hvac` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/hvac/<business>`
-- About this plug-in: https://bizplug.ai/industries/hvac
+- About this plug-in: https://www.bizplug.ai/industries/hvac
 
 ## What a customer can do
 

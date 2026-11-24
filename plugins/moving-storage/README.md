@@ -5,7 +5,7 @@ Version 0.46.0. Moving estimate and storage rates for moving & storage businesse
 - Main function: Moving estimate and storage rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/moving-storage` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/moving-storage/<business>`
-- About this plug-in: https://bizplug.ai/industries/moving-storage
+- About this plug-in: https://www.bizplug.ai/industries/moving-storage
 
 ## What a customer can do
 

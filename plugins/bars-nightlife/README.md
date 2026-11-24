@@ -5,7 +5,7 @@ Version 0.46.0. Table and guest-list requests for bars & nightlife businesses.
 - Main function: Table and guest-list requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/bars-nightlife` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/bars-nightlife/<business>`
-- About this plug-in: https://bizplug.ai/industries/bars-nightlife
+- About this plug-in: https://www.bizplug.ai/industries/bars-nightlife
 
 ## What a customer can do
 

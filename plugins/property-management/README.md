@@ -5,7 +5,7 @@ Version 0.46.0. Maintenance requests and status for property management business
 - Main function: Maintenance requests and status
 - MCP server URL: `https://mcp.bizplug.ai/plugin/property-management` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/property-management/<business>`
-- About this plug-in: https://bizplug.ai/industries/property-management
+- About this plug-in: https://www.bizplug.ai/industries/property-management
 
 ## What a customer can do
 

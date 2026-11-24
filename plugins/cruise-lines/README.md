@@ -5,7 +5,7 @@ Version 0.46.0. Sailing availability and cabin pricing for cruise lines business
 - Main function: Sailing availability and cabin pricing
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cruise-lines` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/cruise-lines/<business>`
-- About this plug-in: https://bizplug.ai/industries/cruise-lines
+- About this plug-in: https://www.bizplug.ai/industries/cruise-lines
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Flight status and support requests for airlines businesses.
 - Main function: Flight status and support requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/airlines` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/airlines/<business>`
-- About this plug-in: https://bizplug.ai/industries/airlines
+- About this plug-in: https://www.bizplug.ai/industries/airlines
 
 ## What a customer can do
 

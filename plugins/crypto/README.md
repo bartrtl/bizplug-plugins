@@ -5,7 +5,7 @@ Version 0.46.0. Fee estimate and onboarding request for crypto & fintech busines
 - Main function: Fee estimate and onboarding request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/crypto` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/crypto/<business>`
-- About this plug-in: https://bizplug.ai/industries/crypto
+- About this plug-in: https://www.bizplug.ai/industries/crypto
 
 ## What a customer can do
 

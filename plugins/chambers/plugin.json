@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-chambers",
   "version": "0.46.0",
-  "description": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/chambers",
+  "homepage": "https://www.bizplug.ai/industries/chambers",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Chambers of Commerce & Business Associations",
         "shortDescription": "Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.",
-        "longDescription": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The chambers of commerce & business associations plug-in from BizPlug. Main function: chamber information, membership enquiries and member businesses. It works from the business's own published profile, covering membership levels and benefits, events, programs, committees, advocacy and member businesses, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the chamber or association has published about membership, dues, events and programs. Never promise that membership will be approved, or any introduction, business lead or policy outcome, and never take payment of dues in chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Chamber information, membership enquiries and member businesses",
           "Who can join, what are the membership levels, and what events are coming up?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/chambers",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/chambers",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

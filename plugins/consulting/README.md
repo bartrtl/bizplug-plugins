@@ -5,7 +5,7 @@ Version 0.46.0. Book a discovery call for consulting & professional services bus
 - Main function: Book a discovery call
 - MCP server URL: `https://mcp.bizplug.ai/plugin/consulting` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/consulting/<business>`
-- About this plug-in: https://bizplug.ai/industries/consulting
+- About this plug-in: https://www.bizplug.ai/industries/consulting
 
 ## What a customer can do
 

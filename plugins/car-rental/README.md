@@ -5,7 +5,7 @@ Version 0.46.0. Vehicle availability and rental price for car rental businesses.
 - Main function: Vehicle availability and rental price
 - MCP server URL: `https://mcp.bizplug.ai/plugin/car-rental` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/car-rental/<business>`
-- About this plug-in: https://bizplug.ai/industries/car-rental
+- About this plug-in: https://www.bizplug.ai/industries/car-rental
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Room availability, rates and booking requests for hospitality & 
 - Main function: Room availability, rates and booking requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/hospitality` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/hospitality/<business>`
-- About this plug-in: https://bizplug.ai/industries/hospitality
+- About this plug-in: https://www.bizplug.ai/industries/hospitality
 
 ## What a customer can do
 

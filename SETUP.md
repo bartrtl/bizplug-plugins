@@ -31,15 +31,15 @@ A plug-in answers only from what the business has published. Configuring it mean
 
 ### 1. Add the plug-in to your account
 
-Sign up at https://bizplug.ai/portal, save your business profile and add your industry's plug-in from the marketplace.
+Sign up at https://www.bizplug.ai/portal, save your business profile and add your industry's plug-in from the marketplace.
 
 ### 2. Provide the data
 
 Either upload each CSV file under its dataset on the plug-in's page in the portal, or send it through the data API:
 
-1. Create an API key at https://bizplug.ai/portal/api.
-2. List your plug-ins and their ids: `GET https://bizplug.ai/api/portal/v1/plugins` with the header `Authorization: Bearer <key>`.
-3. Send each file: `PUT https://bizplug.ai/api/portal/v1/plugins/<plugin-id>/datasets/<file name>` with `Content-Type: text/csv` and the file as the body, or `Content-Type: application/json` and `{"rows": [{...}]}` keyed by the column names.
+1. Create an API key at https://www.bizplug.ai/portal/api.
+2. List your plug-ins and their ids: `GET https://www.bizplug.ai/api/portal/v1/plugins` with the header `Authorization: Bearer <key>`.
+3. Send each file: `PUT https://www.bizplug.ai/api/portal/v1/plugins/<plugin-id>/datasets/<file name>` with `Content-Type: text/csv` and the file as the body, or `Content-Type: application/json` and `{"rows": [{...}]}` keyed by the column names.
 
 Both ways check the file against its dataset and list every error. Fix them and send the file again until it is accepted.
 

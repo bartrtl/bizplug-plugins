@@ -5,7 +5,7 @@ Version 0.46.0. Quote request intake for insurance businesses.
 - Main function: Quote request intake
 - MCP server URL: `https://mcp.bizplug.ai/plugin/insurance` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/insurance/<business>`
-- About this plug-in: https://bizplug.ai/industries/insurance
+- About this plug-in: https://www.bizplug.ai/industries/insurance
 
 ## What a customer can do
 

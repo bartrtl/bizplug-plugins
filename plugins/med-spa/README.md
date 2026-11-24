@@ -5,7 +5,7 @@ Version 0.46.0. Book aesthetic treatments and consults for med spas & aesthetics
 - Main function: Book aesthetic treatments and consults
 - MCP server URL: `https://mcp.bizplug.ai/plugin/med-spa` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/med-spa/<business>`
-- About this plug-in: https://bizplug.ai/industries/med-spa
+- About this plug-in: https://www.bizplug.ai/industries/med-spa
 
 ## What a customer can do
 

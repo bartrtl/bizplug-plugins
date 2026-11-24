@@ -5,7 +5,7 @@ Version 0.46.0. Book salon services with a stylist for beauty & salons businesse
 - Main function: Book salon services with a stylist
 - MCP server URL: `https://mcp.bizplug.ai/plugin/beauty` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/beauty/<business>`
-- About this plug-in: https://bizplug.ai/industries/beauty
+- About this plug-in: https://www.bizplug.ai/industries/beauty
 
 ## What a customer can do
 

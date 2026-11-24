@@ -5,7 +5,7 @@ Version 0.46.0. Book a loan or mortgage consultation for lending & mortgages bus
 - Main function: Book a loan or mortgage consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/lending` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/lending/<business>`
-- About this plug-in: https://bizplug.ai/industries/lending
+- About this plug-in: https://www.bizplug.ai/industries/lending
 
 ## What a customer can do
 

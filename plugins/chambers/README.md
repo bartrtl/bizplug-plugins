@@ -5,7 +5,7 @@ Version 0.46.0. Chamber information, membership enquiries and member businesses 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/chambers/<business>`
-- About this plug-in: https://bizplug.ai/industries/chambers
+- About this plug-in: https://www.bizplug.ai/industries/chambers
 
 ## What a customer can do
 

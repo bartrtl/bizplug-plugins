@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-florists",
   "version": "0.46.0",
-  "description": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/florists",
+  "homepage": "https://www.bizplug.ai/industries/florists",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Florists & Flower Delivery",
         "shortDescription": "Bouquets for pickup or delivery for florists & flower delivery businesses.",
-        "longDescription": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The florists & flower delivery plug-in from BizPlug. Main function: bouquets for pickup or delivery. It works from the business's own published profile, covering bouquets and prices, seasonal flowers, delivery areas, card messages and wedding and funeral flowers, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never promise a delivery time, same-day delivery or an exact seasonal flower the florist has not confirmed; the florist confirms every order and may substitute flowers of the same style and value. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Bouquets for pickup or delivery",
           "Can you deliver white roses downtown tomorrow morning, and what does it cost?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/florists",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/florists",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

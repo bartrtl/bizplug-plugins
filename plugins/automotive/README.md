@@ -5,7 +5,7 @@ Version 0.46.0. Book service and test drives for automotive & dealerships busine
 - Main function: Book service and test drives
 - MCP server URL: `https://mcp.bizplug.ai/plugin/automotive` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/automotive/<business>`
-- About this plug-in: https://bizplug.ai/industries/automotive
+- About this plug-in: https://www.bizplug.ai/industries/automotive
 
 ## What a customer can do
 

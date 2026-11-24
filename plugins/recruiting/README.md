@@ -5,7 +5,7 @@ Version 0.46.0. Book an intro call for employers or candidates for recruiting & 
 - Main function: Book an intro call for employers or candidates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/recruiting` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/recruiting/<business>`
-- About this plug-in: https://bizplug.ai/industries/recruiting
+- About this plug-in: https://www.bizplug.ai/industries/recruiting
 
 ## What a customer can do
 

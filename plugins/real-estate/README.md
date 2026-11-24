@@ -5,7 +5,7 @@ Version 0.46.0. Request property showings for real estate businesses.
 - Main function: Request property showings
 - MCP server URL: `https://mcp.bizplug.ai/plugin/real-estate` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/real-estate/<business>`
-- About this plug-in: https://bizplug.ai/industries/real-estate
+- About this plug-in: https://www.bizplug.ai/industries/real-estate
 
 ## What a customer can do
 

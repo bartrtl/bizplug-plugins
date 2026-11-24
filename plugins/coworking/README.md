@@ -5,7 +5,7 @@ Version 0.46.0. Desk and office availability and rates for coworking & offices b
 - Main function: Desk and office availability and rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coworking` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/coworking/<business>`
-- About this plug-in: https://bizplug.ai/industries/coworking
+- About this plug-in: https://www.bizplug.ai/industries/coworking
 
 ## What a customer can do
 

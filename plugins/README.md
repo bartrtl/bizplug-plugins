@@ -18,7 +18,7 @@ plugins/<slug>/
 ## Set up a plug-in for your business
 
 1. Find your industry below and read its `README.md` and `data/requirements.json`.
-2. Sign up at https://bizplug.ai/portal and add that industry's plug-in. Pick a card theme and a menu layout there if you like.
+2. Sign up at https://www.bizplug.ai/portal and add that industry's plug-in. Pick a card theme and a menu layout there if you like.
 3. Fill in the CSV templates from `data/templates/` with your own information and upload them in the portal, or give `data/AGENT_INSTRUCTIONS.md` to an AI agent to collect them.
 4. Request a test deploy. BizPlug publishes your plug-in to a test address; try it in ChatGPT ([SETUP.md](../SETUP.md)), then request production.
 
@@ -167,6 +167,6 @@ A plug-in of your own (an MCP server you built) is added in `community/plugins/<
 2. Check that it works in ChatGPT developer mode with your MCP server URL ([SETUP.md](../SETUP.md#setup)).
 3. Open a pull request against `main` that adds only that folder, and fill in its checklist: who hosts the server, your privacy policy and terms, and a screenshot in ChatGPT. The **Check contributions** workflow checks the package.
 4. We review the tools, descriptions, test cases and data handling in the pull request, and merge it once approved.
-5. Once merged, it is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, from its `plugin.json` and `mcp.json`. A business that adds it asks the BizPlug team to set it up with its plug-in, at your own endpoint unless we agree with you to host it.
+5. Once merged, it is listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) within about fifteen minutes, from its `plugin.json` and `mcp.json`. A business that adds it asks the BizPlug team to set it up with its plug-in, at your own endpoint unless we agree with you to host it.
 
-Not on GitHub? Submit at https://bizplug.ai/marketplace#submit instead.
+Not on GitHub? Submit at https://www.bizplug.ai/marketplace#submit instead.

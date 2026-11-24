@@ -5,7 +5,7 @@ Version 0.46.0. Book a banker or advisor meeting for financial services & bankin
 - Main function: Book a banker or advisor meeting
 - MCP server URL: `https://mcp.bizplug.ai/plugin/financial-services` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/financial-services/<business>`
-- About this plug-in: https://bizplug.ai/industries/financial-services
+- About this plug-in: https://www.bizplug.ai/industries/financial-services
 
 ## What a customer can do
 

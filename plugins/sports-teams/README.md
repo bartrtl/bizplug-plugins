@@ -5,7 +5,7 @@ Version 0.46.0. Seat availability and ticket requests for sports teams & venues 
 - Main function: Seat availability and ticket requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/sports-teams` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/sports-teams/<business>`
-- About this plug-in: https://bizplug.ai/industries/sports-teams
+- About this plug-in: https://www.bizplug.ai/industries/sports-teams
 
 ## What a customer can do
 

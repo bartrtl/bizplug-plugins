@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-tourism-bureaus",
   "version": "0.46.0",
-  "description": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/tourism-bureaus",
+  "homepage": "https://www.bizplug.ai/industries/tourism-bureaus",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Tourism Bureaus & Destinations",
         "shortDescription": "Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.",
-        "longDescription": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The tourism bureaus & destinations plug-in from BizPlug. Main function: places to stay and things to do, with booking requests. It works from the business's own published profile, covering places to stay, activities and tours, when to visit, getting around, events and visitor information, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Places to stay and things to do, with booking requests",
           "What is there to do in March, and where can we stay for four nights?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/tourism-bureaus",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/tourism-bureaus",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

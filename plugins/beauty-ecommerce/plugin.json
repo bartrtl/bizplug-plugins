@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-beauty-ecommerce",
   "version": "0.46.0",
-  "description": "The beauty e-commerce plug-in from BizPlug. Main function: shop products and place an order. It works from the business's own published profile, covering products, ingredients, shade help and shipping, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The beauty e-commerce plug-in from BizPlug. Main function: shop products and place an order. It works from the business's own published profile, covering products, ingredients, shade help and shipping, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/beauty-ecommerce",
+  "homepage": "https://www.bizplug.ai/industries/beauty-ecommerce",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Beauty E-commerce",
         "shortDescription": "Shop products and place an order for beauty e-commerce businesses.",
-        "longDescription": "The beauty e-commerce plug-in from BizPlug. Main function: shop products and place an order. It works from the business's own published profile, covering products, ingredients, shade help and shipping, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The beauty e-commerce plug-in from BizPlug. Main function: shop products and place an order. It works from the business's own published profile, covering products, ingredients, shade help and shipping, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Shop products and place an order",
           "Which shade suits my skin tone, and is it cruelty-free?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/beauty-ecommerce",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/beauty-ecommerce",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

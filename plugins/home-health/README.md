@@ -5,7 +5,7 @@ Version 0.46.0. Request a care assessment for home health & hospice businesses.
 - Main function: Request a care assessment
 - MCP server URL: `https://mcp.bizplug.ai/plugin/home-health` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/home-health/<business>`
-- About this plug-in: https://bizplug.ai/industries/home-health
+- About this plug-in: https://www.bizplug.ai/industries/home-health
 
 ## What a customer can do
 

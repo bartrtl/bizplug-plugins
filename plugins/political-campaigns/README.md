@@ -5,7 +5,7 @@ Version 0.46.0. Volunteer and event sign-ups for political campaigns & advocacy 
 - Main function: Volunteer and event sign-ups
 - MCP server URL: `https://mcp.bizplug.ai/plugin/political-campaigns` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/political-campaigns/<business>`
-- About this plug-in: https://bizplug.ai/industries/political-campaigns
+- About this plug-in: https://www.bizplug.ai/industries/political-campaigns
 
 ## What a customer can do
 

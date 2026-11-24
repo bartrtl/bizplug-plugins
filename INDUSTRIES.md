@@ -129,14 +129,14 @@ A new industry is right only when the existing ones would be wrong for its custo
 
 1. Look through the tables in the [README](README.md#the-86-industry-plug-ins) and the groups above, and search this page for the words your customers use.
 2. Run the check below on your file: it lists the existing industries that look most like yours. Read each one's package in `plugins/<slug>/` and try it on its sample business.
-3. If one fits, there is nothing to add here: the business signs up at https://bizplug.ai/portal, picks that industry, and gets its own plug-in. Close to fitting but missing something (a field, a tool, a menu option)? Ask for it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form, saying which industry it is for. The team then decides whether to add it to that industry, where every business in it would get it.
+3. If one fits, there is nothing to add here: the business signs up at https://www.bizplug.ai/portal, picks that industry, and gets its own plug-in. Close to fitting but missing something (a field, a tool, a menu option)? Ask for it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form, saying which industry it is for. The team then decides whether to add it to that industry, where every business in it would get it.
 4. If none fits, say in your pull request which one is closest and what a customer does in yours that it cannot. The team does not merge an industry that an existing one already covers.
 
 ### With a pull request
 
-[![Add a new industry to BizPlug, step by step (1:31, video)](assets/videos/add-a-new-industry-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry)
+[![Add a new industry to BizPlug, step by step (1:31, video)](assets/videos/add-a-new-industry-poster.jpg)](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry)
 
-**Watch it step by step** (1:31, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry), or [download the video](assets/videos/add-a-new-industry.mp4). It shows every command below and what it prints.
+**Watch it step by step** (1:31, no sound): [play it on the how-to page](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry), or [download the video](assets/videos/add-a-new-industry.mp4). It shows every command below and what it prints.
 
 You need a GitHub account, Git, and Node.js 18 or later. Nothing else: no account with BizPlug, no keys, no server of your own.
 
@@ -253,7 +253,7 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
 | `author` | Who the industry is credited to: your name or your company's |
-| `authorUrl`, `github` | Optional: your own https link (site or profile) and your GitHub username. With them, the credit on the industry's page and on [bizplug.ai/contributors](https://bizplug.ai/contributors) links to you. They are public, like the rest of the file |
+| `authorUrl`, `github` | Optional: your own https link (site or profile) and your GitHub username. With them, the credit on the industry's page and on [www.bizplug.ai/contributors](https://www.bizplug.ai/contributors) links to you. They are public, like the rest of the file |
 | `icon`, `accent` | Optional: the industry's icon on the website (`AppWindow`, `Armchair`, `Award`, `Baby`, `Bike`, `Bitcoin`, `Bone`, `BookOpen`, `Boxes`, `Brain`, `Briefcase`, `Bug`, `Building`, `Building2`, `Bus`, `Calculator`, `Camera`, `Car`, `CarFront`, `ChefHat`, `Church`, `Code`, `Coffee`, `CookingPot`, `Dices`, `Droplets`, `Dumbbell`, `Eye`, `FerrisWheel`, `FileText`, `Flower`, `Gavel`, `Gem`, `GraduationCap`, `HandCoins`, `Handshake`, `Heart`, `HeartHandshake`, `HeartPulse`, `Hotel`, `Landmark`, `Lightbulb`, `Lock`, `Megaphone`, `Palette`, `PawPrint`, `Pill`, `Plane`, `PlaneTakeoff`, `RadioTower`, `Repeat`, `Salad`, `School`, `Scissors`, `ShieldCheck`, `Ship`, `Shirt`, `ShoppingBag`, `ShoppingCart`, `Smartphone`, `Sofa`, `Sparkles`, `SprayCan`, `Stethoscope`, `Store`, `Sun`, `Ticket`, `Trees`, `TrendingUp`, `Trophy`, `Truck`, `UserPlus`, `Users`, `Utensils`, `UtensilsCrossed`, `Vote`, `Wind`, `Wine`, `Wrench`, `Zap`) and its colour (`lime`, `mint`, `aqua`, `amber`, `sky`). Without them it gets a plain icon |
 | `added` | Optional: the day it was added, as YYYY-MM-DD. Without it, the day the file was first merged |
 | `page` | Optional: the words of the industry's page on the website. `headline`, `problem` (one paragraph), 3 `valueProps`, 4 `moments` and 2 `faqs` written as `"Title::description"`, and 4 short `journeys` (the steps a customer takes). Without it the page uses the engine's general words |
@@ -286,7 +286,7 @@ Please do not put customers' personal data, passwords or other secrets in a prop
 ## After your pull request is merged
 
 1. The **Publish contributed industries** workflow asks the BizPlug website to build again. Each build reads the industry files on `main` and checks them with the same check as your pull request; a file that fails is left out.
-2. When that build is live, usually a few minutes later, the industry is on the website: its plug-in answers at `https://mcp.bizplug.ai/plugin/<slug>`, it has a page at https://bizplug.ai/industries/<slug>, and businesses can add it in the BizPlug portal (https://bizplug.ai/portal). A sample business answers at `.../plugin/<slug>/demo-sample`, so you can try it; it never sends a request.
+2. When that build is live, usually a few minutes later, the industry is on the website: its plug-in answers at `https://mcp.bizplug.ai/plugin/<slug>`, it has a page at https://www.bizplug.ai/industries/<slug>, and businesses can add it in the BizPlug portal (https://www.bizplug.ai/portal). A sample business answers at `.../plugin/<slug>/demo-sample`, so you can try it; it never sends a request.
 3. The workflow waits for that build and then comments on your pull request that the industry is live, with its addresses. If the build has not picked the change up after 20 minutes, the comment says so.
 4. With the next update of this repository, its package appears in `plugins/<slug>/`, and the README and this page list it with your name. The file in `community/industries/` stays: it is the industry's source.
 

@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-nonprofits",
   "version": "0.46.0",
-  "description": "The nonprofits & charities plug-in from BizPlug. Main function: volunteer and donation requests. It works from the business's own published profile, covering programs, events, volunteering and giving, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never take card or bank details in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The nonprofits & charities plug-in from BizPlug. Main function: volunteer and donation requests. It works from the business's own published profile, covering programs, events, volunteering and giving, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never take card or bank details in chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/nonprofits",
+  "homepage": "https://www.bizplug.ai/industries/nonprofits",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Nonprofits & Charities",
         "shortDescription": "Volunteer and donation requests for nonprofits & charities businesses.",
-        "longDescription": "The nonprofits & charities plug-in from BizPlug. Main function: volunteer and donation requests. It works from the business's own published profile, covering programs, events, volunteering and giving, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never take card or bank details in chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The nonprofits & charities plug-in from BizPlug. Main function: volunteer and donation requests. It works from the business's own published profile, covering programs, events, volunteering and giving, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never take card or bank details in chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Volunteer and donation requests",
           "How can I volunteer or donate?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/nonprofits",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/nonprofits",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

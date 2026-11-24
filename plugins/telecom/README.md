@@ -5,7 +5,7 @@ Version 0.46.0. Compare plans and request service for telecom & isps businesses.
 - Main function: Compare plans and request service
 - MCP server URL: `https://mcp.bizplug.ai/plugin/telecom` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/telecom/<business>`
-- About this plug-in: https://bizplug.ai/industries/telecom
+- About this plug-in: https://www.bizplug.ai/industries/telecom
 
 ## What a customer can do
 

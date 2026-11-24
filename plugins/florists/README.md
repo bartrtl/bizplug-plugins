@@ -5,7 +5,7 @@ Version 0.46.0. Bouquets for pickup or delivery for florists & flower delivery b
 - Main function: Bouquets for pickup or delivery
 - MCP server URL: `https://mcp.bizplug.ai/plugin/florists` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/florists/<business>`
-- About this plug-in: https://bizplug.ai/industries/florists
+- About this plug-in: https://www.bizplug.ai/industries/florists
 
 ## What a customer can do
 

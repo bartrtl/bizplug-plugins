@@ -5,7 +5,7 @@ Version 0.46.0. Browse pieces and request an order for furniture & home goods bu
 - Main function: Browse pieces and request an order
 - MCP server URL: `https://mcp.bizplug.ai/plugin/furniture` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/furniture/<business>`
-- About this plug-in: https://bizplug.ai/industries/furniture
+- About this plug-in: https://www.bizplug.ai/industries/furniture
 
 ## What a customer can do
 

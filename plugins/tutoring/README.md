@@ -5,7 +5,7 @@ Version 0.46.0. Book tutoring sessions and prep trials for tutoring & test prep 
 - Main function: Book tutoring sessions and prep trials
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tutoring` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/tutoring/<business>`
-- About this plug-in: https://bizplug.ai/industries/tutoring
+- About this plug-in: https://www.bizplug.ai/industries/tutoring
 
 ## What a customer can do
 

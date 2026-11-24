@@ -5,7 +5,7 @@ Version 0.46.0. Book a platform demo for hr & internal comms businesses.
 - Main function: Book a platform demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/hr-comms` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/hr-comms/<business>`
-- About this plug-in: https://bizplug.ai/industries/hr-comms
+- About this plug-in: https://www.bizplug.ai/industries/hr-comms
 
 ## What a customer can do
 

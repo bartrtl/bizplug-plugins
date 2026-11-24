@@ -5,7 +5,7 @@ Version 0.46.0. Book a security assessment call for cybersecurity businesses.
 - Main function: Book a security assessment call
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cybersecurity` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/cybersecurity/<business>`
-- About this plug-in: https://bizplug.ai/industries/cybersecurity
+- About this plug-in: https://www.bizplug.ai/industries/cybersecurity
 
 ## What a customer can do
 

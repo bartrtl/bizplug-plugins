@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-insurance",
   "version": "0.46.0",
-  "description": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/insurance",
+  "homepage": "https://www.bizplug.ai/industries/insurance",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Insurance",
         "shortDescription": "Quote request intake for insurance businesses.",
-        "longDescription": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The insurance plug-in from BizPlug. Main function: quote request intake. It works from the business's own published profile, covering coverage types and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Do not quote premiums; collect details for a licensed agent. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Quote request intake",
           "What does a basic home policy cover?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/insurance",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/insurance",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

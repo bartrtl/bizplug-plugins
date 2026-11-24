@@ -5,7 +5,7 @@ Version 0.46.0. Book adjustments and therapy sessions for chiropractic & pt busi
 - Main function: Book adjustments and therapy sessions
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chiropractic` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/chiropractic/<business>`
-- About this plug-in: https://bizplug.ai/industries/chiropractic
+- About this plug-in: https://www.bizplug.ai/industries/chiropractic
 
 ## What a customer can do
 

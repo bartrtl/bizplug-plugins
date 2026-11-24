@@ -5,7 +5,7 @@ Version 0.46.0. RSVP to services and events, book pastoral time for religious or
 - Main function: RSVP to services and events, book pastoral time
 - MCP server URL: `https://mcp.bizplug.ai/plugin/religious-orgs` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/religious-orgs/<business>`
-- About this plug-in: https://bizplug.ai/industries/religious-orgs
+- About this plug-in: https://www.bizplug.ai/industries/religious-orgs
 
 ## What a customer can do
 

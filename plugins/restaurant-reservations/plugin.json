@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-restaurant-reservations",
   "version": "0.46.0",
-  "description": "The restaurant reservations plug-in from BizPlug. Main function: table reservations. It works from the business's own published profile, covering tables and party sizes, opening hours, menus, dietary options and private dining, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The restaurant reservations plug-in from BizPlug. Main function: table reservations. It works from the business's own published profile, covering tables and party sizes, opening hours, menus, dietary options and private dining, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/restaurant-reservations",
+  "homepage": "https://www.bizplug.ai/industries/restaurant-reservations",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Restaurant Reservations",
         "shortDescription": "Table reservations for restaurant reservations businesses.",
-        "longDescription": "The restaurant reservations plug-in from BizPlug. Main function: table reservations. It works from the business's own published profile, covering tables and party sizes, opening hours, menus, dietary options and private dining, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The restaurant reservations plug-in from BizPlug. Main function: table reservations. It works from the business's own published profile, covering tables and party sizes, opening hours, menus, dietary options and private dining, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Never confirm a table: the restaurant confirms every reservation. Never take a deposit or card details in the chat. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Table reservations",
           "Do you have a table for four on Friday at 7pm?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/restaurant-reservations",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/restaurant-reservations",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

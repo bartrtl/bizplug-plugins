@@ -5,7 +5,7 @@ Version 0.46.0. Check stock and reserve a gadget for electronics & gadgets busin
 - Main function: Check stock and reserve a gadget
 - MCP server URL: `https://mcp.bizplug.ai/plugin/electronics` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/electronics/<business>`
-- About this plug-in: https://bizplug.ai/industries/electronics
+- About this plug-in: https://www.bizplug.ai/industries/electronics
 
 ## What a customer can do
 

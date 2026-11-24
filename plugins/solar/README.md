@@ -5,7 +5,7 @@ Version 0.46.0. Rough system estimate and site survey request for solar & clean 
 - Main function: Rough system estimate and site survey request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/solar` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/solar/<business>`
-- About this plug-in: https://bizplug.ai/industries/solar
+- About this plug-in: https://www.bizplug.ai/industries/solar
 
 ## What a customer can do
 

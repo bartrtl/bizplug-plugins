@@ -5,7 +5,7 @@ Version 0.46.0. Delivery orders for food delivery businesses.
 - Main function: Delivery orders
 - MCP server URL: `https://mcp.bizplug.ai/plugin/food-delivery` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/food-delivery/<business>`
-- About this plug-in: https://bizplug.ai/industries/food-delivery
+- About this plug-in: https://www.bizplug.ai/industries/food-delivery
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Places to stay and things to do, with booking requests for touri
 - Main function: Places to stay and things to do, with booking requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tourism-bureaus` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/tourism-bureaus/<business>`
-- About this plug-in: https://bizplug.ai/industries/tourism-bureaus
+- About this plug-in: https://www.bizplug.ai/industries/tourism-bureaus
 
 ## What a customer can do
 

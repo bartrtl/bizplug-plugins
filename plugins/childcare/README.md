@@ -5,7 +5,7 @@ Version 0.46.0. Schedule tours and enrollment calls for childcare & daycare busi
 - Main function: Schedule tours and enrollment calls
 - MCP server URL: `https://mcp.bizplug.ai/plugin/childcare` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/childcare/<business>`
-- About this plug-in: https://bizplug.ai/industries/childcare
+- About this plug-in: https://www.bizplug.ai/industries/childcare
 
 ## What a customer can do
 

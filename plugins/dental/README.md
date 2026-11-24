@@ -5,7 +5,7 @@ Version 0.46.0. Book cleanings, exams and consults for dental practices business
 - Main function: Book cleanings, exams and consults
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dental` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/dental/<business>`
-- About this plug-in: https://bizplug.ai/industries/dental
+- About this plug-in: https://www.bizplug.ai/industries/dental
 
 ## What a customer can do
 

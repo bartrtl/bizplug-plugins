@@ -5,7 +5,7 @@ Version 0.46.0. Find sizes and reserve for try-on for fashion & apparel business
 - Main function: Find sizes and reserve for try-on
 - MCP server URL: `https://mcp.bizplug.ai/plugin/fashion` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/fashion/<business>`
-- About this plug-in: https://bizplug.ai/industries/fashion
+- About this plug-in: https://www.bizplug.ai/industries/fashion
 
 ## What a customer can do
 

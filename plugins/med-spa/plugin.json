@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-med-spa",
   "version": "0.46.0",
-  "description": "The med spas & aesthetics plug-in from BizPlug. Main function: book aesthetic treatments and consults. It works from the business's own published profile, covering treatments, pricing and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The med spas & aesthetics plug-in from BizPlug. Main function: book aesthetic treatments and consults. It works from the business's own published profile, covering treatments, pricing and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/med-spa",
+  "homepage": "https://www.bizplug.ai/industries/med-spa",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Med Spas & Aesthetics",
         "shortDescription": "Book aesthetic treatments and consults for med spas & aesthetics businesses.",
-        "longDescription": "The med spas & aesthetics plug-in from BizPlug. Main function: book aesthetic treatments and consults. It works from the business's own published profile, covering treatments, pricing and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The med spas & aesthetics plug-in from BizPlug. Main function: book aesthetic treatments and consults. It works from the business's own published profile, covering treatments, pricing and consultation requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Book aesthetic treatments and consults",
           "What does a first facial cost?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/med-spa",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/med-spa",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

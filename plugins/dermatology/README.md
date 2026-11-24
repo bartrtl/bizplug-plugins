@@ -5,7 +5,7 @@ Version 0.46.0. Book skin-care visits for dermatology & skin businesses.
 - Main function: Book skin-care visits
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dermatology` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/dermatology/<business>`
-- About this plug-in: https://bizplug.ai/industries/dermatology
+- About this plug-in: https://www.bizplug.ai/industries/dermatology
 
 ## What a customer can do
 

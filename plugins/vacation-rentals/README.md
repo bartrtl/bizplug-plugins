@@ -5,7 +5,7 @@ Version 0.46.0. Home availability, nightly rates and booking for vacation rental
 - Main function: Home availability, nightly rates and booking
 - MCP server URL: `https://mcp.bizplug.ai/plugin/vacation-rentals` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/vacation-rentals/<business>`
-- About this plug-in: https://bizplug.ai/industries/vacation-rentals
+- About this plug-in: https://www.bizplug.ai/industries/vacation-rentals
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Book eye exams and fittings for optometry & eye care businesses.
 - Main function: Book eye exams and fittings
 - MCP server URL: `https://mcp.bizplug.ai/plugin/optometry` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/optometry/<business>`
-- About this plug-in: https://bizplug.ai/industries/optometry
+- About this plug-in: https://www.bizplug.ai/industries/optometry
 
 ## What a customer can do
 

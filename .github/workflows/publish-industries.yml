@@ -34,7 +34,7 @@ jobs:
           REPO: ${{ github.repository }}
           SHA: ${{ github.sha }}
           STARTED: ${{ steps.build.outputs.started }}
-          SITE: https://bizplug.ai
+          SITE: https://www.bizplug.ai
           MCP: https://mcp.bizplug.ai
         run: |
           files=$(git diff --name-only --diff-filter=AM HEAD~1 HEAD -- 'community/industries/*.json')

@@ -5,7 +5,7 @@ Version 0.46.0. Estimate a local home service for local & home services business
 - Main function: Estimate a local home service
 - MCP server URL: `https://mcp.bizplug.ai/plugin/home-services` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/home-services/<business>`
-- About this plug-in: https://bizplug.ai/industries/home-services
+- About this plug-in: https://www.bizplug.ai/industries/home-services
 
 ## What a customer can do
 

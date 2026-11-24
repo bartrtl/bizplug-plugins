@@ -5,7 +5,7 @@ Version 0.46.0. Book campus tours and advising for universities & colleges busin
 - Main function: Book campus tours and advising
 - MCP server URL: `https://mcp.bizplug.ai/plugin/universities` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/universities/<business>`
-- About this plug-in: https://bizplug.ai/industries/universities
+- About this plug-in: https://www.bizplug.ai/industries/universities
 
 ## What a customer can do
 

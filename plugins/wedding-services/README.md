@@ -5,7 +5,7 @@ Version 0.46.0. Check your date and request a consultation for wedding & events 
 - Main function: Check your date and request a consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/wedding-services` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/wedding-services/<business>`
-- About this plug-in: https://bizplug.ai/industries/wedding-services
+- About this plug-in: https://www.bizplug.ai/industries/wedding-services
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Book an initial consultation for legal services businesses.
 - Main function: Book an initial consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/legal` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/legal/<business>`
-- About this plug-in: https://bizplug.ai/industries/legal
+- About this plug-in: https://www.bizplug.ai/industries/legal
 
 ## What a customer can do
 

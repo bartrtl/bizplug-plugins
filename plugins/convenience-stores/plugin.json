@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-convenience-stores",
   "version": "0.46.0",
-  "description": "The convenience & c-stores plug-in from BizPlug. Main function: reserve items for quick pickup. It works from the business's own published profile, covering hours, products, fuel and services, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The convenience & c-stores plug-in from BizPlug. Main function: reserve items for quick pickup. It works from the business's own published profile, covering hours, products, fuel and services, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/convenience-stores",
+  "homepage": "https://www.bizplug.ai/industries/convenience-stores",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Convenience & C-Stores",
         "shortDescription": "Reserve items for quick pickup for convenience & c-stores businesses.",
-        "longDescription": "The convenience & c-stores plug-in from BizPlug. Main function: reserve items for quick pickup. It works from the business's own published profile, covering hours, products, fuel and services, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The convenience & c-stores plug-in from BizPlug. Main function: reserve items for quick pickup. It works from the business's own published profile, covering hours, products, fuel and services, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Reserve items for quick pickup",
           "Are you open 24 hours, and do you carry this item?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/convenience-stores",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/convenience-stores",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

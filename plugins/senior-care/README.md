@@ -5,7 +5,7 @@ Version 0.46.0. Schedule community tours for senior care & communities businesse
 - Main function: Schedule community tours
 - MCP server URL: `https://mcp.bizplug.ai/plugin/senior-care` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/senior-care/<business>`
-- About this plug-in: https://bizplug.ai/industries/senior-care
+- About this plug-in: https://www.bizplug.ai/industries/senior-care
 
 ## What a customer can do
 

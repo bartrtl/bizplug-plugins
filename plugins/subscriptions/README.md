@@ -5,7 +5,7 @@ Version 0.46.0. Choose a box and start a subscription request for subscription b
 - Main function: Choose a box and start a subscription request
 - MCP server URL: `https://mcp.bizplug.ai/plugin/subscriptions` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/subscriptions/<business>`
-- About this plug-in: https://bizplug.ai/industries/subscriptions
+- About this plug-in: https://www.bizplug.ai/industries/subscriptions
 
 ## What a customer can do
 

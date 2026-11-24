@@ -5,7 +5,7 @@ Version 0.46.0. Book pet appointments for veterinary & pet care businesses.
 - Main function: Book pet appointments
 - MCP server URL: `https://mcp.bizplug.ai/plugin/veterinary` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/veterinary/<business>`
-- About this plug-in: https://bizplug.ai/industries/veterinary
+- About this plug-in: https://www.bizplug.ai/industries/veterinary
 
 ## What a customer can do
 

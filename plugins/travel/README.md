@@ -5,7 +5,7 @@ Version 0.46.0. Tour and trip availability with price per traveller for travel &
 - Main function: Tour and trip availability with price per traveller
 - MCP server URL: `https://mcp.bizplug.ai/plugin/travel` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/travel/<business>`
-- About this plug-in: https://bizplug.ai/industries/travel
+- About this plug-in: https://www.bizplug.ai/industries/travel
 
 ## What a customer can do
 

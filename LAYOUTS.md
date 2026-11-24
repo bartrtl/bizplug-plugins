@@ -1,12 +1,12 @@
 # Menu layouts
 
-A BizPlug plug-in shows a card in ChatGPT and Claude. Its **menu layout** decides how the menu is organised and how people move through it; the options, forms and results are the same in every layout. A business picks a layout on its plug-in's page in the [BizPlug portal](https://bizplug.ai/portal), with a live preview of its own card next to the standard layout, on a computer and on a phone. Plug-ins show their layout from version 0.31.0. See them live on [bizplug.ai/layouts](https://bizplug.ai/layouts).
+A BizPlug plug-in shows a card in ChatGPT and Claude. Its **menu layout** decides how the menu is organised and how people move through it; the options, forms and results are the same in every layout. A business picks a layout on its plug-in's page in the [BizPlug portal](https://www.bizplug.ai/portal), with a live preview of its own card next to the standard layout, on a computer and on a phone. Plug-ins show their layout from version 0.31.0. See them live on [www.bizplug.ai/layouts](https://www.bizplug.ai/layouts).
 
 Layouts are open source. This page is also how to build one.
 
 ## The layouts
 
-6 layouts. Each name opens the layout's package: its code, its description and two pictures of it on a sample business, on a computer (680 px) and on a phone (390 px). To see one on a real card next to the standard layout, use [bizplug.ai/layouts](https://bizplug.ai/layouts).
+6 layouts. Each name opens the layout's package: its code, its description and two pictures of it on a sample business, on a computer (680 px) and on a phone (390 px). To see one on a real card next to the standard layout, use [www.bizplug.ai/layouts](https://www.bizplug.ai/layouts).
 
 | Layout | What it is | Suits | By | Pictures |
 |---|---|---|---|---|
@@ -23,7 +23,7 @@ A layout is a folder: `community/layouts/<id>/` for yours, `layouts/<id>/` for t
 
 | File | What it holds |
 |---|---|
-| `layout.json` | `id` (the folder's name: lower-case letters, digits, hyphens), `name`, `author` (`name`, optional https `url` and GitHub username `github`, which the credit on bizplug.ai/contributors links to), `summary`, `suits`, and `ownHeader`: `true` when your layout draws the business's name, logo and banner itself (the card then leaves out its own header). |
+| `layout.json` | `id` (the folder's name: lower-case letters, digits, hyphens), `name`, `author` (`name`, optional https `url` and GitHub username `github`, which the credit on www.bizplug.ai/contributors links to), `summary`, `suits`, and `ownHeader`: `true` when your layout draws the business's name, logo and banner itself (the card then leaves out its own header). |
 | `layout.js` | One function, `function render(ctx) { ... }`, that returns the menu as an HTML string. |
 | `layout.css` | Its styles. Every selector starts with `.lay-<id>`: the card puts your HTML in `<div class="lay lay-<id>">`. |
 | `preview-desktop.png`, `preview-mobile.png` | Pictures of your layout at 680 and 390 px wide (from `preview.ts`, below). |
@@ -77,9 +77,9 @@ A layout never runs code of its own in the card: `render` is called again whenev
 
 ### Try it and contribute it
 
-[![Add a menu layout to BizPlug, step by step (1:20, video)](assets/videos/add-a-menu-layout-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout)
+[![Add a menu layout to BizPlug, step by step (1:20, video)](assets/videos/add-a-menu-layout-poster.jpg)](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout)
 
-**Watch it step by step** (1:20, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout), or [download the video](assets/videos/add-a-menu-layout.mp4). It shows every command below and what it prints.
+**Watch it step by step** (1:20, no sound): [play it on the how-to page](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout), or [download the video](assets/videos/add-a-menu-layout.mp4). It shows every command below and what it prints.
 
 1. Copy `layouts/_template/` to `community/layouts/<your-id>/`, and set the same `id` in `layout.json` and in every `.lay-<id>` selector. The rest of `layouts/` is generated from the BizPlug website on every release; `community/` is kept as you wrote it.
 2. `npx tsx layouts/preview.ts community/layouts/<your-id>` writes an HTML page per sample business and mode: open them and resize the window to 680 and 390 px. It uses this repository's copy of the card (`layouts/card.html`) and the sample businesses in `layouts/samples/`.
@@ -87,4 +87,4 @@ A layout never runs code of its own in the card: `render` is called again whenev
 4. `npx tsx layouts/check-layout.ts community/layouts/<your-id>`.
 5. Open a pull request against `main` that adds only `community/layouts/<your-id>/`, and fill in its checklist with the check's output. The **Check contributions** workflow runs the same check. Not on GitHub? Use the [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml) form instead, with a link to your folder.
 
-We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the pull request. Once approved, it is merged and stays in this repository, credited to you. Within about fifteen minutes it is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) and on https://bizplug.ai/layouts, checked again on every read, with no release: the three featured layouts are offered on every business's plug-in, and any other once a business adds it from the marketplace. The layouts listed above are the ones that come with the website; [https://bizplug.ai/layouts](https://bizplug.ai/layouts) lists every layout on offer.
+We review a layout on real cards, in ChatGPT and Claude, in dark and light mode, on a computer and a phone, and may suggest changes in the pull request. Once approved, it is merged and stays in this repository, credited to you. Within about fifteen minutes it is listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) and on https://www.bizplug.ai/layouts, checked again on every read, with no release: the three featured layouts are offered on every business's plug-in, and any other once a business adds it from the marketplace. The layouts listed above are the ones that come with the website; [https://www.bizplug.ai/layouts](https://www.bizplug.ai/layouts) lists every layout on offer.

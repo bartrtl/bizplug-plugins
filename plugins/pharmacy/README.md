@@ -5,7 +5,7 @@ Version 0.46.0. Store services and callback requests for pharmacies businesses.
 - Main function: Store services and callback requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pharmacy` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/pharmacy/<business>`
-- About this plug-in: https://bizplug.ai/industries/pharmacy
+- About this plug-in: https://www.bizplug.ai/industries/pharmacy
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Estimate lawn and landscape work for landscaping & lawn business
 - Main function: Estimate lawn and landscape work
 - MCP server URL: `https://mcp.bizplug.ai/plugin/landscaping` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/landscaping/<business>`
-- About this plug-in: https://bizplug.ai/industries/landscaping
+- About this plug-in: https://www.bizplug.ai/industries/landscaping
 
 ## What a customer can do
 

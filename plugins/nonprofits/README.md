@@ -5,7 +5,7 @@ Version 0.46.0. Volunteer and donation requests for nonprofits & charities busin
 - Main function: Volunteer and donation requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/nonprofits` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/nonprofits/<business>`
-- About this plug-in: https://bizplug.ai/industries/nonprofits
+- About this plug-in: https://www.bizplug.ai/industries/nonprofits
 
 ## What a customer can do
 

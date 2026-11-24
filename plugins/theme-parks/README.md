@@ -5,7 +5,7 @@ Version 0.46.0. Ticket availability for a visit date for theme parks & attractio
 - Main function: Ticket availability for a visit date
 - MCP server URL: `https://mcp.bizplug.ai/plugin/theme-parks` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/theme-parks/<business>`
-- About this plug-in: https://bizplug.ai/industries/theme-parks
+- About this plug-in: https://www.bizplug.ai/industries/theme-parks
 
 ## What a customer can do
 

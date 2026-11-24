@@ -5,7 +5,7 @@ Version 0.46.0. Book a tax or bookkeeping consult for tax & accounting businesse
 - Main function: Book a tax or bookkeeping consult
 - MCP server URL: `https://mcp.bizplug.ai/plugin/accounting` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/accounting/<business>`
-- About this plug-in: https://bizplug.ai/industries/accounting
+- About this plug-in: https://www.bizplug.ai/industries/accounting
 
 ## What a customer can do
 

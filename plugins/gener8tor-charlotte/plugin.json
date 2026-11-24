@@ -6,7 +6,7 @@
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -22,9 +22,9 @@
           "Help me contact this startup's founders"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/gener8tor/charlotte",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms"
+        "websiteURL": "https://www.bizplug.ai/gener8tor/charlotte",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms"
       },
       "review": {
         "commerce": false,

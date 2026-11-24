@@ -5,7 +5,7 @@ Version 0.46.0. Service alerts and issue reports for public transit & mobility b
 - Main function: Service alerts and issue reports
 - MCP server URL: `https://mcp.bizplug.ai/plugin/public-transit` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/public-transit/<business>`
-- About this plug-in: https://bizplug.ai/industries/public-transit
+- About this plug-in: https://www.bizplug.ai/industries/public-transit
 
 ## What a customer can do
 

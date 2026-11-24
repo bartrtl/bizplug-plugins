@@ -5,7 +5,7 @@ Version 0.46.0. Hotel rooms and show tickets (no wagering) for casinos & gaming 
 - Main function: Hotel rooms and show tickets (no wagering)
 - MCP server URL: `https://mcp.bizplug.ai/plugin/casinos` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/casinos/<business>`
-- About this plug-in: https://bizplug.ai/industries/casinos
+- About this plug-in: https://www.bizplug.ai/industries/casinos
 
 ## What a customer can do
 

@@ -5,7 +5,7 @@ Version 0.46.0. Estimate and book an electrician for electricians businesses.
 - Main function: Estimate and book an electrician
 - MCP server URL: `https://mcp.bizplug.ai/plugin/electricians` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/electricians/<business>`
-- About this plug-in: https://bizplug.ai/industries/electricians
+- About this plug-in: https://www.bizplug.ai/industries/electricians
 
 ## What a customer can do
 

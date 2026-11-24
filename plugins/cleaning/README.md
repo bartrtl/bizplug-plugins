@@ -5,7 +5,7 @@ Version 0.46.0. Price a clean by home size and book for cleaning services busine
 - Main function: Price a clean by home size and book
 - MCP server URL: `https://mcp.bizplug.ai/plugin/cleaning` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/cleaning/<business>`
-- About this plug-in: https://bizplug.ai/industries/cleaning
+- About this plug-in: https://www.bizplug.ai/industries/cleaning
 
 ## What a customer can do
 

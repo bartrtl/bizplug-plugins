@@ -5,7 +5,7 @@ Version 0.46.0. Activities by date, with places per person for activity calendar
 - Main function: Activities by date, with places per person
 - MCP server URL: `https://mcp.bizplug.ai/plugin/activity-calendar` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/activity-calendar/<business>`
-- About this plug-in: https://bizplug.ai/industries/activity-calendar
+- About this plug-in: https://www.bizplug.ai/industries/activity-calendar
 
 ## What a customer can do
 

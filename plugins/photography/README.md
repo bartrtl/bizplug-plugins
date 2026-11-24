@@ -5,7 +5,7 @@ Version 0.46.0. Book a shoot or consultation for photography & creative business
 - Main function: Book a shoot or consultation
 - MCP server URL: `https://mcp.bizplug.ai/plugin/photography` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/photography/<business>`
-- About this plug-in: https://bizplug.ai/industries/photography
+- About this plug-in: https://www.bizplug.ai/industries/photography
 
 ## What a customer can do
 

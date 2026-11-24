@@ -5,7 +5,7 @@ Version 0.46.0. Catering price by headcount for catering & events businesses.
 - Main function: Catering price by headcount
 - MCP server URL: `https://mcp.bizplug.ai/plugin/catering` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/catering/<business>`
-- About this plug-in: https://bizplug.ai/industries/catering
+- About this plug-in: https://www.bizplug.ai/industries/catering
 
 ## What a customer can do
 

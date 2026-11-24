@@ -5,7 +5,7 @@ Version 0.46.0. Order from a cloud-kitchen brand for ghost & cloud kitchens busi
 - Main function: Order from a cloud-kitchen brand
 - MCP server URL: `https://mcp.bizplug.ai/plugin/ghost-kitchens` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/ghost-kitchens/<business>`
-- About this plug-in: https://bizplug.ai/industries/ghost-kitchens
+- About this plug-in: https://www.bizplug.ai/industries/ghost-kitchens
 
 ## What a customer can do
 

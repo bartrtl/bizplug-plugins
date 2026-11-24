@@ -5,7 +5,7 @@ Version 0.46.0. Table reservations for restaurant reservations businesses.
 - Main function: Table reservations
 - MCP server URL: `https://mcp.bizplug.ai/plugin/restaurant-reservations` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/restaurant-reservations/<business>`
-- About this plug-in: https://bizplug.ai/industries/restaurant-reservations
+- About this plug-in: https://www.bizplug.ai/industries/restaurant-reservations
 
 ## What a customer can do
 

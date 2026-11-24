@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-crypto",
   "version": "0.46.0",
-  "description": "The crypto & fintech plug-in from BizPlug. Main function: fee estimate and onboarding request. It works from the business's own published profile, covering supported assets, fees and getting started, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Never discuss price predictions. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The crypto & fintech plug-in from BizPlug. Main function: fee estimate and onboarding request. It works from the business's own published profile, covering supported assets, fees and getting started, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Never discuss price predictions. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/crypto",
+  "homepage": "https://www.bizplug.ai/industries/crypto",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Crypto & Fintech",
         "shortDescription": "Fee estimate and onboarding request for crypto & fintech businesses.",
-        "longDescription": "The crypto & fintech plug-in from BizPlug. Main function: fee estimate and onboarding request. It works from the business's own published profile, covering supported assets, fees and getting started, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Never discuss price predictions. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The crypto & fintech plug-in from BizPlug. Main function: fee estimate and onboarding request. It works from the business's own published profile, covering supported assets, fees and getting started, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Information and scheduling only: never give financial, investment, tax or legal advice, and never ask for account numbers or ID numbers. Never discuss price predictions. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Fee estimate and onboarding request",
           "Which assets do you support, and how do I get started?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/crypto",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/crypto",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

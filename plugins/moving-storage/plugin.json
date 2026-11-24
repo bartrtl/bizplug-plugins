@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-moving-storage",
   "version": "0.46.0",
-  "description": "The moving & storage plug-in from BizPlug. Main function: moving estimate and storage rates. It works from the business's own published profile, covering move sizes, storage and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The moving & storage plug-in from BizPlug. Main function: moving estimate and storage rates. It works from the business's own published profile, covering move sizes, storage and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/moving-storage",
+  "homepage": "https://www.bizplug.ai/industries/moving-storage",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Moving & Storage",
         "shortDescription": "Moving estimate and storage rates for moving & storage businesses.",
-        "longDescription": "The moving & storage plug-in from BizPlug. Main function: moving estimate and storage rates. It works from the business's own published profile, covering move sizes, storage and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The moving & storage plug-in from BizPlug. Main function: moving estimate and storage rates. It works from the business's own published profile, covering move sizes, storage and quote requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Moving estimate and storage rates",
           "How much to move a two-bedroom, and do you offer storage?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/moving-storage",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/moving-storage",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

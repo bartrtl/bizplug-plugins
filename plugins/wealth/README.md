@@ -5,7 +5,7 @@ Version 0.46.0. Book an intro meeting with an advisor for wealth & investing bus
 - Main function: Book an intro meeting with an advisor
 - MCP server URL: `https://mcp.bizplug.ai/plugin/wealth` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/wealth/<business>`
-- About this plug-in: https://bizplug.ai/industries/wealth
+- About this plug-in: https://www.bizplug.ai/industries/wealth
 
 ## What a customer can do
 

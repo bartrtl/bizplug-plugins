@@ -5,7 +5,7 @@ Version 0.46.0. Book campus visits and info sessions for education & schools bus
 - Main function: Book campus visits and info sessions
 - MCP server URL: `https://mcp.bizplug.ai/plugin/education` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/education/<business>`
-- About this plug-in: https://bizplug.ai/industries/education
+- About this plug-in: https://www.bizplug.ai/industries/education
 
 ## What a customer can do
 

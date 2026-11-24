@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-retail",
   "version": "0.46.0",
-  "description": "The retail & e-commerce plug-in from BizPlug. Main function: product search and reserve in store. It works from the business's own published profile, covering products, stock, hours and returns, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The retail & e-commerce plug-in from BizPlug. Main function: product search and reserve in store. It works from the business's own published profile, covering products, stock, hours and returns, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/retail",
+  "homepage": "https://www.bizplug.ai/industries/retail",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Retail & E-commerce",
         "shortDescription": "Product search and reserve in store for retail & e-commerce businesses.",
-        "longDescription": "The retail & e-commerce plug-in from BizPlug. Main function: product search and reserve in store. It works from the business's own published profile, covering products, stock, hours and returns, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The retail & e-commerce plug-in from BizPlug. Main function: product search and reserve in store. It works from the business's own published profile, covering products, stock, hours and returns, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Product search and reserve in store",
           "Do you have this in stock, and what are your hours?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/retail",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/retail",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

@@ -5,7 +5,7 @@ Version 0.46.0. Service requests and case status for government & public sector 
 - Main function: Service requests and case status
 - MCP server URL: `https://mcp.bizplug.ai/plugin/government` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/government/<business>`
-- About this plug-in: https://bizplug.ai/industries/government
+- About this plug-in: https://www.bizplug.ai/industries/government
 
 ## What a customer can do
 

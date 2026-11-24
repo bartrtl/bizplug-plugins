@@ -5,7 +5,7 @@ Version 0.46.0. Venue availability, pricing and date holds for events & conferen
 - Main function: Venue availability, pricing and date holds
 - MCP server URL: `https://mcp.bizplug.ai/plugin/events` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/events/<business>`
-- About this plug-in: https://bizplug.ai/industries/events
+- About this plug-in: https://www.bizplug.ai/industries/events
 
 ## What a customer can do
 

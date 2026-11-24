@@ -5,7 +5,7 @@ Version 0.46.0. Book classes, trials and tours for fitness & gyms businesses.
 - Main function: Book classes, trials and tours
 - MCP server URL: `https://mcp.bizplug.ai/plugin/fitness` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/fitness/<business>`
-- About this plug-in: https://bizplug.ai/industries/fitness
+- About this plug-in: https://www.bizplug.ai/industries/fitness
 
 ## What a customer can do
 

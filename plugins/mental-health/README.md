@@ -5,7 +5,7 @@ Version 0.46.0. Request an intake or session for mental health & therapy busines
 - Main function: Request an intake or session
 - MCP server URL: `https://mcp.bizplug.ai/plugin/mental-health` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/mental-health/<business>`
-- About this plug-in: https://bizplug.ai/industries/mental-health
+- About this plug-in: https://www.bizplug.ai/industries/mental-health
 
 ## What a customer can do
 

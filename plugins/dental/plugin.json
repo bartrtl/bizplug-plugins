@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-dental",
   "version": "0.46.0",
-  "description": "The dental practices plug-in from BizPlug. Main function: book cleanings, exams and consults. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The dental practices plug-in from BizPlug. Main function: book cleanings, exams and consults. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/dental",
+  "homepage": "https://www.bizplug.ai/industries/dental",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Dental Practices",
         "shortDescription": "Book cleanings, exams and consults for dental practices businesses.",
-        "longDescription": "The dental practices plug-in from BizPlug. Main function: book cleanings, exams and consults. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The dental practices plug-in from BizPlug. Main function: book cleanings, exams and consults. It works from the business's own published profile, covering services, hours, insurance and appointment requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Book cleanings, exams and consults",
           "Do you take my insurance, and do you see emergencies?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/dental",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/dental",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

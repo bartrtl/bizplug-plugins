@@ -5,7 +5,7 @@ Version 0.46.0. Book a strategy call for marketing agencies businesses.
 - Main function: Book a strategy call
 - MCP server URL: `https://mcp.bizplug.ai/plugin/agencies` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/agencies/<business>`
-- About this plug-in: https://bizplug.ai/industries/agencies
+- About this plug-in: https://www.bizplug.ai/industries/agencies
 
 ## What a customer can do
 

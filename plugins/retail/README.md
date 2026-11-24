@@ -5,7 +5,7 @@ Version 0.46.0. Product search and reserve in store for retail & e-commerce busi
 - Main function: Product search and reserve in store
 - MCP server URL: `https://mcp.bizplug.ai/plugin/retail` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/retail/<business>`
-- About this plug-in: https://bizplug.ai/industries/retail
+- About this plug-in: https://www.bizplug.ai/industries/retail
 
 ## What a customer can do
 

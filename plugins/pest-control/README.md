@@ -5,7 +5,7 @@ Version 0.46.0. Estimate treatment and request a visit for pest control business
 - Main function: Estimate treatment and request a visit
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pest-control` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/pest-control/<business>`
-- About this plug-in: https://bizplug.ai/industries/pest-control
+- About this plug-in: https://www.bizplug.ai/industries/pest-control
 
 ## What a customer can do
 

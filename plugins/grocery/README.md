@@ -5,7 +5,7 @@ Version 0.46.0. Build a pickup or delivery list for grocery & supermarkets busin
 - Main function: Build a pickup or delivery list
 - MCP server URL: `https://mcp.bizplug.ai/plugin/grocery` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/grocery/<business>`
-- About this plug-in: https://bizplug.ai/industries/grocery
+- About this plug-in: https://www.bizplug.ai/industries/grocery
 
 ## What a customer can do
 

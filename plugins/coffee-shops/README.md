@@ -5,7 +5,7 @@ Version 0.46.0. Mobile order-ahead for pickup for coffee shops & cafes businesse
 - Main function: Mobile order-ahead for pickup
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coffee-shops` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/coffee-shops/<business>`
-- About this plug-in: https://bizplug.ai/industries/coffee-shops
+- About this plug-in: https://www.bizplug.ai/industries/coffee-shops
 
 ## What a customer can do
 

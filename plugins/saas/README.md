@@ -5,7 +5,7 @@ Version 0.46.0. Book a product demo for saas & software businesses.
 - Main function: Book a product demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/saas` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/saas/<business>`
-- About this plug-in: https://bizplug.ai/industries/saas
+- About this plug-in: https://www.bizplug.ai/industries/saas
 
 ## What a customer can do
 

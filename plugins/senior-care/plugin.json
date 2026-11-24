@@ -2,13 +2,13 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-senior-care",
   "version": "0.46.0",
-  "description": "The senior care & communities plug-in from BizPlug. Main function: schedule community tours. It works from the business's own published profile, covering care levels, amenities and tour requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+  "description": "The senior care & communities plug-in from BizPlug. Main function: schedule community tours. It works from the business's own published profile, covering care levels, amenities and tour requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
     "email": "info@bizplug.ai",
-    "url": "https://bizplug.ai"
+    "url": "https://www.bizplug.ai"
   },
-  "homepage": "https://bizplug.ai/industries/senior-care",
+  "homepage": "https://www.bizplug.ai/industries/senior-care",
   "repository": "https://github.com/msg2ai/bizplug-plugins",
   "mcpServers": "./mcp.json",
   "extensions": {
@@ -16,18 +16,18 @@
       "interface": {
         "displayName": "BizPlug Senior Care & Communities",
         "shortDescription": "Schedule community tours for senior care & communities businesses.",
-        "longDescription": "The senior care & communities plug-in from BizPlug. Main function: schedule community tours. It works from the business's own published profile, covering care levels, amenities and tour requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://bizplug.ai, info@bizplug.ai.",
+        "longDescription": "The senior care & communities plug-in from BizPlug. Main function: schedule community tours. It works from the business's own published profile, covering care levels, amenities and tour requests, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
         "defaultPrompt": [
           "Schedule community tours",
           "What levels of care do you offer, and can I tour this week?",
           "How do I contact the business?"
         ],
         "category": "Business",
-        "websiteURL": "https://bizplug.ai/industries/senior-care",
-        "privacyPolicyURL": "https://bizplug.ai/privacy",
-        "termsOfServiceURL": "https://bizplug.ai/terms",
+        "websiteURL": "https://www.bizplug.ai/industries/senior-care",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
         "developerName": "BizPlug",
-        "supportURL": "https://bizplug.ai/contact",
+        "supportURL": "https://www.bizplug.ai/contact",
         "supportEmail": "info@bizplug.ai",
         "brandColor": "#d4ff3a",
         "logo": "./assets/icon.png",

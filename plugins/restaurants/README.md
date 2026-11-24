@@ -5,7 +5,7 @@ Version 0.46.0. Order ahead and takeaway for restaurants & food service business
 - Main function: Order ahead and takeaway
 - MCP server URL: `https://mcp.bizplug.ai/plugin/restaurants` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/restaurants/<business>`
-- About this plug-in: https://bizplug.ai/industries/restaurants
+- About this plug-in: https://www.bizplug.ai/industries/restaurants
 
 ## What a customer can do
 

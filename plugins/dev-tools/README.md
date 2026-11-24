@@ -5,7 +5,7 @@ Version 0.46.0. Book a technical demo or onboarding for developer tools business
 - Main function: Book a technical demo or onboarding
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dev-tools` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/dev-tools/<business>`
-- About this plug-in: https://bizplug.ai/industries/dev-tools
+- About this plug-in: https://www.bizplug.ai/industries/dev-tools
 
 ## What a customer can do
 

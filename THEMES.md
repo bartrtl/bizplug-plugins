@@ -35,7 +35,7 @@ A theme is five colours, the ones the card reads, and optionally decorations (be
 | `bg` | The card's background in ChatGPT's dark mode (light mode uses white) | `#rrggbb`, lower case |
 | `glow` | A soft light in the card's corner | `rgba(r,g,b,alpha)`, alpha .25 or less |
 
-With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `business`, and not one already used), a `name` (up to 24 characters), a one-sentence `description` of the look and the kind of business it suits (up to 160 characters), and an `author`: the name or company it is credited to. Optionally add `authorUrl` (your own https link, a site or a profile) and `github` (your GitHub username): the credit in the portal and on [bizplug.ai/contributors](https://bizplug.ai/contributors) then links to you. Everything in the file is public.
+With them, a theme has an `id` (2 to 24 lower-case letters or hyphens, never `business`, and not one already used), a `name` (up to 24 characters), a one-sentence `description` of the look and the kind of business it suits (up to 160 characters), and an `author`: the name or company it is credited to. Optionally add `authorUrl` (your own https link, a site or a profile) and `github` (your GitHub username): the credit in the portal and on [www.bizplug.ai/contributors](https://www.bizplug.ai/contributors) then links to you. Everything in the file is public.
 
 ```json
 {
@@ -86,16 +86,16 @@ Motion stops for people who turn motion off on their device. A sticker you draw 
 
 Theme files are the one part of this repository you change directly: add your theme with a pull request.
 
-[![Add a card theme to BizPlug, step by step (1:04, video)](assets/videos/add-a-card-theme-poster.jpg)](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme)
+[![Add a card theme to BizPlug, step by step (1:04, video)](assets/videos/add-a-card-theme-poster.jpg)](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme)
 
-**Watch it step by step** (1:04, no sound): [play it on the how-to page](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme), or [download the video](assets/videos/add-a-card-theme.mp4). It shows every command below and what it prints.
+**Watch it step by step** (1:04, no sound): [play it on the how-to page](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme), or [download the video](assets/videos/add-a-card-theme.mp4). It shows every command below and what it prints.
 
 1. Write your theme as `themes/<id>.json`, in the format above and named after its `id`. Copy one from `themes/` to start.
 2. Check it, from the root of a copy of this repository: `npx tsx themes/check-theme.ts themes/<id>.json`. It runs the same check BizPlug runs and prints what to fix, or the contrast of each pair.
 3. See it on the real card: `npx tsx themes/preview.ts themes/<id>.json` writes the sample businesses' cards in your colours, in dark and light mode, and prints where. Open them in a browser at about 680 and 390 px wide and take a screenshot.
 4. Open a pull request that adds only that file, with your screenshot. The **Check card themes** workflow runs the same check on it.
 5. The BizPlug team looks at it on real cards, in dark and light mode, and may suggest changes in the pull request.
-6. Once it is merged into `main`, the theme is listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, with no release needed (the three featured themes are offered on every business's plug-in, any other once a business adds it), and it is listed on this page after the next update. Removing the file removes it from the portal: a business that picked it gets its standard look again.
+6. Once it is merged into `main`, the theme is listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) within about fifteen minutes, with no release needed (the three featured themes are offered on every business's plug-in, any other once a business adds it), and it is listed on this page after the next update. Removing the file removes it from the portal: a business that picked it gets its standard look again.
 
 Not on GitHub, or prefer not to open a pull request? Use the [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml) form instead, with the JSON and the check's output, and the team adds the file for you.
 

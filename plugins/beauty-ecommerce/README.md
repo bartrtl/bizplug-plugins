@@ -5,7 +5,7 @@ Version 0.46.0. Shop products and place an order for beauty e-commerce businesse
 - Main function: Shop products and place an order
 - MCP server URL: `https://mcp.bizplug.ai/plugin/beauty-ecommerce` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/beauty-ecommerce/<business>`
-- About this plug-in: https://bizplug.ai/industries/beauty-ecommerce
+- About this plug-in: https://www.bizplug.ai/industries/beauty-ecommerce
 
 ## What a customer can do
 

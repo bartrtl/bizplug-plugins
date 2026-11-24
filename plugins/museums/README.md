@@ -5,7 +5,7 @@ Version 0.46.0. Timed tickets and exhibitions for museums & galleries businesses
 - Main function: Timed tickets and exhibitions
 - MCP server URL: `https://mcp.bizplug.ai/plugin/museums` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/museums/<business>`
-- About this plug-in: https://bizplug.ai/industries/museums
+- About this plug-in: https://www.bizplug.ai/industries/museums
 
 ## What a customer can do
 

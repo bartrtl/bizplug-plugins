@@ -8,9 +8,9 @@ The standard BizPlug plug-in for each of 86 industries. A plug-in is an MCP (Mod
 
 This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
-- Website: https://bizplug.ai
-- Every plug-in on one page: https://bizplug.ai/plugins
-- Blog: https://bizplug.ai/blog
+- Website: https://www.bizplug.ai
+- Every plug-in on one page: https://www.bizplug.ai/plugins
+- Blog: https://www.bizplug.ai/blog
 - Contact: info@bizplug.ai
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -87,7 +87,7 @@ An industry URL serves every business in that industry, so the assistant asks wh
 
 ## Get a plug-in for your business
 
-Sign up at https://bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
+Sign up at https://www.bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
 
 ## Contribute: plug-ins, themes, layouts and industries
 
@@ -95,18 +95,18 @@ Collaborators can add four kinds of work to this repository with a pull request:
 
 | What | Add in your pull request | Check before you open it | Once merged |
 | --- | --- | --- | --- |
-| A **card theme** (five colours) | `themes/<id>.json` ([themes/README.md](themes/README.md), [THEMES.md](THEMES.md)) | `npx tsx themes/check-theme.ts themes/<id>.json` | Listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes; offered on every business's plug-in when featured, otherwise once a business adds it |
-| A **menu layout** (how the card's menu is drawn) | `community/layouts/<id>/` ([LAYOUTS.md](LAYOUTS.md)) | `npx tsx layouts/check-layout.ts community/layouts/<id>` | Listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes, with you as its author; offered on every business's plug-in when featured, otherwise once a business adds it |
-| A **plug-in** (an MCP server of your own) | `community/plugins/<name>/` ([CONTRIBUTING.md](CONTRIBUTING.md)) | It works in ChatGPT developer mode ([SETUP.md](SETUP.md#setup)) | Listed in the [BizPlug marketplace](https://bizplug.ai/marketplace) within about fifteen minutes; a business that adds it asks the BizPlug team to set it up with its plug-in |
+| A **card theme** (five colours) | `themes/<id>.json` ([themes/README.md](themes/README.md), [THEMES.md](THEMES.md)) | `npx tsx themes/check-theme.ts themes/<id>.json` | Listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) within about fifteen minutes; offered on every business's plug-in when featured, otherwise once a business adds it |
+| A **menu layout** (how the card's menu is drawn) | `community/layouts/<id>/` ([LAYOUTS.md](LAYOUTS.md)) | `npx tsx layouts/check-layout.ts community/layouts/<id>` | Listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) within about fifteen minutes, with you as its author; offered on every business's plug-in when featured, otherwise once a business adds it |
+| A **plug-in** (an MCP server of your own) | `community/plugins/<name>/` ([CONTRIBUTING.md](CONTRIBUTING.md)) | It works in ChatGPT developer mode ([SETUP.md](SETUP.md#setup)) | Listed in the [BizPlug marketplace](https://www.bizplug.ai/marketplace) within about fifteen minutes; a business that adds it asks the BizPlug team to set it up with its plug-in |
 | A **new industry** (an industry plug-in on one of the engines) | `community/industries/<slug>.json` ([INDUSTRIES.md](INDUSTRIES.md#add-a-new-industry)) | `npx tsx industries/check-industry.ts community/industries/<slug>.json`; once the pull request is open, a workflow previews it on the test server and comments the results of `industries/test-industry.ts` | The file is the industry: the website is built again with it, and its plug-in, its page and its place in the portal go live with that build. Its package appears in `plugins/<slug>/` with this repository's next update |
 
 The **Check contributions** and **Check card themes** workflows run the checks on every pull request.
 
 Step-by-step videos, with every command and what it prints:
 
-- [Add a card theme to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme) (1:04)
-- [Add a menu layout to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout) (1:20)
-- [Add a new industry to BizPlug, step by step](https://bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry) (1:31)
+- [Add a card theme to BizPlug, step by step](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-card-theme) (1:04)
+- [Add a menu layout to BizPlug, step by step](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-menu-layout) (1:20)
+- [Add a new industry to BizPlug, step by step](https://www.bizplug.ai/how-to/developers/add-theme-layout-industry#add-a-new-industry) (1:31)
 
 ### How to open a pull request
 
@@ -123,7 +123,7 @@ Not sure which engine a new industry needs? Use the [Propose a new industry](htt
 
 By opening a pull request you agree that your contribution is published under this repository's [MIT License](LICENSE).
 
-Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
+Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://www.bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
 ## Version 0.46.0
 
@@ -180,7 +180,7 @@ A business's own plug-in stays on the version it was published with until the bu
 
 ## Plug-ins on the platform
 
-The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on https://bizplug.ai/plugins. The startup directories have their package in `plugins/`; the others are built from a business's own profile. Names belong to their owners and show whose published information a plug-in is built on; BizPlug is not affiliated with or endorsed by them, except msg2ai, the company behind BizPlug, and the plug-ins listed under msg2ai. Businesses that list their own plug-in from the portal are on the website only.
+The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on https://www.bizplug.ai/plugins. The startup directories have their package in `plugins/`; the others are built from a business's own profile. Names belong to their owners and show whose published information a plug-in is built on; BizPlug is not affiliated with or endorsed by them, except msg2ai, the company behind BizPlug, and the plug-ins listed under msg2ai. Businesses that list their own plug-in from the portal are on the website only.
 
 | Plug-in | Kind | Added | What it does | MCP server URL |
 | --- | --- | --- | --- | --- |
@@ -194,7 +194,7 @@ The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on h
 
 ## The 86 industry plug-ins
 
-The standard plug-in of each industry, as on https://bizplug.ai/plugins/industries. A business gets its own copy, built from its profile.
+The standard plug-in of each industry, as on https://www.bizplug.ai/plugins/industries. A business gets its own copy, built from its profile.
 
 ### Business essentials
 

@@ -5,7 +5,7 @@ Version 0.46.0. Membership applications and renewals for membership associations
 - Main function: Membership applications and renewals
 - MCP server URL: `https://mcp.bizplug.ai/plugin/associations` (streamable HTTP, no sign-in)
 - A business's own plug-in: `https://mcp.bizplug.ai/plugin/associations/<business>`
-- About this plug-in: https://bizplug.ai/industries/associations
+- About this plug-in: https://www.bizplug.ai/industries/associations
 
 ## What a customer can do
 
