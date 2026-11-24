@@ -1316,7 +1316,7 @@ function companyFly(m, biz, sub, badge, listName, profile) {
     (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
     '<div class="actions" style="margin-top:14px">' + (ask ? '<button class="primary" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' : "") + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") +
       (profile ? '<button class="btn" data-profile="' + profile + '">Contact details</button>' : "") + "</div>" +
-    (ask ? '<div class="note">Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div>"
+    (ask ? '<div class="note"><b>The answer appears in the chat below this card: scroll down to read it.</b> Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div>"
       : '<div class="note">As listed by ' + esc(biz) + ". Check anything important with the company.</div>") + "</div></div>";
 }
 // ---- Committees, and news, events and newsletter (version 0.25.0, showcase) ----
@@ -2009,7 +2009,12 @@ function render() {
   on("[data-ev]", (b) => { state.ev = b.dataset.ev || ""; if (!state.ev && state.data.events) state.data.events.open = ""; state.view = "events"; render(); });
   on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
-  on("[data-ask]", (b) => { if (b.dataset.ask) ask(b.dataset.ask); });
+  on("[data-ask]", (b) => {
+    if (!b.dataset.ask) return;
+    ask(b.dataset.ask);
+    // In a More about panel, Ask for more says where its answer goes: the chat, below the card.
+    if (b.closest(".sheet") && b.classList.contains("primary")) { b.textContent = "Asked: scroll down in the chat for the answer \u2193"; b.disabled = true; }
+  });
   // 0.31.0: a layout's own state (a tab, an open panel): data-lay="key:value"; an empty value clears the key.
   on("[data-lay]", (b) => {
     state.lay = state.lay || {};
