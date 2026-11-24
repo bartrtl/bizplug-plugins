@@ -1,5 +1,5 @@
 {
-  "version": "0.45.0",
+  "version": "0.46.0",
   "note": "Inputs of the industry-wide plug-in (https://mcp.bizplug.ai/plugin/<industry>). A business's own plug-in (https://mcp.bizplug.ai/plugin/<industry>/<business>) takes the same inputs without \"business\". Generated from the BizPlug plug-in server; see TOOLS.md.",
   "industries": {
     "events": {
@@ -818,6 +818,41 @@
             },
             "required": [
               "form"
+            ]
+          }
+        },
+        {
+          "name": "check_direct_offer",
+          "title": "Direct offer from the host's website",
+          "description": "Ask this hospitality & hotels business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.",
+          "readOnly": true,
+          "when": "Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "check_in": {
+                "type": "string",
+                "description": "Arrival date, as YYYY-MM-DD."
+              },
+              "check_out": {
+                "type": "string",
+                "description": "Departure date, as YYYY-MM-DD; after check_in."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "How many guests stay."
+              }
+            },
+            "required": [
+              "business",
+              "check_in",
+              "check_out",
+              "guests"
             ]
           }
         }
@@ -17389,6 +17424,41 @@
               "form"
             ]
           }
+        },
+        {
+          "name": "check_direct_offer",
+          "title": "Direct offer from the host's website",
+          "description": "Ask this vacation rentals business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.",
+          "readOnly": true,
+          "when": "Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "check_in": {
+                "type": "string",
+                "description": "Arrival date, as YYYY-MM-DD."
+              },
+              "check_out": {
+                "type": "string",
+                "description": "Departure date, as YYYY-MM-DD; after check_in."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "How many guests stay."
+              }
+            },
+            "required": [
+              "business",
+              "check_in",
+              "check_out",
+              "guests"
+            ]
+          }
         }
       ]
     },
@@ -18589,6 +18659,41 @@
             },
             "required": [
               "form"
+            ]
+          }
+        },
+        {
+          "name": "check_direct_offer",
+          "title": "Direct offer from the host's website",
+          "description": "Ask this casinos & gaming business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.",
+          "readOnly": true,
+          "when": "Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "check_in": {
+                "type": "string",
+                "description": "Arrival date, as YYYY-MM-DD."
+              },
+              "check_out": {
+                "type": "string",
+                "description": "Departure date, as YYYY-MM-DD; after check_in."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "How many guests stay."
+              }
+            },
+            "required": [
+              "business",
+              "check_in",
+              "check_out",
+              "guests"
             ]
           }
         }
@@ -23328,6 +23433,41 @@
             },
             "required": [
               "form"
+            ]
+          }
+        },
+        {
+          "name": "check_direct_offer",
+          "title": "Direct offer from the host's website",
+          "description": "Ask this tourism bureaus & destinations business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.",
+          "readOnly": true,
+          "when": "Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "check_in": {
+                "type": "string",
+                "description": "Arrival date, as YYYY-MM-DD."
+              },
+              "check_out": {
+                "type": "string",
+                "description": "Departure date, as YYYY-MM-DD; after check_in."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "How many guests stay."
+              }
+            },
+            "required": [
+              "business",
+              "check_in",
+              "check_out",
+              "guests"
             ]
           }
         }

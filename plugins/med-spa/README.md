@@ -1,6 +1,6 @@
 # BizPlug Med Spas & Aesthetics
 
-Version 0.45.0. Book aesthetic treatments and consults for med spas & aesthetics businesses.
+Version 0.46.0. Book aesthetic treatments and consults for med spas & aesthetics businesses.
 
 - Main function: Book aesthetic treatments and consults
 - MCP server URL: `https://mcp.bizplug.ai/plugin/med-spa` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.45.0. Book aesthetic treatments and consults for med spas & aesthetics
 
 ## Changes
 
+- **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.
 - **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.
 - **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.

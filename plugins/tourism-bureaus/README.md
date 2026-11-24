@@ -1,6 +1,6 @@
 # BizPlug Tourism Bureaus & Destinations
 
-Version 0.45.0. Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.
+Version 0.46.0. Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.
 
 - Main function: Places to stay and things to do, with booking requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tourism-bureaus` (streamable HTTP, no sign-in)
@@ -28,9 +28,11 @@ Version 0.45.0. Places to stay and things to do, with booking requests for touri
 | `get_business_info` | Answer a general question about this tourism bureaus & destinations business using only its published profile: places to stay, activities and tours, when to visit, getting around, events and visitor information. Creates nothing. If the profile does not cover the question, say so and use get_contact. Share only what the bureau has published. Never say a stay or an activity is booked, held or paid: the bureau or its partner confirms every booking. Never take payment or card details in the chat. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `open_form` | Open one of this tourism bureaus & destinations business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
+| `check_direct_offer` | Ask this tourism bureaus & destinations business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book. |
 
 ## Changes
 
+- **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.
 - **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.
 - **0.44.0** (23 November 2026): A Featured row above the events calendar: the events you pick, as large cards to swipe through.
 - **0.43.0** (23 November 2026): On a computer, an event, a member or an exhibitor opens in a panel beside its list, with its links and Ask for more.

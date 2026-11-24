@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.45.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.46.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -15,7 +15,7 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 | Engine | Sample businesses |
 | --- | --- |
 | `order` | `coffee-shops/demo-cafe`, `florists/demo-florist` |
-| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `tourism-bureaus/demo-sample` |
+| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tourism-bureaus/demo-sample` |
 | `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
 | `quote` | `hvac/demo-hvac` |
 | `track` | `property-management/demo-pm` |
@@ -143,7 +143,7 @@ Read-only.
 
 ### `stay`: Check what is free for dates and party size with the total price, send a booking request, check its status.
 
-The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
+The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/hospitality/vrp-test-villaakerlyckan`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
 
 #### `check_room_availability` (look-up: Availability and price)
 
@@ -391,6 +391,16 @@ Read-only.
 ## Tools of the options
 
 A few industries switch on an option that adds tools. Each is offered only when the business published what it needs.
+
+### `check_direct_offer` (Direct offer from the host's website)
+
+Read-only. Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain. Industries: Hospitality & Hotels, Casinos & Gaming, Vacation Rentals, Tourism Bureaus & Destinations.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `check_in` | string | yes | Arrival date, as YYYY-MM-DD. |
+| `check_out` | string | yes | Departure date, as YYYY-MM-DD; after check_in. |
+| `guests` | integer | yes | How many guests stay. |
 
 ### `get_agenda` (Agenda)
 

@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.45.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.46.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -83,6 +83,13 @@ export const isShowTool = (name: string) => (Object.values(SHOW_TOOLS) as string
  */
 export const VISIT_TOOLS = { options: "get_visit_options", tour: "book_tour", pass: "request_day_pass" } as const;
 export const isVisitTool = (name: string) => (Object.values(VISIT_TOOLS) as string[]).includes(name);
+/**
+ * Industries booked by the night, from plug-in version 0.46.0 (`directOffers`, vrp.ts): the signed offer of the
+ * business's own website for one stay, by the Vacation Rental Protocol. The server lists it only for a business whose
+ * profile names its site (`vrp.domain`). Not `get_verified_stay_offer`: the protocol keeps that name for a tool on the
+ * host's own domain.
+ */
+export const DIRECT_OFFER_TOOL = "check_direct_offer";
 /** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
 const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
 const membersDirect = (slug: string) =>
@@ -279,6 +286,17 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           { name: VISIT_TOOLS.options, title: "Tours and day passes", description: `List this ${noun} business's locations from what it published: where tours are given and their tour hours, and where a day pass is sold, with its rate per person per day and what it includes; optionally one location. Creates nothing and sends nothing. Use it for any question about tours, day passes or their prices.`, readOnly: true },
           { name: VISIT_TOOLS.tour, title: "Book a tour", description: "Ask for a tour of one of the business's published locations on a date. Use only once the customer has chosen the location and the day and wants to go ahead. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message for the customer to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms the tour; nothing is booked here. Never invent a location or tour hours.", readOnly: false },
           { name: VISIT_TOOLS.pass, title: "Day pass", description: "Ask for a day pass at one of the business's published locations that sells one, for a date and a number of people. Use only once the customer has chosen the location and the day and wants to go ahead; for the price alone use the tours and day passes look-up. It returns the published rate times the people, or says the business confirms the price when no rate is published. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms; nothing is booked or paid here. Never invent a price or a location.", readOnly: false },
+        ]
+      : []),
+    // 0.46.0, booked by the night: the business's own website's signed offer (vrp.ts). Offered only where the profile names the site.
+    ...(fn.engine === "stay" && fn.span === "nights"
+      ? [
+          {
+            name: DIRECT_OFFER_TOOL,
+            title: "Direct offer from the host's website",
+            description: `Ask this ${noun} business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.`,
+            readOnly: true,
+          },
         ]
       : []),
     // 0.15.0, software products (software.ts). Offered only to plug-ins on 0.15.0 or later (plugin-mcp.ts).
