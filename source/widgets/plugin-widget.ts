@@ -60,6 +60,8 @@ const ICONS: Record<string, string> = {
   spark: '<path d="M12 3c.6 4.2 2.8 6.4 7 7-4.2.6-6.4 2.8-7 7-.6-4.2-2.8-6.4-7-7 4.2-.6 6.4-2.8 7-7z"/>',
   enter: '<path d="M20 5v6a3 3 0 0 1-3 3H5"/><path d="m9 10-4 4 4 4"/>',
   home: '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/>',
+  // 0.47.0: Price for your dates (a direct offer from the host's own website).
+  directoffer: '<path d="M3 12V4a1 1 0 0 1 1-1h8l9 9-9 9z"/><circle cx="8" cy="8" r="1.5"/>',
   more: '<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   chev: '<path d="m9 6 6 6-6 6"/>',
@@ -597,6 +599,20 @@ const who = () => {
 // What each menu option asks for. Returns { html, prompt, args }: prompt() is the sentence sent to the chat,
 // args() the tool arguments when the card runs the tool itself. Both throw a message for the customer.
 function formFor(o) {
+  // 0.47.0: the host website's offer for one stay (vrp.ts). Only the dates and the number of guests are sent.
+  if (o.kind === "directoffer") {
+    const check = () => {
+      need(v("start"), "Choose a check-in date.");
+      need(v("end"), "Choose a check-out date.");
+      need(v("end") > v("start"), "The check-out date must be after the check-in date.");
+      need(num("guests"), "Say how many guests.");
+    };
+    const picks = stayChoices().filter((c) => c.end).map((c) => chip(esc(c.label), "data-owhen", c.start + "|" + c.end, v("start") === c.start && v("end") === c.end)).join("");
+    return { html: '<div class="row three">' + field("start", "Check-in", { type: "date" }) + field("end", "Check-out", { type: "date" }) + field("guests", "Guests", { type: "number", min: 1, placeholder: "2" }) + "</div>" +
+        '<div class="qlabel">Or pick the dates</div><div class="qs">' + picks + "</div>",
+      prompt: () => { check(); return "Is it free from " + v("start") + " to " + v("end") + " for " + v("guests") + " guests, and what does it cost?"; },
+      args: () => { check(); return { check_in: v("start"), check_out: v("end"), guests: Math.floor(num("guests")) }; } };
+  }
   if (o.kind === "lookup") {
     switch (p().engine) {
       case "order":
@@ -1439,6 +1455,52 @@ function memberMessageView() {
     '<div class="note">You send it yourself from your own email or WhatsApp. Nothing was sent by this card, ' + esc(d.business || "the business") + " or BizPlug. Check that a number uses WhatsApp before relying on it.</div>";
 }
 
+// ---- Direct offers (version 0.47.0, vrp.ts) ----
+// The host's own website signed this offer and the server checked it. The card shows only what the offer says and
+// books nothing: Book & pay opens the host's signed booking link, where the guest confirms and pays on the host's site.
+// An offer is valid for at most 15 minutes; after that the card asks for a new one instead of offering the link.
+const offerOpt = () => state.options.findIndex((o) => o.kind === "directoffer");
+const otherDates = () => { const i = offerOpt(); return i >= 0 ? '<button class="btn" data-open="' + i + '">Check other dates</button>' : ""; };
+function directOfferView() {
+  const d = state.data.directOffer || {};
+  const site = esc(d.domain || "the host's website");
+  const head = top(d.property || "Price for your dates") + '<div class="hint">' + esc(d.when || "") + "</div>";
+  const menuBtn = '<button class="btn" data-view="menu">← Menu</button>';
+  if (d.state === "unknown") {
+    return head + '<div class="sent"><b>No price to show</b><p>' + site + " could not confirm an offer for these dates just now.</p>" +
+      '<p class="note">Nothing is quoted when the offer cannot be checked.</p></div>' +
+      '<div class="actions" style="margin-top:12px"><button class="btn go" data-act="oagain">Try again</button>' + otherDates() + menuBtn + "</div>";
+  }
+  if (d.state === "unavailable") {
+    const alts = (d.alternatives || []).map((a) => chip(esc(a.label + ": " + a.checkIn + " to " + a.checkOut), "data-oalt", a.checkIn + "|" + a.checkOut)).join("");
+    return head + '<div class="sent"><b>Not available for these dates</b><p>' + site + " says these dates are taken.</p></div>" +
+      (alts ? '<div class="qlabel">The host suggests</div><div class="qs">' + alts + "</div>" : "") +
+      '<div class="actions" style="margin-top:12px">' + otherDates() + menuBtn + "</div>";
+  }
+  const expired = !(Date.parse(d.validUntil || "") > Date.now());
+  const rules = d.rules || {}, terms = d.termsText || {};
+  const line = (label, value) => (value ? '<div class="bl" style="margin:2px 0"><span style="font-weight:600">' + esc(label) + "</span> " + esc(value) + "</div>" : "");
+  const nights = (d.nightly || []).map((n) => '<div class="it"><div class="nm"><span>' + esc(n.date) + (n.season ? " · " + esc(n.season) : "") + "</span><b>" + esc(n.rate) + "</b></div></div>").join("") +
+    (d.adjustments || []).map((a) => '<div class="it"><div class="nm"><span>' + esc(a.label) + "</span><b>" + esc(a.amount) + "</b></div></div>").join("");
+  const refund = rules.refund ? '<ul style="margin:0;padding-left:18px">' + rules.refund.map((r) => "<li>" + esc(r) + "</li>").join("") + "</ul>" : "<p>Not stated in the offer.</p>";
+  const book = expired
+    ? '<button class="primary" data-act="oagain">Check the price again</button>'
+    : '<button class="primary" data-href="' + esc(d.bookingUrl) + '">Book &amp; pay on ' + site + "</button>";
+  return head +
+    '<div class="sent"><b>' + esc(d.total) + "</b><p>Total for " + esc(String(d.nights)) + (d.nights === 1 ? " night" : " nights") + ", " + esc(String(d.guests)) + (d.guests === 1 ? " guest" : " guests") + "</p>" +
+      (d.noAddOnFees ? '<p class="note">No booking, service or cleaning fees on top, as the host states.</p>' : "") + "</div>" +
+    (nights ? '<div class="qlabel" style="margin-top:12px">Night by night</div><div class="list">' + nights + "</div>" : "") +
+    '<div class="qlabel" style="margin-top:12px">House rules</div><div class="sum sm" style="margin:0"><div>' +
+      line("Check-in", rules.checkInTime) + line("Check-out", rules.checkOutTime) + line("Pets", rules.pets) +
+      line("Minimum age", rules.minimumGuestAge != null ? String(rules.minimumGuestAge) : "") +
+      line("Allowed", (terms.allowed || []).join(", ")) + line("Not allowed", (terms.notAllowed || []).join(", ")) +
+      line("Included", (terms.included || []).join(", ")) + "</div></div>" +
+    '<div class="qlabel" style="margin-top:12px">Cancellation</div><div class="sent sm">' + refund + "</div>" +
+    '<div class="actions" style="margin-top:12px">' + book + otherDates() + menuBtn + "</div>" +
+    '<div class="note">' + (expired ? "This offer has expired. Check the price again before you book." : "The offer comes from " + site + ", signed by the host and checked. You confirm and pay on the host's own website; nothing is booked or paid here.") + "</div>";
+}
+const offerArgs = (checkIn, checkOut) => { const d = state.data.directOffer || {}; return { check_in: checkIn || d.checkIn, check_out: checkOut || d.checkOut, guests: d.guests }; };
+
 // ---- Tours and day passes (version 0.22.0, coworking) ----
 // The business's published locations (plugin.visits.locations): a tour where it gives tours, a day pass where it
 // sells one. The rate and the tour hours are shown as the business published them; the total comes with the result.
@@ -1918,7 +1980,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -1965,6 +2027,10 @@ function render() {
     let fallback = o.example; try { fallback = f.prompt(); } catch (e) {}
     run(o.tool, f.args(), fallback);
   }));
+  // 0.47.0: a direct offer asked again (expired, or not checked), for other dates the host suggested, or with dates picked.
+  on('[data-act="oagain"]', () => { const o = opt("directoffer"); run(o && o.tool, offerArgs(), (o && o.example) || ""); });
+  on("[data-oalt]", (b) => { const o = opt("directoffer"), w = b.dataset.oalt.split("|"); run(o && o.tool, offerArgs(w[0], w[1]), (o && o.example) || ""); });
+  on("[data-owhen]", (b) => { const w = b.dataset.owhen.split("|"); state.f.start = w[0]; state.f.end = w[1]; render(); });
   on('[data-act="again"]', () => { state.open = state.options.findIndex((x) => x.kind === "lookup"); state.hint = ""; state.view = "form"; state.error = ""; render(); });
   on('[data-act="paid"]', () => { const st = opt("status"); if (state.payRef && st) run(st.tool, { reference: state.payRef }, "I have paid. What is the status of " + state.payRef + "?"); });
   on('[data-act="status"]', () => { state.open = state.options.findIndex((x) => x.kind === "status"); state.hint = ""; state.view = "form"; state.error = ""; render(); });

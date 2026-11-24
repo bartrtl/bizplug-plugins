@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.46.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.47.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -31,7 +31,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
