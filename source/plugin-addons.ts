@@ -7,7 +7,7 @@ import type { Engine, Span } from "@/lib/industry-functions";
 import { CUSTOMER_LINKS, type CustomerLinkKey } from "@/lib/customer-links";
 
 export type AddonStatus = "included" | "setup" | "custom";
-export type AddonGroup = "requests" | "chat" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
+export type AddonGroup = "requests" | "chat" | "website" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
 
 export type Addon = {
   id: string;
@@ -53,6 +53,7 @@ export const ADDON_STATUS_NOTE: Record<AddonStatus, string> = {
 export const ADDON_GROUP_LABEL: Record<AddonGroup, string> = {
   requests: "Where your requests go",
   chat: "Chat with your customers",
+  website: "Booking from your website",
   forms: "Forms",
   payments: "Payment pages",
   calendars: "Calendars and booking pages",
@@ -384,6 +385,20 @@ const PASSWORD_SIGN_IN: Addon = {
   link: { label: "How password sign-in works", href: "/how-to/plug-in/password-sign-in" },
 };
 
+// Direct offers by the Vacation Rental Protocol (plug-in 0.46.0, vrp.ts): booked by the night only.
+const DIRECT_OFFERS: Addon = {
+  id: "vrp", name: "Vacation Rental Protocol", group: "website", status: "included",
+  what: "Your plug-in asks your own website for the exact price of the dates a guest gives, with your terms and your booking link, and the guest books and pays on your site.",
+  needs: ["A website on your own domain that publishes signed offers by the Vacation Rental Protocol (vacationrentalprotocol.com), set up by your booking software or your developer."],
+  steps: [
+    "Enter your website's domain, for example villa-example.se, and press Check and save. BizPlug asks your site for a real offer for sample dates (two nights, two guests, about six weeks ahead) and saves the domain only if the offer checks out: signed with the keys your site publishes, for those exact dates, with a booking link on your own domain. A signed \"not available\" counts too.",
+    "Press Check my site at any time to run the same check again. Only the dates and the number of guests are sent to your site.",
+    "It applies to your test and live plug-in at once, from plug-in version 0.46.0. From 0.47.0 your card also gets a Price for your dates button. If your plug-in runs an older version, press Upgrade on its Overview tab.",
+    "To switch it off, clear the field and save.",
+  ],
+  link: { label: "How direct offers work", href: "/how-to/plug-in/direct-offers" },
+};
+
 export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
@@ -393,7 +408,8 @@ export function addonsFor(engine: Engine, span?: Span): Addon[] {
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 
