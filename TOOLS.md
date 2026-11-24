@@ -14,7 +14,7 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 
 | Engine | Sample businesses |
 | --- | --- |
-| `order` | `coffee-shops/demo-cafe`, `florists/demo-florist` |
+| `order` | `coffee-shops/demo-cafe`, `florists/demo-florist`, `retail/demo-shop` |
 | `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tourism-bureaus/demo-sample` |
 | `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
 | `quote` | `hvac/demo-hvac` |
@@ -83,7 +83,7 @@ Every industry runs on one of 5 engines ([INDUSTRIES.md](INDUSTRIES.md)). The en
 
 ### `order`: Browse a catalog with prices, send a pickup or delivery order, check its status.
 
-The inputs below are Restaurants & Food Service's. Every order industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/coffee-shops/demo-cafe`, `https://mcp.bizplug.ai/plugin/florists/demo-florist`.
+The inputs below are Restaurants & Food Service's. Every order industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/coffee-shops/demo-cafe`, `https://mcp.bizplug.ai/plugin/florists/demo-florist`, `https://mcp.bizplug.ai/plugin/retail/demo-shop`.
 
 #### `browse_menu` (look-up: Browse and prices)
 
