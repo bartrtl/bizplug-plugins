@@ -10,6 +10,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 
 - Website: https://bizplug.ai
 - Every plug-in on one page: https://bizplug.ai/plugins
+- Blog: https://bizplug.ai/blog
 - Contact: info@bizplug.ai
 - Set up, configure and test a plug-in: [SETUP.md](SETUP.md)
 - Submit your own plug-in to the marketplace: [CONTRIBUTING.md](CONTRIBUTING.md)
