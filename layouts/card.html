@@ -228,7 +228,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .sum.biz{align-items:center;justify-content:space-between;margin:0 0 12px}
 .sum.biz b{font-size:15px}
 .sum.sm b{font-size:14px}
-.head .ic.logo{width:54px;height:54px;border-radius:15px;background:#fff;padding:6px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
+.head .ic.logo{width:54px;height:54px;border-radius:15px;background:#fff;padding:6px;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}.head .ic.logo.full{background:transparent;padding:0;overflow:hidden}.head .ic.logo.full img{object-fit:cover;border-radius:15px}
 .head .wm{flex:none;box-sizing:border-box;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
 .head .wm img{height:44px;width:auto;max-width:100%;object-fit:contain;display:block}
 @media (max-width:420px){.head .wm{height:48px;max-width:150px}.head .wm img{height:34px}}
@@ -1329,7 +1329,7 @@ function header() {
   const d = p();
   // A business's card shows no BizPlug mark (BizPlug stays in the contact bar); the industry-wide one does.
   // 0.25.0: the business's own logo in place of the store icon; the store icon comes back if the logo fails to load (render).
-  const mark = !d.bound ? MARK : d.logo && d.logoWide ? '<span class="wm"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"></span>' : d.logo ? '<span class="ic logo"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"></span>' : '<span class="ic">' + icon("store") + "</span>";
+  const mark = !d.bound ? MARK : d.logo && d.logoWide ? '<span class="wm"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"></span>' : d.logo ? '<span class="ic logo"><img src="' + esc(d.logo) + '" alt="' + esc(d.title || "") + '" data-fallback="store"' + (/[?&]c=1/.test(d.logo) ? ' crossorigin="anonymous" data-fit' : "") + '></span>' : '<span class="ic">' + icon("store") + "</span>";
   // 0.21.0: the business's own picture above the menu, from BizPlug's site (card-banner.ts); removed if it fails to load (render).
   const banner = d.banner && state.view === "menu" ? '<img class="banner" src="' + esc(d.banner) + '" alt="' + esc(d.title || "") + '">' : "";
   return banner + '<div class="glow"></div><div class="head">' + mark + '<div><div class="t">' + esc(d.title || "Plug-in") + '</div><div class="s">' + esc(d.subtitle) + "</div></div></div>";
@@ -2644,6 +2644,7 @@ function render() {
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
+  app.querySelectorAll("img[data-fit]").forEach(fitLogo);
   app.querySelectorAll("img[data-fallback]").forEach((img) => img.addEventListener("error", () => {
     const box = img.parentElement, f = img.dataset.fallback;
     if (!box) return;
@@ -2914,6 +2915,27 @@ if (window.openai) {
 }
 let resizeT = 0;
 window.addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (state.plugin) render(); }, 120); }, { passive: true });
+// A logo that fills its own square (opaque corners, e.g. a dark tile with the name in it) is drawn edge to edge in
+// its rounded tile; one on a transparent background keeps the white tile, so a dark logo stays readable on the card.
+// The logo route allows CORS (logo-response.ts), so its corners can be read; if not, nothing changes.
+function fitLogo(img) {
+  // Kept on state: the card draws its first screen before this part of the script has run.
+  const logoFit = state.logoFit || (state.logoFit = {});
+  const box = img.parentElement, src = img.currentSrc || img.src;
+  const apply = () => { if (logoFit[src]) box.classList.add("full"); };
+  if (logoFit[src] !== undefined) { apply(); return; }
+  const test = () => {
+    try {
+      const c = document.createElement("canvas"); c.width = 16; c.height = 16;
+      const x = c.getContext("2d"); x.drawImage(img, 0, 0, 16, 16);
+      const px = [[0, 0], [15, 0], [0, 15], [15, 15]].map(([a, b]) => x.getImageData(a, b, 1, 1).data);
+      // Opaque corners that are not near white: the picture is its own tile.
+      logoFit[src] = px.every((d) => d[3] > 235) && px.some((d) => d[0] + d[1] + d[2] < 690);
+    } catch (e) { logoFit[src] = false; }
+    apply();
+  };
+  if (img.complete && img.naturalWidth) test(); else img.addEventListener("load", test, { once: true });
+}
 // Where the last tap outside a side panel was, in the frame's own coordinates (placeSheet).
 document.addEventListener("click", (e) => { if (!(e.target && e.target.closest && e.target.closest(".sheet"))) state.tapY = e.clientY; }, true);
 function placeSheet(sh) {
