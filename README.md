@@ -19,6 +19,7 @@ This repository holds the plug-in **packages**: what each plug-in is called, wha
 - Card themes, and how to propose one: [THEMES.md](THEMES.md)
 - Menu layouts, with desktop and mobile pictures, and how to code one: [LAYOUTS.md](LAYOUTS.md)
 - Contribute a plug-in, a theme or a layout: [Contribute](#contribute-plug-ins-themes-and-layouts)
+- Skills for AI agents, such as building a business's plug-in from its website: [Skills](#skills-for-ai-agents)
 
 ## Repository layout
 
@@ -35,6 +36,7 @@ plugins/             BizPlug's plug-in packages, one folder each (plugins/README
 themes/              one JSON file per card theme, check-theme.ts and preview.ts (themes/README.md)
 industries/          check-industry.ts, test-industry.ts and an example, for writing and testing a new industry (INDUSTRIES.md)
 layouts/             BizPlug's menu layouts, the template, check-layout.ts, preview.ts and sample businesses
+skills/              skills for AI agents, one folder with a SKILL.md each (README: Skills for AI agents)
 community/           what collaborators contributed (community/README.md)
   plugins/<name>/      a contributed plug-in package
   layouts/<id>/        a contributed menu layout
@@ -88,6 +90,16 @@ An industry URL serves every business in that industry, so the assistant asks wh
 ## Get a plug-in for your business
 
 Sign up at https://www.bizplug.ai/portal, pick your industry and provide the data its package lists, by uploading the CSV files or through the data API. BizPlug publishes the plug-in to a test address first and to production when you ask. The plug-in is $24.99 a month or $199 a year, for businesses in any country; plan details are confirmed with you before any payment.
+
+## Skills for AI agents
+
+`skills/` holds skills: instructions an AI agent loads when a task calls for them, one folder with a `SKILL.md` each, in the format Claude Code and the Claude apps read.
+
+| Skill | What it does |
+| --- | --- |
+| [`build-a-bizplug-plugin`](skills/build-a-bizplug-plugin/SKILL.md) | Builds a business's plug-in from its own website with the BizPlug CLI (`@bizplug/cli`): picks the industry, writes the files its package lists, sends them to your account, checks them, and asks you before any deploy request. |
+
+To use one in Claude Code, copy its folder into `.claude/skills/` in your project, or `~/.claude/skills/` for every project. Each skill needs only what it names, here Node.js and a BizPlug account.
 
 ## Contribute: plug-ins, themes, layouts and industries
 
