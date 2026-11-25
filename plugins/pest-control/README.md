@@ -1,6 +1,6 @@
 # BizPlug Pest Control
 
-Version 0.51.0. Estimate treatment and request a visit for pest control businesses.
+Version 0.52.0. Estimate treatment and request a visit for pest control businesses.
 
 - Main function: Estimate treatment and request a visit
 - MCP server URL: `https://mcp.bizplug.ai/plugin/pest-control` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.51.0. Estimate treatment and request a visit for pest control business
 
 ## Changes
 
+- **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.
 - **0.51.0** (25 November 2026): Vacation rentals: name your local picks yourself, such as "Harrison's Suggestions", in place of Explore the area.
 - **0.50.0** (25 November 2026): Tour operators and DMCs: trips day by day in the card, with a picture per day, each day opening on its flights, hotels and activities by the hour; My trip by code; and a proposal's price breakdown.
 - **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
