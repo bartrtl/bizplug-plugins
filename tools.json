@@ -1,5 +1,5 @@
 {
-  "version": "0.49.0",
+  "version": "0.50.0",
   "note": "Inputs of the industry-wide plug-in (https://mcp.bizplug.ai/plugin/<industry>). A business's own plug-in (https://mcp.bizplug.ai/plugin/<industry>/<business>) takes the same inputs without \"business\". Generated from the BizPlug plug-in server; see TOOLS.md.",
   "industries": {
     "events": {
@@ -17838,6 +17838,816 @@
             },
             "required": [
               "business"
+            ]
+          }
+        }
+      ]
+    },
+    "tour-operators": {
+      "name": "Tour Operators",
+      "engine": "stay",
+      "url": "https://mcp.bizplug.ai/plugin/tour-operators",
+      "tools": [
+        {
+          "name": "show_menu",
+          "title": "Menu",
+          "description": "Return this plug-in's menu: what the customer can do here, each with a short title, a one-line description and a question to try. Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option; where there is no card, show the options exactly as returned (same titles, same order). Creates nothing.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "check_tour_departures",
+          "title": "Departures and price",
+          "description": "Check which tour departure options are free for the customer's dates and party size, with the published rate and total price. Creates nothing. Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "start": {
+                "type": "string",
+                "description": "The date, as YYYY-MM-DD."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of people."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "month": {
+                "type": "string",
+                "description": "YYYY-MM: the calendar month to show, when no dates are chosen yet."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "request_tour_booking",
+          "title": "Request a booking",
+          "description": "Send a booking request for the chosen tour departure and dates to the business. Use only once the customer has chosen an option. The business confirms; nothing is held or charged in chat. Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking.",
+          "readOnly": false,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "option": {
+                "type": "string",
+                "description": "The tour departure id chosen from the availability result."
+              },
+              "start": {
+                "type": "string",
+                "description": "The date, as YYYY-MM-DD."
+              },
+              "guests": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Number of people."
+              },
+              "name": {
+                "type": "string",
+                "description": "Customer's name."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email the business can reply to."
+              },
+              "phone": {
+                "type": "string",
+                "description": "Optional phone number."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Anything else the business should know."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              }
+            },
+            "required": [
+              "business",
+              "option",
+              "start",
+              "name",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "get_booking_status",
+          "title": "Booking status",
+          "description": "Look up the status of a booking request by its reference.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "reference": {
+                "type": "string",
+                "description": "The reference returned when the request was made, e.g. BP-7K2Q9D."
+              }
+            },
+            "required": [
+              "business",
+              "reference"
+            ]
+          }
+        },
+        {
+          "name": "get_business_info",
+          "title": "Business information",
+          "description": "Answer a general question about this tour operators business using only its published profile: itineraries day by day, departures and prices per traveller, what is included, and each traveller's own trip by code. Creates nothing. If the profile does not cover the question, say so and use get_contact. Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "question": {
+                "type": "string",
+                "description": "The customer's question, in their words."
+              },
+              "section": {
+                "type": "string",
+                "enum": [
+                  "committees",
+                  "news",
+                  "social"
+                ],
+                "description": "Optional: \"committees\" for the business's committees, \"news\" for its news, events and newsletter, \"social\" for its latest social media posts and where to follow it. Leave out for everything else."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_contact",
+          "title": "Contact details",
+          "description": "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "open_form",
+          "title": "Open a form",
+          "description": "Open one of this tour operators business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page.",
+          "readOnly": true,
+          "when": "Only when the business linked forms of its own.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "form": {
+                "type": "string",
+                "description": "The form's id or title, from the business's forms."
+              },
+              "name": {
+                "type": "string",
+                "description": "The customer's name, when they gave it."
+              },
+              "email": {
+                "type": "string",
+                "description": "The customer's email, when they gave it."
+              },
+              "phone": {
+                "type": "string",
+                "description": "The customer's phone, when they gave it."
+              },
+              "date": {
+                "type": "string",
+                "description": "A date the form asks for, as YYYY-MM-DD, when the customer gave it."
+              },
+              "details": {
+                "type": "string",
+                "description": "What the customer said the form is about, in their words."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "form"
+            ]
+          }
+        },
+        {
+          "name": "find_itineraries",
+          "title": "Itineraries",
+          "description": "List the itineraries this tour operators business published for anyone to browse, each with its days, route, summary and published \"from\" price. Optional query (a place, a kind of trip). Read-only. Use it when the customer asks what trips there are.",
+          "readOnly": true,
+          "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "query": {
+                "type": "string",
+                "description": "Optional: words to look for, such as a place or a kind of trip."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_itinerary",
+          "title": "Itinerary day by day",
+          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code.",
+          "readOnly": true,
+          "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "itinerary": {
+                "type": "string",
+                "description": "The itinerary's id or name, from the itineraries list."
+              },
+              "day": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Optional: one day of the trip, 1 for the first day."
+              }
+            },
+            "required": [
+              "business",
+              "itinerary"
+            ]
+          }
+        },
+        {
+          "name": "open_my_trip",
+          "title": "My trip",
+          "description": "Open a traveller's own trip with the code the business gave them: the same day-by-day view with their dates, flights, hotels and booking references, and their trip contact. Pass the code exactly as the traveller typed it; never guess, suggest or repeat a code. Optional day. Read-only.",
+          "readOnly": true,
+          "when": "Only when the business published trips with a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "code": {
+                "type": "string",
+                "description": "The trip code exactly as the traveller typed it. Never guess, suggest or invent one."
+              },
+              "day": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Optional: one day of the trip, 1 for the first day."
+              }
+            },
+            "required": [
+              "business",
+              "code"
+            ]
+          }
+        }
+      ]
+    },
+    "dmc": {
+      "name": "Destination Management Companies",
+      "engine": "quote",
+      "url": "https://mcp.bizplug.ai/plugin/dmc",
+      "tools": [
+        {
+          "name": "show_menu",
+          "title": "Menu",
+          "description": "Return this plug-in's menu: what the customer can do here, each with a short title, a one-line description and a question to try. Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option; where there is no card, show the options exactly as returned (same titles, same order). Creates nothing.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "get_package_estimate",
+          "title": "Package estimate",
+          "description": "Work out a price estimate for a travel package from the business's published price list, or list what can be estimated. Creates nothing and is never a final price. Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "service": {
+                "type": "string",
+                "description": "Optional travel package id or name. Omit to list what can be estimated."
+              },
+              "size": {
+                "type": "number",
+                "description": "How much, in the unit the price list uses (e.g. square feet, guests, miles)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "request_custom_proposal",
+          "title": "Request a proposal",
+          "description": "Send the customer's travel package request and estimate to the business so it can confirm a price and a time. Use only once the customer agrees to send it. Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price.",
+          "readOnly": false,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "service": {
+                "type": "string",
+                "description": "The travel package id or name."
+              },
+              "size": {
+                "type": "number"
+              },
+              "location": {
+                "type": "string",
+                "description": "Address or ZIP code for the work."
+              },
+              "name": {
+                "type": "string",
+                "description": "Customer's name."
+              },
+              "email": {
+                "type": "string",
+                "description": "Email the business can reply to."
+              },
+              "phone": {
+                "type": "string",
+                "description": "Optional phone number."
+              },
+              "notes": {
+                "type": "string",
+                "description": "Anything else the business should know."
+              }
+            },
+            "required": [
+              "business",
+              "service",
+              "name",
+              "email"
+            ]
+          }
+        },
+        {
+          "name": "get_proposal_status",
+          "title": "Proposal status",
+          "description": "Look up the status of a request by its reference.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "reference": {
+                "type": "string",
+                "description": "The reference returned when the request was made, e.g. BP-7K2Q9D."
+              }
+            },
+            "required": [
+              "business",
+              "reference"
+            ]
+          }
+        },
+        {
+          "name": "get_business_info",
+          "title": "Business information",
+          "description": "Answer a general question about this destination management companies business using only its published profile: tailor-made packages, sample itineraries day by day, each client's proposal by code, and its price breakdown. Creates nothing. If the profile does not cover the question, say so and use get_contact. Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "question": {
+                "type": "string",
+                "description": "The customer's question, in their words."
+              },
+              "section": {
+                "type": "string",
+                "enum": [
+                  "committees",
+                  "news",
+                  "social"
+                ],
+                "description": "Optional: \"committees\" for the business's committees, \"news\" for its news, events and newsletter, \"social\" for its latest social media posts and where to follow it. Leave out for everything else."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_contact",
+          "title": "Contact details",
+          "description": "Return the business's published contact details and opening hours for anything the other tools cannot do.",
+          "readOnly": true,
+          "when": null,
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "open_form",
+          "title": "Open a form",
+          "description": "Open one of this destination management companies business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page.",
+          "readOnly": true,
+          "when": "Only when the business linked forms of its own.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "form": {
+                "type": "string",
+                "description": "The form's id or title, from the business's forms."
+              },
+              "name": {
+                "type": "string",
+                "description": "The customer's name, when they gave it."
+              },
+              "email": {
+                "type": "string",
+                "description": "The customer's email, when they gave it."
+              },
+              "phone": {
+                "type": "string",
+                "description": "The customer's phone, when they gave it."
+              },
+              "date": {
+                "type": "string",
+                "description": "A date the form asks for, as YYYY-MM-DD, when the customer gave it."
+              },
+              "details": {
+                "type": "string",
+                "description": "What the customer said the form is about, in their words."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              }
+            },
+            "required": [
+              "form"
+            ]
+          }
+        },
+        {
+          "name": "find_itineraries",
+          "title": "Sample packages",
+          "description": "List the itineraries this destination management companies business published for anyone to browse, each with its days, route, summary and published \"from\" price. Optional query (a place, a kind of trip). Read-only. Use it when the customer asks what trips there are.",
+          "readOnly": true,
+          "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "query": {
+                "type": "string",
+                "description": "Optional: words to look for, such as a place or a kind of trip."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_itinerary",
+          "title": "Itinerary day by day",
+          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code.",
+          "readOnly": true,
+          "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "itinerary": {
+                "type": "string",
+                "description": "The itinerary's id or name, from the itineraries list."
+              },
+              "day": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Optional: one day of the trip, 1 for the first day."
+              }
+            },
+            "required": [
+              "business",
+              "itinerary"
+            ]
+          }
+        },
+        {
+          "name": "open_my_trip",
+          "title": "My proposal",
+          "description": "Open a traveller's own trip or proposal with the code the business gave them: the same day-by-day view with their dates, flights, hotels and booking references, and the proposal's price breakdown, and their trip contact. Pass the code exactly as the traveller typed it; never guess, suggest or repeat a code. Optional day. Read-only.",
+          "readOnly": true,
+          "when": "Only when the business published trips with a code (trips.csv), from version 0.50.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "code": {
+                "type": "string",
+                "description": "The trip code exactly as the traveller typed it. Never guess, suggest or invent one."
+              },
+              "day": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Optional: one day of the trip, 1 for the first day."
+              }
+            },
+            "required": [
+              "business",
+              "code"
             ]
           }
         }

@@ -107,6 +107,18 @@ const ICONS: Record<string, string> = {
   match: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c2.8 0 5 2.2 5 5"/>',
   daypass: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 9v6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
+  // 0.50.0: trips day by day (itinerary.ts): the two menu options and what happens on a day.
+  trips: '<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
+  mytrip: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><circle cx="12" cy="13.5" r="2"/><path d="M12 15.5V17"/>',
+  t_flight: '<path d="M10.5 20 13 13l5 1.5a1.5 1.5 0 0 0 1-2.8L13 10V4.5a1.5 1.5 0 0 0-3 0V10l-6 1.7a1.5 1.5 0 0 0 1 2.8L10 13l-2 7z"/>',
+  t_hotel: '<path d="M3 18V6M3 14h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/>',
+  t_cruise: '<path d="M3 17c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0"/><path d="M5 14 4 10h16l-1 4"/><path d="M8 10V6h8v4M12 6V3"/>',
+  t_transfer: '<path d="M5 17h14v-5l-2-5H7l-2 5z"/><path d="M5 12h14"/><circle cx="8" cy="17" r="1.6"/><circle cx="16" cy="17" r="1.6"/>',
+  t_train: '<rect x="6" y="3" width="12" height="14" rx="3"/><path d="M6 11h12M9 21l1.5-4M15 21l-1.5-4"/><circle cx="9.5" cy="14" r=".8"/><circle cx="14.5" cy="14" r=".8"/>',
+  t_activity: '<path d="m4 20 6-11 4 6 2-3 4 8z"/><circle cx="16" cy="6" r="2"/>',
+  t_meal: '<path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8M7 7h4"/><path d="M17 21V3c-2 1-3 4-3 8h3"/>',
+  t_guide: '<circle cx="12" cy="7" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/><path d="M12 12v3"/>',
+  t_note: '<circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
 };
 
@@ -353,6 +365,39 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .cgrid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));margin-top:10px}.ctile{text-align:left;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:inherit;cursor:pointer;font:inherit}.ctile small{display:block;color:var(--a1);font-size:11px;text-transform:uppercase;letter-spacing:.04em}.ctile b{display:block;margin:3px 0}.ctile span{color:var(--muted);font-size:12.5px;line-height:1.35}
 .cq{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:inherit;font:inherit;font-size:13.5px;cursor:pointer}.cq:hover{border-color:var(--a1)}
 .chouse{margin-top:6px;padding:10px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}.chouse summary{cursor:pointer;display:flex;justify-content:space-between;gap:8px}.chouse summary small{color:var(--muted)}.chouse p{margin:8px 0 0;line-height:1.45}
+.tdot svg,.tki svg,.tcodebar svg,.tcov .tph svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.tdot{color:var(--a1)}.tki{color:var(--muted)}.tpc .nm{display:flex;justify-content:space-between;gap:10px;padding-bottom:6px}.tcard .nm{display:flex;justify-content:space-between;align-items:center;gap:10px}.tsum+.qlabel{margin-top:12px}
+.tlist{display:grid;gap:12px;margin-top:10px}.tcard{display:block;width:100%;text-align:left;padding:0;border-radius:18px;overflow:hidden;background:var(--card);border:1px solid var(--line);color:inherit;font:inherit;cursor:pointer}.tcard .tbody{padding:10px 14px 12px}.tcard p{margin:0 0 6px;color:var(--muted);font-size:13.5px;line-height:1.4}.tgo{color:var(--a1);font-size:13px;font-weight:600}
+.tcov{position:relative;height:150px;background:linear-gradient(135deg,var(--a1),var(--a2));overflow:hidden}.tcov.big{height:210px;border-radius:18px;margin-top:6px}.tcov img{width:100%;height:100%;object-fit:cover;display:block}.tcov .tph,.tday .tph{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-size:30px;font-weight:800}.tcov .tph svg{width:44px;height:44px}
+.tcap{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 12px;background:linear-gradient(180deg,transparent,rgba(5,7,14,.86));color:#fff}.tcap small{display:block;font-size:11.5px;opacity:.85;text-transform:uppercase;letter-spacing:.04em}.tcap b{display:block;font-size:18px;line-height:1.2;margin:2px 0}.tcov.big .tcap b{font-size:21px}.tcap span{font-size:12.5px;opacity:.9}
+.tcodebar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding:10px 12px;border-radius:14px;border:1px dashed var(--a1)}.tcodebar span{display:flex;align-items:center;gap:8px;font-size:13.5px}.tcodebar svg{width:18px;height:18px;flex:none}
+.tsum{margin:10px 0 0;line-height:1.5}.task{display:flex;gap:8px;margin-top:12px;padding:6px;border-radius:999px;background:var(--card);border:1px solid var(--a1)}.task input{flex:1;min-width:0;border:0;background:transparent;color:inherit;font:inherit;padding:6px 10px;outline:none}.task .btn{border-radius:999px;white-space:nowrap}
+.tcon{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.tcon small{display:block;color:var(--a1);font-size:11px;text-transform:uppercase;letter-spacing:.04em}.tcon b{display:block}.tcon span{color:var(--muted);font-size:12.5px}.tcon .acts{display:flex;gap:8px;flex-wrap:wrap}
+.tdays{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));margin-top:4px}.tday{position:relative;display:block;padding:0;text-align:left;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid var(--line);color:inherit;font:inherit;cursor:pointer;transition:transform .12s}.tday:hover{transform:translateY(-2px);border-color:var(--a1)}.tday img,.tday .tph{width:100%;height:96px;object-fit:cover;display:block;position:relative;background:linear-gradient(135deg,var(--a1),var(--a2))}.tdi{padding:8px 10px 10px}.tdi small{display:block;color:var(--a1);font-size:11px;font-weight:600}.tdi b{display:block;font-size:13.5px;line-height:1.25;margin:2px 0}.tdi span{color:var(--muted);font-size:12px}.tki{display:flex;gap:4px;margin-top:6px}.tki i svg{width:15px;height:15px;opacity:.75}
+@media (min-width:640px){.tdays{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}.tday img,.tday .tph{height:120px}}
+.tdhero{position:relative;height:200px;border-radius:18px;overflow:hidden;margin-top:6px;background:linear-gradient(135deg,var(--a1),var(--a2))}.tdhero img{width:100%;height:100%;object-fit:cover;display:block}.tdhero .tcap b{font-size:20px}
+.ttl{position:relative;margin-top:6px}.titem{display:grid;grid-template-columns:44px 30px 1fr;gap:6px;position:relative}.titem::before{content:"";position:absolute;left:58px;top:30px;bottom:-6px;border-left:2px dotted var(--line)}.titem:last-child::before{display:none}.ttime{font-size:12.5px;font-weight:700;padding-top:8px;text-align:right;color:var(--a1)}.tdot{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--glow);border:1px solid var(--a1);margin-top:3px;z-index:1}.tdot svg{width:16px;height:16px}
+.tbox{margin-bottom:10px;padding:10px 12px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.tbox small{display:block;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em}.tbox b{display:block;margin:2px 0}.tbox p{margin:6px 0 0;font-size:13.5px;line-height:1.45}.tbox .tadr{color:var(--muted);font-size:12.5px;margin-top:4px}.tbox .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.tbox .acts .btn{padding:6px 10px;font-size:12.5px}
+.troute{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-top:4px}.troute b{display:inline;font-size:15px;margin:0}.troute small{display:inline;text-transform:none;font-size:12.5px;color:var(--a1)}.troute span{color:var(--muted)}.tref{margin-top:6px;font-size:12.5px;padding:5px 9px;border-radius:9px;background:var(--glow);display:inline-block}.tref b{display:inline;letter-spacing:.05em}
+.tinc{margin:6px 0 0;padding:0;list-style:none}.tinc li{padding:3px 0;font-size:13.5px}.tinc.ex li{color:var(--muted)}.tnav{justify-content:space-between}
+.tprice{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--a1);color:inherit;font:inherit;text-align:left;cursor:pointer}.tprice small{display:block;color:var(--a1);font-size:11px;text-transform:uppercase}.tprice b{display:block;font-size:20px}.tprice span span{color:var(--muted);font-size:12.5px}
+.tpc{margin-top:12px;padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.tpl{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:13.5px}.tpl small{display:block;color:var(--muted);font-size:12px}.tpl b{white-space:nowrap}.tpt{margin-top:14px}
+.vcredits{margin-top:10px;font-size:11px;line-height:1.45;color:var(--muted)}.tlsw{display:flex;align-items:center;gap:6px;margin:2px 0 8px;font-size:12.5px;color:var(--muted)}.tlsw .q{margin:0;padding:4px 10px;font-size:12.5px}.visit{margin-top:4px}.vhero{position:relative;margin:0 0 12px;aspect-ratio:1125/420;overflow:hidden;border-radius:16px;background:var(--card)}.vhero img{width:100%;height:100%;object-fit:cover;display:block}.vcred{position:absolute;right:6px;bottom:4px;max-width:70%;font-size:9.5px;line-height:1.2;color:#fff;opacity:.85;text-shadow:0 1px 2px rgba(0,0,0,.8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vhead{position:relative;padding-top:12px}.vhead::before{content:"";position:absolute;top:0;left:0;width:72px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--a1) 0 40%,var(--a2) 40% 70%,var(--ink) 70% 100%)}.veye{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.vhead h1{margin:4px 0 2px;font-size:22px;line-height:1.2}.vtag{color:var(--a1);font-weight:650;font-size:14px}.vmuted{color:var(--muted);font-size:13.5px;line-height:1.45}.vmuted.small,.small.vmuted{font-size:12.5px}.vhead p{margin:6px 0 0}.vbadge{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--glow);color:var(--a1);text-transform:none;letter-spacing:0}.center{text-align:center}
+.vplan,.vpanel{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--card)}.vplan h2{margin:0 0 6px;font-size:15.5px}.vdays{list-style:none;margin:0;padding:0}.vday{padding:12px 0;border-top:1px solid var(--line)}.vday:first-child{border-top:0;padding-top:4px}.vdh{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:8px;font-size:13.5px}.vchip{background:var(--a1);color:var(--ink);border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700}
+.vtiles{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:10px}.vtile{display:grid;grid-template-columns:112px 1fr;gap:12px;width:100%;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--bg);color:inherit;font:inherit;text-align:left}button.vtile{cursor:pointer}button.vtile:hover,.vday.open>button.vtile{border-color:var(--a1)}.vday.open .vtiles .vtile{grid-template-columns:88px 1fr}
+.vthumb{position:relative;min-height:96px;display:flex;align-items:center;justify-content:center;overflow:hidden}.vthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1}.vti svg{width:28px;height:28px;fill:none;stroke:var(--ink);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.75}.vthumb .vcred{z-index:2;font-size:8.5px;right:4px;bottom:3px}
+.tone-sky{background:linear-gradient(135deg,#cfe6fb,#7db4ea)}.tone-sun{background:linear-gradient(135deg,#fff3bf,#f2c14e)}.tone-sea{background:linear-gradient(135deg,#c9f0ea,#6fcfc2)}.tone-leaf{background:linear-gradient(135deg,#d3efd9,#6fc48a)}.tone-clay{background:linear-gradient(135deg,#f6d9c8,#d98b5f)}.tone-plain{background:linear-gradient(135deg,var(--a1),var(--a2))}
+.vbody{padding:10px 12px 10px 0;min-width:0}.vwhen{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--a1)}.vtt{font-weight:650;font-size:14.5px;margin-top:1px}.vblurb{margin-top:4px;font-size:13.5px;line-height:1.45}.vtip{margin-top:8px;padding:6px 9px;border-radius:9px;background:var(--glow);font-size:12.5px;line-height:1.4}.vtip b{margin-right:4px}.vtip.ref b{font-weight:600}.vrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px}.vgo{color:var(--a1);font-size:12.5px;font-weight:650;white-space:nowrap}.vprice{font-weight:650}
+.vopen{margin:4px 0 0 0;padding-left:10px;border-left:2px solid var(--a1)}.vmeals{margin-top:8px}.vlinks{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px}.vlinks .link{font-size:12.5px;font-weight:600;color:var(--a1);padding:0}
+.vlist{display:grid;gap:12px;margin-top:10px}.vtrip{display:block;width:100%;padding:0;text-align:left;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--card);color:inherit;font:inherit;cursor:pointer}.vtrip .vhero{margin:0;border-radius:0}.vtrip .vtb{padding:12px 14px}.vtrip b{display:block;font-size:17px;margin:2px 0}.vtrip p{margin:6px 0 0}
+.vpanel{background:var(--glow);border-color:transparent;border-left:4px solid var(--a1)}.vph{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}.vph svg{flex:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.vph b{display:block}.vph span{color:var(--muted);font-size:12.5px}.vwa{flex:none;width:34px;height:34px;border-radius:50%;background:#25d366;display:grid;place-items:center}.vwa svg{width:20px;height:20px;stroke:#fff}.vpanel.wa{border-left-color:#25d366}.vlistdot{margin:4px 0 12px;padding-left:20px;font-size:13.5px}.vlistdot li{margin:3px 0}.vwab{width:100%;background:#1faa59;color:#fff}.vpanel .primary,.vcta .primary,.vwab{width:100%;box-sizing:border-box;max-width:100%}
+.vpanel.price .vtotal{font-size:21px;font-weight:700;margin:2px 0 4px}.vpanel.price .btn{margin-top:10px}.vcta{margin-top:14px}.vcta .primary{width:100%}.vcta .actions{margin-top:8px}.vtop .bar-top{margin-bottom:6px}
+.tki{display:flex;gap:4px}.tki svg{width:15px;height:15px;fill:none;stroke:var(--muted);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.task{display:flex;gap:8px;margin-top:12px;padding:6px;border-radius:999px;background:var(--card);border:1px solid var(--a1)}.task input{flex:1;min-width:0;border:0;background:transparent;color:inherit;font:inherit;padding:6px 10px;outline:none}.task .btn{border-radius:999px;white-space:nowrap}
+.troute{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin-top:3px}.troute b{font-size:14px}.troute small{font-size:12px;color:var(--a1)}.troute span{color:var(--muted)}
+.tinc{margin:6px 0 0;padding:0;list-style:none}.tinc li{padding:3px 0;font-size:13.5px}.tinc li.ex{color:var(--muted)}
+.tpc{margin-top:12px;padding:10px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.tpc .nm{display:flex;justify-content:space-between;gap:10px;padding-bottom:6px}.tpl{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--line);font-size:13.5px}.tpl small{display:block;color:var(--muted);font-size:12px}.tpl b{white-space:nowrap}
+@media (max-width:420px){.vtile{grid-template-columns:88px 1fr}.vday.open .vtiles .vtile{grid-template-columns:72px 1fr}.vhead h1{font-size:20px}}
 .cday{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.cdh{font-weight:700;margin-bottom:6px}.cslot{display:grid;grid-template-columns:78px 1fr;gap:8px;padding:6px 0;border-top:1px solid var(--line)}.cslot small{color:var(--a1);font-size:11.5px;padding-top:2px}.cslot span{color:var(--muted);font-size:12.5px}.cslot p{margin:3px 0 0;font-size:13px;color:var(--muted)}.cslot .cnote{color:inherit}.cslot .acts{margin-top:4px;display:flex;flex-wrap:wrap;gap:14px}.it.dim{opacity:.6}
 .fly{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end;background:rgba(5,6,12,.55);animation:flyin .15s ease-out}
 .sheet{width:min(440px,94%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:18px;box-shadow:-16px 0 40px rgba(0,0,0,.4);animation:slidein .22s ease-out}
@@ -538,6 +583,8 @@ function receive(sc) {
     if (sc.view === "speakers" && sc.speakers) { (sc.speakers.items || []).forEach((x) => { state.spk[x.id] = x; }); state.f.pq = sc.speakers.query || ""; }
     if (sc.view === "exhibitors" && sc.exhibitors) { (sc.exhibitors.items || []).forEach((x) => { state.exh[x.id] = x; }); state.f.xq = sc.exhibitors.query || ""; }
     if (sc.view === "agenda" && sc.agenda) { state.ses = ""; state.f.aq = sc.agenda.query || ""; }
+    // 0.50.0: a trip asked for one day opens on that day.
+    if (sc.view === "itinerary" && sc.itinerary) state.texp = sc.itinerary.day || 0;
     if (sc.view === "members" && sc.members) { (sc.members.items || []).forEach((x) => { state.mem[x.id] = x; }); state.f.mq = sc.members.query || ""; }
     state.view = sc.view;
   }
@@ -786,7 +833,7 @@ function links(except) {
 function track() {
   const cur = { v: state.view, open: state.open, sel: state.sel };
   const was = state.shown;
-  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "mwrite", "speaker", "exhibitor"].indexOf(cur.v) < 0 || was.sel === cur.sel);
+  const same = was && was.v === cur.v && (cur.v !== "form" || was.open === cur.open) && (["item", "option", "member", "mwrite", "speaker", "exhibitor", "tday"].indexOf(cur.v) < 0 || was.sel === cur.sel);
   if (same) return;
   if (["menu", "sent", "whatsapp", "visit", "loading"].indexOf(cur.v) >= 0) state.hist = [];
   else if (!state.going && was && ["menu", "loading", "asked", "sent", "whatsapp", "visit"].indexOf(was.v) < 0) state.hist = state.hist.concat([was]).slice(-12);
@@ -1786,6 +1833,239 @@ function conciergeHandlers(on, app, guard) {
   });
 }
 
+// ---- Trips day by day (version 0.50.0, tour operators and DMCs; itinerary.ts) ----
+// Laid out like the Visit Pass card (msg2ai-server mcp-app/src/visit.ts, the Jamaica look): a hero photo, the
+// business as an eyebrow over the trip's name, then the days, each a "Day N" pill and a photo tile that opens in
+// place on the day by the hour (flights, hotels, the ship, transfers, activities; Website, Directions, Ask), a price
+// panel and a WhatsApp panel for the trip's contact. Without Visit Pass's discovery: there is no search or brief, the
+// trip is what the business published. My trip opens a traveller's own trip with the code the business gave them.
+const itin = () => p().itinerary || null;
+const TKIND = { flight: "Flight", hotel: "Hotel", cruise: "Ship", transfer: "Transfer", train: "Train", activity: "Activity", meal: "Meal", guide: "Guide", note: "Note" };
+const TTONE = { flight: "sky", hotel: "sun", cruise: "sea", transfer: "plain", train: "leaf", activity: "leaf", meal: "clay", guide: "sun", note: "plain" };
+const tdate = (s, long) => { if (!/^\d{4}-\d{2}-\d{2}$/.test(s || "")) return ""; const d = new Date(s + "T12:00:00Z"); return WD[d.getUTCDay()] + " " + d.getUTCDate() + " " + MON[d.getUTCMonth()] + (long ? " " + d.getUTCFullYear() : ""); };
+const tripBiz = (d) => (d && d.business) || p().businessName || p().title || "the company";
+const curTrip = () => ((state.data.itinerary || {}).trip) || null;
+const tripCtx = (t, d) => "About my trip “" + t.name + "” with " + tripBiz(state.data.itinerary) + (d ? ", day " + d.day + (d.date ? " (" + tdate(d.date, true) + ")" : "") + ": " + d.title + (d.place ? " in " + d.place : "") + (d.items.length ? ". That day: " + d.items.map((x) => (x.time ? x.time + " " : "") + x.title).join("; ") : "") : t.route.length ? ", " + t.route.join(" → ") : "") + ".";
+const tAsk = (q, b) => { if (p().askMore) askOwn(q, b); else ask(q); };
+// 0.50.0: two layouts for trips: Plan (like the Visit Pass card, the default) and Day cards. The business picks the
+// one its card opens with (tripLayout); the traveller can switch.
+const tripLayout = () => state.tlay || ((itin() || {}).layout === "cards" ? "cards" : "plan");
+const tsw = () => '<div class="tlsw"><span>View</span>' + chip("Plan", "data-tlay", "plan", tripLayout() === "plan") + chip("Day cards", "data-tlay", "cards", tripLayout() === "cards") + "</div>";
+const tdays = (x) => (Array.isArray(x.days) ? x.days.length : x.days);
+const credit = (c) => (c ? '<span class="vcred">' + esc(c) + "</span>" : "");
+// A tile is too small for a credit: the trip lists every photo's credit at its end (tripCredits).
+const vthumb = (img, kind) => '<div class="vthumb tone-' + (TTONE[kind] || "plain") + '">' + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy">' : "") + '<span class="vti">' + icon(kind ? "t_" + kind : "plan") + "</span></div>";
+// Every photo credit of a trip, once each, for photos under a licence that asks for one.
+function tripCredits(t) {
+  const all = [t.imageCredit].concat(...t.days.map((d) => [d.imageCredit].concat(d.items.map((x) => x.imageCredit)))).filter(Boolean);
+  const seen = [...new Set(all.map((c) => String(c).replace(/^Photo:\s*/, "")))];
+  return seen.length ? '<div class="vcredits">Photos: ' + seen.map(esc).join(" \u00b7 ") + ".</div>" : "";
+}
+function tripHead(t, d, own) {
+  const when = [t.start ? tdate(t.start, true) + (t.end && t.end !== t.start ? " – " + tdate(t.end, true) : "") : "", tdays(t) + " days", own ? t.travellers : ""].filter(Boolean).join(" · ");
+  return (t.image ? '<div class="vhero"><img src="' + esc(t.image) + '" alt="">' + credit(t.imageCredit) + "</div>" : "") +
+    '<header class="vhead"><div class="veye">' + esc(tripBiz(d)) + (own && t.status ? ' <span class="vbadge">' + esc(t.status) + "</span>" : "") + "</div><h1>" + esc(t.name) + '</h1><div class="vtag">' + esc(when) + "</div>" +
+    (t.route.length ? '<div class="vmuted">' + esc(t.route.join(" → ")) + "</div>" : "") + (t.summary ? '<p class="vmuted">' + esc(t.summary) + "</p>" : "") + "</header>";
+}
+function tripsView() {
+  const d = state.data.trips || { items: [] }, o = opt("trips");
+  const rows = (d.items || []).map((x) => '<button class="vtrip" data-topen="' + esc(x.id) + '">' + (x.image ? '<div class="vhero"><img src="' + esc(x.image) + '" alt="" loading="lazy">' + credit(x.imageCredit) + "</div>" : "") +
+    '<div class="vtb"><div class="vwhen">' + esc(x.kindLabel + " · " + tdays(x) + " days") + "</div><b>" + esc(x.name) + "</b>" + (x.route.length ? '<div class="vmuted small">' + esc(x.route.join(" → ")) + "</div>" : "") +
+    (x.summary ? '<p class="vmuted">' + esc(x.summary) + "</p>" : "") + '<div class="vrow"><span class="vprice">' + esc(x.from) + '</span><span class="vgo">See the days →</span></div></div></button>').join("");
+  return top(o ? o.title : "Itineraries") + tsw() + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    '<div class="vlist">' + (rows || '<div class="empty">No itineraries are published.</div>') + "</div>" +
+    (d.codes && opt("mytrip") ? '<section class="vpanel"><div class="vph">' + icon("mytrip") + "<div><b>Already booked?</b><span>Open your own trip with the code " + esc(tripBiz(d)) + " gave you.</span></div></div>" + '<button class="primary" data-view="tripcode">' + esc(opt("mytrip").title) + "</button></section>" : "");
+}
+function tripCodeView() {
+  const o = opt("mytrip"), dmc = (itin() || {}).dmc;
+  return '<div class="form">' + top(o ? o.title : "My trip") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
+    field("tcode", dmc ? "Your proposal code" : "Your trip code", { placeholder: "e.g. " + (dmc ? "PERU-8K2M-ANDES" : "DANUBE-7Q4K-2M") }) + errLine() +
+    '<div class="actions">' + primary(dmc ? "Open my proposal" : "Open my trip", "tcode") + "</div>" +
+    '<div class="note">Your code is in the confirmation ' + esc(p().businessName || "the company") + " sent you. It opens only your own trip; nobody else sees it.</div></div>";
+}
+function tripContact(t) {
+  const c = t.contact;
+  if (!c) return "";
+  const who = c.name || tripBiz(state.data.itinerary);
+  const wa = c.whatsapp ? "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent("Hi " + (c.name || "") + ", about my trip " + t.name + ": ") : "";
+  return '<section class="vpanel wa"><div class="vph"><span class="vwa">' + icon("whatsapp") + "</span><div><b>" + esc(t.own ? "Your " + (c.role || "trip contact").toLowerCase() + ", " + who : "Talk to " + who) + "</b><span>" + esc([c.role && !t.own ? c.role : "", c.phone].filter(Boolean).join(" · ")) + "</span></div></div>" +
+    '<ul class="vlistdot"><li>Questions before you travel</li><li>Changes to your trip</li><li>Help while you are on the road</li></ul>' +
+    (wa ? '<button class="primary vwab" data-href="' + esc(wa) + '">Message ' + esc(c.name ? c.name.split(" ")[0] : who) + " on WhatsApp</button>" : "") +
+    (c.email ? '<div class="vlinks"><button class="link" data-href="mailto:' + esc(c.email) + "?subject=" + esc(encodeURIComponent(t.name)) + '">Email ' + esc(c.email) + "</button></div>" : "") +
+    (wa ? '<div class="vmuted small center">Opens WhatsApp with a message ready; nothing is sent until you press send.</div>' : "") + "</section>";
+}
+function tripAskBar(t) {
+  return '<div class="task"><input type="text" data-f="tq" data-enter="task" value="' + esc(state.f.tq || "") + '" placeholder="Ask anything about this trip…"><button class="btn go" data-act="task">Ask ' + esc(AI()) + "</button></div>";
+}
+function tItem(x, t, day) {
+  const route = x.from || x.to ? '<div class="troute"><b>' + esc(x.from) + "</b>" + (x.depart ? "<small>" + esc(x.depart) + "</small>" : "") + "<span>→</span><b>" + esc(x.to) + "</b>" + (x.arrive ? "<small>" + esc(x.arrive) + "</small>" : "") + "</div>" : "";
+  const facts = [x.carrier || x.number ? [x.carrier, x.number].filter(Boolean).join(" ") : "", x.checkIn ? "Check-in " + x.checkIn : "", x.checkOut ? "Check-out " + x.checkOut : "", x.room].filter(Boolean);
+  const q = tripCtx(t, null) + " Tell me more about " + x.title + (x.place ? " (" + x.place + ")" : "") + " on day " + day.day + ": what to expect, how to get there and anything worth knowing. Tell me which parts are not from " + possOf(tripBiz(state.data.itinerary)) + " itinerary.";
+  return '<li class="vtile">' + vthumb(x.image, x.kind, x.imageCredit) + '<div class="vbody"><div class="vwhen">' + esc(x.kindLabel + (x.time ? " · " + x.time : "")) + '</div><div class="vtt">' + esc(x.title) + "</div>" +
+    (x.place && !route ? '<div class="vmuted small">' + esc(x.place) + "</div>" : "") + route +
+    (facts.length ? '<div class="vmuted small">' + facts.map(esc).join(" · ") + "</div>" : "") + (x.details ? '<div class="vblurb">' + esc(x.details) + "</div>" : "") +
+    (x.reference ? '<div class="vtip ref"><b>Booking reference</b> ' + esc(x.reference) + "</div>" : "") + (x.address ? '<div class="vmuted small">' + esc(x.address) + "</div>" : "") +
+    '<div class="vlinks">' + (x.url ? '<button class="link" data-href="' + esc(x.url) + '">' + esc(x.urlLabel) + "</button>" : "") + (x.directions ? '<button class="link" data-href="' + esc(x.directions) + '">Directions</button>' : "") +
+    '<button class="link" data-own="1" data-ask="' + esc(q) + '">Ask ' + esc(AI()) + "</button></div></div></li>";
+}
+function tDay(day, t) {
+  const open = state.texp === day.day;
+  const kinds = [...new Set(day.items.map((x) => x.kind))].filter((k) => k !== "note").slice(0, 5).map((k) => '<i title="' + esc(TKIND[k] || k) + '">' + icon("t_" + k) + "</i>").join("");
+  return '<li class="vday' + (open ? " open" : "") + '"><div class="vdh"><span class="vchip">Day ' + day.day + "</span>" + (day.date ? "<span>" + esc(tdate(day.date)) + "</span>" : "") + (day.place ? '<span class="vmuted">· ' + esc(day.place) + "</span>" : "") + "</div>" +
+    '<button class="vtile vdaytile" data-tday="' + day.day + '" aria-expanded="' + open + '">' + vthumb(day.image, "", day.imageCredit) + '<div class="vbody"><div class="vtt">' + esc(day.title) + "</div>" + (day.summary ? '<div class="vblurb">' + esc(day.summary) + "</div>" : "") +
+    '<div class="vrow"><span class="tki">' + kinds + '</span><span class="vgo">' + (open ? "Hide the day ▴" : day.items.length ? "Open the day ▾" : "Details ▾") + "</span></div></div></button>" +
+    (open ? '<div class="vopen">' + (day.highlights.length ? '<div class="vtip hl"><b>Highlights</b> ' + day.highlights.map(esc).join(" · ") + "</div>" : "") +
+      (day.items.length ? '<ul class="vtiles">' + day.items.map((x) => tItem(x, t, day)).join("") + "</ul>" : "") +
+      (day.meals || day.overnight ? '<div class="vmuted small vmeals">' + [day.meals ? "Meals: " + esc(day.meals) : "", day.overnight ? "Overnight: " + esc(day.overnight) : ""].filter(Boolean).join(" · ") + "</div>" : "") +
+      '<div class="vlinks">' + (day.directions ? '<button class="link" data-href="' + esc(day.directions) + '">Map of ' + esc(day.place) + "</button>" : "") + '<button class="link" data-own="1" data-ask="' + esc(tripCtx(t, day) + " What should I know for this day: timings, what to bring and anything to watch out for? Tell me which parts are not from " + possOf(tripBiz(state.data.itinerary)) + " itinerary.") + '">Ask ' + esc(AI()) + " about day " + day.day + "</button></div></div>" : "") + "</li>";
+}
+function itineraryView() {
+  const d = state.data.itinerary || {}, t = d.trip;
+  if (!t) return top("Itinerary") + '<div class="empty">Nothing to show.</div>';
+  const pr = t.prices, dmc = (itin() || {}).dmc;
+  return '<div class="vtop">' + top(t.own ? (dmc ? "Your proposal" : "Your trip") : t.kindLabel) + "</div>" + tsw() + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    '<article class="visit">' + tripHead(t, d, t.own) + tripAskBar(t) +
+    (pr ? '<section class="vpanel price"><div class="vwhen">' + (t.own ? "Your price" : "Price") + '</div><div class="vtotal">' + esc(pr.total) + (pr.perPerson ? ' <span class="vmuted">· ' + esc(pr.perPerson) + " per person</span>" : "") + "</div>" +
+      '<div class="vmuted small">' + (pr.people ? pr.people + " travellers. " : "") + (t.validUntil ? "Valid until " + esc(tdate(t.validUntil, true)) + ". " : "") + esc(tripBiz(d)) + ' confirms every booking.</div><button class="btn" data-view="tprices">See the price breakdown →</button></section>' : "") +
+    '<section class="vplan"><h2>Your ' + t.days.length + "-day " + (dmc ? "programme" : t.kind === "cruise" ? "cruise" : "trip") + '</h2><ol class="vdays">' + t.days.map((day) => tDay(day, t)).join("") + "</ol></section>" +
+    (!pr && t.from ? '<section class="vpanel price"><div class="vtotal">' + esc(t.from) + '</div><div class="vmuted small">As published by ' + esc(tripBiz(d)) + ".</div></section>" : "") +
+    (t.includes.length || t.excludes.length ? '<section class="vplan"><h2>What is included</h2><ul class="tinc">' + t.includes.map((x) => "<li>✓ " + esc(x) + "</li>").join("") + t.excludes.map((x) => '<li class="ex">✕ ' + esc(x) + "</li>").join("") + "</ul></section>" : "") +
+    (t.notes ? '<div class="vtip">' + esc(t.notes) + "</div>" : "") + tripContact(t) + tripActs(t) +
+    '<div class="note">As published by ' + esc(tripBiz(d)) + "." + (t.own ? " Only you see this trip, with your code." : "") + "</div>" + tripCredits(t) + "</article>";
+}
+function tripActs(t) {
+  const dmc = (itin() || {}).dmc, biz = tripBiz(state.data.itinerary), req = opt("request");
+  const go = t.bookUrl ? '<button class="primary" data-href="' + esc(t.bookUrl) + '">' + (t.own ? "Manage my booking" : "Book this trip") + "</button>"
+    : req && dmc ? '<button class="primary" data-ask="' + esc(t.own ? "I'd like to go ahead with my proposal “" + t.name + "” from " + biz + ". Please send my confirmation to " + biz + "." : "I'd like a tailor-made proposal like “" + t.name + "” from " + biz + ".") + '">' + (t.own ? "Go ahead with this proposal" : "Ask for a proposal like this") + "</button>"
+    : req && !t.own ? '<button class="primary" data-ask="' + esc("I'd like to book “" + t.name + "” with " + biz + ". Which departures are available?") + '">Book this trip</button>' : "";
+  const change = dmc && t.own && req ? '<button class="btn" data-ask="' + esc("I'd like some changes to my proposal “" + t.name + "” from " + biz + ": ") + '">Ask for changes</button>' : "";
+  const con = opt("contact");
+  return '<section class="vcta">' + go + '<div class="actions">' + change + (con ? '<button class="btn" data-open="' + state.options.indexOf(con) + '">Contact ' + esc(biz) + "</button>" : "") + "</div></section>";
+}
+function tripPricesView() {
+  const d = state.data.itinerary || {}, t = d.trip, pr = t && t.prices;
+  if (!pr) return itineraryView();
+  return top("Price breakdown") + '<article class="visit"><header class="vhead"><div class="veye">' + esc(tripBiz(d)) + "</div><h1>" + esc(t.name) + "</h1></header>" +
+    pr.categories.map((c) => '<div class="tpc"><div class="nm"><b>' + esc(c.name) + "</b><b>" + esc(c.subtotal) + "</b></div>" + c.lines.map((l) => '<div class="tpl"><span>' + esc(l.item) + (l.quantity || l.unitPrice ? "<small>" + esc([l.quantity, l.unitPrice ? "× " + l.unitPrice : ""].filter(Boolean).join(" ")) + "</small>" : "") + (l.note ? "<small>" + esc(l.note) + "</small>" : "") + "</span><b>" + esc(l.total) + "</b></div>").join("") + "</div>").join("") +
+    '<section class="vpanel price"><div class="vtotal">' + esc(pr.total) + (pr.perPerson ? ' <span class="vmuted">· ' + esc(pr.perPerson) + " per person</span>" : "") + '</div><div class="vmuted small">' + (pr.people ? "Total for " + pr.people + " travellers. " : "") + (t.validUntil ? "Valid until " + esc(tdate(t.validUntil, true)) + ". " : "") + esc(tripBiz(d)) + " confirms every booking; nothing is booked or paid here.</div></section>" + tripActs(t) + "</article>";
+}
+// ---- 0.50.0, the Day cards layout (tripLayout "cards"): trips as big covers, the days as a grid of picture cards,
+// and a day on its own screen by the hour with Back, All days and the next day. The Plan layout above is the default.
+function tripCoverC(x, big) {
+  return '<div class="tcov' + (big ? " big" : "") + '">' + (x.image ? '<img src="' + esc(x.image) + '" alt="" loading="lazy">' : '<span class="tph">' + icon("plan") + "</span>") +
+    '<div class="tcap"><small>' + esc(x.kindLabel) + " · " + (Array.isArray(x.days) ? x.days.length : x.days) + " days" + (x.start ? " · " + esc(tdate(x.start, true)) : "") + "</small><b>" + esc(x.name) + "</b>" + (x.route.length ? "<span>" + esc(x.route.join(" → ")) + "</span>" : "") + "</div></div>";
+}
+function tripsViewC() {
+  const d = state.data.trips || { items: [] }, o = opt("trips");
+  const rows = (d.items || []).map((x) => '<button class="tcard" data-topen="' + esc(x.id) + '">' + tripCoverC(x) +
+    '<div class="tbody">' + (x.summary ? '<p>' + esc(x.summary) + "</p>" : "") + '<div class="nm"><span class="pr">' + esc(x.from) + '</span><span class="tgo">Day by day →</span></div></div></button>').join("");
+  return top(o ? o.title : "Itineraries") + tsw() + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    (d.codes && opt("mytrip") ? '<div class="tcodebar"><span>' + icon("mytrip") + "Booked with " + esc(tripBiz(d)) + "? Open your own trip with your code.</span>" + '<button class="btn go" data-view="tripcode">' + esc(opt("mytrip").title) + "</button></div>" : "") +
+    '<div class="tlist">' + (rows || '<div class="empty">No itineraries match.</div>') + "</div>";
+}
+function tripContactC(t) {
+  const c = t.contact;
+  if (!c) return "";
+  const wa = c.whatsapp ? "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent("Hi " + (c.name || "") + ", about my trip " + t.name + ": ") : "";
+  return '<div class="tcon"><div><small>' + esc(c.role || "Your trip contact") + "</small><b>" + esc(c.name || tripBiz(state.data.itinerary)) + "</b>" + (c.phone ? "<span>" + esc(c.phone) + "</span>" : "") + "</div>" +
+    '<div class="acts">' + (wa ? '<button class="btn wa" data-href="' + esc(wa) + '">' + icon("whatsapp") + "WhatsApp</button>" : "") + (c.email ? '<button class="btn" data-href="mailto:' + esc(c.email) + "?subject=" + esc(encodeURIComponent(t.name)) + '">' + icon("mail") + "Email</button>" : "") + "</div></div>";
+}
+function tripAskBarC(t, d) {
+  return '<div class="task"><input type="text" data-f="tq" data-enter="task" value="' + esc(state.f.tq || "") + '" placeholder="' + esc(d ? "Ask about day " + d.day + "…" : "Ask anything about this trip…") + '"><button class="btn go" data-act="task"' + (d ? ' data-tday="' + d.day + '"' : "") + ">Ask " + esc(AI()) + "</button></div>";
+}
+function itineraryViewC() {
+  const d = state.data.itinerary || {}, t = d.trip;
+  if (!t) return top("Itinerary") + '<div class="empty">Nothing to show.</div>';
+  const chips = [t.own && t.status ? t.status : "", t.travellers, t.start ? tdate(t.start, true) + (t.end && t.end !== t.start ? " – " + tdate(t.end, true) : "") : "", t.nights ? t.nights + " nights" : ""].filter(Boolean);
+  const kinds = (day) => [...new Set(day.items.map((x) => x.kind))].filter((k) => k !== "note").slice(0, 5).map((k) => '<i title="' + esc(TKIND[k] || k) + '">' + icon("t_" + k) + "</i>").join("");
+  const days = t.days.map((day) => '<button class="tday" data-tday="' + day.day + '">' + (day.image ? '<img src="' + esc(day.image) + '" alt="" loading="lazy">' : '<span class="tph">' + day.day + "</span>") +
+    '<div class="tdi"><small>Day ' + day.day + (day.date ? " · " + esc(tdate(day.date)) : "") + "</small><b>" + esc(day.title) + "</b>" + (day.place ? "<span>" + esc(day.place) + "</span>" : "") + '<div class="tki">' + kinds(day) + "</div></div></button>").join("");
+  const pr = t.prices;
+  const dmc = (itin() || {}).dmc;
+  return top(t.own ? (dmc ? "Your proposal" : "Your trip") : t.kindLabel) + tsw() + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    tripCoverC(t, true) + (chips.length ? '<div class="ctags">' + chips.map((c) => '<span class="ctag">' + esc(c) + "</span>").join("") + "</div>" : "") +
+    (t.summary ? '<p class="tsum">' + esc(t.summary) + "</p>" : "") + tripAskBarC(t, null) + tripContactC(t) +
+    '<div class="qlabel" style="margin-top:16px">Day by day</div><div class="tdays">' + days + "</div>" +
+    (pr ? '<button class="tprice" data-view="tprices"><span><small>Price breakdown</small><b>' + esc(pr.total) + "</b>" + (pr.perPerson ? "<span>" + esc(pr.perPerson) + " per person · " + pr.people + " travellers</span>" : "") + "</span><span class=\"tgo\">See every line →</span></button>" : t.from ? '<div class="sum" style="margin-top:12px"><div><b>' + esc(t.from) + "</b><span>As published</span></div></div>" : "") +
+    (t.includes.length || t.excludes.length ? '<details class="chouse"><summary><b>What is included</b></summary>' + (t.includes.length ? "<ul class=\"tinc\">" + t.includes.map((x) => "<li>✓ " + esc(x) + "</li>").join("") + "</ul>" : "") + (t.excludes.length ? '<ul class="tinc ex">' + t.excludes.map((x) => "<li>✕ " + esc(x) + "</li>").join("") + "</ul>" : "") + "</details>" : "") +
+    (t.notes ? '<div class="note">' + esc(t.notes) + "</div>" : "") + tripActsC(t) +
+    '<div class="note">As published by ' + esc(tripBiz(d)) + ". " + (t.own ? "Only you see this trip, with your code." : "") + "</div>" + tripCredits(t);
+}
+function tripActsC(t) {
+  const dmc = (itin() || {}).dmc, biz = tripBiz(state.data.itinerary), req = opt("request");
+  const go = t.bookUrl ? '<button class="btn go" data-href="' + esc(t.bookUrl) + '">' + (t.own ? "Manage my booking" : "Book this trip") + "</button>"
+    : req && dmc ? '<button class="btn go" data-ask="' + esc(t.own ? "I'd like to go ahead with my proposal “" + t.name + "” from " + biz + ". Please send my confirmation to " + biz + "." : "I'd like a tailor-made proposal like “" + t.name + "” from " + biz + ".") + '">' + (t.own ? "Go ahead with this proposal" : "Ask for a proposal like this") + "</button>"
+    : req && !t.own ? '<button class="btn go" data-ask="' + esc("I'd like to book “" + t.name + "” with " + biz + ". Which departures are available?") + '">Book this trip</button>' : "";
+  const change = dmc && t.own && req ? '<button class="btn" data-ask="' + esc("I'd like some changes to my proposal “" + t.name + "” from " + biz + ": ") + '">Ask for changes</button>' : "";
+  const con = opt("contact");
+  return '<div class="actions" style="margin-top:14px">' + go + change + (con ? '<button class="btn" data-open="' + state.options.indexOf(con) + '">Contact ' + esc(biz) + "</button>" : "") + "</div>";
+}
+function tItemC(x, t, day) {
+  const route = x.from || x.to ? '<div class="troute"><b>' + esc(x.from) + "</b>" + (x.depart ? "<small>" + esc(x.depart) + "</small>" : "") + "<span>→</span><b>" + esc(x.to) + "</b>" + (x.arrive ? "<small>" + esc(x.arrive) + "</small>" : "") + "</div>" : "";
+  const facts = [x.carrier || x.number ? [x.carrier, x.number].filter(Boolean).join(" ") : "", x.checkIn ? "Check-in " + x.checkIn : "", x.checkOut ? "Check-out " + x.checkOut : "", x.room].filter(Boolean);
+  const q = tripCtx(t, null) + " Tell me more about " + x.title + (x.place ? " (" + x.place + ")" : "") + " on day " + day.day + ": what to expect, how to get there and anything worth knowing. Tell me which parts are not from " + possOf(tripBiz(state.data.itinerary)) + " itinerary.";
+  return '<div class="titem k-' + esc(x.kind) + '"><div class="ttime">' + esc(x.time || "") + '</div><div class="tdot">' + icon("t_" + x.kind) + "</div>" +
+    '<div class="tbox"><small>' + esc(x.kindLabel) + (x.place && !route ? " · " + esc(x.place) : "") + "</small><b>" + esc(x.title) + "</b>" + route +
+    (facts.length ? '<div class="ctags">' + facts.map((f) => '<span class="ctag">' + esc(f) + "</span>").join("") + "</div>" : "") +
+    (x.reference ? '<div class="tref">Booking reference <b>' + esc(x.reference) + "</b></div>" : "") +
+    (x.image ? '<img class="cimg" src="' + esc(x.image) + '" alt="" loading="lazy">' : "") + (x.details ? "<p>" + esc(x.details) + "</p>" : "") +
+    (x.address ? '<p class="tadr">' + esc(x.address) + "</p>" : "") + (x.phone ? '<p class="tadr">' + esc(x.phone) + "</p>" : "") +
+    '<div class="acts">' + (x.url ? '<button class="btn" data-href="' + esc(x.url) + '">' + esc(x.urlLabel) + "</button>" : "") + (x.directions ? '<button class="btn" data-href="' + esc(x.directions) + '">Directions</button>' : "") +
+    '<button class="btn" data-own="1" data-ask="' + esc(q) + '">Ask ' + esc(AI()) + "</button></div></div></div>";
+}
+function tripDayViewC() {
+  const d = state.data.itinerary || {}, t = d.trip;
+  const day = t && t.days.find((x) => x.day === state.sel);
+  if (!day) return itineraryViewC();
+  const i = t.days.indexOf(day), prev = t.days[i - 1], next = t.days[i + 1];
+  return top("Day " + day.day + " of " + t.days.length) + tsw() +
+    '<div class="tdhero">' + (day.image ? '<img src="' + esc(day.image) + '" alt="">' : "") + '<div class="tcap"><small>' + esc(day.date ? tdate(day.date, true) : t.name) + "</small><b>" + esc(day.title) + "</b>" + (day.place ? "<span>" + esc(day.place) + "</span>" : "") + "</div></div>" +
+    (day.directions ? '<div class="actions" style="margin-top:8px"><button class="btn" data-href="' + esc(day.directions) + '">Directions to ' + esc(day.place) + "</button></div>" : "") +
+    (day.summary ? '<p class="tsum">' + esc(day.summary) + "</p>" : "") +
+    (day.highlights.length ? '<div class="qlabel">Highlights</div><ul class="tinc">' + day.highlights.map((h) => "<li>★ " + esc(h) + "</li>").join("") + "</ul>" : "") +
+    (day.items.length ? '<div class="qlabel" style="margin-top:14px">By the hour</div><div class="ttl">' + day.items.map((x) => tItemC(x, t, day)).join("") + "</div>" : "") +
+    (day.meals || day.overnight ? '<div class="sum" style="margin-top:12px">' + (day.meals ? "<div><b>" + esc(day.meals) + "</b><span>Meals</span></div>" : "") + (day.overnight ? "<div><b>" + esc(day.overnight) + "</b><span>Overnight</span></div>" : "") + "</div>" : "") +
+    tripAskBarC(t, day) +
+    '<div class="actions tnav" style="margin-top:12px">' + (prev ? '<button class="btn" data-tday="' + prev.day + '">← Day ' + prev.day + "</button>" : "") + '<button class="btn" data-tday="0">All days</button>' + (next ? '<button class="btn go" data-tday="' + next.day + '">Day ' + next.day + " →</button>" : "") + "</div>";
+}
+function tripPricesViewC() {
+  const d = state.data.itinerary || {}, t = d.trip, pr = t && t.prices;
+  if (!pr) return itineraryViewC();
+  return top("Price breakdown") + '<div class="enm" style="font-size:16px;font-weight:700">' + esc(t.name) + "</div>" +
+    pr.categories.map((c) => '<div class="tpc"><div class="nm"><b>' + esc(c.name) + "</b><b>" + esc(c.subtotal) + "</b></div>" + c.lines.map((l) => '<div class="tpl"><span>' + esc(l.item) + (l.quantity || l.unitPrice ? "<small>" + esc([l.quantity, l.unitPrice ? "× " + l.unitPrice : ""].filter(Boolean).join(" ")) + "</small>" : "") + (l.note ? "<small>" + esc(l.note) + "</small>" : "") + "</span><b>" + esc(l.total) + "</b></div>").join("") + "</div>").join("") +
+    '<div class="sum tpt"><div><b>' + esc(pr.total) + "</b><span>Total" + (pr.people ? " for " + pr.people + " travellers" : "") + "</span></div>" + (pr.perPerson ? "<div><b>" + esc(pr.perPerson) + "</b><span>Per person</span></div>" : "") + "</div>" +
+    '<div class="note">' + (t.validUntil ? "Valid until " + esc(tdate(t.validUntil, true)) + ". " : "") + esc(tripBiz(d)) + " confirms every booking; nothing is booked or paid here.</div>" + tripActsC(t);
+}
+function itineraryHandlers(on) {
+  const tool = (k) => ((itin() || {}).tool || {})[k];
+  // A photo that does not load leaves the tile's colour and icon.
+  document.querySelectorAll(".vthumb img, .vhero img").forEach((img) => img.addEventListener("error", () => { const c = img.parentElement && img.parentElement.querySelector(".vcred"); if (c) c.remove(); img.remove(); }, { once: true }));
+  on("[data-topen]", (b) => { state.texp = 0; run(tool("get"), { itinerary: b.dataset.topen }, "Show me the itinerary " + b.dataset.topen + " day by day."); });
+  on("[data-tlay]", (b) => { state.tlay = b.dataset.tlay; if (state.view === "tday") { state.texp = state.sel || 0; state.view = "itinerary"; } render(); });
+  on("[data-tday]", (b) => {
+    if (b.dataset.act) return;
+    const n = Number(b.dataset.tday);
+    // Day cards: a day on its own screen. Plan: the day opens in place.
+    if (tripLayout() === "cards") { state.error = ""; if (n) { state.sel = n; state.view = "tday"; } else { state.sel = null; state.view = "itinerary"; } render(); return; }
+    state.texp = state.texp === n ? 0 : n; state.view = "itinerary"; render(); const el = document.querySelector('.vday.open'); if (el && el.scrollIntoView) el.scrollIntoView({ block: "nearest" }); });
+  on('[data-act="tcode"]', () => {
+    const code = v("tcode");
+    if (!code) { state.error = "Enter the code you were given."; render(); return; }
+    // The code is not kept in the card's saved state.
+    state.f.tcode = ""; state.texp = 0;
+    const o = opt("mytrip");
+    run(tool("mine"), { code }, (o && o.example) || "");
+  });
+  on('[data-act="task"]', (b) => {
+    const t = curTrip(), q = v("tq");
+    if (!t || !q) return;
+    const n = b.dataset.tday ? Number(b.dataset.tday) : state.texp;
+    const day = n ? t.days.find((x) => x.day === n) : null;
+    state.f.tq = "";
+    tAsk(tripCtx(t, day) + " " + q, b);
+  });
+}
+
 // ---- Software products (version 0.15.0) ----
 const findIn = (kind, over) => { const o = opt(kind); const a = clean(Object.assign({ query: v(kind === "features" ? "fq" : "gq") }, over || {})); run(o && o.tool, a, (o && o.example) || ""); };
 function featuresView() {
@@ -2188,6 +2468,11 @@ function openOption(i) {
     if (o.kind === "plan") { state.view = "planform"; render(); return; }
     if (o.kind === "match") { state.view = "matchform"; render(); return; }
   }
+  // 0.50.0, trips day by day: Itineraries opens the list, My trip the code form.
+  if (itin() && inCard()) {
+    if (o.kind === "trips") { run(o.tool, {}, o.example); return; }
+    if (o.kind === "mytrip") { state.view = "tripcode"; render(); return; }
+  }
   // 0.22.0: a tour or a day pass opens its form, with the business's own locations to choose from.
   if ((o.kind === "tour" || o.kind === "daypass") && inCard() && vlocs(o.kind).length) { openVisit(o.kind, ""); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
@@ -2223,7 +2508,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -2271,6 +2556,8 @@ function render() {
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
   // 0.48.0: the rental concierge's screens.
   conciergeHandlers(on, app, guard);
+  // 0.50.0: trips day by day.
+  itineraryHandlers(on);
   on("[data-ask]", (b) => {
     if (!b.dataset.ask) return;
     // 0.49.0: a question for the assistant itself stays on this screen, and on a computer the card floats.

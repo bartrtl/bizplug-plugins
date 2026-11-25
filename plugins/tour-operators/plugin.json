@@ -1,0 +1,88 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-tour-operators",
+  "version": "0.50.0",
+  "description": "The tour operators plug-in from BizPlug. Main function: tour departures, price per traveller and trips day by day. It works from the business's own published profile, covering itineraries day by day, departures and prices per traveller, what is included, and each traveller's own trip by code, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://www.bizplug.ai"
+  },
+  "homepage": "https://www.bizplug.ai/industries/tour-operators",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Tour Operators",
+        "shortDescription": "Tour departures, price per traveller and trips day by day for tour operators businesses.",
+        "longDescription": "The tour operators plug-in from BizPlug. Main function: tour departures, price per traveller and trips day by day. It works from the business's own published profile, covering itineraries day by day, departures and prices per traveller, what is included, and each traveller's own trip by code, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Tour departures, price per traveller and trips day by day",
+          "What does the 5-day Danube river cruise include, day by day?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://www.bizplug.ai/industries/tour-operators",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://www.bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Tour departures, price per traveller and trips day by day",
+            "expect": "Calls check_tour_departures and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What does the 5-day Danube river cruise include, day by day?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_tour_booking only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What trips do you offer?",
+            "expect": "Calls find_itineraries and lists only the published itineraries with their days and prices, or says none are published.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Show me day 3 of the first itinerary.",
+            "expect": "Calls get_itinerary with the itinerary's id and day 3, and shows only what the business published for that day.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "I have a trip code from the operator. Can you open my trip?",
+            "expect": "Asks for the code, then calls open_my_trip with it exactly as typed; never guesses or suggests a code, and says so plainly when no trip has that code.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

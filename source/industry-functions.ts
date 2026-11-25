@@ -40,6 +40,7 @@ export type IndustryFunction = {
   software?: boolean; // a software product: from 0.15.0 the menu is Features, Pricing, Help & guides, Support, Book a demo (plugins.ts, software.ts)
   visits?: boolean; // the business may publish its locations with tours and day passes: from 0.22.0 get_visit_options, book_tour and request_day_pass, and locations.csv (plugins.ts, plugin-data.ts, visits.ts)
   concierge?: boolean; // vacation rentals: from 0.48.0 the concierge (local picks, area guide and events, house guide, Which home fits, Plan my stay, Continue on WhatsApp; concierge.ts) and places.csv, area.csv, events.csv, house.csv
+  itinerary?: "tour" | "dmc"; // tour operators and DMCs: from 0.50.0 trips day by day (Itineraries, My trip by code, a DMC proposal's price breakdown; itinerary.ts) and trips.csv, trip_days.csv, trip_items.csv, trip_prices.csv
   show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 
@@ -49,7 +50,7 @@ const NO_FIN = "Information and scheduling only: never give financial, investmen
 // slug | engine | title | tool names | noun | span | perGuest | note
 const r = (
   slug: string, engine: Engine, title: string, tools: [string, string, string], noun: string,
-  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software" | "show" | "visits" | "concierge">> = {},
+  extra: Partial<Pick<IndustryFunction, "span" | "perGuest" | "note" | "members" | "infoFirst" | "software" | "show" | "visits" | "concierge" | "itinerary">> = {},
 ): IndustryFunction => ({ slug, engine, title, tools, noun, ...extra });
 
 export const industryFunctions: IndustryFunction[] = [
@@ -81,6 +82,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("museums", "stay", "Timed tickets and exhibitions", ["check_ticket_availability", "request_tickets", "get_ticket_request_status"], "ticket", { span: "single", perGuest: true }),
   r("sports-teams", "stay", "Seat availability and ticket requests", ["check_seat_availability", "request_tickets", "get_ticket_request_status"], "seat section", { span: "single", perGuest: true }),
   r("vacation-rentals", "stay", "Home availability, nightly rates and booking", ["check_rental_availability", "request_booking", "get_booking_status"], "home", { span: "nights", concierge: true }),
+  r("tour-operators", "stay", "Tour departures, price per traveller and trips day by day", ["check_tour_departures", "request_tour_booking", "get_booking_status"], "tour departure", { span: "single", perGuest: true, itinerary: "tour", note: "Share only the itinerary, departures and prices the operator published; never invent a flight, hotel, time or booking reference, and never say a place on a tour is confirmed, since the operator confirms every booking." }),
   r("car-rental", "stay", "Vehicle availability and rental price", ["check_vehicle_availability", "request_reservation", "get_reservation_status"], "vehicle class", { span: "days" }),
   r("coworking", "stay", "Desk and office availability and rates", ["check_space_availability", "request_space_booking", "get_booking_status"], "desk, room or office", { span: "days", members: true, visits: true }),
 
@@ -128,6 +130,7 @@ export const industryFunctions: IndustryFunction[] = [
   r("pest-control", "quote", "Estimate treatment and request a visit", ["get_treatment_estimate", "request_treatment", "get_job_status"], "treatment"),
   r("solar", "quote", "Rough system estimate and site survey request", ["get_solar_estimate", "request_site_survey", "get_survey_status"], "solar system", { note: "Estimates are rough published ranges, never a guarantee of savings or output." }),
   r("moving-storage", "quote", "Moving estimate and storage rates", ["get_moving_estimate", "request_move", "get_move_status"], "move or storage unit"),
+  r("dmc", "quote", "Tailor-made packages with a price breakdown, and proposals day by day", ["get_package_estimate", "request_custom_proposal", "get_proposal_status"], "travel package", { itinerary: "dmc", note: "Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price." }),
   r("catering", "quote", "Catering price by headcount", ["get_catering_estimate", "request_catering_quote", "get_quote_status"], "catering package"),
   r("logistics", "quote", "Shipping rate estimate and pickup request", ["get_shipping_estimate", "request_pickup", "track_shipment"], "shipment"),
   r("insurance", "quote", "Quote request intake", ["get_quote_requirements", "request_quote", "get_quote_status"], "policy type", { note: NO_FIN + " Do not quote premiums; collect details for a licensed agent." }),

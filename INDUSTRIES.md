@@ -1,6 +1,6 @@
 # Industry plug-ins
 
-BizPlug has a standard plug-in for each of 86 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
+BizPlug has a standard plug-in for each of 88 industries. Each one is a package in [`plugins/<slug>/`](plugins), and every business in that industry can get its own copy, built from its own profile. This page explains what an industry plug-in is made of, and how to propose a new industry.
 
 This page is generated with the rest of the repository, so please do not edit it by hand. A new industry is added with a pull request here that adds one file, `community/industries/<slug>.json`: once it is merged, that file is the industry ([below](#add-a-new-industry)). Never add a package to `plugins/` yourself: those folders are generated from the BizPlug website, so one added by hand would be overwritten by the next update.
 
@@ -46,9 +46,9 @@ Check what is free for dates and party size with the total price, send a booking
 - A stay industry is booked one of 3 ways:
   - Booked by the night: Hospitality & Hotels, Casinos & Gaming, Vacation Rentals, Tourism Bureaus & Destinations.
   - Booked by the day, first and last day both counted: Events & Conferences, Car Rental, Coworking & Offices.
-  - Booked for one date: Wedding & Events Pros, Bars & Nightlife, Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Activity Calendar.
-- Priced per guest instead of per unit: Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Activity Calendar.
-- 15 industries: Hospitality & Hotels, Casinos & Gaming, Events & Conferences, Wedding & Events Pros, Bars & Nightlife, Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Vacation Rentals, Car Rental, Coworking & Offices, Activity Calendar, Tourism Bureaus & Destinations.
+  - Booked for one date: Wedding & Events Pros, Bars & Nightlife, Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Tour Operators, Activity Calendar.
+- Priced per guest instead of per unit: Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Tour Operators, Activity Calendar.
+- 16 industries: Hospitality & Hotels, Casinos & Gaming, Events & Conferences, Wedding & Events Pros, Bars & Nightlife, Travel & Tourism, Cruise Lines, Theme Parks & Attractions, Museums & Galleries, Sports Teams & Venues, Vacation Rentals, Tour Operators, Car Rental, Coworking & Offices, Activity Calendar, Tourism Bureaus & Destinations.
 
 ### `appt`
 
@@ -64,7 +64,7 @@ Work out an estimate from published price rules, request a quote or a visit, che
 
 - Tools, as HVAC & Heating/Cooling names them: `get_service_estimate` (Price estimate), `request_service_visit` (Request the job), `get_job_status` (Job status). The tool names differ from industry to industry.
 - Data the engine adds: `price-rules.csv` (required).
-- 14 industries: HVAC & Heating/Cooling, Plumbing, Electricians, Local & Home Services, Cleaning Services, Landscaping & Lawn, Pest Control, Solar & Clean Energy, Moving & Storage, Catering & Events, Logistics & Delivery, Insurance, Telecom & ISPs, Crypto & Fintech.
+- 15 industries: HVAC & Heating/Cooling, Plumbing, Electricians, Local & Home Services, Cleaning Services, Landscaping & Lawn, Pest Control, Solar & Clean Energy, Moving & Storage, Destination Management Companies, Catering & Events, Logistics & Delivery, Insurance, Telecom & ISPs, Crypto & Fintech.
 
 ### `track`
 
@@ -86,7 +86,7 @@ A few industries switch on an option that adds tools, menu options and data file
 | `visits` | The business may publish its locations, with tours and day passes. The business confirms each one. | `get_visit_options`, `book_tour`, `request_day_pass` | `locations.csv` | Coworking & Offices |
 | `show` | A show or conference that published its programme gets an event guide (agenda, speakers, exhibitors and sponsors, enquiries) instead of the venue's menu. | `get_agenda`, `find_speakers`, `find_exhibitors`, `send_event_enquiry` | `sessions.csv`, `speakers.csv`, `exhibitors.csv`, `sponsors.csv` | Events & Conferences |
 
-28 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
+30 industries also carry a rule the assistant always follows, shown in their tool descriptions; for example, health plug-ins never give medical advice, and finance plug-ins never ask for account numbers.
 
 ### Groups
 
@@ -99,11 +99,11 @@ The website groups the industries like this:
 | Property & auto | 3 | Real Estate, Local & Home Services, Automotive & Dealerships |
 | Health & wellness | 13 | Healthcare & Clinics, Fitness & Gyms, Beauty & Salons, Dental Practices, ... |
 | Community & public | 13 | Education & Schools, Logistics & Delivery, Government & Public Sector, Utilities & Energy, ... |
-| Travel & leisure | 13 | Travel & Tourism, Airlines, Cruise Lines, Vacation Rentals, ... |
+| Travel & leisure | 15 | Travel & Tourism, Airlines, Cruise Lines, Vacation Rentals, ... |
 | Finance & B2B | 12 | Financial Services & Banking, Insurance, Legal Services, Lending & Mortgages, ... |
 | Home & trades | 9 | HVAC & Heating/Cooling, Plumbing, Electricians, Cleaning Services, ... |
 
-Added since the first 80: Vacation Rentals (`vacation-rentals`, 2026-11-23), Activity Calendar (`activity-calendar`, 2026-11-23), Tourism Bureaus & Destinations (`tourism-bureaus`, 2026-11-23), Florists & Flower Delivery (`florists`, 2026-11-21), Restaurant Reservations (`restaurant-reservations`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
+Added since the first 80: Tour Operators (`tour-operators`, 2026-11-25), Destination Management Companies (`dmc`, 2026-11-25), Vacation Rentals (`vacation-rentals`, 2026-11-23), Activity Calendar (`activity-calendar`, 2026-11-23), Tourism Bureaus & Destinations (`tourism-bureaus`, 2026-11-23), Florists & Flower Delivery (`florists`, 2026-11-21), Restaurant Reservations (`restaurant-reservations`, 2026-11-21), Chambers of Commerce & Business Associations (`chambers`, 2026-11-18).
 
 ## Contributed industries
 
@@ -127,7 +127,7 @@ Most businesses already have their industry here, often under another name. An i
 
 A new industry is right only when the existing ones would be wrong for its customers: what they mainly do (order, book dates, book a time, ask for a quote, follow a request) or the words of the plug-in (what is booked or ordered, its tools, its rules) do not fit any industry here. A different name, a niche, a city or a type of customer is not enough.
 
-1. Look through the tables in the [README](README.md#the-86-industry-plug-ins) and the groups above, and search this page for the words your customers use.
+1. Look through the tables in the [README](README.md#the-88-industry-plug-ins) and the groups above, and search this page for the words your customers use.
 2. Run the check below on your file: it lists the existing industries that look most like yours. Read each one's package in `plugins/<slug>/` and try it on its sample business.
 3. If one fits, there is nothing to add here: the business signs up at https://www.bizplug.ai/portal, picks that industry, and gets its own plug-in. Close to fitting but missing something (a field, a tool, a menu option)? Ask for it with the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form, saying which industry it is for. The team then decides whether to add it to that industry, where every business in it would get it.
 4. If none fits, say in your pull request which one is closest and what a customer does in yours that it cannot. The team does not merge an industry that an existing one already covers.

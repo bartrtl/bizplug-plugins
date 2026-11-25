@@ -1,0 +1,933 @@
+{
+  "industry": "dmc",
+  "name": "Destination Management Companies",
+  "engine": "quote",
+  "functionTitle": "Tailor-made packages with a price breakdown, and proposals day by day",
+  "datasets": [
+    {
+      "id": "business",
+      "file": "business.csv",
+      "title": "Business details",
+      "why": "What the plug-in says about the business and where customers can reach it.",
+      "required": true,
+      "single": true,
+      "maxRows": 1,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Business name",
+          "required": true,
+          "type": "text",
+          "example": "Andes Path DMC",
+          "help": "As customers know it."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": true,
+          "type": "text",
+          "example": "Andes Path DMC serves customers in and around Charlotte, NC.",
+          "help": "One or two sentences, in the business's own words."
+        },
+        {
+          "key": "email",
+          "label": "Public email",
+          "required": true,
+          "type": "email",
+          "example": "hello@example.com",
+          "help": "The address customers may write to."
+        },
+        {
+          "key": "phone",
+          "label": "Public phone",
+          "required": false,
+          "type": "text",
+          "example": "+1 704 555 0100",
+          "help": "With country code."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com",
+          "help": "Full URL."
+        },
+        {
+          "key": "tagline",
+          "label": "What you are",
+          "required": false,
+          "type": "text",
+          "example": "Destination Management Companies in Charlotte",
+          "help": "A few words shown after your name in ChatGPT, e.g. \"Harbor Street Studio – Yoga in Charlotte\". Without it, the plug-in's industry is shown."
+        },
+        {
+          "key": "logo",
+          "label": "Logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo.png",
+          "help": "Your own logo as an https image, square if you have one. Shown next to your plug-in in the BizPlug portal, and as its icon in ChatGPT."
+        },
+        {
+          "key": "wordmark",
+          "label": "Wide logo URL",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/logo-wide.png",
+          "help": "Optional: your logo with your name, wider than it is tall, as an https PNG, JPEG or WebP image. From plug-in version 0.25.0 it heads your card in ChatGPT and Claude; without it the card shows the logo above."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "123 Main St, Charlotte, NC 28202",
+          "help": "Street address, if customers visit."
+        },
+        {
+          "key": "city",
+          "label": "City",
+          "required": false,
+          "type": "text",
+          "example": "Charlotte",
+          "help": ""
+        },
+        {
+          "key": "region",
+          "label": "State or country",
+          "required": false,
+          "type": "text",
+          "example": "NC",
+          "help": ""
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Mon-Fri 09:00-17:00; Sat 10:00-14:00",
+          "help": "As shown to customers."
+        },
+        {
+          "key": "currency",
+          "label": "Currency",
+          "required": false,
+          "type": "text",
+          "example": "USD",
+          "help": "ISO code for the prices in the other files."
+        },
+        {
+          "key": "trip_layout",
+          "label": "Trip layout",
+          "required": false,
+          "type": "text",
+          "example": "plan",
+          "help": "plan (the default: a photo and the days as a list that opens in place) or cards (the days as a grid of picture cards, each day on its own screen). Travellers can switch in the card."
+        },
+        {
+          "key": "notify_email",
+          "label": "Requests go to",
+          "required": false,
+          "type": "email",
+          "example": "orders@example.com",
+          "help": "The team inbox that should receive requests from ChatGPT (not shown to customers)."
+        }
+      ],
+      "collect": [
+        "Copy the name, summary, phone, email, website and address exactly as they appear on the business's website or Google Business Profile.",
+        "Write the summary in the business's own words (one or two sentences). Do not add claims the business does not make.",
+        "Ask the owner which inbox should receive requests from ChatGPT and put it in notify_email."
+      ]
+    },
+    {
+      "id": "prices",
+      "file": "price-rules.csv",
+      "title": "Price list (travel packages)",
+      "why": "The published prices the plug-in builds estimates from. Estimates are never final prices.",
+      "required": true,
+      "maxRows": 500,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id",
+          "required": true,
+          "type": "text",
+          "example": "private-guide-day",
+          "help": "Short, unique, lowercase with hyphens."
+        },
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Private guide, full day",
+          "help": ""
+        },
+        {
+          "key": "base",
+          "label": "Base price",
+          "required": true,
+          "type": "number",
+          "example": "0",
+          "help": "Call-out or starting price."
+        },
+        {
+          "key": "per_unit",
+          "label": "Price per unit",
+          "required": false,
+          "type": "number",
+          "example": "220",
+          "help": "Added for each unit."
+        },
+        {
+          "key": "unit",
+          "label": "Unit",
+          "required": false,
+          "type": "text",
+          "example": "day",
+          "help": "What one unit is (room, sq ft, hour, item)."
+        },
+        {
+          "key": "minimum",
+          "label": "Minimum",
+          "required": false,
+          "type": "number",
+          "example": "220",
+          "help": "Smallest total charged."
+        },
+        {
+          "key": "note",
+          "label": "Note",
+          "required": false,
+          "type": "text",
+          "example": "English-speaking licensed guide; entrance fees are separate",
+          "help": "Shown with the estimate."
+        }
+      ],
+      "collect": [
+        "Copy the published price list or rate card. Only include prices the business is happy to publish as estimates."
+      ]
+    },
+    {
+      "id": "services",
+      "file": "services.csv",
+      "title": "Services list",
+      "why": "A short list of what the business offers, used in answers.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "service",
+          "label": "Service",
+          "required": true,
+          "type": "text",
+          "example": "Tailor-made group programmes",
+          "help": "One per row."
+        }
+      ],
+      "collect": [
+        "List the services from the website's services or about page, one per row, short names only."
+      ]
+    },
+    {
+      "id": "faqs",
+      "file": "faqs.csv",
+      "title": "Questions and answers",
+      "why": "The plug-in answers customer questions only from these, so it never guesses.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "question",
+          "label": "Question",
+          "required": true,
+          "type": "text",
+          "example": "How long is a proposal's price valid?",
+          "help": "How a customer would ask it."
+        },
+        {
+          "key": "answer",
+          "label": "Answer",
+          "required": true,
+          "type": "text",
+          "example": "Two weeks from the date we send it; hotels are held only once you confirm.",
+          "help": "The business's answer, in full sentences."
+        }
+      ],
+      "collect": [
+        "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
+        "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    },
+    {
+      "id": "trips",
+      "file": "trips.csv",
+      "title": "Packages and proposals",
+      "why": "One row per package or proposal. Without a code it is a sample package anyone may browse; with a code it is one client's proposal or trip, opened only by the client with that code.",
+      "required": false,
+      "maxRows": 200,
+      "columns": [
+        {
+          "key": "id",
+          "label": "Trip id",
+          "required": true,
+          "type": "text",
+          "example": "peru-10-days",
+          "help": "Short, unique, lowercase with hyphens. trip_days.csv, trip_items.csv and trip_prices.csv name the trip by it."
+        },
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Peru & Machu Picchu in 10 days",
+          "help": "As the traveller knows the trip."
+        },
+        {
+          "key": "code",
+          "label": "Trip code",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Only for one traveller's or group's own trip: at least 8 letters or digits, hard to guess (e.g. DANUBE-7Q4K-2M). Give it to them yourself; it is never shown or listed. Empty for an itinerary anyone may browse."
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "required": false,
+          "type": "text",
+          "example": "proposal",
+          "help": "One of: tour, cruise, package, proposal."
+        },
+        {
+          "key": "start",
+          "label": "First day",
+          "required": false,
+          "type": "date",
+          "example": "2027-05-10",
+          "help": "YYYY-MM-DD. Empty for an itinerary without fixed dates."
+        },
+        {
+          "key": "end",
+          "label": "Last day",
+          "required": false,
+          "type": "date",
+          "example": "2027-05-14",
+          "help": "YYYY-MM-DD."
+        },
+        {
+          "key": "travellers",
+          "label": "Who travels",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Only on a trip with a code, in words: \"2 adults\", \"Lopez family (4)\". Never passport or ID numbers."
+        },
+        {
+          "key": "people",
+          "label": "Number of travellers",
+          "required": false,
+          "type": "number",
+          "example": "",
+          "help": "For the price per person of a proposal."
+        },
+        {
+          "key": "summary",
+          "label": "Summary",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "One or two sentences."
+        },
+        {
+          "key": "image",
+          "label": "Cover picture",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: an https photo. Without it the first day's picture is used."
+        },
+        {
+          "key": "image_credit",
+          "label": "Photo credit",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: who took the photo and its licence, shown on it, e.g. Photo: Jane Doe, CC BY-SA 4.0. Needed for most free-licence photos."
+        },
+        {
+          "key": "price_from",
+          "label": "From price",
+          "required": false,
+          "type": "number",
+          "example": "",
+          "help": "Optional: the published starting price, number only."
+        },
+        {
+          "key": "price_per",
+          "label": "Price per",
+          "required": false,
+          "type": "text",
+          "example": "person",
+          "help": "person or group."
+        },
+        {
+          "key": "includes",
+          "label": "Included",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, separated by semicolons."
+        },
+        {
+          "key": "excludes",
+          "label": "Not included",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, separated by semicolons."
+        },
+        {
+          "key": "contact_name",
+          "label": "Trip contact",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: the travel designer for this proposal."
+        },
+        {
+          "key": "contact_role",
+          "label": "Contact's role",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional."
+        },
+        {
+          "key": "contact_phone",
+          "label": "Contact phone",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: a work number, with country code."
+        },
+        {
+          "key": "contact_email",
+          "label": "Contact email",
+          "required": false,
+          "type": "email",
+          "example": "",
+          "help": "Optional: a work address."
+        },
+        {
+          "key": "contact_whatsapp",
+          "label": "Contact WhatsApp",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: a work WhatsApp number with country code."
+        },
+        {
+          "key": "status",
+          "label": "Status",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, on a trip with a code: Confirmed, Deposit paid, Proposal..."
+        },
+        {
+          "key": "valid_until",
+          "label": "Price valid until",
+          "required": false,
+          "type": "date",
+          "example": "",
+          "help": "Optional, for a proposal: YYYY-MM-DD."
+        },
+        {
+          "key": "book_url",
+          "label": "Booking page",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: your own page to book this trip (https)."
+        },
+        {
+          "key": "notes",
+          "label": "Notes",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: anything the traveller should know."
+        }
+      ],
+      "collect": [
+        "Copy each itinerary from your own brochure or website, in your own words.",
+        "A trip with a code holds one traveller's or group's details: give the code to them yourself, and never reuse a code. Use at least 8 letters or digits that cannot be guessed from the name or dates.",
+        "Never put passport numbers, dates of birth, card numbers or health details in any file."
+      ]
+    },
+    {
+      "id": "trip_days",
+      "file": "trip_days.csv",
+      "title": "Trip days",
+      "why": "Each day of a trip as a card with its own picture: the title, the place, what happens, meals and where the night is.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "trip",
+          "label": "Trip id",
+          "required": true,
+          "type": "text",
+          "example": "blue-danube-5",
+          "help": "The id from trips.csv."
+        },
+        {
+          "key": "day",
+          "label": "Day",
+          "required": true,
+          "type": "number",
+          "example": "1",
+          "help": "1 for the first day."
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "required": false,
+          "type": "date",
+          "example": "",
+          "help": "YYYY-MM-DD; worked out from the trip's first day when empty."
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Embark in Passau",
+          "help": ""
+        },
+        {
+          "key": "place",
+          "label": "Place",
+          "required": false,
+          "type": "text",
+          "example": "Passau, Germany",
+          "help": "Where the day is; the card offers directions to it."
+        },
+        {
+          "key": "summary",
+          "label": "What happens",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "A short paragraph."
+        },
+        {
+          "key": "image",
+          "label": "Picture",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "An https photo of the day."
+        },
+        {
+          "key": "image_credit",
+          "label": "Photo credit",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: who took the photo and its licence, shown on it."
+        },
+        {
+          "key": "highlights",
+          "label": "Highlights",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, separated by semicolons."
+        },
+        {
+          "key": "meals",
+          "label": "Meals",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: Breakfast, lunch, dinner."
+        },
+        {
+          "key": "overnight",
+          "label": "Overnight",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: the hotel or ship."
+        },
+        {
+          "key": "maps_url",
+          "label": "Map link",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: a Google Maps or Apple Maps link for the day (https)."
+        }
+      ],
+      "collect": [
+        "One row per day. A picture per day makes the card: use your own photos, or ones you have the right to use."
+      ]
+    },
+    {
+      "id": "trip_items",
+      "file": "trip_items.csv",
+      "title": "Day details",
+      "why": "What happens on a day, by the hour: flights, hotels, the ship, transfers, trains, activities and meals, each with its own buttons for the website and directions.",
+      "required": false,
+      "maxRows": 5000,
+      "columns": [
+        {
+          "key": "trip",
+          "label": "Trip id",
+          "required": true,
+          "type": "text",
+          "example": "blue-danube-5",
+          "help": "The id from trips.csv."
+        },
+        {
+          "key": "day",
+          "label": "Day",
+          "required": true,
+          "type": "number",
+          "example": "1",
+          "help": ""
+        },
+        {
+          "key": "time",
+          "label": "Time",
+          "required": false,
+          "type": "text",
+          "example": "15:00",
+          "help": "HH:MM, or Morning, Afternoon, Evening."
+        },
+        {
+          "key": "kind",
+          "label": "Kind",
+          "required": false,
+          "type": "text",
+          "example": "cruise",
+          "help": "One of: flight, hotel, cruise, transfer, train, activity, meal, guide, note."
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Board the ship",
+          "help": ""
+        },
+        {
+          "key": "details",
+          "label": "Details",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "What to know, in a sentence or two."
+        },
+        {
+          "key": "place",
+          "label": "Place",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": ""
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "For directions."
+        },
+        {
+          "key": "maps_url",
+          "label": "Directions link",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional (https)."
+        },
+        {
+          "key": "url",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: the hotel, airline, museum or activity's own page (https)."
+        },
+        {
+          "key": "url_label",
+          "label": "Website button",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: the button's words, such as Hotel website or Tickets."
+        },
+        {
+          "key": "phone",
+          "label": "Phone",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: the place's public number."
+        },
+        {
+          "key": "image",
+          "label": "Picture",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional (https)."
+        },
+        {
+          "key": "image_credit",
+          "label": "Photo credit",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: who took the photo and its licence, shown on it."
+        },
+        {
+          "key": "reference",
+          "label": "Booking reference",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Only on a trip with a code: the hotel or flight confirmation the traveller may need."
+        },
+        {
+          "key": "carrier",
+          "label": "Airline or operator",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Flights and trains."
+        },
+        {
+          "key": "number",
+          "label": "Flight or train number",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": ""
+        },
+        {
+          "key": "from",
+          "label": "From",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Flights, trains and transfers."
+        },
+        {
+          "key": "to",
+          "label": "To",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": ""
+        },
+        {
+          "key": "depart",
+          "label": "Departs",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "HH:MM."
+        },
+        {
+          "key": "arrive",
+          "label": "Arrives",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "HH:MM."
+        },
+        {
+          "key": "check_in",
+          "label": "Check-in",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Hotels and ships: HH:MM or a date."
+        },
+        {
+          "key": "check_out",
+          "label": "Check-out",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": ""
+        },
+        {
+          "key": "room",
+          "label": "Room or cabin",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional."
+        }
+      ],
+      "collect": [
+        "Booking references only on trips with a code, and only what the traveller needs at check-in. Never passport numbers or card details."
+      ]
+    },
+    {
+      "id": "trip_prices",
+      "file": "trip_prices.csv",
+      "title": "Price breakdown",
+      "why": "A package's or proposal's price, line by line: the card groups the lines by category with subtotals, the total and the price per person.",
+      "required": false,
+      "maxRows": 2000,
+      "columns": [
+        {
+          "key": "trip",
+          "label": "Trip id",
+          "required": true,
+          "type": "text",
+          "example": "peru-10-days",
+          "help": "The id from trips.csv."
+        },
+        {
+          "key": "item",
+          "label": "Item",
+          "required": true,
+          "type": "text",
+          "example": "Hotel Monasterio, Cusco: deluxe room",
+          "help": ""
+        },
+        {
+          "key": "category",
+          "label": "Category",
+          "required": false,
+          "type": "text",
+          "example": "Accommodation",
+          "help": "Accommodation, Flights, Transfers, Guides, Activities, Meals, Fees..."
+        },
+        {
+          "key": "quantity",
+          "label": "Quantity",
+          "required": false,
+          "type": "number",
+          "example": "3",
+          "help": ""
+        },
+        {
+          "key": "unit",
+          "label": "Unit",
+          "required": false,
+          "type": "text",
+          "example": "nights",
+          "help": ""
+        },
+        {
+          "key": "unit_price",
+          "label": "Unit price",
+          "required": false,
+          "type": "number",
+          "example": "620",
+          "help": "Number only."
+        },
+        {
+          "key": "total",
+          "label": "Line total",
+          "required": true,
+          "type": "number",
+          "example": "1860",
+          "help": "Number only, in your currency."
+        },
+        {
+          "key": "note",
+          "label": "Note",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional."
+        }
+      ],
+      "collect": [
+        "Only prices you are ready to quote. Put the date the proposal's price holds until in trips.csv (valid_until)."
+      ]
+    },
+    {
+      "id": "social",
+      "file": "social.csv",
+      "title": "Social media",
+      "why": "Where to follow you, and your latest posts with their pictures, shown under Social media in the plug-in. Feeds (YouTube, podcast, blog, Substack, Medium, Bluesky, Mastodon) are read automatically; for LinkedIn, Instagram, X, Facebook and TikTok you pin the posts you want shown. From plug-in version 0.35.0 a YouTube video plays inside the card.",
+      "required": false,
+      "maxRows": 60,
+      "columns": [
+        {
+          "key": "kind",
+          "label": "Kind",
+          "required": true,
+          "type": "text",
+          "example": "follow",
+          "help": "\"follow\" for a profile to follow, \"feed\" for a public feed BizPlug reads (YouTube channel, podcast or blog RSS, Substack, Medium, Bluesky or Mastodon profile), \"post\" for one post you pin."
+        },
+        {
+          "key": "network",
+          "label": "Network",
+          "required": false,
+          "type": "text",
+          "example": "instagram",
+          "help": "instagram, linkedin, facebook, x, tiktok, youtube, threads, bluesky, mastodon, podcast, blog, substack, medium, pinterest or whatsapp. Left empty, it is read from the address."
+        },
+        {
+          "key": "url",
+          "label": "Address",
+          "required": true,
+          "type": "url",
+          "example": "https://www.instagram.com/yourbusiness/",
+          "help": "The profile, the feed or the post, as an https address."
+        },
+        {
+          "key": "image",
+          "label": "Picture",
+          "required": false,
+          "type": "url",
+          "example": "https://example.com/post.jpg",
+          "help": "For a pinned post: its picture, an https PNG, JPEG or WebP image."
+        },
+        {
+          "key": "text",
+          "label": "Text",
+          "required": false,
+          "type": "text",
+          "example": "Our new menu is here.",
+          "help": "For a pinned post: its caption, or the first lines of it."
+        },
+        {
+          "key": "date",
+          "label": "Date",
+          "required": false,
+          "type": "text",
+          "example": "2026-11-20",
+          "help": "For a pinned post: YYYY-MM-DD."
+        }
+      ],
+      "collect": [
+        "Take the profiles from the links on the business's own website (header or footer).",
+        "Add a feed row for a YouTube channel, a podcast or blog RSS, a Substack, Medium, Bluesky or Mastodon profile; its latest posts appear by themselves.",
+        "Pin a few recent posts from LinkedIn, Instagram, X, Facebook or TikTok with their own picture and text: only posts the business published.",
+        "A pinned post may also be one of the business's own YouTube videos (a watch, youtu.be or Shorts address): it plays inside the card, and needs no picture."
+      ]
+    }
+  ],
+  "never": [
+    "Passwords, API keys or other secrets.",
+    "Card numbers, bank details or government ID numbers.",
+    "Customers' personal data (names, phone numbers, addresses, health or financial details).",
+    "Passport numbers, dates of birth, visa details, card numbers or health details of travellers, in any file. A proposal with a code holds only what the client needs: the itinerary, the bookings and the price breakdown.",
+    "The plug-in's own rule: Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price."
+  ]
+}

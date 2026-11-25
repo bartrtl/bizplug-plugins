@@ -1,6 +1,6 @@
 # BizPlug Developer Tools
 
-Version 0.49.0. Book a technical demo or onboarding for developer tools businesses.
+Version 0.50.0. Book a technical demo or onboarding for developer tools businesses.
 
 - Main function: Book a technical demo or onboarding
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dev-tools` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.49.0. Book a technical demo or onboarding for developer tools business
 
 ## Changes
 
+- **0.50.0** (25 November 2026): Tour operators and DMCs: trips day by day in the card, with a picture per day, each day opening on its flights, hotels and activities by the hour; My trip by code; and a proposal's price breakdown.
 - **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
 - **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.

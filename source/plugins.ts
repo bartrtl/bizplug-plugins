@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.49.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.50.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -31,7 +31,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer" | "explore" | "plan" | "area" | "house" | "match";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer" | "explore" | "plan" | "area" | "house" | "match" | "trips" | "mytrip";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -97,6 +97,13 @@ export const DIRECT_OFFER_TOOL = "check_direct_offer";
  */
 export const CONCIERGE_TOOLS = { explore: "explore_area", area: "get_area_guide", house: "get_house_guide", match: "match_home", plan: "plan_stay", whatsapp: "continue_on_whatsapp" } as const;
 export const isConciergeTool = (name: string) => (Object.values(CONCIERGE_TOOLS) as string[]).includes(name);
+/**
+ * Tour operators and DMCs (`itinerary` in industry-functions.ts), from plug-in version 0.50.0 (itinerary.ts): the
+ * itineraries the business published, one of them day by day, and a traveller's own trip or proposal by its code.
+ * plugin-mcp.ts lists each only on a version with the flag, and only where the business published what it needs.
+ */
+export const ITINERARY_TOOLS = { find: "find_itineraries", get: "get_itinerary", mine: "open_my_trip" } as const;
+export const isItineraryTool = (name: string) => (Object.values(ITINERARY_TOOLS) as string[]).includes(name);
 /** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
 const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
 const membersDirect = (slug: string) =>
@@ -139,6 +146,13 @@ const TITLES: Record<Engine, [string, string, string]> = {
   track: ["Look up a reference", "Send a request", "Request status"],
 };
 
+// 0.50.0: tour operators and DMCs name their three steps in travel words (TITLES are the engine's).
+const ITINERARY_TITLES: Record<"tour" | "dmc", [string, string, string]> = {
+  tour: ["Departures and price", "Request a booking", "Booking status"],
+  dmc: ["Package estimate", "Request a proposal", "Proposal status"],
+};
+const titlesOf = (fn: IndustryFunction) => (fn.itinerary ? ITINERARY_TITLES[fn.itinerary] : TITLES[fn.engine]);
+
 // The menu: [look-up, request, status] in customer words, with a question to try. Examples stay generic
 // here; a plug-in bound to one business swaps in its own first item (plugin-mcp.ts).
 const MENU_COPY: Record<Engine, [string, string, string]> = {
@@ -168,7 +182,7 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
   const { engine, tools } = fn;
   const example = (idx: 0 | 1 | 2) => (engine === "stay" && idx === 0 ? STAY_FIRST[fn.span ?? "single"] : MENU_EXAMPLES[engine][idx]);
   const KINDS = ["lookup", "request", "status"] as const;
-  const step = (idx: 0 | 1 | 2): MenuOption => ({ tool: tools[idx], kind: KINDS[idx], title: TITLES[engine][idx], description: MENU_COPY[engine][idx], example: example(idx) });
+  const step = (idx: 0 | 1 | 2): MenuOption => ({ tool: tools[idx], kind: KINDS[idx], title: titlesOf(fn)[idx], description: MENU_COPY[engine][idx], example: example(idx) });
   const question: MenuOption = { tool: "get_business_info", kind: "question", title: "Ask a question", description: `Answers from the business's own information: ${i.covers}.`, example: i.ask };
   // 0.15.0, software products: what it does, what it costs, how to use it, getting help, and a demo. The engine's
   // look-up and request stay, as Book a demo; the menu before 0.15.0 stays for plug-ins pinned to it.
@@ -230,8 +244,16 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
         { tool: CONCIERGE_TOOLS.house, kind: "house", title: "House guide", description: "How things work in the home: the stove, grill, washer, Wi-Fi and more.", example: "How do I use the grill?" },
       ]
     : [];
+  // 0.50.0, tour operators and DMCs: the itineraries and My trip first (itinerary.ts).
+  const dmc = fn.itinerary === "dmc";
+  const itinerary: MenuOption[] = fn.itinerary
+    ? [
+        { tool: ITINERARY_TOOLS.mine, kind: "mytrip", title: dmc ? "My proposal" : "My trip", description: dmc ? "Enter the code you were given to open your proposal: the itinerary day by day and the price breakdown." : "Enter the code you were given to open your own trip: flights, hotels and every day by the hour.", example: dmc ? "Open my proposal, my code is PERU-8K2M-ANDES" : "Open my trip, my code is DANUBE-7Q4K-2M" },
+        { tool: ITINERARY_TOOLS.find, kind: "trips", title: dmc ? "Sample packages" : "Itineraries", description: dmc ? "Sample packages day by day with pictures, and what each costs." : "The itineraries day by day with pictures: where you go, where you stay and what is included.", example: dmc ? "Show me a 10-day Peru package with Machu Picchu" : "Show me the river cruise day by day" },
+      ]
+    : [];
   return [
-    ...(fn.infoFirst ? [question, ...showcase, step(1), step(0), ...visits] : [step(0), ...concierge, step(1), ...visits, question]),
+    ...(fn.infoFirst ? [question, ...showcase, step(1), step(0), ...visits] : [...itinerary, step(0), ...concierge, step(1), ...visits, question]),
     step(2),
     ...(fn.members
       ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]
@@ -258,7 +280,7 @@ export function buildPlugin(i: Industry): IndustryPlugin {
     },
     ...fn.tools.map((name, idx) => ({
       name,
-      title: TITLES[fn.engine][idx],
+      title: titlesOf(fn)[idx],
       description: TOOL_COPY[fn.engine][idx].replaceAll("{n}", fn.noun) + (idx < 2 ? rule : ""),
       readOnly: idx !== 1,
     })),
@@ -327,6 +349,14 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           { name: CONCIERGE_TOOLS.whatsapp, title: "Continue on WhatsApp", description: "Hand the guest's trip (dates, group, home, saved picks, a note) to the host's WhatsApp concierge, which also answers during the stay. Returns the WhatsApp link and the exact message to send; sends nothing itself. Use it when the guest wants to continue with the host on WhatsApp.", readOnly: true },
         ]
       : []),
+    // 0.50.0, tour operators and DMCs: itineraries and trips by code (itinerary.ts). Offered only to plug-ins on 0.50.0 or later.
+    ...(fn.itinerary
+      ? [
+          { name: ITINERARY_TOOLS.find, title: fn.itinerary === "dmc" ? "Sample packages" : "Itineraries", description: `List the itineraries this ${noun} business published for anyone to browse, each with its days, route, summary and published "from" price. Optional query (a place, a kind of trip). Read-only. Use it when the customer asks what trips there are.`, readOnly: true },
+          { name: ITINERARY_TOOLS.get, title: "Itinerary day by day", description: "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code.", readOnly: true },
+          { name: ITINERARY_TOOLS.mine, title: fn.itinerary === "dmc" ? "My proposal" : "My trip", description: `Open a traveller's own trip${fn.itinerary === "dmc" ? " or proposal" : ""} with the code the business gave them: the same day-by-day view with their dates, flights, hotels and booking references${fn.itinerary === "dmc" ? ", and the proposal's price breakdown" : ""}, and their trip contact. Pass the code exactly as the traveller typed it; never guess, suggest or repeat a code. Optional day. Read-only.`, readOnly: true },
+        ]
+      : []),
     // 0.15.0, software products (software.ts). Offered only to plug-ins on 0.15.0 or later (plugin-mcp.ts).
     ...(fn.software
       ? [
@@ -376,6 +406,13 @@ export function buildPlugin(i: Industry): IndustryPlugin {
             { prompt: "Where should we eat near the house? We have two kids.", expect: `Calls ${CONCIERGE_TOOLS.explore} and gives the host's own picks as the host's, nearest first, or says the host has not published them; labels anything it adds as its own.`, shouldTrigger: true },
             { prompt: "Plan 4 days for us from 12 to 16 June, two adults, three kids and a dog.", expect: `Calls ${CONCIERGE_TOOLS.plan} with the dates and the group and shows the day-by-day plan from the host's picks with the homes that fit and their price for the stay; offers to check availability and book. Books nothing.`, shouldTrigger: true },
             { prompt: "How do I use the washing machine?", expect: `Calls ${CONCIERGE_TOOLS.house} and answers only from the host's house guide, or says it is not covered and offers the host's contact; never guesses.`, shouldTrigger: true },
+          ]
+        : []),
+      ...(fn.itinerary
+        ? [
+            { prompt: "What trips do you offer?", expect: `Calls ${ITINERARY_TOOLS.find} and lists only the published itineraries with their days and prices, or says none are published.`, shouldTrigger: true },
+            { prompt: "Show me day 3 of the first itinerary.", expect: `Calls ${ITINERARY_TOOLS.get} with the itinerary's id and day 3, and shows only what the business published for that day.`, shouldTrigger: true },
+            { prompt: "I have a trip code from the operator. Can you open my trip?", expect: `Asks for the code, then calls ${ITINERARY_TOOLS.mine} with it exactly as typed; never guesses or suggests a code, and says so plainly when no trip has that code.`, shouldTrigger: true },
           ]
         : []),
       ...(fn.visits

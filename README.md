@@ -4,7 +4,7 @@
 
 Published by **Bart Cant - msg2ai**.
 
-The standard BizPlug plug-in for each of 86 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
+The standard BizPlug plug-in for each of 88 industries. A plug-in is an MCP (Model Context Protocol) server, hosted by BizPlug, that lets a business's customers ask questions and send orders, bookings or requests from inside ChatGPT. The business confirms every request itself. Customers pay the business directly: a Pay online button after a request opens the business's own payment page (Stripe is the official payment provider; PayPal, Square and other payment pages work too), and the money never passes through BizPlug.
 
 This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
@@ -125,10 +125,11 @@ By opening a pull request you agree that your contribution is published under th
 
 Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://www.bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
-## Version 0.49.0
+## Version 0.50.0
 
-All 86 plug-ins share one version. What changed in each:
+All 88 plug-ins share one version. What changed in each:
 
+- **0.50.0** (25 November 2026): Tour operators and DMCs: trips day by day in the card, with a picture per day, each day opening on its flights, hotels and activities by the hour; My trip by code; and a proposal's price breakdown.
 - **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
 - **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.
@@ -195,7 +196,7 @@ The plug-ins BizPlug serves besides the industry plug-ins, newest first, as on h
 | [gener8tor Charlotte Startups for Investors](plugins/gener8tor-charlotte) | Startup directory | 2026-11-15 | Find the gBETA Charlotte startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/gener8tor-charlotte` |
 | [Web Summit Qatar Startups for Investors](plugins/websummit-qatar) | Startup directory | 2026-11-14 | Find Web Summit Qatar 2026 startups that match your investment thesis. | `https://mcp.bizplug.ai/plugin/startups/websummit-qatar` |
 
-## The 86 industry plug-ins
+## The 88 industry plug-ins
 
 The standard plug-in of each industry, as on https://www.bizplug.ai/plugins/industries. A business gets its own copy, built from its profile.
 
@@ -284,6 +285,8 @@ The standard plug-in of each industry, as on https://www.bizplug.ai/plugins/indu
 | [Airlines](plugins/airlines) | Flight status and support requests | `https://mcp.bizplug.ai/plugin/airlines` |
 | [Cruise Lines](plugins/cruise-lines) | Sailing availability and cabin pricing | `https://mcp.bizplug.ai/plugin/cruise-lines` |
 | [Vacation Rentals](plugins/vacation-rentals) | Home availability, nightly rates and booking | `https://mcp.bizplug.ai/plugin/vacation-rentals` |
+| [Tour Operators](plugins/tour-operators) | Tour departures, price per traveller and trips day by day | `https://mcp.bizplug.ai/plugin/tour-operators` |
+| [Destination Management Companies](plugins/dmc) | Tailor-made packages with a price breakdown, and proposals day by day | `https://mcp.bizplug.ai/plugin/dmc` |
 | [Car Rental](plugins/car-rental) | Vehicle availability and rental price | `https://mcp.bizplug.ai/plugin/car-rental` |
 | [Theme Parks & Attractions](plugins/theme-parks) | Ticket availability for a visit date | `https://mcp.bizplug.ai/plugin/theme-parks` |
 | [Museums & Galleries](plugins/museums) | Timed tickets and exhibitions | `https://mcp.bizplug.ai/plugin/museums` |

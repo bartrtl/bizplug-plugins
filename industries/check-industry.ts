@@ -286,6 +286,8 @@ const RULES: IndustryFileRules = {
     "airlines",
     "cruise-lines",
     "vacation-rentals",
+    "tour-operators",
+    "dmc",
     "car-rental",
     "theme-parks",
     "museums",
@@ -760,6 +762,20 @@ const RULES: IndustryFileRules = {
       "group": "Travel & leisure",
       "engine": "stay",
       "about": "homes and who they sleep, nightly rates, house rules, check-in and the local area. Do you have a house on Seabrook Island for 4 people next weekend?"
+    },
+    {
+      "slug": "tour-operators",
+      "name": "Tour Operators",
+      "group": "Travel & leisure",
+      "engine": "stay",
+      "about": "itineraries day by day, departures and prices per traveller, what is included, and each traveller's own trip by code. What does the 5-day Danube river cruise include, day by day?"
+    },
+    {
+      "slug": "dmc",
+      "name": "Destination Management Companies",
+      "group": "Travel & leisure",
+      "engine": "quote",
+      "about": "tailor-made packages, sample itineraries day by day, each client's proposal by code, and its price breakdown. Can you put together 10 days in Peru with Machu Picchu for six of us, and what would it cost?"
     },
     {
       "slug": "car-rental",

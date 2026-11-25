@@ -50,7 +50,7 @@ export type PluginDataSpec = {
 const col = (key: string, label: string, required: boolean, type: ColumnType, example: string, help: string): DataColumn => ({ key, label, required, type, example, help });
 
 // Shared by every plug-in. Examples come from plugin-examples.ts so each industry sees its own kind of business.
-const businessDataset = (name: string, ex?: IndustryExample, software = false, orders = false): Dataset => ({
+const businessDataset = (name: string, ex?: IndustryExample, software = false, orders = false, trips = false): Dataset => ({
   id: "business",
   file: "business.csv",
   title: "Business details",
@@ -73,6 +73,8 @@ const businessDataset = (name: string, ex?: IndustryExample, software = false, o
     col("hours", "Opening hours", false, "text", "Mon-Fri 09:00-17:00; Sat 10:00-14:00", "As shown to customers."),
     col("currency", "Currency", false, "text", "USD", "ISO code for the prices in the other files."),
     // Order plug-ins (0.37.0): the fee a delivery order carries.
+    // Tour operators and DMCs (0.50.0): how the card lays trips out.
+    ...(trips ? [col("trip_layout", "Trip layout", false, "text", "plan", "plan (the default: a photo and the days as a list that opens in place) or cards (the days as a grid of picture cards, each day on its own screen). Travellers can switch in the card.")] : []),
     ...(orders ? [col("delivery_fee", "Delivery fee", false, "number", "5", "Number only, in your currency. Added to every delivery order and its checkout; pickup orders never carry it. Leave empty if delivery is free or you price it yourself.")] : []),
     col("notify_email", "Requests go to", false, "email", "orders@example.com", "The team inbox that should receive requests from ChatGPT (not shown to customers)."),
     // Software products (plug-in 0.15.0): the product's own pages, for Pricing, Help & guides, Support and Contact.
@@ -499,6 +501,127 @@ const houseDataset: Dataset = {
   collect: ["Never put door codes, Wi-Fi passwords or alarm codes here: they are sent to the guest privately before arrival."],
 };
 
+// Tour operators and DMCs (`itinerary` in industry-functions.ts), from plug-in version 0.50.0 (itinerary.ts): trips
+// day by day. All optional; Itineraries shows once a trip without a code is there, My trip once one with a code is.
+const tripsDataset = (dmc: boolean): Dataset => ({
+  id: "trips",
+  file: "trips.csv",
+  title: dmc ? "Packages and proposals" : "Trips",
+  why: dmc
+    ? "One row per package or proposal. Without a code it is a sample package anyone may browse; with a code it is one client's proposal or trip, opened only by the client with that code."
+    : "One row per trip. Without a code it is an itinerary anyone may browse; with a code it is one traveller's (or group's) own trip, opened only with that code.",
+  required: false,
+  maxRows: 200,
+  columns: [
+    col("id", "Trip id", true, "text", dmc ? "peru-10-days" : "blue-danube-5", "Short, unique, lowercase with hyphens. trip_days.csv, trip_items.csv and trip_prices.csv name the trip by it."),
+    col("name", "Name", true, "text", dmc ? "Peru & Machu Picchu in 10 days" : "Blue Danube in 5 days", "As the traveller knows the trip."),
+    col("code", "Trip code", false, "text", "", "Only for one traveller's or group's own trip: at least 8 letters or digits, hard to guess (e.g. DANUBE-7Q4K-2M). Give it to them yourself; it is never shown or listed. Empty for an itinerary anyone may browse."),
+    col("kind", "Kind", false, "text", dmc ? "proposal" : "cruise", "One of: tour, cruise, package, proposal."),
+    col("start", "First day", false, "date", "2027-05-10", "YYYY-MM-DD. Empty for an itinerary without fixed dates."),
+    col("end", "Last day", false, "date", "2027-05-14", "YYYY-MM-DD."),
+    col("travellers", "Who travels", false, "text", "", "Only on a trip with a code, in words: \"2 adults\", \"Lopez family (4)\". Never passport or ID numbers."),
+    col("people", "Number of travellers", false, "number", "", "For the price per person of a proposal."),
+    col("summary", "Summary", false, "text", "", "One or two sentences."),
+    col("image", "Cover picture", false, "url", "", "Optional: an https photo. Without it the first day's picture is used."),
+    col("image_credit", "Photo credit", false, "text", "", "Optional: who took the photo and its licence, shown on it, e.g. Photo: Jane Doe, CC BY-SA 4.0. Needed for most free-licence photos."),
+    col("price_from", "From price", false, "number", "", "Optional: the published starting price, number only."),
+    col("price_per", "Price per", false, "text", "person", "person or group."),
+    col("includes", "Included", false, "text", "", "Optional, separated by semicolons."),
+    col("excludes", "Not included", false, "text", "", "Optional, separated by semicolons."),
+    col("contact_name", "Trip contact", false, "text", "", dmc ? "Optional: the travel designer for this proposal." : "Optional: the tour leader or cruise director."),
+    col("contact_role", "Contact's role", false, "text", "", "Optional."),
+    col("contact_phone", "Contact phone", false, "text", "", "Optional: a work number, with country code."),
+    col("contact_email", "Contact email", false, "email", "", "Optional: a work address."),
+    col("contact_whatsapp", "Contact WhatsApp", false, "text", "", "Optional: a work WhatsApp number with country code."),
+    col("status", "Status", false, "text", "", "Optional, on a trip with a code: Confirmed, Deposit paid, Proposal..."),
+    col("valid_until", "Price valid until", false, "date", "", "Optional, for a proposal: YYYY-MM-DD."),
+    col("book_url", "Booking page", false, "url", "", "Optional: your own page to book this trip (https)."),
+    col("notes", "Notes", false, "text", "", "Optional: anything the traveller should know."),
+  ],
+  collect: [
+    "Copy each itinerary from your own brochure or website, in your own words.",
+    "A trip with a code holds one traveller's or group's details: give the code to them yourself, and never reuse a code. Use at least 8 letters or digits that cannot be guessed from the name or dates.",
+    "Never put passport numbers, dates of birth, card numbers or health details in any file.",
+  ],
+});
+const tripDaysDataset: Dataset = {
+  id: "trip_days",
+  file: "trip_days.csv",
+  title: "Trip days",
+  why: "Each day of a trip as a card with its own picture: the title, the place, what happens, meals and where the night is.",
+  required: false,
+  maxRows: 2000,
+  columns: [
+    col("trip", "Trip id", true, "text", "blue-danube-5", "The id from trips.csv."),
+    col("day", "Day", true, "number", "1", "1 for the first day."),
+    col("date", "Date", false, "date", "", "YYYY-MM-DD; worked out from the trip's first day when empty."),
+    col("title", "Title", true, "text", "Embark in Passau", ""),
+    col("place", "Place", false, "text", "Passau, Germany", "Where the day is; the card offers directions to it."),
+    col("summary", "What happens", false, "text", "", "A short paragraph."),
+    col("image", "Picture", false, "url", "", "An https photo of the day."),
+    col("image_credit", "Photo credit", false, "text", "", "Optional: who took the photo and its licence, shown on it."),
+    col("highlights", "Highlights", false, "text", "", "Optional, separated by semicolons."),
+    col("meals", "Meals", false, "text", "", "Optional: Breakfast, lunch, dinner."),
+    col("overnight", "Overnight", false, "text", "", "Optional: the hotel or ship."),
+    col("maps_url", "Map link", false, "url", "", "Optional: a Google Maps or Apple Maps link for the day (https)."),
+  ],
+  collect: ["One row per day. A picture per day makes the card: use your own photos, or ones you have the right to use."],
+};
+const tripItemsDataset: Dataset = {
+  id: "trip_items",
+  file: "trip_items.csv",
+  title: "Day details",
+  why: "What happens on a day, by the hour: flights, hotels, the ship, transfers, trains, activities and meals, each with its own buttons for the website and directions.",
+  required: false,
+  maxRows: 5000,
+  columns: [
+    col("trip", "Trip id", true, "text", "blue-danube-5", "The id from trips.csv."),
+    col("day", "Day", true, "number", "1", ""),
+    col("time", "Time", false, "text", "15:00", "HH:MM, or Morning, Afternoon, Evening."),
+    col("kind", "Kind", false, "text", "cruise", "One of: flight, hotel, cruise, transfer, train, activity, meal, guide, note."),
+    col("title", "Title", true, "text", "Board the ship", ""),
+    col("details", "Details", false, "text", "", "What to know, in a sentence or two."),
+    col("place", "Place", false, "text", "", ""),
+    col("address", "Address", false, "text", "", "For directions."),
+    col("maps_url", "Directions link", false, "url", "", "Optional (https)."),
+    col("url", "Website", false, "url", "", "Optional: the hotel, airline, museum or activity's own page (https)."),
+    col("url_label", "Website button", false, "text", "", "Optional: the button's words, such as Hotel website or Tickets."),
+    col("phone", "Phone", false, "text", "", "Optional: the place's public number."),
+    col("image", "Picture", false, "url", "", "Optional (https)."),
+    col("image_credit", "Photo credit", false, "text", "", "Optional: who took the photo and its licence, shown on it."),
+    col("reference", "Booking reference", false, "text", "", "Only on a trip with a code: the hotel or flight confirmation the traveller may need."),
+    col("carrier", "Airline or operator", false, "text", "", "Flights and trains."),
+    col("number", "Flight or train number", false, "text", "", ""),
+    col("from", "From", false, "text", "", "Flights, trains and transfers."),
+    col("to", "To", false, "text", "", ""),
+    col("depart", "Departs", false, "text", "", "HH:MM."),
+    col("arrive", "Arrives", false, "text", "", "HH:MM."),
+    col("check_in", "Check-in", false, "text", "", "Hotels and ships: HH:MM or a date."),
+    col("check_out", "Check-out", false, "text", "", ""),
+    col("room", "Room or cabin", false, "text", "", "Optional."),
+  ],
+  collect: ["Booking references only on trips with a code, and only what the traveller needs at check-in. Never passport numbers or card details."],
+};
+const tripPricesDataset: Dataset = {
+  id: "trip_prices",
+  file: "trip_prices.csv",
+  title: "Price breakdown",
+  why: "A package's or proposal's price, line by line: the card groups the lines by category with subtotals, the total and the price per person.",
+  required: false,
+  maxRows: 2000,
+  columns: [
+    col("trip", "Trip id", true, "text", "peru-10-days", "The id from trips.csv."),
+    col("item", "Item", true, "text", "Hotel Monasterio, Cusco: deluxe room", ""),
+    col("category", "Category", false, "text", "Accommodation", "Accommodation, Flights, Transfers, Guides, Activities, Meals, Fees..."),
+    col("quantity", "Quantity", false, "number", "3", ""),
+    col("unit", "Unit", false, "text", "nights", ""),
+    col("unit_price", "Unit price", false, "number", "620", "Number only."),
+    col("total", "Line total", true, "number", "1860", "Number only, in your currency."),
+    col("note", "Note", false, "text", "", "Optional."),
+  ],
+  collect: ["Only prices you are ready to quote. Put the date the proposal's price holds until in trips.csv (valid_until)."],
+};
+
 function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dataset[] {
   switch (engine) {
     case "order": {
@@ -680,6 +803,8 @@ const INDUSTRY_NOTES: Partial<Record<string, string[]>> = {
   coworking: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only."],
   chambers: ["In members.csv: a member business that has not agreed to be listed, or a named person's private email, phone number or address. Company-level contact details only.", "Member-only documents, board papers or anything the chamber does not publish to the public."],
   events: ["In speakers.csv and exhibitors.csv: only what the event itself publishes. Company-level contact details for exhibitors; never a named person's private email, phone number or address."],
+  "tour-operators": ["Passport numbers, dates of birth, visa details, card numbers or health details of travellers, in any file. A trip with a code holds only what the traveller needs: dates, flights, hotels and booking references."],
+  dmc: ["Passport numbers, dates of birth, visa details, card numbers or health details of travellers, in any file. A proposal with a code holds only what the client needs: the itinerary, the bookings and the price breakdown."],
   pharmacy: ["Never upload prescriptions, medication lists or patient records."],
   "mental-health": ["Never upload client names, notes or diagnoses."],
 };
@@ -701,7 +826,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
     engine: fn.engine,
     functionTitle: fn.title,
     datasets: [
-      businessDataset(ind.name, ex, Boolean(fn.software), fn.engine === "order"),
+      businessDataset(ind.name, ex, Boolean(fn.software), fn.engine === "order", Boolean(fn.itinerary)),
       // 0.18.0: a show or conference publishes its programme instead of a venue's spaces.
       ...engineDatasets(fn.engine, fn.noun, ex).map((d) => (fn.show && d.id === "inventory" ? { ...d, unless: SHOW_FILES } : d)),
       servicesDataset(ex),
@@ -709,6 +834,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
       ...(fn.visits ? [locationsDataset] : []),
       ...(fn.concierge ? [placesDataset, areaDataset, eventsDataset, houseDataset] : []),
+      ...(fn.itinerary ? [tripsDataset(fn.itinerary === "dmc"), tripDaysDataset, tripItemsDataset, ...(fn.itinerary === "dmc" ? [tripPricesDataset] : [])] : []),
       ...(fn.infoFirst ? [committeesDataset, newsDataset, newsletterDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),

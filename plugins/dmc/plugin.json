@@ -1,0 +1,88 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "bizplug-dmc",
+  "version": "0.50.0",
+  "description": "The destination management companies plug-in from BizPlug. Main function: tailor-made packages with a price breakdown, and proposals day by day. It works from the business's own published profile, covering tailor-made packages, sample itineraries day by day, each client's proposal by code, and its price breakdown, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
+  "author": {
+    "name": "Bart Cant - msg2ai",
+    "email": "info@bizplug.ai",
+    "url": "https://www.bizplug.ai"
+  },
+  "homepage": "https://www.bizplug.ai/industries/dmc",
+  "repository": "https://github.com/msg2ai/bizplug-plugins",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "BizPlug Destination Management Companies",
+        "shortDescription": "Tailor-made packages with a price breakdown, and proposals day by day for destination management companies businesses.",
+        "longDescription": "The destination management companies plug-in from BizPlug. Main function: tailor-made packages with a price breakdown, and proposals day by day. It works from the business's own published profile, covering tailor-made packages, sample itineraries day by day, each client's proposal by code, and its price breakdown, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Share only the packages, proposals and prices the company published; a proposal's price holds only until the date it gives, and the company confirms every booking. Never invent a flight, hotel, time, booking reference or price. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
+        "defaultPrompt": [
+          "Tailor-made packages with a price breakdown, and proposals day by day",
+          "Can you put together 10 days in Peru with Machu Picchu for six of us, and what would it cost?",
+          "How do I contact the business?"
+        ],
+        "category": "Business",
+        "websiteURL": "https://www.bizplug.ai/industries/dmc",
+        "privacyPolicyURL": "https://www.bizplug.ai/privacy",
+        "termsOfServiceURL": "https://www.bizplug.ai/terms",
+        "developerName": "BizPlug",
+        "supportURL": "https://www.bizplug.ai/contact",
+        "supportEmail": "info@bizplug.ai",
+        "brandColor": "#d4ff3a",
+        "logo": "./assets/icon.png",
+        "composerIcon": "./assets/icon.png"
+      },
+      "review": {
+        "commerce": false,
+        "test_cases": [
+          {
+            "prompt": "What can this plug-in do?",
+            "expect": "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Tailor-made packages with a price breakdown, and proposals day by day",
+            "expect": "Calls get_package_estimate and answers from the published profile.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Can you put together 10 days in Peru with Machu Picchu for six of us, and what would it cost?",
+            "expect": "Answers from the business profile, or says it is not covered and offers contact details.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Go ahead and send it.",
+            "expect": "Calls request_custom_proposal only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "What trips do you offer?",
+            "expect": "Calls find_itineraries and lists only the published itineraries with their days and prices, or says none are published.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Show me day 3 of the first itinerary.",
+            "expect": "Calls get_itinerary with the itinerary's id and day 3, and shows only what the business published for that day.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "I have a trip code from the operator. Can you open my trip?",
+            "expect": "Asks for the code, then calls open_my_trip with it exactly as typed; never guesses or suggests a code, and says so plainly when no trip has that code.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Write me a poem about the ocean.",
+            "expect": "Does not call any tool.",
+            "shouldTrigger": false
+          }
+        ],
+        "demo_recording_url": null
+      },
+      "publication": {
+        "status": "draft",
+        "pricing": "$24.99/month or $199/year"
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.49.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.50.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -15,9 +15,9 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 | Engine | Sample businesses |
 | --- | --- |
 | `order` | `coffee-shops/demo-cafe`, `florists/demo-florist`, `retail/demo-shop` |
-| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tourism-bureaus/demo-sample` |
+| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tour-operators/demo-riverbend-journeys`, `tourism-bureaus/demo-sample` |
 | `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
-| `quote` | `hvac/demo-hvac` |
+| `quote` | `dmc/demo-andes-path`, `hvac/demo-hvac` |
 | `track` | `property-management/demo-pm` |
 
 List the tools, then call one:
@@ -143,7 +143,7 @@ Read-only.
 
 ### `stay`: Check what is free for dates and party size with the total price, send a booking request, check its status.
 
-The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/hospitality/vrp-test-villaakerlyckan`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
+The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/hospitality/vrp-test-villaakerlyckan`, `https://mcp.bizplug.ai/plugin/tour-operators/demo-riverbend-journeys`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
 
 #### `check_room_availability` (look-up: Availability and price)
 
@@ -185,7 +185,7 @@ Read-only.
 | --- | --- | --- | --- |
 | `reference` | string | yes | The reference returned when the request was made, e.g. BP-7K2Q9D. |
 
-<details><summary>Tool names of the 15 stay industries</summary>
+<details><summary>Tool names of the 16 stay industries</summary>
 
 | Industry | Look-up | Request | Status |
 | --- | --- | --- | --- |
@@ -200,6 +200,7 @@ Read-only.
 | Museums & Galleries | `check_ticket_availability` | `request_tickets` | `get_ticket_request_status` |
 | Sports Teams & Venues | `check_seat_availability` | `request_tickets` | `get_ticket_request_status` |
 | Vacation Rentals | `check_rental_availability` | `request_booking` | `get_booking_status` |
+| Tour Operators | `check_tour_departures` | `request_tour_booking` | `get_booking_status` |
 | Car Rental | `check_vehicle_availability` | `request_reservation` | `get_reservation_status` |
 | Coworking & Offices | `check_space_availability` | `request_space_booking` | `get_booking_status` |
 | Activity Calendar | `check_activity_calendar` | `request_activity_places` | `get_activity_request_status` |
@@ -284,7 +285,7 @@ Read-only.
 
 ### `quote`: Work out an estimate from published price rules, request a quote or a visit, check its status.
 
-The inputs below are HVAC & Heating/Cooling's. Every quote industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/hvac/demo-hvac`.
+The inputs below are HVAC & Heating/Cooling's. Every quote industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/dmc/demo-andes-path`, `https://mcp.bizplug.ai/plugin/hvac/demo-hvac`.
 
 #### `get_service_estimate` (look-up: Price estimate)
 
@@ -317,7 +318,7 @@ Read-only.
 | --- | --- | --- | --- |
 | `reference` | string | yes | The reference returned when the request was made, e.g. BP-7K2Q9D. |
 
-<details><summary>Tool names of the 14 quote industries</summary>
+<details><summary>Tool names of the 15 quote industries</summary>
 
 | Industry | Look-up | Request | Status |
 | --- | --- | --- | --- |
@@ -330,6 +331,7 @@ Read-only.
 | Pest Control | `get_treatment_estimate` | `request_treatment` | `get_job_status` |
 | Solar & Clean Energy | `get_solar_estimate` | `request_site_survey` | `get_survey_status` |
 | Moving & Storage | `get_moving_estimate` | `request_move` | `get_move_status` |
+| Destination Management Companies | `get_package_estimate` | `request_custom_proposal` | `get_proposal_status` |
 | Catering & Events | `get_catering_estimate` | `request_catering_quote` | `get_quote_status` |
 | Logistics & Delivery | `get_shipping_estimate` | `request_pickup` | `track_shipment` |
 | Insurance | `get_quote_requirements` | `request_quote` | `get_quote_status` |
@@ -537,6 +539,41 @@ Read-only. Only when the host has a WhatsApp concierge or number. Industries: Va
 | `home` | string |  | Optional: the home they chose. |
 | `picks` | array of string |  | Optional: the picks the guest saved. |
 | `note` | string |  | Optional: anything else for the host, in the guest's words. |
+
+### `find_itineraries` (Itineraries)
+
+Read-only. Only when the business published itineraries without a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `query` | string |  | Optional: words to look for, such as a place or a kind of trip. |
+
+### `get_itinerary` (Itinerary day by day)
+
+Read-only. Only when the business published itineraries without a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `itinerary` | string | yes | The itinerary's id or name, from the itineraries list. |
+| `day` | integer |  | Optional: one day of the trip, 1 for the first day. |
+
+### `open_my_trip` (My trip)
+
+Read-only. Only when the business published trips with a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `code` | string | yes | The trip code exactly as the traveller typed it. Never guess, suggest or invent one. |
+| `day` | integer |  | Optional: one day of the trip, 1 for the first day. |
 
 ### `find_members` (Members)
 
