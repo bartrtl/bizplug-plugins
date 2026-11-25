@@ -346,7 +346,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .head .wm{flex:none;box-sizing:border-box;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
 .head .wm img{height:44px;width:auto;max-width:100%;object-fit:contain;display:block}
 @media (max-width:420px){.head .wm{height:48px;max-width:150px}.head .wm img{height:34px}}
-.cpick .cimg,.it .cimg,.sheet .cimg{width:100%;max-height:170px;object-fit:cover;border-radius:12px;margin:8px 0 4px;display:block}
+.cpick .cimg,.it .cimg,.sheet .cimg,.chouse .cimg{width:100%;max-height:170px;object-fit:cover;border-radius:12px;margin:8px 0 4px;display:block}
 .ctags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.ccat,.ctag{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}.ccat{background:var(--glow);color:inherit;border-color:transparent}
 .cwhy{margin:8px 0 0;font-style:italic;line-height:1.45}.coffer{margin-top:8px;padding:8px 10px;border-radius:10px;border:1px dashed var(--a1);font-size:13px}.coffer b{color:var(--a1)}
 .btn.on{border-color:var(--a1);color:var(--a1)}.ctrip{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--a1)}.ctrip span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
