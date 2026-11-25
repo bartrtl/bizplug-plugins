@@ -118,6 +118,14 @@
           "help": "ISO code for the prices in the other files."
         },
         {
+          "key": "picks_title",
+          "label": "Name for your local picks",
+          "required": false,
+          "type": "text",
+          "example": "Harrison's Suggestions",
+          "help": "Optional, up to 40 characters. Replaces \"Explore the area\" on your card's menu and picks screen. Leave empty to keep Explore the area."
+        },
+        {
           "key": "notify_email",
           "label": "Requests go to",
           "required": false,

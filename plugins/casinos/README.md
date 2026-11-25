@@ -1,6 +1,6 @@
 # BizPlug Casinos & Gaming
 
-Version 0.50.0. Hotel rooms and show tickets (no wagering) for casinos & gaming businesses.
+Version 0.51.0. Hotel rooms and show tickets (no wagering) for casinos & gaming businesses.
 
 - Main function: Hotel rooms and show tickets (no wagering)
 - MCP server URL: `https://mcp.bizplug.ai/plugin/casinos` (streamable HTTP, no sign-in)
@@ -32,6 +32,7 @@ Version 0.50.0. Hotel rooms and show tickets (no wagering) for casinos & gaming 
 
 ## Changes
 
+- **0.51.0** (25 November 2026): Vacation rentals: name your local picks yourself, such as "Harrison's Suggestions", in place of Explore the area.
 - **0.50.0** (25 November 2026): Tour operators and DMCs: trips day by day in the card, with a picture per day, each day opening on its flights, hotels and activities by the hour; My trip by code; and a proposal's price breakdown.
 - **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
 - **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.

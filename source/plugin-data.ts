@@ -50,7 +50,7 @@ export type PluginDataSpec = {
 const col = (key: string, label: string, required: boolean, type: ColumnType, example: string, help: string): DataColumn => ({ key, label, required, type, example, help });
 
 // Shared by every plug-in. Examples come from plugin-examples.ts so each industry sees its own kind of business.
-const businessDataset = (name: string, ex?: IndustryExample, software = false, orders = false, trips = false): Dataset => ({
+const businessDataset = (name: string, ex?: IndustryExample, software = false, orders = false, trips = false, concierge = false): Dataset => ({
   id: "business",
   file: "business.csv",
   title: "Business details",
@@ -75,6 +75,8 @@ const businessDataset = (name: string, ex?: IndustryExample, software = false, o
     // Order plug-ins (0.37.0): the fee a delivery order carries.
     // Tour operators and DMCs (0.50.0): how the card lays trips out.
     ...(trips ? [col("trip_layout", "Trip layout", false, "text", "plan", "plan (the default: a photo and the days as a list that opens in place) or cards (the days as a grid of picture cards, each day on its own screen). Travellers can switch in the card.")] : []),
+    // Vacation rentals (0.51.0): the host's own name for its local picks.
+    ...(concierge ? [col("picks_title", "Name for your local picks", false, "text", "Harrison's Suggestions", "Optional, up to 40 characters. Replaces \"Explore the area\" on your card's menu and picks screen. Leave empty to keep Explore the area.")] : []),
     ...(orders ? [col("delivery_fee", "Delivery fee", false, "number", "5", "Number only, in your currency. Added to every delivery order and its checkout; pickup orders never carry it. Leave empty if delivery is free or you price it yourself.")] : []),
     col("notify_email", "Requests go to", false, "email", "orders@example.com", "The team inbox that should receive requests from ChatGPT (not shown to customers)."),
     // Software products (plug-in 0.15.0): the product's own pages, for Pricing, Help & guides, Support and Contact.
@@ -826,7 +828,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
     engine: fn.engine,
     functionTitle: fn.title,
     datasets: [
-      businessDataset(ind.name, ex, Boolean(fn.software), fn.engine === "order", Boolean(fn.itinerary)),
+      businessDataset(ind.name, ex, Boolean(fn.software), fn.engine === "order", Boolean(fn.itinerary), Boolean(fn.concierge)),
       // 0.18.0: a show or conference publishes its programme instead of a venue's spaces.
       ...engineDatasets(fn.engine, fn.noun, ex).map((d) => (fn.show && d.id === "inventory" ? { ...d, unless: SHOW_FILES } : d)),
       servicesDataset(ex),
@@ -975,7 +977,8 @@ export function validateCsv(d: Dataset, text: string): ValidationResult {
       if (!CHECKS[c.type](v)) errors.push(`Row ${line}: "${c.key}" should be ${c.type === "day" ? "a day like mon" : `a ${c.type}`} (got "${v.slice(0, 40)}").`);
     }
     const idAt = header.indexOf("id");
-    if (idAt >= 0 && d.id !== "blocked") {
+    // blocked-dates.csv and rates.csv list an option once per range, so their ids repeat.
+    if (idAt >= 0 && d.id !== "blocked" && d.id !== "rates") {
       const id = (r[idAt] ?? "").trim();
       if (id && ids.has(id)) errors.push(`Row ${line}: id "${id}" is used twice.`);
       ids.add(id);

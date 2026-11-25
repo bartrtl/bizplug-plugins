@@ -26,6 +26,7 @@ Columns (first row of the file, exactly these names):
 - `region`: State or country, text.  Example: NC
 - `hours`: Opening hours, text. As shown to customers. Example: Mon-Fri 09:00-17:00; Sat 10:00-14:00
 - `currency`: Currency, text. ISO code for the prices in the other files. Example: USD
+- `picks_title`: Name for your local picks, text. Optional, up to 40 characters. Replaces "Explore the area" on your card's menu and picks screen. Leave empty to keep Explore the area. Example: Harrison's Suggestions
 - `notify_email`: Requests go to, email. The team inbox that should receive requests from ChatGPT (not shown to customers). Example: orders@example.com
 
 How to collect it:
