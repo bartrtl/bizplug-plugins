@@ -1,2 +1,2 @@
-id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url
-full-day-package,Full-day wedding package,6800,150,"Ceremony, reception and coordinator",fri:6800;sat:6800,,,,,,,,,,
+id,name,rate,capacity,description,day_rates,per,start,end,category,place,featured,free,url,url_label,maps_url,amenities
+full-day-package,Full-day wedding package,6800,150,"Ceremony, reception and coordinator",fri:6800;sat:6800,,,,,,,,,,,

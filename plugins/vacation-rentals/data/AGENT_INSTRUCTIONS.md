@@ -53,6 +53,7 @@ Columns (first row of the file, exactly these names):
 - `url`: Event: its own page, url. Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request. Example: 
 - `url_label`: Event: what the page is, text. Optional: Tickets or Website. Example: 
 - `maps_url`: Event: directions, url. Optional: a directions link (https). Example: 
+- `amenities`: Features, text. Optional, from plug-in version 0.48.0 (vacation rentals): what the home has, separated by semicolons, such as Pet friendly;Pool table;Bunk room. Which home fits matches a group's wishes against them; write No pets for a home that takes no dogs. Example: 
 
 How to collect it:
 1. Copy each bookable option and its standard published rate from the website or booking engine.
@@ -100,6 +101,74 @@ Columns (first row of the file, exactly these names):
 How to collect it:
 1. Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).
 2. Keep each answer factual and current. Leave out anything the owner has not confirmed.
+
+### places.csv (optional, up to 150 rows)
+Your own recommendations near your homes: where to eat, groceries, the beach, things to do. Guests browse them by category in the card, Plan my stay builds a day-by-day plan from them, and ChatGPT presents them as yours.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Name, text. The place's name, as it is known. Example: Harris Teeter
+- `category` (required): Category, text. One of: groceries, eat, drink, beach, outdoors, activities, shopping, culture, wellness, services. Example: groceries
+- `why`: Why we like it, text. In your own words, one or two sentences. This is what makes a pick yours. Example: Do the big shop here when you arrive: a full supermarket with a deli and bakery.
+- `distance`: How far, text. From your homes, in words. Example: 10 min by car
+- `minutes`: Minutes away, number. The same distance in minutes, to put the nearest first. Example: 10
+- `price`: Price level, text. Optional: $ to $$$$, or Free. Example: $$
+- `best_time`: Best time, text. Optional: when to go. Example: Before 10:00, when it is quiet
+- `hours`: Opening hours, text. Optional, as published by the place; guests are told to check before they go. Example: Daily 6:00 to 23:00
+- `address`: Address, text. Optional. Example: 515 Freshfields Dr, Johns Island, SC
+- `website`: Website, url. Optional, https. Example: https://www.harristeeter.com
+- `maps_url`: Directions, url. Optional: a Google Maps or Apple Maps link (https). Example: 
+- `book_url`: Book or reserve, url. Optional: the place's own booking page (https). Example: 
+- `image`: Photo, url. Optional: a photo the card may show (https, on storage.googleapis.com). Example: 
+- `good_for`: Good for, text. Optional, separated by semicolons: kids, dogs, rainy, couples, groups, sunset, free. Example: kids;rainy
+- `offer`: Partner offer, text. Optional: an offer the place gives your guests, as agreed with it, such as 10% off a kayak tour. Example: 
+- `offer_url`: Offer link, url. Optional: where the guest claims the offer (https). Example: 
+- `offer_direct`: Only for direct bookings, boolean. Optional: yes when the offer is only for guests who booked with you directly. Example: 
+
+How to collect it:
+1. Write each pick in the host's own words: why they recommend it, and for whom. Start with groceries and the first dinner.
+2. Give the distance from the homes in words and in minutes. Never copy reviews or ratings from other sites.
+3. Add an offer only when the place agreed to it, with the exact terms.
+
+### area.csv (optional, up to 40 rows)
+About the area, its history, a map, getting here and around, the seasons, local rules, essentials and safety. Guests read it in the card and can ask ChatGPT more from each topic.
+
+Columns (first row of the file, exactly these names):
+- `topic` (required): Topic, text. One of: about, history, map, arrival, around, seasons, rules, essentials, safety. Example: arrival
+- `title` (required): Title, text.  Example: Getting here
+- `text` (required): Text, text. A short paragraph in your own words. Example: Charleston International Airport (CHS) is about 32 miles away; Island Transportation does transfers.
+- `map_url`: Map link, url. Optional: a map page (https), such as Google Maps or the area's own map. Example: 
+- `image`: Picture, url. Optional (https, on storage.googleapis.com). Example: 
+- `questions`: Questions to ask ChatGPT, text. Optional, separated by semicolons: questions the guest can send to the chat from this topic, where ChatGPT answers from what it knows and the web, not from you. Example: 
+
+How to collect it:
+1. Write what a guest needs before and during the stay, in the host's words. Rules (gate passes, beach rules) as the area publishes them.
+
+### events.csv (optional, up to 100 rows)
+Events near your homes. Guests see the ones on their dates, and Plan my stay puts them in the plan.
+
+Columns (first row of the file, exactly these names):
+- `name` (required): Event, text.  Example: Holiday Festival of Lights
+- `start` (required): First day, date. YYYY-MM-DD. Example: 2026-11-13
+- `end`: Last day, date. YYYY-MM-DD; empty for one day. Example: 2027-01-01
+- `place`: Where, text.  Example: James Island County Park
+- `description`: What it is, text. One sentence. Example: 
+- `url`: Its own page, url. https. Example: 
+
+How to collect it:
+1. List only events with published dates, from the organiser's own page. Remove past ones.
+
+### house.csv (optional, up to 120 rows)
+How things work in your homes: the stove, oven, grill, washer and dryer, coffee maker, heating, TV, check-in, rules and checkout. Guests find the answer in the card instead of messaging you.
+
+Columns (first row of the file, exactly these names):
+- `topic` (required): Topic, text. One of: kitchen, laundry, outdoor, comfort, arrival, rules, checkout, other. Example: kitchen
+- `title` (required): Title, text. The appliance or thing. Example: Gas grill
+- `text` (required): How it works, text. Step by step, in your own words. Example: Open the propane valve, press and turn a burner knob to light it.
+- `homes`: Which homes, text. Optional: home ids from your homes file, separated by semicolons. Empty means every home. Example: 
+- `image`: Photo, url. Optional (https, on storage.googleapis.com). Example: 
+
+How to collect it:
+1. Never put door codes, Wi-Fi passwords or alarm codes here: they are sent to the guest privately before arrival.
 
 ### social.csv (optional, up to 60 rows)
 Where to follow you, and your latest posts with their pictures, shown under Social media in the plug-in. Feeds (YouTube, podcast, blog, Substack, Medium, Bluesky, Mastodon) are read automatically; for LinkedIn, Instagram, X, Facebook and TikTok you pin the posts you want shown. From plug-in version 0.35.0 a YouTube video plays inside the card.

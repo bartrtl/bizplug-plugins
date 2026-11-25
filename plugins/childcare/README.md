@@ -1,6 +1,6 @@
 # BizPlug Childcare & Daycare
 
-Version 0.47.0. Schedule tours and enrollment calls for childcare & daycare businesses.
+Version 0.48.0. Schedule tours and enrollment calls for childcare & daycare businesses.
 
 - Main function: Schedule tours and enrollment calls
 - MCP server URL: `https://mcp.bizplug.ai/plugin/childcare` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.47.0. Schedule tours and enrollment calls for childcare & daycare busi
 
 ## Changes
 
+- **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.
 - **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.
 - **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.

@@ -414,6 +414,91 @@ const locationsDataset: Dataset = {
   ],
 };
 
+// Vacation rentals (`concierge` in industry-functions.ts), from plug-in version 0.48.0 (concierge.ts): the host's own
+// local picks, area guide, events and house guide. All optional; each menu option shows only once its file is there.
+const placesDataset: Dataset = {
+  id: "places",
+  file: "places.csv",
+  title: "Local picks",
+  why: "Your own recommendations near your homes: where to eat, groceries, the beach, things to do. Guests browse them by category in the card, Plan my stay builds a day-by-day plan from them, and ChatGPT presents them as yours.",
+  required: false,
+  maxRows: 150,
+  columns: [
+    col("name", "Name", true, "text", "Harris Teeter", "The place's name, as it is known."),
+    col("category", "Category", true, "text", "groceries", "One of: groceries, eat, drink, beach, outdoors, activities, shopping, culture, wellness, services."),
+    col("why", "Why we like it", false, "text", "Do the big shop here when you arrive: a full supermarket with a deli and bakery.", "In your own words, one or two sentences. This is what makes a pick yours."),
+    col("distance", "How far", false, "text", "10 min by car", "From your homes, in words."),
+    col("minutes", "Minutes away", false, "number", "10", "The same distance in minutes, to put the nearest first."),
+    col("price", "Price level", false, "text", "$$", "Optional: $ to $$$$, or Free."),
+    col("best_time", "Best time", false, "text", "Before 10:00, when it is quiet", "Optional: when to go."),
+    col("hours", "Opening hours", false, "text", "Daily 6:00 to 23:00", "Optional, as published by the place; guests are told to check before they go."),
+    col("address", "Address", false, "text", "515 Freshfields Dr, Johns Island, SC", "Optional."),
+    col("website", "Website", false, "url", "https://www.harristeeter.com", "Optional, https."),
+    col("maps_url", "Directions", false, "url", "", "Optional: a Google Maps or Apple Maps link (https)."),
+    col("book_url", "Book or reserve", false, "url", "", "Optional: the place's own booking page (https)."),
+    col("image", "Photo", false, "url", "", "Optional: a photo the card may show (https, on storage.googleapis.com)."),
+    col("good_for", "Good for", false, "text", "kids;rainy", "Optional, separated by semicolons: kids, dogs, rainy, couples, groups, sunset, free."),
+    col("offer", "Partner offer", false, "text", "", "Optional: an offer the place gives your guests, as agreed with it, such as 10% off a kayak tour."),
+    col("offer_url", "Offer link", false, "url", "", "Optional: where the guest claims the offer (https)."),
+    col("offer_direct", "Only for direct bookings", false, "boolean", "", "Optional: yes when the offer is only for guests who booked with you directly."),
+  ],
+  collect: [
+    "Write each pick in the host's own words: why they recommend it, and for whom. Start with groceries and the first dinner.",
+    "Give the distance from the homes in words and in minutes. Never copy reviews or ratings from other sites.",
+    "Add an offer only when the place agreed to it, with the exact terms.",
+  ],
+};
+const areaDataset: Dataset = {
+  id: "area",
+  file: "area.csv",
+  title: "Area guide",
+  why: "About the area, its history, a map, getting here and around, the seasons, local rules, essentials and safety. Guests read it in the card and can ask ChatGPT more from each topic.",
+  required: false,
+  maxRows: 40,
+  columns: [
+    col("topic", "Topic", true, "text", "arrival", "One of: about, history, map, arrival, around, seasons, rules, essentials, safety."),
+    col("title", "Title", true, "text", "Getting here", ""),
+    col("text", "Text", true, "text", "Charleston International Airport (CHS) is about 32 miles away; Island Transportation does transfers.", "A short paragraph in your own words."),
+    col("map_url", "Map link", false, "url", "", "Optional: a map page (https), such as Google Maps or the area's own map."),
+    col("image", "Picture", false, "url", "", "Optional (https, on storage.googleapis.com)."),
+    col("questions", "Questions to ask ChatGPT", false, "text", "", "Optional, separated by semicolons: questions the guest can send to the chat from this topic, where ChatGPT answers from what it knows and the web, not from you."),
+  ],
+  collect: ["Write what a guest needs before and during the stay, in the host's words. Rules (gate passes, beach rules) as the area publishes them."],
+};
+const eventsDataset: Dataset = {
+  id: "events",
+  file: "events.csv",
+  title: "What's on",
+  why: "Events near your homes. Guests see the ones on their dates, and Plan my stay puts them in the plan.",
+  required: false,
+  maxRows: 100,
+  columns: [
+    col("name", "Event", true, "text", "Holiday Festival of Lights", ""),
+    col("start", "First day", true, "date", "2026-11-13", "YYYY-MM-DD."),
+    col("end", "Last day", false, "date", "2027-01-01", "YYYY-MM-DD; empty for one day."),
+    col("place", "Where", false, "text", "James Island County Park", ""),
+    col("description", "What it is", false, "text", "", "One sentence."),
+    col("url", "Its own page", false, "url", "", "https."),
+  ],
+  collect: ["List only events with published dates, from the organiser's own page. Remove past ones."],
+};
+const houseDataset: Dataset = {
+  id: "house",
+  file: "house.csv",
+  title: "House guide",
+  why: "How things work in your homes: the stove, oven, grill, washer and dryer, coffee maker, heating, TV, check-in, rules and checkout. Guests find the answer in the card instead of messaging you.",
+  required: false,
+  maxRows: 120,
+  columns: [
+    col("topic", "Topic", true, "text", "kitchen", "One of: kitchen, laundry, outdoor, comfort, arrival, rules, checkout, other."),
+    col("title", "Title", true, "text", "Gas grill", "The appliance or thing."),
+    col("text", "How it works", true, "text", "Open the propane valve, press and turn a burner knob to light it.", "Step by step, in your own words."),
+    col("homes", "Which homes", false, "text", "", "Optional: home ids from your homes file, separated by semicolons. Empty means every home."),
+    col("image", "Photo", false, "url", "", "Optional (https, on storage.googleapis.com)."),
+  ],
+  collect: ["Never put door codes, Wi-Fi passwords or alarm codes here: they are sent to the guest privately before arrival."],
+};
+
 function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dataset[] {
   switch (engine) {
     case "order": {
@@ -471,6 +556,7 @@ function engineDatasets(engine: Engine, noun: string, ex?: IndustryExample): Dat
             col("url", "Event: its own page", false, "url", "", "Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request."),
             col("url_label", "Event: what the page is", false, "text", "", "Optional: Tickets or Website."),
             col("maps_url", "Event: directions", false, "url", "", "Optional: a directions link (https)."),
+            col("amenities", "Features", false, "text", "", "Optional, from plug-in version 0.48.0 (vacation rentals): what the home has, separated by semicolons, such as Pet friendly;Pool table;Bunk room. Which home fits matches a group's wishes against them; write No pets for a home that takes no dogs."),
           ],
           collect: [
             "Copy each bookable option and its standard published rate from the website or booking engine.",
@@ -622,6 +708,7 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       faqDataset(ex),
       ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
       ...(fn.visits ? [locationsDataset] : []),
+      ...(fn.concierge ? [placesDataset, areaDataset, eventsDataset, houseDataset] : []),
       ...(fn.infoFirst ? [committeesDataset, newsDataset, newsletterDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),

@@ -17,6 +17,7 @@ A card theme is five colours for a plug-in's card in ChatGPT. A business picks o
 | [`noir-gold.json`](noir-gold.json) | Noir Gold | Bart Cant |
 | [`qatar-sports.json`](qatar-sports.json) | Qatar Sports | Bart Cant - Rethink Labs |
 | [`qatar.json`](qatar.json) | Qatar | Bart Cant - Rethink Labs |
+| [`south-carolina-beaches.json`](south-carolina-beaches.json) | South Carolina Beaches | Bart Cant - Rethink Labs |
 | [`usa.json`](usa.json) | USA | Bart Cant - Rethink Labs |
 
 `check-theme.ts` checks a theme the way BizPlug does: valid colours, a unique id, and readable contrast. `preview.ts` draws it on the real card with the sample businesses.

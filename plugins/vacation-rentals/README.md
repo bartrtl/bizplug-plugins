@@ -1,6 +1,6 @@
 # BizPlug Vacation Rentals
 
-Version 0.47.0. Home availability, nightly rates and booking for vacation rentals businesses.
+Version 0.48.0. Home availability, nightly rates and booking for vacation rentals businesses.
 
 - Main function: Home availability, nightly rates and booking
 - MCP server URL: `https://mcp.bizplug.ai/plugin/vacation-rentals` (streamable HTTP, no sign-in)
@@ -10,6 +10,11 @@ Version 0.47.0. Home availability, nightly rates and booking for vacation rental
 ## What a customer can do
 
 - **Availability and price**: See what is free for your dates and party size, with the total price.
+- **Plan my stay**: A day-by-day plan for your dates and your group from the host's own picks, with the price of the homes that fit and Book.
+- **Explore the area**: The host's own picks nearby: where to eat, the beach, groceries and things to do, with why and how far.
+- **Which home fits?**: Tell us who's coming and what you want: the home that fits best, and why.
+- **Area guide & what's on**: Getting here and around, the seasons, local rules, and what's on during your dates.
+- **House guide**: How things work in the home: the stove, grill, washer, Wi-Fi and more.
 - **Request the booking**: Send a booking request. The business confirms it; nothing is held or charged here.
 - **Ask a question**: Answers from the business's own information: homes and who they sleep, nightly rates, house rules, check-in and the local area.
 - **Booking status**: Check a booking request with its reference.
@@ -29,9 +34,16 @@ Version 0.47.0. Home availability, nightly rates and booking for vacation rental
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `open_form` | Open one of this vacation rentals business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 | `check_direct_offer` | Ask this vacation rentals business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book. |
+| `explore_area` | The host's own local picks near its homes: where to eat, groceries, beaches and pools, things to do, shopping, day trips and services, each with why the host recommends it, how far it is, the best time to go and any partner offer. Optional category, good_for (kids, dogs, rainy, couples, groups, sunset, free) and query. Read-only. Use it for any question about what to do, where to eat or what is nearby. |
+| `get_area_guide` | The host's area guide (about the area, its history, a map, getting there and around, seasons, local rules, essentials, safety) and the events it lists, matched to the guest's dates when start and end are given. Optional topic. Read-only. |
+| `get_house_guide` | How things work in the host's homes, as the host explains them: the stove and oven, grill, washer and dryer, coffee maker, heating and cooling, TV, check-in, house rules and checkout. Optional home and query ("grill", "washing machine"). Read-only. Never guess how an appliance works. |
+| `match_home` | Which of the host's homes fits a group: adults, children, dogs and what they want (needs, e.g. "pool table, near the beach"), with the reasons from the published details and, with dates, the price for the stay. Read-only; check_rental_availability confirms the dates. |
+| `plan_stay` | A day-by-day plan for the guest's dates (start, end) and group (adults, children, dogs), from the host's own local picks, shaped by interests and pace, with the events on those dates, rainy-day options, partner offers, and the homes that fit priced for the stay. Optional picks (names the guest saved) and home. Read-only: nothing is booked or held. Afterwards offer to check availability and book, or to continue on WhatsApp. |
+| `continue_on_whatsapp` | Hand the guest's trip (dates, group, home, saved picks, a note) to the host's WhatsApp concierge, which also answers during the stay. Returns the WhatsApp link and the exact message to send; sends nothing itself. Use it when the guest wants to continue with the host on WhatsApp. |
 
 ## Changes
 
+- **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.
 - **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.
 - **0.45.0** (23 November 2026): Member, exhibitor and sponsor lists as a grid of tiles with logo, name and category.

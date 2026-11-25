@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.47.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.48.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -452,6 +452,91 @@ Sends something to the business: once sent, it cannot be taken back. Only for a 
 | `name` | string | yes | Customer's name. |
 | `email` | string | yes | Email the organisers can reply to. |
 | `phone` | string |  | Optional phone number. |
+
+### `explore_area` (Explore the area)
+
+Read-only. Only when the host published its local picks (places.csv). Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `category` | `groceries` or `eat` or `drink` or `beach` or `outdoors` or `activities` or `shopping` or `culture` or `wellness` or `services` |  | Optional: one category of the host's picks. |
+| `good_for` | `kids` or `dogs` or `rainy` or `couples` or `groups` or `sunset` or `free` |  | Optional: only picks the host marked good for this. |
+| `query` | string |  | Optional: words to look for, such as pizza or kayak. |
+
+### `get_area_guide` (Area guide and events)
+
+Read-only. Only when the host published an area guide or events (area.csv, events.csv). Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `topic` | string |  | Optional: one topic (about, history, map, arrival, around, seasons, rules, essentials, safety) or words to look for. |
+| `start` | string |  | Arrival date, YYYY-MM-DD. |
+| `end` | string |  | Departure date, YYYY-MM-DD. |
+
+### `get_house_guide` (House guide)
+
+Read-only. Only when the host published a house guide (house.csv). Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `home` | string |  | Optional: the home the guest stays in, by id or name. |
+| `query` | string |  | Optional: what they ask about, such as grill, washer, oven or Wi-Fi. |
+
+### `match_home` (Which home fits)
+
+Read-only. Only on vacation rental plug-ins from version 0.48.0. Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer | yes | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `dogs` | integer |  | How many dogs come along. |
+| `needs` | string |  | Optional: what the group wants, in their words (pool table, near the beach, bunk beds). |
+| `start` | string |  | Arrival date, YYYY-MM-DD. |
+| `end` | string |  | Departure date, YYYY-MM-DD. |
+
+### `plan_stay` (Plan my stay)
+
+Read-only. Only on vacation rental plug-ins from version 0.48.0. Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer | yes | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `start` | string | yes | Arrival date, YYYY-MM-DD. |
+| `end` | string | yes | Departure date, YYYY-MM-DD. |
+| `dogs` | integer |  | How many dogs come along. |
+| `interests` | array of string |  | Optional: what they enjoy most. |
+| `pace` | `relaxed` or `balanced` or `packed` |  | Optional: how full the days should be. Defaults to balanced. |
+| `picks` | array of string |  | Optional: names of the host's picks the guest saved, planned first. |
+| `home` | string |  | Optional: the home they chose, by id or name. |
+
+### `continue_on_whatsapp` (Continue on WhatsApp)
+
+Read-only. Only when the host has a WhatsApp concierge or number. Industries: Vacation Rentals.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `start` | string |  | Arrival date, YYYY-MM-DD. |
+| `end` | string |  | Departure date, YYYY-MM-DD. |
+| `dogs` | integer |  | How many dogs come along. |
+| `home` | string |  | Optional: the home they chose. |
+| `picks` | array of string |  | Optional: the picks the guest saved. |
+| `note` | string |  | Optional: anything else for the host, in the guest's words. |
 
 ### `find_members` (Members)
 

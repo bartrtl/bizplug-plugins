@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "bizplug-vacation-rentals",
-  "version": "0.47.0",
+  "version": "0.48.0",
   "description": "The vacation rentals plug-in from BizPlug. Main function: home availability, nightly rates and booking. It works from the business's own published profile, covering homes and who they sleep, nightly rates, house rules, check-in and the local area, and sends requests to the business to confirm. It never takes payment and only shares what the business has published. Provided by BizPlug: https://www.bizplug.ai, info@bizplug.ai.",
   "author": {
     "name": "Bart Cant - msg2ai",
@@ -54,6 +54,21 @@
           {
             "prompt": "Go ahead and send it.",
             "expect": "Calls request_booking only after the customer has confirmed the details, and reports that the business still has to confirm.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Where should we eat near the house? We have two kids.",
+            "expect": "Calls explore_area and gives the host's own picks as the host's, nearest first, or says the host has not published them; labels anything it adds as its own.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "Plan 4 days for us from 12 to 16 June, two adults, three kids and a dog.",
+            "expect": "Calls plan_stay with the dates and the group and shows the day-by-day plan from the host's picks with the homes that fit and their price for the stay; offers to check availability and book. Books nothing.",
+            "shouldTrigger": true
+          },
+          {
+            "prompt": "How do I use the washing machine?",
+            "expect": "Calls get_house_guide and answers only from the host's house guide, or says it is not covered and offers the host's contact; never guesses.",
             "shouldTrigger": true
           },
           {

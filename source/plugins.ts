@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.47.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.48.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -31,7 +31,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer" | "explore" | "plan" | "area" | "house" | "match";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -90,6 +90,13 @@ export const isVisitTool = (name: string) => (Object.values(VISIT_TOOLS) as stri
  * host's own domain.
  */
 export const DIRECT_OFFER_TOOL = "check_direct_offer";
+/**
+ * Vacation rentals (`concierge` in industry-functions.ts), from plug-in version 0.48.0 (concierge.ts): the host's
+ * local picks, area guide and events, house guide, which home fits, a plan for the stay, and the trip on WhatsApp.
+ * plugin-mcp.ts lists each only on a version with the flag, and only where the business published what it needs.
+ */
+export const CONCIERGE_TOOLS = { explore: "explore_area", area: "get_area_guide", house: "get_house_guide", match: "match_home", plan: "plan_stay", whatsapp: "continue_on_whatsapp" } as const;
+export const isConciergeTool = (name: string) => (Object.values(CONCIERGE_TOOLS) as string[]).includes(name);
 /** Who publishes the member list, in the tool copy: coworking's wording is unchanged since 0.12.0. */
 const MEMBERS_HOST: Record<string, string> = { coworking: "the coworking business", chambers: "the chamber or association" };
 const membersDirect = (slug: string) =>
@@ -213,8 +220,18 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
         { tool: "get_business_info", kind: "news", title: "News & events", description: "The latest news, upcoming events and the newsletter, with links to read more and sign up.", example: "What events are coming up?" },
       ]
     : [];
+  // 0.48.0, vacation rentals: the concierge, after availability and before the request (concierge.ts).
+  const concierge: MenuOption[] = fn.concierge
+    ? [
+        { tool: CONCIERGE_TOOLS.plan, kind: "plan", title: "Plan my stay", description: "A day-by-day plan for your dates and your group from the host's own picks, with the price of the homes that fit and Book.", example: "Plan 4 days for a family of five with a dog." },
+        { tool: CONCIERGE_TOOLS.explore, kind: "explore", title: "Explore the area", description: "The host's own picks nearby: where to eat, the beach, groceries and things to do, with why and how far.", example: "Where should we eat near the house?" },
+        { tool: CONCIERGE_TOOLS.match, kind: "match", title: "Which home fits?", description: "Tell us who's coming and what you want: the home that fits best, and why.", example: "Which home is best for 10 people with kids and a dog?" },
+        { tool: CONCIERGE_TOOLS.area, kind: "area", title: "Area guide & what's on", description: "Getting here and around, the seasons, local rules, and what's on during your dates.", example: "What's on while we're there?" },
+        { tool: CONCIERGE_TOOLS.house, kind: "house", title: "House guide", description: "How things work in the home: the stove, grill, washer, Wi-Fi and more.", example: "How do I use the grill?" },
+      ]
+    : [];
   return [
-    ...(fn.infoFirst ? [question, ...showcase, step(1), step(0), ...visits] : [step(0), step(1), ...visits, question]),
+    ...(fn.infoFirst ? [question, ...showcase, step(1), step(0), ...visits] : [step(0), ...concierge, step(1), ...visits, question]),
     step(2),
     ...(fn.members
       ? [{ tool: MEMBERS_TOOL, kind: "members" as const, title: "Members", description: "The member businesses here, when the business has published its member list: find one by name, kind of business, or what you need or offer, and contact it directly.", example: "Which member businesses here could help with web design?" }]
@@ -299,6 +316,17 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           },
         ]
       : []),
+    // 0.48.0, vacation rentals: the concierge (concierge.ts). Offered only to plug-ins on 0.48.0 or later (plugin-mcp.ts).
+    ...(fn.concierge
+      ? [
+          { name: CONCIERGE_TOOLS.explore, title: "Explore the area", description: "The host's own local picks near its homes: where to eat, groceries, beaches and pools, things to do, shopping, day trips and services, each with why the host recommends it, how far it is, the best time to go and any partner offer. Optional category, good_for (kids, dogs, rainy, couples, groups, sunset, free) and query. Read-only. Use it for any question about what to do, where to eat or what is nearby.", readOnly: true },
+          { name: CONCIERGE_TOOLS.area, title: "Area guide and events", description: "The host's area guide (about the area, its history, a map, getting there and around, seasons, local rules, essentials, safety) and the events it lists, matched to the guest's dates when start and end are given. Optional topic. Read-only.", readOnly: true },
+          { name: CONCIERGE_TOOLS.house, title: "House guide", description: "How things work in the host's homes, as the host explains them: the stove and oven, grill, washer and dryer, coffee maker, heating and cooling, TV, check-in, house rules and checkout. Optional home and query (\"grill\", \"washing machine\"). Read-only. Never guess how an appliance works.", readOnly: true },
+          { name: CONCIERGE_TOOLS.match, title: "Which home fits", description: "Which of the host's homes fits a group: adults, children, dogs and what they want (needs, e.g. \"pool table, near the beach\"), with the reasons from the published details and, with dates, the price for the stay. Read-only; check_rental_availability confirms the dates.", readOnly: true },
+          { name: CONCIERGE_TOOLS.plan, title: "Plan my stay", description: "A day-by-day plan for the guest's dates (start, end) and group (adults, children, dogs), from the host's own local picks, shaped by interests and pace, with the events on those dates, rainy-day options, partner offers, and the homes that fit priced for the stay. Optional picks (names the guest saved) and home. Read-only: nothing is booked or held. Afterwards offer to check availability and book, or to continue on WhatsApp.", readOnly: true },
+          { name: CONCIERGE_TOOLS.whatsapp, title: "Continue on WhatsApp", description: "Hand the guest's trip (dates, group, home, saved picks, a note) to the host's WhatsApp concierge, which also answers during the stay. Returns the WhatsApp link and the exact message to send; sends nothing itself. Use it when the guest wants to continue with the host on WhatsApp.", readOnly: true },
+        ]
+      : []),
     // 0.15.0, software products (software.ts). Offered only to plug-ins on 0.15.0 or later (plugin-mcp.ts).
     ...(fn.software
       ? [
@@ -342,6 +370,13 @@ export function buildPlugin(i: Industry): IndustryPlugin {
         : []),
       ...(fn.members
         ? [{ prompt: "Which member businesses here could help with web design?", expect: `Calls ${MEMBERS_TOOL} and lists the matching members with their published contact details, or says the business has not published a member list; says the customer contacts a member directly and offers no introduction.`, shouldTrigger: true }]
+        : []),
+      ...(fn.concierge
+        ? [
+            { prompt: "Where should we eat near the house? We have two kids.", expect: `Calls ${CONCIERGE_TOOLS.explore} and gives the host's own picks as the host's, nearest first, or says the host has not published them; labels anything it adds as its own.`, shouldTrigger: true },
+            { prompt: "Plan 4 days for us from 12 to 16 June, two adults, three kids and a dog.", expect: `Calls ${CONCIERGE_TOOLS.plan} with the dates and the group and shows the day-by-day plan from the host's picks with the homes that fit and their price for the stay; offers to check availability and book. Books nothing.`, shouldTrigger: true },
+            { prompt: "How do I use the washing machine?", expect: `Calls ${CONCIERGE_TOOLS.house} and answers only from the host's house guide, or says it is not covered and offers the host's contact; never guesses.`, shouldTrigger: true },
+          ]
         : []),
       ...(fn.visits
         ? [

@@ -36,6 +36,10 @@
 //   result (view "visit") is a summary, the message to send as text and Continue on WhatsApp, and no name or
 //   email is asked; otherwise the form asks for them and the result is the usual sent request. A look-up of the
 //   locations from the chat (view "visits") lists them with a button into each form.
+//   From 0.48.0, on a vacation rental plug-in (plugin.concierge): Explore the area, Area guide & what's on, House
+//   guide, Which home fits, Plan my stay and Continue on WhatsApp (views places, area, house, match, plan, trip). Picks
+//   are saved to My trip (kept in the widget state); on a computer a pick or a topic opens in a panel beside the list.
+//   Questions about a pick, a topic or the weather go to the chat. Check availability & book opens the booking screen.
 //   From 0.35.0 a social media post that is a YouTube video (post.video) plays on its own screen in the card:
 //   YouTube's player in an iframe to youtube-nocookie.com, built only when the customer taps the post. It is the
 //   only thing the card ever frames, and the only time the card makes the customer's browser contact another site.
@@ -95,6 +99,12 @@ const ICONS: Record<string, string> = {
   tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   committees: '<circle cx="12" cy="6" r="2.5"/><circle cx="5" cy="17" r="2.5"/><circle cx="19" cy="17" r="2.5"/><path d="M12 8.5v3M12 11.5l-5 3.5M12 11.5l5 3.5"/>',
   news: '<path d="M4 5h13v14H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 16h3"/>',
+  // 0.48.0, the rental concierge.
+  explore: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+  plan: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18M8 15h3M8 18h6"/>',
+  area: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>',
+  house: '<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+  match: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c2.8 0 5 2.2 5 5"/>',
   daypass: '<path d="M3 9V6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v3a3 3 0 0 0 0 6v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a3 3 0 0 0 0-6z"/><path d="M14 9v6"/>',
   mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>',
   whatsapp: '<path d="M21 12a9 9 0 0 1-13.4 7.9L3 21l1.2-4.4A9 9 0 1 1 21 12z"/><path d="M9 9.5c.3 2.4 2.1 4.2 4.5 4.5l1-1 2 1-.4 1.6c-3.6.3-7.8-3.9-7.5-7.5L10.2 8l1 2z"/>',
@@ -330,6 +340,14 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .head .wm{flex:none;box-sizing:border-box;height:58px;max-width:200px;padding:7px 12px;border-radius:15px;background:#fff;display:grid;place-items:center;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 6px 18px rgba(0,0,0,.25)}
 .head .wm img{height:44px;width:auto;max-width:100%;object-fit:contain;display:block}
 @media (max-width:420px){.head .wm{height:48px;max-width:150px}.head .wm img{height:34px}}
+.cpick .cimg,.it .cimg,.sheet .cimg{width:100%;max-height:170px;object-fit:cover;border-radius:12px;margin:8px 0 4px;display:block}
+.ctags{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}.ccat,.ctag{font-size:11.5px;padding:3px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}.ccat{background:var(--glow);color:inherit;border-color:transparent}
+.cwhy{margin:8px 0 0;font-style:italic;line-height:1.45}.coffer{margin-top:8px;padding:8px 10px;border-radius:10px;border:1px dashed var(--a1);font-size:13px}.coffer b{color:var(--a1)}
+.btn.on{border-color:var(--a1);color:var(--a1)}.ctrip{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--a1)}.ctrip span{display:block;color:var(--muted);font-size:13px;margin-top:3px}
+.cgrid{display:grid;gap:8px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));margin-top:10px}.ctile{text-align:left;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);color:inherit;cursor:pointer;font:inherit}.ctile small{display:block;color:var(--a1);font-size:11px;text-transform:uppercase;letter-spacing:.04em}.ctile b{display:block;margin:3px 0}.ctile span{color:var(--muted);font-size:12.5px;line-height:1.35}
+.cq{display:block;width:100%;text-align:left;margin-top:6px;padding:9px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line);color:inherit;font:inherit;font-size:13.5px;cursor:pointer}.cq:hover{border-color:var(--a1)}
+.chouse{margin-top:6px;padding:10px 12px;border-radius:12px;background:var(--card);border:1px solid var(--line)}.chouse summary{cursor:pointer;display:flex;justify-content:space-between;gap:8px}.chouse summary small{color:var(--muted)}.chouse p{margin:8px 0 0;line-height:1.45}
+.cday{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--card);border:1px solid var(--line)}.cdh{font-weight:700;margin-bottom:6px}.cslot{display:grid;grid-template-columns:78px 1fr;gap:8px;padding:6px 0;border-top:1px solid var(--line)}.cslot small{color:var(--a1);font-size:11.5px;padding-top:2px}.cslot span{color:var(--muted);font-size:12.5px}.cslot p{margin:3px 0 0;font-size:13px;color:var(--muted)}.cslot .cnote{color:inherit}.cslot .acts{margin-top:4px;display:flex;flex-wrap:wrap;gap:14px}.it.dim{opacity:.6}
 .fly{position:fixed;inset:0;z-index:30;display:flex;justify-content:flex-end;background:rgba(5,6,12,.55);animation:flyin .15s ease-out}
 .sheet{width:min(440px,94%);height:100%;overflow:auto;background:var(--bg);border-left:1px solid var(--line);padding:18px;box-shadow:-16px 0 40px rgba(0,0,0,.4);animation:slidein .22s ease-out}
 @keyframes flyin{from{opacity:0}to{opacity:1}}
@@ -433,8 +451,8 @@ const state = { plugin: null, options: [], view: "loading", open: null, data: {}
   // 0.38.0: the language the customer chose on the card, and whether the menu was already asked for in the host's.
   lang: "", langAsked: false };
 const p = () => state.plugin || {};
-function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName, lang: state.lang }); } catch (e) {} }
-function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; if (ws && ws.lang) state.lang = ws.lang; }
+function save() { try { oa() && oa().setWidgetState && oa().setWidgetState({ f: state.f, business: state.business, bizName: state.bizName, lang: state.lang, trip: state.trip || [] }); } catch (e) {} }
+function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f = Object.assign(state.f, ws.f); if (ws && ws.business) state.business = ws.business; if (ws && ws.bizName) state.bizName = ws.bizName; if (ws && ws.lang) state.lang = ws.lang; if (ws && Array.isArray(ws.trip)) state.trip = ws.trip.filter((x) => typeof x === "string").slice(0, 30); }
 const opt = (kind) => state.options.find((o) => o.kind === kind) || null;
 // The card runs tools itself from version 0.3.0, once it knows which business it is working for.
 const inCard = () => Boolean(p().inCard && oa() && oa().callTool && (p().bound || state.business));
@@ -1551,6 +1569,190 @@ function visitsView() {
     '<div class="note">As published by ' + esc(d.business || "the business") + ". The business confirms every tour and day pass; nothing is booked or paid here.</div>" + links("");
 }
 
+// ---- The rental concierge (version 0.48.0, vacation rentals; concierge.ts) ----
+// Explore the area (the host's picks by category, saved to My trip), Area guide & what's on (topics with questions
+// for the chat), House guide (per home), Which home fits, Plan my stay (then Check availability & book) and
+// Continue on WhatsApp. On a computer a pick or a topic opens in a panel beside the list (the .fly sheet); on a phone
+// it opens on its own screen. Questions go to the chat, where the answer is the assistant's, not the host's.
+const conc = () => p().concierge || null;
+const wideNow = () => window.innerWidth >= 640;
+const tripList = () => state.trip || (state.trip = []);
+const inTrip = (name) => tripList().indexOf(name) >= 0;
+function toggleTrip(name) { const t = tripList(), i = t.indexOf(name); if (i >= 0) t.splice(i, 1); else t.push(name); save(); render(); }
+const possOf = (n) => (/s$/i.test(n) ? n + "’" : n + "’s");
+const hostName = (d) => (d && d.business) || p().businessName || p().title || "the host";
+const pickQ = (x, d) => "Tell me more about " + x.name + (x.address ? " (" + x.address + ")" : "") + " near " + hostName(d) + ": what to expect, what to order or do, how busy it gets and anything worth knowing before going. You may use what you know and search the web; tell me which parts are not from " + possOf(hostName(d)) + " own picks.";
+const gfTag = (g) => '<span class="ctag">' + esc({ kids: "Kids", dogs: "Dogs", rainy: "Rainy day", couples: "Couples", groups: "Groups", sunset: "Sunset", free: "Free" }[g] || g) + "</span>";
+function pickBody(x, d, full) {
+  return (x.image ? '<img class="cimg" src="' + esc(x.image) + '" alt="">' : "") +
+    '<div class="ctags"><span class="ccat">' + esc(x.categoryLabel) + "</span>" + (x.distance ? '<span class="ctag">' + esc(x.distance) + "</span>" : "") + (x.price ? '<span class="ctag">' + esc(x.price) + "</span>" : "") + (x.goodFor || []).map(gfTag).join("") + "</div>" +
+    (x.why ? '<p class="cwhy">“' + esc(x.why) + '”</p>' : "") +
+    (full && x.bestTime ? '<div class="qlabel" style="margin-top:10px">Best time</div><div class="bl">' + esc(x.bestTime) + "</div>" : "") +
+    (full && x.hours ? '<div class="qlabel" style="margin-top:10px">Hours</div><div class="bl">' + esc(x.hours) + " · check before you go</div>" : "") +
+    (full && x.address ? '<div class="qlabel" style="margin-top:10px">Address</div><div class="bl">' + esc(x.address) + "</div>" : "") +
+    (x.offer ? '<div class="coffer"><b>' + (x.offerDirect ? "Book-direct perk" : "Guest offer") + "</b> " + esc(x.offer) + (x.offerUrl ? ' <button class="link" data-href="' + esc(x.offerUrl) + '">Claim</button>' : "") + "</div>" : "");
+}
+function pickActs(x, d, inSheet) {
+  return '<div class="acts">' +
+    '<button class="btn' + (inTrip(x.name) ? " on" : " go") + '" data-tsave="' + esc(x.name) + '">' + (inTrip(x.name) ? "✓ Saved" : "♡ Save to my trip") + "</button>" +
+    (x.mapsUrl ? '<button class="btn" data-href="' + esc(x.mapsUrl) + '">Directions</button>' : "") +
+    (x.bookUrl ? '<button class="btn" data-href="' + esc(x.bookUrl) + '">Reserve</button>' : "") +
+    (x.website ? '<button class="btn" data-href="' + esc(x.website) + '">Website</button>' : "") +
+    (inSheet ? "" : '<button class="btn" data-cpick="' + esc(x.id) + '">' + (wideNow() ? "More" : "Details") + "</button>") + "</div>";
+}
+function pickSheet(x, d) {
+  return '<div class="fly" data-act="cflyx"><div class="sheet" role="dialog" aria-label="' + esc(x.name) + '">' +
+    '<div class="bar-top"><span class="kd">' + esc(possOf(hostName(d))) + " pick</span><button class=\"link\" data-act=\"cflyx\">Close ✕</button></div>" +
+    '<div class="enm" style="font-size:18px;font-weight:700;margin-top:10px">' + esc(x.name) + "</div>" + pickBody(x, d, true) + pickActs(x, d, true) +
+    '<button class="primary morebtn" data-ask="' + esc(pickQ(x, d)) + '">Ask ' + esc(AI()) + " about it</button>" +
+    '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div></div></div>";
+}
+function placesView() {
+  const d = state.data.places || { items: [], categories: [] }, o = opt("explore");
+  const items = d.items || [];
+  const open = items.find((x) => x.id === state.cpick);
+  if (open && !wideNow()) return top(open.name) + '<div class="it">' + pickBody(open, d, true) + pickActs(open, d, true) + "</div>" +
+    '<div class="actions" style="margin-top:10px"><button class="btn" data-ask="' + esc(pickQ(open, d)) + '">Ask ' + esc(AI()) + ' about it</button><button class="btn" data-cpick="">← All picks</button></div>';
+  const cats = '<div class="qs">' + chip("All", "data-ccat", "", !d.category) + (d.categories || []).map((c) => chip(esc(c.icon + " " + c.label), "data-ccat", c.id, d.category === c.id)).join("") + "</div>";
+  const gf = (d.goodForAll || []).length ? '<div class="qs">' + (d.goodForAll || []).map((g) => chip(esc(g.label), "data-cgf", g.id, d.goodFor === g.id)).join("") + "</div>" : "";
+  const rows = items.map((x) => '<div class="it cpick"><div class="nm"><b>' + esc(x.name) + "</b></div>" + pickBody(x, d, false) + pickActs(x, d, false) + "</div>").join("");
+  return top(o ? o.title : "Explore the area") + cats + gf +
+    (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    '<div class="list" style="margin-top:10px">' + (rows || '<div class="empty">No picks match.</div>') + "</div>" + tripBar() +
+    '<div class="note">' + esc(possOf(hostName(d))) + " own recommendations. Opening hours change: check before you go.</div>" +
+    (open && wideNow() ? pickSheet(open, d) : "");
+}
+function tripBar() {
+  const t = tripList(), c = conc() || {};
+  if (!t.length) return "";
+  return '<div class="ctrip"><b>My trip · ' + t.length + " saved</b><span>" + t.map(esc).join(", ") + "</span>" +
+    '<div class="acts">' + (opt("plan") ? '<button class="btn go" data-cgo="plan">Plan my stay with these</button>' : "") +
+    (c.whatsapp ? '<button class="btn wa" data-act="ctrip">' + icon("whatsapp") + "Continue on WhatsApp</button>" : "") + '<button class="link" data-act="cclear">Clear</button></div></div>';
+}
+function areaSheet(t, d) {
+  return '<div class="fly" data-act="cflyx"><div class="sheet" role="dialog" aria-label="' + esc(t.title) + '">' +
+    '<div class="bar-top"><span class="kd">' + esc(t.label) + '</span><button class="link" data-act="cflyx">Close ✕</button></div>' + areaBody(t, d, true) + "</div></div>";
+}
+function areaBody(t, d, sheet) {
+  return (t.image ? '<img class="cimg" src="' + esc(t.image) + '" alt="">' : "") + '<div class="enm" style="font-size:17px;font-weight:700;margin-top:8px">' + esc(t.title) + "</div>" +
+    '<p class="cwhy" style="font-style:normal">' + esc(t.text) + "</p>" +
+    (t.mapUrl ? '<div class="actions"><button class="btn go" data-href="' + esc(t.mapUrl) + '">Open the map</button></div>' : "") +
+    ((t.questions || []).length ? '<div class="qlabel" style="margin-top:12px">Ask ' + esc(AI()) + "</div>" + t.questions.map((q) => '<button class="cq" data-ask="' + esc(q) + '">' + esc(q) + " →</button>").join("") +
+      '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div>" : "");
+}
+function areaView() {
+  const d = state.data.area || { topics: [], events: [] }, o = opt("area");
+  const open = (d.topics || []).find((t) => t.topic + "|" + t.title === state.ctopic);
+  if (open && !wideNow()) return top(open.label) + '<div class="it">' + areaBody(open, d, false) + '</div><div class="actions" style="margin-top:10px"><button class="btn" data-ctopic="">← Area guide</button></div>';
+  const tiles = (d.topics || []).map((t) => '<button class="ctile" data-ctopic="' + esc(t.topic + "|" + t.title) + '"><small>' + esc(t.label) + "</small><b>" + esc(t.title) + "</b><span>" + esc(t.text.slice(0, 90)) + (t.text.length > 90 ? "…" : "") + "</span></button>").join("");
+  const ev = (d.events || []).map((e) => '<div class="it"><div class="nm"><b>' + esc(e.name) + '</b></div><div class="bl">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + "</div>" + (e.description ? '<div class="bl">' + esc(e.description) + "</div>" : "") +
+    '<div class="acts">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">Its page</button>' : "") + '<button class="btn" data-ask="' + esc("Tell me more about " + e.name + " (" + e.when + (e.place ? ", " + e.place : "") + "): what to expect, tickets and how to get there. Tell me which parts are not from " + possOf(hostName(d)) + " list.") + '">Ask ' + esc(AI()) + "</button></div></div>").join("");
+  return top(o ? o.title : "Area guide") + '<div class="cgrid">' + tiles + "</div>" +
+    '<div class="bar-top" style="margin-top:16px"><h3 style="font-size:15px">What&rsquo;s on · ' + esc(d.range || "") + "</h3></div>" +
+    '<div class="row">' + field("cstart", "From", { type: "date" }) + field("cend", "To", { type: "date" }) + '</div><div class="actions" style="margin-top:6px"><button class="btn" data-act="cevents">Show events for these dates</button></div>' +
+    '<div class="list" style="margin-top:10px">' + (ev || '<div class="empty">No events listed for these dates.</div>') + "</div>" +
+    '<div class="note">As written by ' + esc(hostName(d)) + ".</div>" + (open && wideNow() ? areaSheet(open, d) : "");
+}
+function houseView() {
+  const d = state.data.house || { items: [], homes: [] }, o = opt("house");
+  const homes = (d.homes || []).length > 1 ? '<div class="qlabel">Your home</div><div class="qs" style="margin-top:0">' + chip("All homes", "data-chome", "", !d.home) + d.homes.map((h) => chip(esc(h.name), "data-chome", h.id, d.home === h.id)).join("") + "</div>" : "";
+  const find = '<div class="find"><input type="search" data-f="hq" data-enter="hfind" value="' + esc(state.f.hq || "") + '" placeholder="Grill, washer, oven, Wi-Fi…"><button class="btn" data-act="hfind">Search</button></div>';
+  const groups = [];
+  (d.items || []).forEach((x) => { let g = groups.find((y) => y.label === x.topicLabel); if (!g) groups.push(g = { label: x.topicLabel, items: [] }); g.items.push(x); });
+  const body = groups.map((g) => '<div class="qlabel" style="margin-top:14px">' + esc(g.label) + "</div>" + g.items.map((x) =>
+    '<details class="chouse"><summary><b>' + esc(x.title) + "</b>" + (x.homes.length ? "<small>" + esc(x.homes.join(", ")) + "</small>" : "") + "</summary>" + (x.image ? '<img class="cimg" src="' + esc(x.image) + '" alt="">' : "") + "<p>" + esc(x.text) + "</p></details>").join("")).join("");
+  return top(o ? o.title : "House guide") + homes + find + (body || '<div class="empty">Nothing in the house guide matches. Ask the host.</div>') +
+    '<div class="note">As written by ' + esc(hostName(d)) + ". Door codes and Wi-Fi passwords come from the host before you arrive.</div>" + links("");
+}
+const partyFields = () => '<div class="row three">' + field("cadults", "Adults", { type: "number", min: 1, placeholder: "2" }) + field("ckids", "Children", { type: "number", placeholder: "0" }) + field("cdogs", "Dogs", { type: "number", placeholder: "0" }) + "</div>";
+const party = () => clean({ adults: Math.max(1, Math.floor(num("cadults") || 2)), children: Math.floor(num("ckids") || 0) || undefined, dogs: Math.floor(num("cdogs") || 0) || undefined });
+const INTERESTS = [["beaches", "Beaches"], ["food", "Food"], ["nature", "Nature & wildlife"], ["golf", "Golf"], ["tennis", "Tennis"], ["shopping", "Shopping"], ["history", "History"], ["day-trips", "Day trips"], ["family-activities", "Family"], ["relax", "Relax"]];
+function planFormView() {
+  const o = opt("plan"), ints = (state.f.cints || "").split(",").filter(Boolean), pace = state.f.cpace || "balanced";
+  return '<div class="form">' + top(o ? o.title : "Plan my stay") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
+    '<div class="row">' + field("start", "Arrive", { type: "date" }) + field("end", "Leave", { type: "date" }) + '</div><div class="qs">' + whenChips() + "</div>" + partyFields() +
+    '<div class="qlabel">What do you enjoy?</div><div class="qs" style="margin-top:0">' + INTERESTS.map((i) => chip(esc(i[1]), "data-cint", i[0], ints.indexOf(i[0]) >= 0)).join("") + "</div>" +
+    '<div class="qlabel">Pace</div><div class="qs" style="margin-top:0">' + [["relaxed", "Relaxed"], ["balanced", "Balanced"], ["packed", "Packed"]].map((x) => chip(x[1], "data-cpace", x[0], pace === x[0])).join("") + "</div>" +
+    (tripList().length ? '<div class="note">Your ' + tripList().length + " saved picks are planned first.</div>" : "") + errLine() +
+    '<div class="actions">' + primary("Plan my stay", "cplan") + "</div></div>";
+}
+function planView() {
+  const d = state.data.plan || { days: [], homes: [] };
+  const day = (x) => '<div class="cday"><div class="cdh">' + esc(x.label) + "</div>" + x.items.map((i) =>
+    '<div class="cslot"><small>' + esc(i.part) + "</small><div>" + (i.place ? '<b>' + esc(i.place.name) + "</b>" + (i.place.distance ? " <span>" + esc(i.place.distance) + "</span>" : "") + (i.place.why ? '<p>' + esc(i.place.why) + "</p>" : "") : "") + (i.note ? '<p class="cnote">' + esc(i.note) + "</p>" : "") +
+      (i.place ? '<div class="acts">' + '<button class="link" data-tsave="' + esc(i.place.name) + '">' + (inTrip(i.place.name) ? "✓ Saved" : "♡ Save") + "</button>" + (i.place.mapsUrl ? '<button class="link" data-href="' + esc(i.place.mapsUrl) + '">Directions</button>' : "") + '<button class="link" data-ask="' + esc(pickQ(i.place, d)) + '">Ask ' + esc(AI()) + "</button></div>" : "") + "</div></div>").join("") +
+    (x.events || []).map((e) => '<div class="cslot cev"><small>On</small><div><b>' + esc(e.name) + "</b>" + (e.place ? " <span>" + esc(e.place) + "</span>" : "") + (e.url ? ' <button class="link" data-href="' + esc(e.url) + '">Its page</button>' : "") + "</div></div>").join("") + "</div>";
+  const homes = (d.homes || []).map((h) => '<div class="it"><div class="nm"><b>' + esc(h.name) + "</b><b>" + esc(h.total) + '</b></div><div class="bl">' + esc(h.nights + " nights · " + h.nightly + " a night on average") + (h.capacity ? " · sleeps " + h.capacity : "") + "</div>" +
+    '<div class="acts"><button class="btn go" data-cbook="' + esc(h.id) + '">Check availability & book</button></div></div>').join("");
+  return top("Your stay · " + (d.party ? d.party.text : "")) + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    '<div class="note" style="margin-top:4px">Built from ' + esc(possOf(hostName(d))) + " own picks. Weather and anything else " + esc(AI()) + " adds is its own.</div>" +
+    (d.days || []).map(day).join("") + (d.truncated ? '<div class="note">The plan shows the first days of your stay.</div>' : "") +
+    ((d.rainy || []).length ? '<div class="ctrip"><b>If it rains</b><span>' + d.rainy.map((x) => esc(x.name)).join(", ") + "</span></div>" : "") +
+    ((d.offers || []).length ? '<div class="qlabel" style="margin-top:14px">Guest offers</div>' + d.offers.map((x) => '<div class="coffer"><b>' + esc(x.name) + (x.offerDirect ? " · book-direct perk" : "") + "</b> " + esc(x.offer) + "</div>").join("") : "") +
+    '<div class="qlabel" style="margin-top:16px">Homes for your dates</div><div class="list">' + (homes || '<div class="empty">No home fits this group on those dates. Try other dates.</div>') + "</div>" +
+    '<div class="note">Prices from the published rates, ' + esc(d.tax || "") + ". The availability check confirms the dates and the price; nothing is booked until you book.</div>" +
+    '<div class="actions" style="margin-top:12px"><button class="btn" data-ask="' + esc("Looking at my plan for " + hostName(d) + " (" + d.start + " to " + d.end + "): what is the weather usually like then, and what should we pack? Say which parts are yours and not the host's.") + '">Ask ' + esc(AI()) + " about the weather</button>" +
+    ((conc() || {}).whatsapp ? '<button class="btn wa" data-act="ctrip">' + icon("whatsapp") + "Continue on WhatsApp</button>" : "") + '<button class="btn" data-view="planform">Change the plan</button></div>';
+}
+function matchFormView() {
+  const o = opt("match");
+  return '<div class="form">' + top(o ? o.title : "Which home fits?") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" + partyFields() +
+    field("cneeds", "What matters to you", { type: "textarea", placeholder: "Near the beach, a pool table, bunk beds for the kids…" }) +
+    '<div class="row">' + field("start", "Arrive", { type: "date", optional: true }) + field("end", "Leave", { type: "date", optional: true }) + "</div>" + errLine() +
+    '<div class="actions">' + primary("Find my home", "cmatch") + "</div></div>";
+}
+function matchView() {
+  const d = state.data.match || { homes: [] };
+  const rows = (d.homes || []).map((h, i) => '<div class="it' + (h.fits ? "" : " dim") + '"><div class="nm"><b>' + (h.fits && i === 0 ? "★ " : "") + esc(h.name) + "</b><b>" + esc(h.total || "from " + h.nightly) + "</b></div>" +
+    (h.description ? '<div class="bl">' + esc(h.description) + "</div>" : "") + '<div class="ctags">' + (h.why || []).map((w) => '<span class="ctag">' + esc(w) + "</span>").join("") + "</div>" +
+    (h.fits ? '<div class="acts"><button class="btn go" data-cbook="' + esc(h.id) + '">Check availability & book</button>' + (opt("plan") ? '<button class="btn" data-cgo="plan" data-home="' + esc(h.id) + '">Plan my stay here</button>' : "") + "</div>" : "") + "</div>").join("");
+  return top("Homes for " + ((d.party || {}).text || "your group")) + '<div class="list" style="margin-top:10px">' + rows + "</div>" +
+    '<div class="note">From ' + esc(possOf(hostName(d))) + " published details and rates. The availability check confirms the dates and the price.</div>";
+}
+function tripView() {
+  const d = state.data.trip || {};
+  const ok = /^https:\/\//.test(d.link || "");
+  return top("Continue on WhatsApp") + '<div class="sent"><b>Message to send</b><p class="msg">' + esc(d.message) + "</p>" +
+    (d.assistant ? "<ol><li>Tap Continue on WhatsApp and send the message it fills in" + (d.join ? " (" + esc(d.join) + ")" : "") + ", as it is.</li><li>Then send the message above.</li></ol>" : "") +
+    '<p class="note">' + esc(possOf(hostName(d))) + " WhatsApp concierge takes it from there, and answers during your stay too. Nothing is sent until you send it.</p></div>" +
+    '<div class="actions" style="margin-top:12px">' + (ok ? '<button class="btn wa" data-href="' + esc(d.link) + '">' + icon("whatsapp") + "Continue on WhatsApp</button>" : "") + '<button class="btn" data-view="menu">← Menu</button></div>';
+}
+function conciergeHandlers(on, app, guard) {
+  const tool = (k) => ((conc() || {}).tool || {})[k];
+  on("[data-tsave]", (b) => toggleTrip(b.dataset.tsave));
+  on('[data-act="cclear"]', () => { state.trip = []; save(); render(); });
+  on("[data-cpick]", (b) => { state.cpick = b.dataset.cpick || ""; render(); });
+  on("[data-ctopic]", (b) => { state.ctopic = b.dataset.ctopic || ""; render(); });
+  app.querySelectorAll('[data-act="cflyx"]').forEach((el) => el.addEventListener("click", (e) => { if (e.target === el) { state.cpick = ""; state.ctopic = ""; render(); } }));
+  on("[data-ccat]", (b) => { const d = state.data.places || {}; state.cpick = ""; run(tool("explore"), clean({ category: b.dataset.ccat, good_for: d.goodFor }), ""); });
+  on("[data-cgf]", (b) => { const d = state.data.places || {}; state.cpick = ""; run(tool("explore"), clean({ category: d.category, good_for: d.goodFor === b.dataset.cgf ? "" : b.dataset.cgf }), ""); });
+  on("[data-chome]", (b) => run(tool("house"), clean({ home: b.dataset.chome, query: v("hq") }), ""));
+  on('[data-act="hfind"]', () => run(tool("house"), clean({ home: (state.data.house || {}).home, query: v("hq") }), ""));
+  on('[data-act="cevents"]', () => run(tool("area"), clean({ start: v("cstart"), end: v("cend") }), ""));
+  on("[data-cint]", (b) => { const s = (state.f.cints || "").split(",").filter(Boolean), i = s.indexOf(b.dataset.cint); if (i >= 0) s.splice(i, 1); else s.push(b.dataset.cint); state.f.cints = s.join(","); render(); });
+  on("[data-cpace]", (b) => { state.f.cpace = b.dataset.cpace; render(); });
+  on("[data-cgo]", (b) => { if (b.dataset.home) state.f.chome = b.dataset.home; state.error = ""; state.view = b.dataset.cgo === "plan" ? "planform" : "matchform"; render(); });
+  on('[data-act="cplan"]', () => guard(() => {
+    need(v("start") && v("end") && v("end") > v("start"), "Choose your arrival and departure dates.");
+    const o = opt("plan");
+    run(o && o.tool, Object.assign(clean({ start: v("start"), end: v("end"), pace: state.f.cpace || "", home: state.f.chome || "", interests: (state.f.cints || "").split(",").filter(Boolean), picks: tripList().slice() }), party()), (o && o.example) || "");
+  }));
+  on('[data-act="cmatch"]', () => guard(() => {
+    const o = opt("match");
+    run(o && o.tool, Object.assign(clean({ needs: v("cneeds"), start: v("start"), end: v("end") }), party()), (o && o.example) || "");
+  }));
+  on("[data-cbook]", (b) => {
+    const lk = opt("lookup"), d = state.data.plan || state.data.match || {};
+    const pa = (d.party || {});
+    state.sq = { adults: pa.adults || 2, children: pa.children || 0, rooms: 1, start: d.start || v("start"), end: d.end || v("end") };
+    run(lk && lk.tool, clean({ adults: state.sq.adults, children: state.sq.children, rooms: 1, start: state.sq.start, end: state.sq.end }), (lk && lk.example) || "");
+  });
+  on('[data-act="ctrip"]', () => {
+    const d = state.data.plan || {}, pa = d.party || {};
+    run(tool("whatsapp"), clean({ start: d.start || v("start"), end: d.end || v("end"), adults: pa.adults, children: pa.children || undefined, dogs: pa.dogs || undefined, home: state.f.chome || "", picks: tripList().slice() }), "I'd like to continue with the host on WhatsApp.");
+  });
+}
+
 // ---- Software products (version 0.15.0) ----
 const findIn = (kind, over) => { const o = opt(kind); const a = clean(Object.assign({ query: v(kind === "features" ? "fq" : "gq") }, over || {})); run(o && o.tool, a, (o && o.example) || ""); };
 function featuresView() {
@@ -1945,6 +2147,14 @@ function openOption(i) {
   // 0.18.0, event guide: Agenda, Speakers and Exhibitors open with their lists; an enquiry opens its form.
   if (o.kind === "agenda" || o.kind === "speakers" || o.kind === "exhibitors") { state.f.aq = ""; state.f.pq = ""; state.f.xq = ""; run(o.tool, {}, o.example); return; }
   if (o.kind === "enquiry") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } if (!v("etopic")) state.f.etopic = "Exhibiting"; state.view = "enquiry"; render(); return; }
+  // 0.48.0, the rental concierge: lists open with their results, Plan my stay and Which home fits with their forms.
+  if (conc() && inCard()) {
+    if (o.kind === "explore") { state.cpick = ""; run(o.tool, {}, o.example); return; }
+    if (o.kind === "area") { state.ctopic = ""; run(o.tool, {}, o.example); return; }
+    if (o.kind === "house") { state.f.hq = ""; run(o.tool, {}, o.example); return; }
+    if (o.kind === "plan") { state.view = "planform"; render(); return; }
+    if (o.kind === "match") { state.view = "matchform"; render(); return; }
+  }
   // 0.22.0: a tour or a day pass opens its form, with the business's own locations to choose from.
   if ((o.kind === "tour" || o.kind === "daypass") && inCard() && vlocs(o.kind).length) { openVisit(o.kind, ""); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
@@ -1980,7 +2190,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -2009,6 +2219,8 @@ function render() {
   on("[data-ev]", (b) => { state.ev = b.dataset.ev || ""; if (!state.ev && state.data.events) state.data.events.open = ""; state.view = "events"; render(); });
   on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
+  // 0.48.0: the rental concierge's screens.
+  conciergeHandlers(on, app, guard);
   on("[data-ask]", (b) => {
     if (!b.dataset.ask) return;
     ask(b.dataset.ask);

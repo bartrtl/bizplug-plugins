@@ -267,6 +267,14 @@
           "type": "url",
           "example": "",
           "help": "Optional: a directions link (https)."
+        },
+        {
+          "key": "amenities",
+          "label": "Features",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, from plug-in version 0.48.0 (vacation rentals): what the home has, separated by semicolons, such as Pet friendly;Pool table;Bunk room. Which home fits matches a group's wishes against them; write No pets for a home that takes no dogs."
         }
       ],
       "collect": [

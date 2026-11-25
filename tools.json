@@ -1,5 +1,5 @@
 {
-  "version": "0.47.0",
+  "version": "0.48.0",
   "note": "Inputs of the industry-wide plug-in (https://mcp.bizplug.ai/plugin/<industry>). A business's own plug-in (https://mcp.bizplug.ai/plugin/<industry>/<business>) takes the same inputs without \"business\". Generated from the BizPlug plug-in server; see TOOLS.md.",
   "industries": {
     "events": {
@@ -17457,6 +17457,387 @@
               "check_in",
               "check_out",
               "guests"
+            ]
+          }
+        },
+        {
+          "name": "explore_area",
+          "title": "Explore the area",
+          "description": "The host's own local picks near its homes: where to eat, groceries, beaches and pools, things to do, shopping, day trips and services, each with why the host recommends it, how far it is, the best time to go and any partner offer. Optional category, good_for (kids, dogs, rainy, couples, groups, sunset, free) and query. Read-only. Use it for any question about what to do, where to eat or what is nearby.",
+          "readOnly": true,
+          "when": "Only when the host published its local picks (places.csv).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "groceries",
+                  "eat",
+                  "drink",
+                  "beach",
+                  "outdoors",
+                  "activities",
+                  "shopping",
+                  "culture",
+                  "wellness",
+                  "services"
+                ],
+                "description": "Optional: one category of the host's picks."
+              },
+              "good_for": {
+                "type": "string",
+                "enum": [
+                  "kids",
+                  "dogs",
+                  "rainy",
+                  "couples",
+                  "groups",
+                  "sunset",
+                  "free"
+                ],
+                "description": "Optional: only picks the host marked good for this."
+              },
+              "query": {
+                "type": "string",
+                "description": "Optional: words to look for, such as pizza or kayak."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_area_guide",
+          "title": "Area guide and events",
+          "description": "The host's area guide (about the area, its history, a map, getting there and around, seasons, local rules, essentials, safety) and the events it lists, matched to the guest's dates when start and end are given. Optional topic. Read-only.",
+          "readOnly": true,
+          "when": "Only when the host published an area guide or events (area.csv, events.csv).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "topic": {
+                "type": "string",
+                "description": "Optional: one topic (about, history, map, arrival, around, seasons, rules, essentials, safety) or words to look for."
+              },
+              "start": {
+                "type": "string",
+                "description": "Arrival date, YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Departure date, YYYY-MM-DD."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "get_house_guide",
+          "title": "House guide",
+          "description": "How things work in the host's homes, as the host explains them: the stove and oven, grill, washer and dryer, coffee maker, heating and cooling, TV, check-in, house rules and checkout. Optional home and query (\"grill\", \"washing machine\"). Read-only. Never guess how an appliance works.",
+          "readOnly": true,
+          "when": "Only when the host published a house guide (house.csv).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "home": {
+                "type": "string",
+                "description": "Optional: the home the guest stays in, by id or name."
+              },
+              "query": {
+                "type": "string",
+                "description": "Optional: what they ask about, such as grill, washer, oven or Wi-Fi."
+              }
+            },
+            "required": [
+              "business"
+            ]
+          }
+        },
+        {
+          "name": "match_home",
+          "title": "Which home fits",
+          "description": "Which of the host's homes fits a group: adults, children, dogs and what they want (needs, e.g. \"pool table, near the beach\"), with the reasons from the published details and, with dates, the price for the stay. Read-only; check_rental_availability confirms the dates.",
+          "readOnly": true,
+          "when": "Only on vacation rental plug-ins from version 0.48.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "dogs": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "How many dogs come along."
+              },
+              "needs": {
+                "type": "string",
+                "description": "Optional: what the group wants, in their words (pool table, near the beach, bunk beds)."
+              },
+              "start": {
+                "type": "string",
+                "description": "Arrival date, YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Departure date, YYYY-MM-DD."
+              }
+            },
+            "required": [
+              "business",
+              "adults"
+            ]
+          }
+        },
+        {
+          "name": "plan_stay",
+          "title": "Plan my stay",
+          "description": "A day-by-day plan for the guest's dates (start, end) and group (adults, children, dogs), from the host's own local picks, shaped by interests and pace, with the events on those dates, rainy-day options, partner offers, and the homes that fit priced for the stay. Optional picks (names the guest saved) and home. Read-only: nothing is booked or held. Afterwards offer to check availability and book, or to continue on WhatsApp.",
+          "readOnly": true,
+          "when": "Only on vacation rental plug-ins from version 0.48.0.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "start": {
+                "type": "string",
+                "description": "Arrival date, YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Departure date, YYYY-MM-DD."
+              },
+              "dogs": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "How many dogs come along."
+              },
+              "interests": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "beaches",
+                    "food",
+                    "nature",
+                    "wildlife",
+                    "adventure",
+                    "sports",
+                    "golf",
+                    "tennis",
+                    "shopping",
+                    "culture",
+                    "history",
+                    "day-trips",
+                    "wellness",
+                    "relax",
+                    "family-activities"
+                  ]
+                },
+                "description": "Optional: what they enjoy most."
+              },
+              "pace": {
+                "type": "string",
+                "enum": [
+                  "relaxed",
+                  "balanced",
+                  "packed"
+                ],
+                "description": "Optional: how full the days should be. Defaults to balanced."
+              },
+              "picks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Optional: names of the host's picks the guest saved, planned first."
+              },
+              "home": {
+                "type": "string",
+                "description": "Optional: the home they chose, by id or name."
+              }
+            },
+            "required": [
+              "business",
+              "start",
+              "end",
+              "adults"
+            ]
+          }
+        },
+        {
+          "name": "continue_on_whatsapp",
+          "title": "Continue on WhatsApp",
+          "description": "Hand the guest's trip (dates, group, home, saved picks, a note) to the host's WhatsApp concierge, which also answers during the stay. Returns the WhatsApp link and the exact message to send; sends nothing itself. Use it when the guest wants to continue with the host on WhatsApp.",
+          "readOnly": true,
+          "when": "Only when the host has a WhatsApp concierge or number.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "business": {
+                "type": "string",
+                "description": "The business's BizPlug slug. Ask the customer which business they mean if unknown."
+              },
+              "adults": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 27,
+                "description": "Number of adults. Use with children instead of guests."
+              },
+              "children": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 18,
+                "description": "Number of children (default 0)."
+              },
+              "rooms": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9,
+                "description": "How many rooms of the same type (default 1)."
+              },
+              "start": {
+                "type": "string",
+                "description": "Arrival date, YYYY-MM-DD."
+              },
+              "end": {
+                "type": "string",
+                "description": "Departure date, YYYY-MM-DD."
+              },
+              "dogs": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "How many dogs come along."
+              },
+              "home": {
+                "type": "string",
+                "description": "Optional: the home they chose."
+              },
+              "picks": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Optional: the picks the guest saved."
+              },
+              "note": {
+                "type": "string",
+                "description": "Optional: anything else for the host, in the guest's words."
+              }
+            },
+            "required": [
+              "business"
             ]
           }
         }

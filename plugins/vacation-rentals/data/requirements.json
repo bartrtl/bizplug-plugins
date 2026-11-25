@@ -267,6 +267,14 @@
           "type": "url",
           "example": "",
           "help": "Optional: a directions link (https)."
+        },
+        {
+          "key": "amenities",
+          "label": "Features",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, from plug-in version 0.48.0 (vacation rentals): what the home has, separated by semicolons, such as Pet friendly;Pool table;Bunk room. Which home fits matches a group's wishes against them; write No pets for a home that takes no dogs."
         }
       ],
       "collect": [
@@ -405,6 +413,332 @@
       "collect": [
         "Take the FAQ page of the website first, then policies (cancellation, delivery, payment, parking, accessibility).",
         "Keep each answer factual and current. Leave out anything the owner has not confirmed."
+      ]
+    },
+    {
+      "id": "places",
+      "file": "places.csv",
+      "title": "Local picks",
+      "why": "Your own recommendations near your homes: where to eat, groceries, the beach, things to do. Guests browse them by category in the card, Plan my stay builds a day-by-day plan from them, and ChatGPT presents them as yours.",
+      "required": false,
+      "maxRows": 150,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Name",
+          "required": true,
+          "type": "text",
+          "example": "Harris Teeter",
+          "help": "The place's name, as it is known."
+        },
+        {
+          "key": "category",
+          "label": "Category",
+          "required": true,
+          "type": "text",
+          "example": "groceries",
+          "help": "One of: groceries, eat, drink, beach, outdoors, activities, shopping, culture, wellness, services."
+        },
+        {
+          "key": "why",
+          "label": "Why we like it",
+          "required": false,
+          "type": "text",
+          "example": "Do the big shop here when you arrive: a full supermarket with a deli and bakery.",
+          "help": "In your own words, one or two sentences. This is what makes a pick yours."
+        },
+        {
+          "key": "distance",
+          "label": "How far",
+          "required": false,
+          "type": "text",
+          "example": "10 min by car",
+          "help": "From your homes, in words."
+        },
+        {
+          "key": "minutes",
+          "label": "Minutes away",
+          "required": false,
+          "type": "number",
+          "example": "10",
+          "help": "The same distance in minutes, to put the nearest first."
+        },
+        {
+          "key": "price",
+          "label": "Price level",
+          "required": false,
+          "type": "text",
+          "example": "$$",
+          "help": "Optional: $ to $$$$, or Free."
+        },
+        {
+          "key": "best_time",
+          "label": "Best time",
+          "required": false,
+          "type": "text",
+          "example": "Before 10:00, when it is quiet",
+          "help": "Optional: when to go."
+        },
+        {
+          "key": "hours",
+          "label": "Opening hours",
+          "required": false,
+          "type": "text",
+          "example": "Daily 6:00 to 23:00",
+          "help": "Optional, as published by the place; guests are told to check before they go."
+        },
+        {
+          "key": "address",
+          "label": "Address",
+          "required": false,
+          "type": "text",
+          "example": "515 Freshfields Dr, Johns Island, SC",
+          "help": "Optional."
+        },
+        {
+          "key": "website",
+          "label": "Website",
+          "required": false,
+          "type": "url",
+          "example": "https://www.harristeeter.com",
+          "help": "Optional, https."
+        },
+        {
+          "key": "maps_url",
+          "label": "Directions",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: a Google Maps or Apple Maps link (https)."
+        },
+        {
+          "key": "book_url",
+          "label": "Book or reserve",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: the place's own booking page (https)."
+        },
+        {
+          "key": "image",
+          "label": "Photo",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: a photo the card may show (https, on storage.googleapis.com)."
+        },
+        {
+          "key": "good_for",
+          "label": "Good for",
+          "required": false,
+          "type": "text",
+          "example": "kids;rainy",
+          "help": "Optional, separated by semicolons: kids, dogs, rainy, couples, groups, sunset, free."
+        },
+        {
+          "key": "offer",
+          "label": "Partner offer",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: an offer the place gives your guests, as agreed with it, such as 10% off a kayak tour."
+        },
+        {
+          "key": "offer_url",
+          "label": "Offer link",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: where the guest claims the offer (https)."
+        },
+        {
+          "key": "offer_direct",
+          "label": "Only for direct bookings",
+          "required": false,
+          "type": "boolean",
+          "example": "",
+          "help": "Optional: yes when the offer is only for guests who booked with you directly."
+        }
+      ],
+      "collect": [
+        "Write each pick in the host's own words: why they recommend it, and for whom. Start with groceries and the first dinner.",
+        "Give the distance from the homes in words and in minutes. Never copy reviews or ratings from other sites.",
+        "Add an offer only when the place agreed to it, with the exact terms."
+      ]
+    },
+    {
+      "id": "area",
+      "file": "area.csv",
+      "title": "Area guide",
+      "why": "About the area, its history, a map, getting here and around, the seasons, local rules, essentials and safety. Guests read it in the card and can ask ChatGPT more from each topic.",
+      "required": false,
+      "maxRows": 40,
+      "columns": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "required": true,
+          "type": "text",
+          "example": "arrival",
+          "help": "One of: about, history, map, arrival, around, seasons, rules, essentials, safety."
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Getting here",
+          "help": ""
+        },
+        {
+          "key": "text",
+          "label": "Text",
+          "required": true,
+          "type": "text",
+          "example": "Charleston International Airport (CHS) is about 32 miles away; Island Transportation does transfers.",
+          "help": "A short paragraph in your own words."
+        },
+        {
+          "key": "map_url",
+          "label": "Map link",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional: a map page (https), such as Google Maps or the area's own map."
+        },
+        {
+          "key": "image",
+          "label": "Picture",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional (https, on storage.googleapis.com)."
+        },
+        {
+          "key": "questions",
+          "label": "Questions to ask ChatGPT",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional, separated by semicolons: questions the guest can send to the chat from this topic, where ChatGPT answers from what it knows and the web, not from you."
+        }
+      ],
+      "collect": [
+        "Write what a guest needs before and during the stay, in the host's words. Rules (gate passes, beach rules) as the area publishes them."
+      ]
+    },
+    {
+      "id": "events",
+      "file": "events.csv",
+      "title": "What's on",
+      "why": "Events near your homes. Guests see the ones on their dates, and Plan my stay puts them in the plan.",
+      "required": false,
+      "maxRows": 100,
+      "columns": [
+        {
+          "key": "name",
+          "label": "Event",
+          "required": true,
+          "type": "text",
+          "example": "Holiday Festival of Lights",
+          "help": ""
+        },
+        {
+          "key": "start",
+          "label": "First day",
+          "required": true,
+          "type": "date",
+          "example": "2026-11-13",
+          "help": "YYYY-MM-DD."
+        },
+        {
+          "key": "end",
+          "label": "Last day",
+          "required": false,
+          "type": "date",
+          "example": "2027-01-01",
+          "help": "YYYY-MM-DD; empty for one day."
+        },
+        {
+          "key": "place",
+          "label": "Where",
+          "required": false,
+          "type": "text",
+          "example": "James Island County Park",
+          "help": ""
+        },
+        {
+          "key": "description",
+          "label": "What it is",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "One sentence."
+        },
+        {
+          "key": "url",
+          "label": "Its own page",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "https."
+        }
+      ],
+      "collect": [
+        "List only events with published dates, from the organiser's own page. Remove past ones."
+      ]
+    },
+    {
+      "id": "house",
+      "file": "house.csv",
+      "title": "House guide",
+      "why": "How things work in your homes: the stove, oven, grill, washer and dryer, coffee maker, heating, TV, check-in, rules and checkout. Guests find the answer in the card instead of messaging you.",
+      "required": false,
+      "maxRows": 120,
+      "columns": [
+        {
+          "key": "topic",
+          "label": "Topic",
+          "required": true,
+          "type": "text",
+          "example": "kitchen",
+          "help": "One of: kitchen, laundry, outdoor, comfort, arrival, rules, checkout, other."
+        },
+        {
+          "key": "title",
+          "label": "Title",
+          "required": true,
+          "type": "text",
+          "example": "Gas grill",
+          "help": "The appliance or thing."
+        },
+        {
+          "key": "text",
+          "label": "How it works",
+          "required": true,
+          "type": "text",
+          "example": "Open the propane valve, press and turn a burner knob to light it.",
+          "help": "Step by step, in your own words."
+        },
+        {
+          "key": "homes",
+          "label": "Which homes",
+          "required": false,
+          "type": "text",
+          "example": "",
+          "help": "Optional: home ids from your homes file, separated by semicolons. Empty means every home."
+        },
+        {
+          "key": "image",
+          "label": "Photo",
+          "required": false,
+          "type": "url",
+          "example": "",
+          "help": "Optional (https, on storage.googleapis.com)."
+        }
+      ],
+      "collect": [
+        "Never put door codes, Wi-Fi passwords or alarm codes here: they are sent to the guest privately before arrival."
       ]
     },
     {

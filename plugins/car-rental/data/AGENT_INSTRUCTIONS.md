@@ -53,6 +53,7 @@ Columns (first row of the file, exactly these names):
 - `url`: Event: its own page, url. Optional: the event's own page for tickets or details (https). With one, the plug-in sends people there and takes no request. Example: 
 - `url_label`: Event: what the page is, text. Optional: Tickets or Website. Example: 
 - `maps_url`: Event: directions, url. Optional: a directions link (https). Example: 
+- `amenities`: Features, text. Optional, from plug-in version 0.48.0 (vacation rentals): what the home has, separated by semicolons, such as Pet friendly;Pool table;Bunk room. Which home fits matches a group's wishes against them; write No pets for a home that takes no dogs. Example: 
 
 How to collect it:
 1. Copy each bookable option and its standard published rate from the website or booking engine.
