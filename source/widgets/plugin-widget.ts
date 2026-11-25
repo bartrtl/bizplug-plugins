@@ -160,6 +160,11 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .glow{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
 .head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}
 .fsbar{display:flex;justify-content:flex-end;margin:-8px 0 8px}.fsbar .link{font-size:12.5px}
+#app.is-split{height:100vh;box-sizing:border-box;display:flex;flex-direction:column}
+.split{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px}
+.split .pane{min-height:0;overflow:auto;padding-bottom:18px}.split .pane.r{border-left:1px solid var(--line);padding-left:20px}
+.split .pane.l .grid{grid-template-columns:1fr 1fr}.split .banner{width:100%;margin:0 0 14px;border-radius:14px;max-height:160px;aspect-ratio:auto;object-fit:cover}
+.split .fly{left:50%}#app.is-split .stk{right:calc(50% + 14px)}.splithint{margin-top:40px;padding:22px;border:1px dashed var(--line);border-radius:16px;text-align:center}.splithint b{display:block;font-size:16px;margin-bottom:6px}.splithint span{color:var(--muted);font-size:13.5px}
 .langs{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 12px;justify-content:flex-end}.lang{font:inherit;font-size:12px;line-height:1;padding:7px 10px;border-radius:999px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;cursor:pointer;opacity:.8}.lang.on{background:var(--a1,#888);color:var(--ink,#111);border-color:transparent;opacity:1;font-weight:600}
 [dir=rtl] .head,[dir=rtl] .tile,[dir=rtl] .contact{direction:rtl}[dir=rtl] input,[dir=rtl] textarea{text-align:right}.banner{display:block;width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:1.91/1;object-fit:cover;background:rgba(255,255,255,.04);border-bottom:2px solid var(--a2,rgba(255,255,255,.1));position:relative}
 .head>svg{width:26px;height:36px;flex:none}
@@ -354,7 +359,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 @keyframes flyin{from{opacity:0}to{opacity:1}}
 @keyframes slidein{from{transform:translateX(40px);opacity:.4}to{transform:none;opacity:1}}
 .hl{margin:6px 0 0 18px;font-size:13.5px;display:grid;gap:4px}
-.morebtn{margin-top:14px;width:100%}
+.morebtn{margin-top:14px;width:100%;box-sizing:border-box;text-align:center}
 .lvl{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:2px 8px;border-radius:999px;color:var(--ink);background:linear-gradient(110deg,var(--a1),var(--a2));margin-left:6px;vertical-align:1px;white-space:nowrap}
 .ic.logo img,.lg img{width:100%;height:100%;object-fit:contain;display:block}
 .lg{flex:none;width:46px;height:46px;border-radius:12px;background:#fff;display:grid;place-items:center;overflow:hidden;padding:5px;box-shadow:0 0 0 1px var(--line)}
@@ -579,9 +584,12 @@ function askOwn(prompt, b) {
   if (oa() && oa().sendFollowUpMessage) oa().sendFollowUpMessage({ prompt: text, scrollToBottom: true });
   else window.parent.postMessage({ jsonrpc: "2.0", id: Date.now(), method: "ui/message", params: { role: "user", content: [{ type: "text", text }] } }, "*");
   if (window.innerWidth >= 640 && curMode() === "inline" && canMode()) displayMode("pip");
+  if (curMode() === "fullscreen") { b.textContent = "Asked \u2713 " + AI() + "\u2019s answer is in the chat on the left"; b.disabled = true; return; }
   b.textContent = "Asked \u2713 " + AI() + "\u2019s answer is in the chat"; b.disabled = true;
 }
-const fullBar = () => (p().askMore && canMode() && state.view === "menu" ? '<div class="fsbar"><button class="link" data-act="fullscreen">' + (curMode() === "fullscreen" ? "Exit full screen" : "\u2922 Full screen") + "</button></div>" : "");
+// In full screen on a computer the card splits in two: the menu on the left, what was opened on the right.
+const splitOn = () => Boolean(p().askMore && state.plugin) && curMode() === "fullscreen" && window.innerWidth >= 900;
+const fullBar = () => (p().askMore && canMode() && (state.view === "menu" || splitOn()) ? '<div class="fsbar"><button class="link" data-act="fullscreen">' + (curMode() === "fullscreen" ? "Exit full screen" : "\u2922 Full screen") + "</button></div>" : "");
 // ChatGPT opens web links from a card, not mailto: links, so an email goes through a page that starts it in the
 // customer's mail app. The address travels in the fragment and is not sent to the server.
 const MAIL_PAGE = __MAIL__;
@@ -853,7 +861,7 @@ function decorSvg(s) {
 // opens as before and the details take the screen.
 // How a listing's Details open (listing-details.ts): "panel" (the default), "chat" or "off"; "" on an older version.
 const listMode = () => p().listing || "";
-const listWide = () => Boolean(listMode()) && window.innerWidth >= 640;
+const listWide = () => Boolean(listMode()) && window.innerWidth >= 640 && !splitOn();
 const listPanel = () => listWide() && listMode() !== "chat";
 const evPrompt = (e) => "Tell me more about " + e.name + (e.url ? " (" + e.url + ")" : "") + ", " + e.when + (e.place ? " at " + e.place : "") + ": what to expect, how to get tickets or take part, how to get there, and anything else worth knowing before going. You may use what you know and search the web; tell me which parts are not from " + (p().businessName || p().title || "the business") + "'s calendar.";
 function evFly(e) {
@@ -1599,7 +1607,8 @@ function visitsView() {
 // Continue on WhatsApp. On a computer a pick or a topic opens in a panel beside the list (the .fly sheet); on a phone
 // it opens on its own screen. Questions go to the chat, where the answer is the assistant's, not the host's.
 const conc = () => p().concierge || null;
-const wideNow = () => window.innerWidth >= 640;
+const chatWhere = () => (curMode() === "fullscreen" ? "in the chat beside the card" : "in the chat below the card");
+const wideNow = () => window.innerWidth >= 640 && !splitOn();
 const tripList = () => state.trip || (state.trip = []);
 const inTrip = (name) => tripList().indexOf(name) >= 0;
 function toggleTrip(name) { const t = tripList(), i = t.indexOf(name); if (i >= 0) t.splice(i, 1); else t.push(name); save(); render(); }
@@ -1629,7 +1638,7 @@ function pickSheet(x, d) {
     '<div class="bar-top"><span class="kd">' + esc(possOf(hostName(d))) + " pick</span><button class=\"link\" data-act=\"cflyx\">Close ✕</button></div>" +
     '<div class="enm" style="font-size:18px;font-weight:700;margin-top:10px">' + esc(x.name) + "</div>" + pickBody(x, d, true) + pickActs(x, d, true) +
     '<button class="primary morebtn" data-own="1" data-ask="' + esc(pickQ(x, d)) + '">Ask ' + esc(AI()) + " about it</button>" +
-    '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div></div></div>";
+    '<div class="note">The answer comes ' + chatWhere() + ', from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div></div></div>";
 }
 function placesView() {
   const d = state.data.places || { items: [], categories: [] }, o = opt("explore");
@@ -1662,7 +1671,7 @@ function areaBody(t, d, sheet) {
     '<p class="cwhy" style="font-style:normal">' + esc(t.text) + "</p>" +
     (t.mapUrl ? '<div class="actions"><button class="btn go" data-href="' + esc(t.mapUrl) + '">Open the map</button></div>' : "") +
     ((t.questions || []).length ? '<div class="qlabel" style="margin-top:12px">Ask ' + esc(AI()) + "</div>" + t.questions.map((q) => '<button class="cq" data-own="1" data-ask="' + esc(q) + '">' + esc(q) + " →</button>").join("") +
-      '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div>" : "");
+      '<div class="note">The answer comes ' + chatWhere() + ', from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div>" : "");
 }
 function areaView() {
   const d = state.data.area || { topics: [], events: [] }, o = opt("area");
@@ -2221,7 +2230,22 @@ function render() {
   // when it fails, so the menu says so above its buttons: at the bottom of a tall card it is out of sight, and without
   // the error line a refused call looked like a tap that did nothing. The picker carries its own error line.
   const menuStatus = state.view === "menu" && state.plugin ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + (picker() ? "" : errLine()) : "";
-  app.innerHTML = decorTop() + (ownHead ? "" : header() + decorMid()) + fullBar() + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "") + decorBottom();
+  if (splitOn() && state.view !== "loading") {
+    // 0.49.0, full screen on a computer: the menu stays on the left, and what the customer opened shows on the right.
+    const menuHead = p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
+    const left = (menuHead ? "" : header() + decorMid()) + fullBar() + langBar() + (nav() && state.busy && state.view === "menu" ? '<div class="note">Working…</div>' : "") + (state.view === "menu" ? errLine() : "") + menuView() + contactBar();
+    const right = state.view === "menu"
+      ? '<div class="splithint"><b>Choose something on the left</b><span>It opens here, with its details. Questions you send to ' + esc(AI()) + " are answered in the chat beside the card.</span></div>"
+      : body;
+    app.innerHTML = decorTop() + '<div class="split"><div class="pane l">' + left + '</div><div class="pane r">' + right + "</div></div>" + decorBottom();
+    app.classList.add("is-split");
+  } else {
+    app.classList.remove("is-split");
+    app.innerHTML = decorTop() + (ownHead ? "" : header() + decorMid()) + fullBar() + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "") + decorBottom();
+  }
+  // A side panel opens level with what was tapped when the card is taller than the screen (inline in ChatGPT the
+  // card's frame is as tall as the card, so a panel pinned to its top could open far above what the customer sees).
+  placeSheet(app.querySelector(".fly .sheet"));
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
@@ -2492,6 +2516,17 @@ if (window.openai) {
     const gl = (e && e.detail && e.detail.globals) || {};
     if (gl.toolOutput) receive(gl.toolOutput); else render();
   }, { passive: true });
+}
+let resizeT = 0;
+window.addEventListener("resize", () => { clearTimeout(resizeT); resizeT = setTimeout(() => { if (state.plugin) render(); }, 120); }, { passive: true });
+// Where the last tap outside a side panel was, in the frame's own coordinates (placeSheet).
+document.addEventListener("click", (e) => { if (!(e.target && e.target.closest && e.target.closest(".sheet"))) state.tapY = e.clientY; }, true);
+function placeSheet(sh) {
+  if (!sh) return;
+  const tall = window.innerHeight > ((window.screen && window.screen.availHeight) || 900);
+  if (!tall || !state.tapY) return;
+  const top = Math.max(0, Math.min(state.tapY - 160, window.innerHeight - 560));
+  sh.style.alignSelf = "flex-start"; sh.style.marginTop = top + "px"; sh.style.height = "auto"; sh.style.maxHeight = (window.innerHeight - top) + "px";
 }
 window.addEventListener("message", (e) => {
   const m = e.data;
