@@ -1,0 +1,73 @@
+{
+  "view": "menu",
+  "title": "Demo Shop (sample profile)",
+  "subtitle": "Product search and reserve in store",
+  "options": [
+    {
+      "tool": "search_products",
+      "kind": "lookup",
+      "title": "Browse and prices",
+      "description": "See what is on offer, with prices.",
+      "example": "What do you have, and how much is it?"
+    },
+    {
+      "tool": "reserve_item",
+      "kind": "request",
+      "title": "Place the order",
+      "description": "Send your order. The business confirms it and takes payment itself.",
+      "example": "I'd like to order for pickup"
+    },
+    {
+      "tool": "get_business_info",
+      "kind": "question",
+      "title": "Ask a question",
+      "description": "Answers from the business's own information: products, stock, hours and returns.",
+      "example": "Do you have this in stock, and what are your hours?"
+    },
+    {
+      "tool": "get_reservation_status",
+      "kind": "status",
+      "title": "Order status",
+      "description": "Check an order with its reference.",
+      "example": "What's the status of my order?"
+    },
+    {
+      "tool": "get_contact",
+      "kind": "contact",
+      "title": "Contact the business",
+      "description": "Phone, email, website and opening hours.",
+      "example": "How do I contact the business?"
+    }
+  ],
+  "plugin": {
+    "title": "Demo Shop (sample profile)",
+    "subtitle": "Product search and reserve in store",
+    "bound": true,
+    "inCard": true,
+    "nav": true,
+    "stayCal": false,
+    "listing": "panel",
+    "listingGrid": true,
+    "quick": {
+      "categories": [
+        {
+          "name": "Shoes",
+          "count": 62
+        }
+      ]
+    },
+    "businessName": "Demo Shop (sample profile)",
+    "sample": true,
+    "engine": "order",
+    "span": null,
+    "noun": "product",
+    "needsContact": true,
+    "theme": null,
+    "contact": {
+      "title": "Contact BizPlug",
+      "description": "Questions about this plug-in, or one like it for your business.",
+      "whatsapp": "https://wa.me/17047372724?text=Hi%20BizPlug%2C%20I'm%20using%20the%20Demo%20Shop%20(sample%20profile)%20plug-in%20in%20ChatGPT%20and%20would%20like%20to%20know%20more.",
+      "email": "mailto:info@bizplug.ai"
+    }
+  }
+}

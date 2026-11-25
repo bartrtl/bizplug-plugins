@@ -23,7 +23,7 @@ A layout is a folder: `community/layouts/<id>/` for yours, `layouts/<id>/` for t
 
 | File | What it holds |
 |---|---|
-| `layout.json` | `id` (the folder's name: lower-case letters, digits, hyphens), `name`, `author` (`name`, optional https `url` and GitHub username `github`, which the credit on www.bizplug.ai/contributors links to), `summary`, `suits`, and `ownHeader`: `true` when your layout draws the business's name, logo and banner itself (the card then leaves out its own header). |
+| `layout.json` | `id` (the folder's name: lower-case letters, digits, hyphens), `name`, `author` (`name`, optional https `url` and GitHub username `github`, which the credit on www.bizplug.ai/contributors links to), `summary`, `suits`, and `ownHeader`: `true` when your layout draws the business's name, logo and banner itself (the card then leaves out its own header); optional `sample`: the BizPlug sample business your layout is shown with first, `hospitality/demo-hotel`, `coffee-shops/demo-cafe` or `retail/demo-shop`, so a shop layout is previewed on the sample shop. |
 | `layout.js` | One function, `function render(ctx) { ... }`, that returns the menu as an HTML string. |
 | `layout.css` | Its styles. Every selector starts with `.lay-<id>`: the card puts your HTML in `<div class="lay lay-<id>">`. |
 | `preview-desktop.png`, `preview-mobile.png` | Pictures of your layout at 680 and 390 px wide (from `preview.ts`, below). |
