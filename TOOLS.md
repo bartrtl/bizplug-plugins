@@ -15,7 +15,7 @@ You can call one yourself. The **sample businesses** below answer like a real bu
 | Engine | Sample businesses |
 | --- | --- |
 | `order` | `coffee-shops/demo-cafe`, `florists/demo-florist`, `retail/demo-shop` |
-| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tour-operators/demo-riverbend-journeys`, `tourism-bureaus/demo-sample` |
+| `stay` | `activity-calendar/demo-sample`, `events/demo-venue`, `hospitality/demo-hotel`, `hospitality/vrp-test-villaakerlyckan`, `tour-operators/demo-nile-river-cruises`, `tour-operators/demo-riverbend-journeys`, `tourism-bureaus/demo-sample` |
 | `appt` | `beauty/demo-salon`, `restaurant-reservations/demo-sample` |
 | `quote` | `dmc/demo-andes-path`, `hvac/demo-hvac` |
 | `track` | `property-management/demo-pm` |
@@ -143,7 +143,7 @@ Read-only.
 
 ### `stay`: Check what is free for dates and party size with the total price, send a booking request, check its status.
 
-The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/hospitality/vrp-test-villaakerlyckan`, `https://mcp.bizplug.ai/plugin/tour-operators/demo-riverbend-journeys`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
+The inputs below are Hospitality & Hotels's. Every stay industry takes the same inputs under its own tool names (table at the end of this section); only the words in the descriptions change. Try it on a sample business: `https://mcp.bizplug.ai/plugin/activity-calendar/demo-sample`, `https://mcp.bizplug.ai/plugin/events/demo-venue`, `https://mcp.bizplug.ai/plugin/hospitality/demo-hotel`, `https://mcp.bizplug.ai/plugin/hospitality/vrp-test-villaakerlyckan`, `https://mcp.bizplug.ai/plugin/tour-operators/demo-nile-river-cruises`, `https://mcp.bizplug.ai/plugin/tour-operators/demo-riverbend-journeys`, `https://mcp.bizplug.ai/plugin/tourism-bureaus/demo-sample`.
 
 #### `check_room_availability` (look-up: Availability and price)
 

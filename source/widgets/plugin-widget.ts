@@ -1888,7 +1888,7 @@ function tripContact(t) {
   if (!c) return "";
   const who = c.name || tripBiz(state.data.itinerary);
   const wa = c.whatsapp ? "https://wa.me/" + c.whatsapp + "?text=" + encodeURIComponent("Hi " + (c.name || "") + ", about my trip " + t.name + ": ") : "";
-  return '<section class="vpanel wa"><div class="vph"><span class="vwa">' + icon("whatsapp") + "</span><div><b>" + esc(t.own ? "Your " + (c.role || "trip contact").toLowerCase() + ", " + who : "Talk to " + who) + "</b><span>" + esc([c.role && !t.own ? c.role : "", c.phone].filter(Boolean).join(" · ")) + "</span></div></div>" +
+  return '<section class="vpanel wa"><div class="vph"><span class="vwa">' + icon("whatsapp") + "</span><div><b>" + esc(t.own ? (/^your\b/i.test(c.role || "") ? c.role : "Your " + (c.role || "trip contact").toLowerCase()) + ", " + who : "Talk to " + who) + "</b><span>" + esc([c.role && !t.own ? c.role : "", c.phone].filter(Boolean).join(" · ")) + "</span></div></div>" +
     '<ul class="vlistdot"><li>Questions before you travel</li><li>Changes to your trip</li><li>Help while you are on the road</li></ul>' +
     (wa ? '<button class="primary vwab" data-href="' + esc(wa) + '">Message ' + esc(c.name ? c.name.split(" ")[0] : who) + " on WhatsApp</button>" : "") +
     (c.email ? '<div class="vlinks"><button class="link" data-href="mailto:' + esc(c.email) + "?subject=" + esc(encodeURIComponent(t.name)) + '">Email ' + esc(c.email) + "</button></div>" : "") +
