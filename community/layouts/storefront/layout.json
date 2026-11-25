@@ -1,8 +1,12 @@
 {
   "id": "storefront",
   "name": "Storefront",
-  "author": { "name": "Bart Cant - Rethink Labs", "url": "https://www.bizplug.ai" },
+  "author": {
+    "name": "Bart Cant - Rethink Labs",
+    "url": "https://www.bizplug.ai"
+  },
   "summary": "An online shop's home page: a slim announcement bar, your logo and name with a bag button, a search bar, your banner with a Shop now button, every option as a product tile in a grid with a Start here badge, the questions customers ask, and a shop footer.",
   "suits": "Shops and e-commerce, including shops on Shopify, Square and WooCommerce; boutiques, gift and fashion stores, bakeries and delis, and any business people come to browse and buy.",
-  "ownHeader": true
+  "ownHeader": true,
+  "sample": "retail/demo-shop"
 }
