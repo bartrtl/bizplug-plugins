@@ -48,6 +48,7 @@
     "stayCal": true,
     "listing": "panel",
     "listingGrid": true,
+    "askMore": true,
     "quick": {
       "maxGuests": 4
     },

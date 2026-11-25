@@ -125,10 +125,11 @@ By opening a pull request you agree that your contribution is published under th
 
 Not on GitHub? Use the forms instead: [Propose a card theme](https://github.com/msg2ai/bizplug-plugins/issues/new?template=card-theme.yml), [Propose a menu layout](https://github.com/msg2ai/bizplug-plugins/issues/new?template=menu-layout.yml), or https://www.bizplug.ai/marketplace#submit for a plug-in. Questions: info@bizplug.ai.
 
-## Version 0.48.0
+## Version 0.49.0
 
 All 86 plug-ins share one version. What changed in each:
 
+- **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
 - **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.
 - **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.

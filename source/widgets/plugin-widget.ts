@@ -159,6 +159,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 @media (prefers-reduced-motion:reduce){.dec.shimmer::after{display:none}.dec.twinkle,.stk svg,.stk svg path,.dwalk svg,.dwalk svg g,.dwalk svg path{animation:none}.dwalk svg{left:14px}}
 .glow{position:absolute;inset:-40% -20% auto auto;width:360px;height:360px;background:radial-gradient(closest-side,var(--glow),transparent);pointer-events:none}
 .head{display:flex;align-items:center;gap:12px;margin-bottom:14px;position:relative}
+.fsbar{display:flex;justify-content:flex-end;margin:-8px 0 8px}.fsbar .link{font-size:12.5px}
 .langs{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 12px;justify-content:flex-end}.lang{font:inherit;font-size:12px;line-height:1;padding:7px 10px;border-radius:999px;border:1px solid rgba(127,127,127,.35);background:transparent;color:inherit;cursor:pointer;opacity:.8}.lang.on{background:var(--a1,#888);color:var(--ink,#111);border-color:transparent;opacity:1;font-weight:600}
 [dir=rtl] .head,[dir=rtl] .tile,[dir=rtl] .contact{direction:rtl}[dir=rtl] input,[dir=rtl] textarea{text-align:right}.banner{display:block;width:calc(100% + 36px);margin:-18px -18px 14px;aspect-ratio:1.91/1;object-fit:cover;background:rgba(255,255,255,.04);border-bottom:2px solid var(--a2,rgba(255,255,255,.1));position:relative}
 .head>svg{width:26px;height:36px;flex:none}
@@ -558,6 +559,29 @@ function ask(prompt) {
   else window.parent.postMessage({ jsonrpc: "2.0", id: Date.now(), method: "ui/message", params: { role: "user", content: [{ type: "text", text: prompt }] } }, "*");
   state.asked = prompt; state.view = "asked"; state.error = ""; render();
 }
+// ---- 0.49.0: questions for the assistant itself, picture-in-picture and full screen (plugin.askMore) ----
+// "Ask ChatGPT about it" buttons (data-own) send a question the assistant answers from what it knows and the web. The
+// note at the end asks it not to open this card again for it (it used to call the plug-in and redraw the card instead
+// of answering). The card stays on its screen, and on a computer it asks the host to float the card
+// (picture-in-picture) so it stays in view while the answer arrives in the chat. The host decides; a refusal is ignored.
+const OWN_NOTE = "(Please answer here in the chat from what you know and the web; no need to open the plug-in again for this.)";
+const curMode = () => (window.openai && window.openai.displayMode) || state.mode || (state.full ? "fullscreen" : "inline");
+function displayMode(mode) {
+  try {
+    if (window.openai && window.openai.requestDisplayMode) { const r = window.openai.requestDisplayMode({ mode }); if (r && r.catch) r.catch(() => {}); state.mode = mode; return; }
+    if (mcp) { quiet(request("ui/request-display-mode", { mode })); state.mode = mode; }
+  } catch (e) {}
+}
+const canMode = () => Boolean((window.openai && window.openai.requestDisplayMode) || mcp);
+function askOwn(prompt, b) {
+  const text = prompt + " " + OWN_NOTE;
+  save();
+  if (oa() && oa().sendFollowUpMessage) oa().sendFollowUpMessage({ prompt: text, scrollToBottom: true });
+  else window.parent.postMessage({ jsonrpc: "2.0", id: Date.now(), method: "ui/message", params: { role: "user", content: [{ type: "text", text }] } }, "*");
+  if (window.innerWidth >= 640 && curMode() === "inline" && canMode()) displayMode("pip");
+  b.textContent = "Asked \u2713 " + AI() + "\u2019s answer is in the chat"; b.disabled = true;
+}
+const fullBar = () => (p().askMore && canMode() && state.view === "menu" ? '<div class="fsbar"><button class="link" data-act="fullscreen">' + (curMode() === "fullscreen" ? "Exit full screen" : "\u2922 Full screen") + "</button></div>" : "");
 // ChatGPT opens web links from a card, not mailto: links, so an email goes through a page that starts it in the
 // customer's mail app. The address travels in the fragment and is not sent to the server.
 const MAIL_PAGE = __MAIL__;
@@ -844,7 +868,7 @@ function evFly(e) {
     (e.blurb ? '<p class="about">' + esc(e.blurb) + "</p>" : "") +
     '<div class="actions" style="margin-top:14px">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">' + esc(e.urlLabel || "Open its page") + "</button>" : "") +
     (e.mapsUrl ? '<button class="btn" data-href="' + esc(e.mapsUrl) + '">Directions</button>' : "") + (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") + "</div>" +
-    (ask ? '<button class="primary morebtn" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + " for more</button>" +
+    (ask ? '<button class="primary morebtn" data-own="1" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + " for more</button>" +
       '<div class="note">Ask ' + esc(AI()) + " for more continues in the chat, where " + esc(AI()) + " may add what it knows or finds on the web. That part does not come from " + esc(biz) + "&rsquo;s calendar; check anything important on the event&rsquo;s own page.</div>"
       : '<div class="note">As listed by ' + esc(biz) + ". Check anything important on the event&rsquo;s own page.</div>") + "</div></div>";
 }
@@ -852,7 +876,7 @@ function evButtons(e, detail) {
   const fly = !detail && listPanel(), chat = !detail && listWide() && listMode() === "chat";
   return '<div class="acts">' + (e.url ? '<button class="btn go" ' + (fly ? 'data-efly="' + esc(e.id) + '"' : 'data-href="' + esc(e.url) + '"') + ">" + esc(e.urlLabel || "Open its page") + "</button>" : (opt("request") ? '<button class="btn go" data-pick-stay="' + esc(e.id) + '" data-name="' + esc(e.name) + '" data-total="' + esc(e.price || "") + '">' + esc(opt("request").title) + "</button>" : "")) +
     (e.mapsUrl ? '<button class="btn" data-href="' + esc(e.mapsUrl) + '">Directions</button>' : "") +
-    (detail ? (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") : (chat ? '<button class="btn" data-ask="' + esc(evPrompt(e)) + '">Details</button>' : '<button class="btn" ' + (fly ? "data-efly" : "data-ev") + '="' + esc(e.id) + '">Details</button>')) + "</div>";
+    (detail ? (e.calendar ? '<button class="btn" data-href="' + esc(e.calendar) + '">Add to calendar</button>' : "") : (chat ? '<button class="btn" data-own="1" data-ask="' + esc(evPrompt(e)) + '">Details</button>' : '<button class="btn" ' + (fly ? "data-efly" : "data-ev") + '="' + esc(e.id) + '">Details</button>')) + "</div>";
 }
 function evTags(e) {
   return '<div class="etags">' + (e.category ? '<span class="ecat">' + esc(e.category) + "</span>" : "") + (e.status ? '<span class="estat">' + esc(e.status) + "</span>" : "") + (e.free ? '<span class="efree">Free</span>' : "") + "</div>";
@@ -867,7 +891,7 @@ function evFeatured(d) {
   const list = d.featured || [];
   if (!list.length) return "";
   return '<div class="efeat"><div class="qlabel">Featured</div><div class="erail">' + list.map((e) =>
-    '<button class="efc" ' + (listPanel() ? "data-efly" : listWide() && listMode() === "chat" ? 'data-ask="' + esc(evPrompt(e)) + '" data-x' : "data-ev") + '="' + esc(e.id) + '">' +
+    '<button class="efc" ' + (listPanel() ? "data-efly" : listWide() && listMode() === "chat" ? 'data-own="1" data-ask="' + esc(evPrompt(e)) + '" data-x' : "data-ev") + '="' + esc(e.id) + '">' +
     '<div class="etop">' + evDate(e) + "<div>" + evTags(e) + "</div></div>" + '<div class="enm">' + esc(e.name) + '</div><div class="ewh">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + "</div></button>").join("") + "</div></div>";
 }
 const evAll = (d) => (d.events || []).concat((d.featured || []).filter((f) => !(d.events || []).some((e) => e.id === f.id)));
@@ -1308,7 +1332,7 @@ function memberView() {
     (m.description ? '<p class="about" style="margin:0 0 4px">' + esc(m.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || p().memberWrite ? '<div class="actions" style="margin-top:14px">' + (p().memberWrite ? '<button class="primary" data-act="mwrite">Write to them</button>' : "") + (web ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") +
       (mail ? '<button class="btn" data-href="mailto:' + esc(m.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-ask="' + esc("Tell me more about " + m.name + (web ? " (" + m.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + ((state.data.members || {}).business || "the business") + "'s member list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-own="1" data-ask="' + esc("Tell me more about " + m.name + (web ? " (" + m.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + ((state.data.members || {}).business || "the business") + "'s member list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(m.name) + '</div><div class="dd">' + (m.about || (m.highlights || []).length ? "What they do, their main services and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the contact details listed for ' + esc(m.name) + ". You write or call them yourself: " + esc((state.data.members || {}).business || "the business") + " and BizPlug do not introduce you, pass a message on or vouch for a member.</div>" +
     (more && state.fly === state.sel ? memberFly(m) : "");
 }
@@ -1332,7 +1356,7 @@ function companyFly(m, biz, sub, badge, listName, profile) {
     ((m.highlights || []).length ? '<div class="qlabel" style="margin-top:12px">Highlights</div><ul class="hl">' + m.highlights.map((h) => "<li>" + esc(h) + "</li>").join("") + "</ul>" : "") +
     (m.address ? '<div class="qlabel" style="margin-top:12px">Address</div><div class="bl" style="margin-top:3px">' + esc(m.address) + "</div>" : "") +
     (sites.length ? '<div class="note">From ' + sites.map(esc).join(", ") + ", listed by " + esc(biz) + ".</div>" : "") +
-    '<div class="actions" style="margin-top:14px">' + (ask ? '<button class="primary" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' : "") + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") +
+    '<div class="actions" style="margin-top:14px">' + (ask ? '<button class="primary" data-own="1" data-ask="' + esc(prompt) + '">Ask ' + esc(AI()) + ' for more</button>' : "") + (/^https:\/\//.test(m.website || "") ? '<button class="btn go" data-href="' + esc(m.website) + '">Website</button>' : "") + (/^https:\/\//.test(m.linkedin || "") ? '<button class="btn" data-href="' + esc(m.linkedin) + '">LinkedIn</button>' : "") +
       (profile ? '<button class="btn" data-profile="' + profile + '">Contact details</button>' : "") + "</div>" +
     (ask ? '<div class="note"><b>The answer appears in the chat below this card: scroll down to read it.</b> Ask ' + esc(AI()) + ' for more continues in the chat, where ' + esc(AI()) + ' may add what it knows or finds on the web. That part does not come from ' + esc(biz) + "&rsquo;s list; check anything important with the company.</div>"
       : '<div class="note">As listed by ' + esc(biz) + ". Check anything important with the company.</div>") + "</div></div>";
@@ -1604,7 +1628,7 @@ function pickSheet(x, d) {
   return '<div class="fly" data-act="cflyx"><div class="sheet" role="dialog" aria-label="' + esc(x.name) + '">' +
     '<div class="bar-top"><span class="kd">' + esc(possOf(hostName(d))) + " pick</span><button class=\"link\" data-act=\"cflyx\">Close ✕</button></div>" +
     '<div class="enm" style="font-size:18px;font-weight:700;margin-top:10px">' + esc(x.name) + "</div>" + pickBody(x, d, true) + pickActs(x, d, true) +
-    '<button class="primary morebtn" data-ask="' + esc(pickQ(x, d)) + '">Ask ' + esc(AI()) + " about it</button>" +
+    '<button class="primary morebtn" data-own="1" data-ask="' + esc(pickQ(x, d)) + '">Ask ' + esc(AI()) + " about it</button>" +
     '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div></div></div>";
 }
 function placesView() {
@@ -1612,7 +1636,7 @@ function placesView() {
   const items = d.items || [];
   const open = items.find((x) => x.id === state.cpick);
   if (open && !wideNow()) return top(open.name) + '<div class="it">' + pickBody(open, d, true) + pickActs(open, d, true) + "</div>" +
-    '<div class="actions" style="margin-top:10px"><button class="btn" data-ask="' + esc(pickQ(open, d)) + '">Ask ' + esc(AI()) + ' about it</button><button class="btn" data-cpick="">← All picks</button></div>';
+    '<div class="actions" style="margin-top:10px"><button class="btn" data-own="1" data-ask="' + esc(pickQ(open, d)) + '">Ask ' + esc(AI()) + ' about it</button><button class="btn" data-cpick="">← All picks</button></div>';
   const cats = '<div class="qs">' + chip("All", "data-ccat", "", !d.category) + (d.categories || []).map((c) => chip(esc(c.icon + " " + c.label), "data-ccat", c.id, d.category === c.id)).join("") + "</div>";
   const gf = (d.goodForAll || []).length ? '<div class="qs">' + (d.goodForAll || []).map((g) => chip(esc(g.label), "data-cgf", g.id, d.goodFor === g.id)).join("") + "</div>" : "";
   const rows = items.map((x) => '<div class="it cpick"><div class="nm"><b>' + esc(x.name) + "</b></div>" + pickBody(x, d, false) + pickActs(x, d, false) + "</div>").join("");
@@ -1637,7 +1661,7 @@ function areaBody(t, d, sheet) {
   return (t.image ? '<img class="cimg" src="' + esc(t.image) + '" alt="">' : "") + '<div class="enm" style="font-size:17px;font-weight:700;margin-top:8px">' + esc(t.title) + "</div>" +
     '<p class="cwhy" style="font-style:normal">' + esc(t.text) + "</p>" +
     (t.mapUrl ? '<div class="actions"><button class="btn go" data-href="' + esc(t.mapUrl) + '">Open the map</button></div>' : "") +
-    ((t.questions || []).length ? '<div class="qlabel" style="margin-top:12px">Ask ' + esc(AI()) + "</div>" + t.questions.map((q) => '<button class="cq" data-ask="' + esc(q) + '">' + esc(q) + " →</button>").join("") +
+    ((t.questions || []).length ? '<div class="qlabel" style="margin-top:12px">Ask ' + esc(AI()) + "</div>" + t.questions.map((q) => '<button class="cq" data-own="1" data-ask="' + esc(q) + '">' + esc(q) + " →</button>").join("") +
       '<div class="note">The answer comes in the chat below the card, from ' + esc(AI()) + ", not from " + esc(hostName(d)) + ".</div>" : "");
 }
 function areaView() {
@@ -1646,7 +1670,7 @@ function areaView() {
   if (open && !wideNow()) return top(open.label) + '<div class="it">' + areaBody(open, d, false) + '</div><div class="actions" style="margin-top:10px"><button class="btn" data-ctopic="">← Area guide</button></div>';
   const tiles = (d.topics || []).map((t) => '<button class="ctile" data-ctopic="' + esc(t.topic + "|" + t.title) + '"><small>' + esc(t.label) + "</small><b>" + esc(t.title) + "</b><span>" + esc(t.text.slice(0, 90)) + (t.text.length > 90 ? "…" : "") + "</span></button>").join("");
   const ev = (d.events || []).map((e) => '<div class="it"><div class="nm"><b>' + esc(e.name) + '</b></div><div class="bl">' + esc(e.when) + (e.place ? " · " + esc(e.place) : "") + "</div>" + (e.description ? '<div class="bl">' + esc(e.description) + "</div>" : "") +
-    '<div class="acts">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">Its page</button>' : "") + '<button class="btn" data-ask="' + esc("Tell me more about " + e.name + " (" + e.when + (e.place ? ", " + e.place : "") + "): what to expect, tickets and how to get there. Tell me which parts are not from " + possOf(hostName(d)) + " list.") + '">Ask ' + esc(AI()) + "</button></div></div>").join("");
+    '<div class="acts">' + (e.url ? '<button class="btn go" data-href="' + esc(e.url) + '">Its page</button>' : "") + '<button class="btn" data-own="1" data-ask="' + esc("Tell me more about " + e.name + " (" + e.when + (e.place ? ", " + e.place : "") + "): what to expect, tickets and how to get there. Tell me which parts are not from " + possOf(hostName(d)) + " list.") + '">Ask ' + esc(AI()) + "</button></div></div>").join("");
   return top(o ? o.title : "Area guide") + '<div class="cgrid">' + tiles + "</div>" +
     '<div class="bar-top" style="margin-top:16px"><h3 style="font-size:15px">What&rsquo;s on · ' + esc(d.range || "") + "</h3></div>" +
     '<div class="row">' + field("cstart", "From", { type: "date" }) + field("cend", "To", { type: "date" }) + '</div><div class="actions" style="margin-top:6px"><button class="btn" data-act="cevents">Show events for these dates</button></div>' +
@@ -1680,7 +1704,7 @@ function planView() {
   const d = state.data.plan || { days: [], homes: [] };
   const day = (x) => '<div class="cday"><div class="cdh">' + esc(x.label) + "</div>" + x.items.map((i) =>
     '<div class="cslot"><small>' + esc(i.part) + "</small><div>" + (i.place ? '<b>' + esc(i.place.name) + "</b>" + (i.place.distance ? " <span>" + esc(i.place.distance) + "</span>" : "") + (i.place.why ? '<p>' + esc(i.place.why) + "</p>" : "") : "") + (i.note ? '<p class="cnote">' + esc(i.note) + "</p>" : "") +
-      (i.place ? '<div class="acts">' + '<button class="link" data-tsave="' + esc(i.place.name) + '">' + (inTrip(i.place.name) ? "✓ Saved" : "♡ Save") + "</button>" + (i.place.mapsUrl ? '<button class="link" data-href="' + esc(i.place.mapsUrl) + '">Directions</button>' : "") + '<button class="link" data-ask="' + esc(pickQ(i.place, d)) + '">Ask ' + esc(AI()) + "</button></div>" : "") + "</div></div>").join("") +
+      (i.place ? '<div class="acts">' + '<button class="link" data-tsave="' + esc(i.place.name) + '">' + (inTrip(i.place.name) ? "✓ Saved" : "♡ Save") + "</button>" + (i.place.mapsUrl ? '<button class="link" data-href="' + esc(i.place.mapsUrl) + '">Directions</button>' : "") + '<button class="link" data-own="1" data-ask="' + esc(pickQ(i.place, d)) + '">Ask ' + esc(AI()) + "</button></div>" : "") + "</div></div>").join("") +
     (x.events || []).map((e) => '<div class="cslot cev"><small>On</small><div><b>' + esc(e.name) + "</b>" + (e.place ? " <span>" + esc(e.place) + "</span>" : "") + (e.url ? ' <button class="link" data-href="' + esc(e.url) + '">Its page</button>' : "") + "</div></div>").join("") + "</div>";
   const homes = (d.homes || []).map((h) => '<div class="it"><div class="nm"><b>' + esc(h.name) + "</b><b>" + esc(h.total) + '</b></div><div class="bl">' + esc(h.nights + " nights · " + h.nightly + " a night on average") + (h.capacity ? " · sleeps " + h.capacity : "") + "</div>" +
     '<div class="acts"><button class="btn go" data-cbook="' + esc(h.id) + '">Check availability & book</button></div></div>').join("");
@@ -1691,7 +1715,7 @@ function planView() {
     ((d.offers || []).length ? '<div class="qlabel" style="margin-top:14px">Guest offers</div>' + d.offers.map((x) => '<div class="coffer"><b>' + esc(x.name) + (x.offerDirect ? " · book-direct perk" : "") + "</b> " + esc(x.offer) + "</div>").join("") : "") +
     '<div class="qlabel" style="margin-top:16px">Homes for your dates</div><div class="list">' + (homes || '<div class="empty">No home fits this group on those dates. Try other dates.</div>') + "</div>" +
     '<div class="note">Prices from the published rates, ' + esc(d.tax || "") + ". The availability check confirms the dates and the price; nothing is booked until you book.</div>" +
-    '<div class="actions" style="margin-top:12px"><button class="btn" data-ask="' + esc("Looking at my plan for " + hostName(d) + " (" + d.start + " to " + d.end + "): what is the weather usually like then, and what should we pack? Say which parts are yours and not the host's.") + '">Ask ' + esc(AI()) + " about the weather</button>" +
+    '<div class="actions" style="margin-top:12px"><button class="btn" data-own="1" data-ask="' + esc("Looking at my plan for " + hostName(d) + " (" + d.start + " to " + d.end + "): what is the weather usually like then, and what should we pack? Say which parts are yours and not the host's.") + '">Ask ' + esc(AI()) + " about the weather</button>" +
     ((conc() || {}).whatsapp ? '<button class="btn wa" data-act="ctrip">' + icon("whatsapp") + "Continue on WhatsApp</button>" : "") + '<button class="btn" data-view="planform">Change the plan</button></div>';
 }
 function matchFormView() {
@@ -1874,7 +1898,7 @@ function exhibitorView() {
   return top(x.name) + hero +
     (x.description ? '<p class="about" style="margin:0 0 4px">' + esc(x.description) + "</p>" : "") + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
     (web || mail || li ? '<div class="actions" style="margin-top:14px">' + (web ? '<button class="btn go" data-href="' + esc(x.website) + '">Website</button>' : "") + (mail ? '<button class="btn" data-href="mailto:' + esc(x.email) + '">' + icon("mail") + "Email</button>" : "") + (li ? '<button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button>' : "") + "</div>" : "") +
-    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-ask="' + esc("Tell me more about " + x.name + (web ? " (" + x.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s exhibitor and sponsor list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
+    (more ? '<button class="tile wide morebtn" ' + (listMode() === "chat" ? 'data-own="1" data-ask="' + esc("Tell me more about " + x.name + (web ? " (" + x.website + ")" : "") + ": what they do, recent news, and how I could work with them. You may use what you know and search the web; tell me which parts are not from " + biz + "'s exhibitor and sponsor list.") + '"' : 'data-act="mfly"') + '><span class="ic">' + icon("lookup") + '</span><div><div class="tt">More about ' + esc(x.name) + '</div><div class="dd">' + (x.about || (x.highlights || []).length ? "What they do, their products and where it comes from" : "Ask " + AI() + " what it knows or finds about them") + "</div></div></button>" : "") +
     '<div class="note">These are the details ' + esc(biz) + " lists. You contact " + esc(x.name) + " yourself.</div>" +
     (more && state.fly === state.sel ? companyFly(x, biz, [label, x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list") : "");
 }
@@ -2197,7 +2221,7 @@ function render() {
   // when it fails, so the menu says so above its buttons: at the bottom of a tall card it is out of sight, and without
   // the error line a refused call looked like a tap that did nothing. The picker carries its own error line.
   const menuStatus = state.view === "menu" && state.plugin ? (nav() && state.busy ? '<div class="note">Working…</div>' : "") + (picker() ? "" : errLine()) : "";
-  app.innerHTML = decorTop() + (ownHead ? "" : header() + decorMid()) + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "") + decorBottom();
+  app.innerHTML = decorTop() + (ownHead ? "" : header() + decorMid()) + fullBar() + langBar() + menuStatus + body + (state.view === "menu" ? contactBar() : "") + decorBottom();
   const pic = app.querySelector(".banner");
   if (pic) pic.addEventListener("error", () => pic.remove(), { once: true });
   // 0.25.0: a logo that does not load gives way to the store icon (the header) or the initials (a member).
@@ -2218,11 +2242,14 @@ function render() {
   app.querySelectorAll('[data-act="eflyx"]').forEach((el) => el.addEventListener("click", (e) => { if (e.target === el) { state.efly = ""; render(); } }));
   on("[data-ev]", (b) => { state.ev = b.dataset.ev || ""; if (!state.ev && state.data.events) state.data.events.open = ""; state.view = "events"; render(); });
   on("[data-lang]", (b) => { if (b.dataset.lang !== curLang()) setLang(b.dataset.lang); });
+  on('[data-act="fullscreen"]', () => { const full = curMode() === "fullscreen"; displayMode(full ? "inline" : "fullscreen"); state.full = !full; setTimeout(render, 250); });
   on("[data-view]", (b) => { state.view = b.dataset.view; state.error = ""; render(); });
   // 0.48.0: the rental concierge's screens.
   conciergeHandlers(on, app, guard);
   on("[data-ask]", (b) => {
     if (!b.dataset.ask) return;
+    // 0.49.0: a question for the assistant itself stays on this screen, and on a computer the card floats.
+    if (b.dataset.own && p().askMore) { askOwn(b.dataset.ask, b); return; }
     ask(b.dataset.ask);
     // In a More about panel, Ask for more says where its answer goes: the chat, below the card.
     if (b.closest(".sheet") && b.classList.contains("primary")) { b.textContent = "Asked: scroll down in the chat for the answer \u2193"; b.disabled = true; }
@@ -2601,6 +2628,8 @@ const IMAGE_ORIGINS = [...CARD_IMAGE_ORIGINS, ...siteOrigins()];
 export const pluginWidgetMeta = (frames = false) => ({
   ui: { prefersBorder: true, csp: { connectDomains: [], resourceDomains: IMAGE_ORIGINS, ...(frames ? { frameDomains: [VIDEO_FRAME_ORIGIN] } : {}) } },
   "openai/widgetPrefersBorder": true,
+  // 0.49.0: the card may float (picture-in-picture) while the assistant answers, or open full screen.
+  "openai/ui": { availableDisplayModes: ["inline", "pip", "fullscreen"] },
   "openai/widgetDescription":
     "An interactive card for a business plug-in: a menu with one button per thing the customer can do, short forms for their input, and the results (a price list, availability, open times, an estimate, a status, a sent request). The card already shows the menu or the result: do not repeat it in full; add one short next step at most.",
   "openai/widgetCSP": { connect_domains: [], resource_domains: IMAGE_ORIGINS, ...(frames ? { frame_domains: [VIDEO_FRAME_ORIGIN] } : {}), redirect_domains: ["https://wa.me", "https://api.whatsapp.com", new URL(siteConfig.url).origin, "https://checkout.stripe.com"] },

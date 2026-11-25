@@ -1,6 +1,6 @@
 # BizPlug Tax & Accounting
 
-Version 0.48.0. Book a tax or bookkeeping consult for tax & accounting businesses.
+Version 0.49.0. Book a tax or bookkeeping consult for tax & accounting businesses.
 
 - Main function: Book a tax or bookkeeping consult
 - MCP server URL: `https://mcp.bizplug.ai/plugin/accounting` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.48.0. Book a tax or bookkeeping consult for tax & accounting businesse
 
 ## Changes
 
+- **0.49.0** (25 November 2026): Ask ChatGPT from the card without losing it: the question is answered in the chat, the card floats beside the answer on a computer, and the menu opens full screen.
 - **0.48.0** (25 November 2026): Vacation rentals: a concierge in the card. The host's local picks, an area guide with events on the guest's dates, a house guide, Which home fits, Plan my stay with the price for the dates, and Continue on WhatsApp.
 - **0.47.0** (24 November 2026): Direct offers in the card: Price for your dates, the host's offer as a screen, and Book & pay on the host's own website.
 - **0.46.0** (24 November 2026): Direct offers: a rental or hotel whose own website publishes signed offers by the Vacation Rental Protocol is quoted from its site, with the exact total, the terms and its own booking link.
