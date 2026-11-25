@@ -1,0 +1,48 @@
+{
+  "id": "south-carolina-beaches",
+  "name": "South Carolina Beaches",
+  "description": "Atlantic teal to sea-oat sand on deep indigo, with the palmetto-flag crescent. For beach rentals, resorts and seafood spots on the South Carolina coast.",
+  "author": "Bart Cant - Rethink Labs",
+  "colors": {
+    "a1": "#5eead4",
+    "a2": "#fcd9a8",
+    "ink": "#06201f",
+    "bg": "#0b1626",
+    "glow": "rgba(94,234,212,.14)"
+  },
+  "decor": {
+    "header": {
+      "pattern": "lines",
+      "colors": [
+        "#1e3a8a",
+        "#5eead4",
+        "#fcd9a8"
+      ]
+    },
+    "divider": {
+      "pattern": "dots",
+      "colors": [
+        "#5eead4",
+        "#fcd9a8"
+      ]
+    },
+    "footer": {
+      "pattern": "serrated",
+      "colors": [
+        "#fcd9a8",
+        "#5eead4"
+      ]
+    },
+    "stickers": [
+      {
+        "path": "M14.5 3.5a8.5 8.5 0 1 0 6 14.6A7 7 0 1 1 14.5 3.5z",
+        "color": "#ffffff"
+      },
+      {
+        "shape": "sun",
+        "color": "#fcd9a8",
+        "motion": "spin"
+      }
+    ]
+  }
+}
