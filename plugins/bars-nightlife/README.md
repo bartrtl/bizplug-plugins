@@ -1,6 +1,6 @@
 # BizPlug Bars & Nightlife
 
-Version 0.52.0. Table and guest-list requests for bars & nightlife businesses.
+Version 0.53.0. Table and guest-list requests for bars & nightlife businesses.
 
 - Main function: Table and guest-list requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/bars-nightlife` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.52.0. Table and guest-list requests for bars & nightlife businesses.
 
 ## Changes
 
+- **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.
 - **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.
 - **0.51.0** (25 November 2026): Vacation rentals: name your local picks yourself, such as "Harrison's Suggestions", in place of Explore the area.
 - **0.50.0** (25 November 2026): Tour operators and DMCs: trips day by day in the card, with a picture per day, each day opening on its flights, hotels and activities by the hour; My trip by code; and a proposal's price breakdown.
