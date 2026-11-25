@@ -40,11 +40,15 @@ Each result has `content` (text written for the assistant) and, for most tools, 
 
 Read-only.
 
+How the plug-in's instructions tell the assistant to use it: Call it when the customer asks what this can do, asks for a menu or options, or opens without a question. ChatGPT shows the menu as a card with a button and a short form for each option. Where there is no card, show the options exactly as returned (same titles, same order).
+
 No inputs.
 
 ### `get_business_info` (Business information)
 
 Read-only.
+
+How the plug-in's instructions tell the assistant to use it: If the profile does not cover the question, say so and use get_contact.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -64,6 +68,8 @@ Read-only.
 ### `open_form` (Open a form)
 
 Read-only. Only when the business linked forms of its own.
+
+How the plug-in's instructions tell the assistant to use it: Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -97,6 +103,8 @@ Read-only.
 #### `place_order` (request: Place the order)
 
 Sends something to the business: once sent, it cannot be taken back.
+
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has confirmed the items.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -163,6 +171,8 @@ Read-only.
 
 Sends something to the business: once sent, it cannot be taken back.
 
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has chosen an option.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `option` | string | yes | The room type id chosen from the availability result. |
@@ -216,6 +226,8 @@ The inputs below are Healthcare & Clinics's. Every appt industry takes the same 
 
 Read-only.
 
+How the plug-in's instructions tell the assistant to use it: Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `service` | string |  | Optional visit type id or name. |
@@ -224,6 +236,8 @@ Read-only.
 #### `request_appointment` (request: Request the appointment)
 
 Sends something to the business: once sent, it cannot be taken back.
+
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has picked a time. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -300,6 +314,8 @@ Read-only.
 
 Sends something to the business: once sent, it cannot be taken back.
 
+How the plug-in's instructions tell the assistant to use it: Use only once the customer agrees to send it.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `service` | string | yes | The HVAC service id or name. |
@@ -356,6 +372,8 @@ Read-only.
 
 Sends something to the business: once sent, it cannot be taken back.
 
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has given the details and agrees to send it.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `topic` | string | yes | Short title for the service request. |
@@ -397,6 +415,8 @@ A few industries switch on an option that adds tools. Each is offered only when 
 ### `check_direct_offer` (Direct offer from the host's website)
 
 Read-only. Only when the business's own website gives signed offers by the Vacation Rental Protocol, and the BizPlug team has set up its domain. Industries: Hospitality & Hotels, Casinos & Gaming, Vacation Rentals, Tourism Bureaus & Destinations.
+
+How the plug-in's instructions tell the assistant to use it: An offer that cannot be checked is returned as unknown and nothing from it may be quoted. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -443,6 +463,8 @@ Read-only. Only for a show or conference that published its programme (sessions.
 
 Sends something to the business: once sent, it cannot be taken back. Only for a show or conference that published its programme (sessions.csv and the others); it then replaces the venue's three tools. Industries: Events & Conferences.
 
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has given the details and agrees to send it.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
@@ -458,6 +480,8 @@ Sends something to the business: once sent, it cannot be taken back. Only for a 
 ### `explore_area` (Explore the area)
 
 Read-only. Only when the host published its local picks (places.csv). Industries: Vacation Rentals.
+
+How the plug-in's instructions tell the assistant to use it: Use it for any question about what to do, where to eat or what is nearby.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -484,6 +508,8 @@ Read-only. Only when the host published an area guide or events (area.csv, event
 ### `get_house_guide` (House guide)
 
 Read-only. Only when the host published a house guide (house.csv). Industries: Vacation Rentals.
+
+How the plug-in's instructions tell the assistant to use it: Never guess how an appliance works.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -528,6 +554,8 @@ Read-only. Only on vacation rental plug-ins from version 0.48.0. Industries: Vac
 
 Read-only. Only when the host has a WhatsApp concierge or number. Industries: Vacation Rentals.
 
+How the plug-in's instructions tell the assistant to use it: Use it when the guest wants to continue with the host on WhatsApp.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
@@ -543,6 +571,8 @@ Read-only. Only when the host has a WhatsApp concierge or number. Industries: Va
 ### `find_itineraries` (Itineraries)
 
 Read-only. Only when the business published itineraries without a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
+
+How the plug-in's instructions tell the assistant to use it: Use it when the customer asks what trips there are.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -567,6 +597,8 @@ Read-only. Only when the business published itineraries without a code (trips.cs
 
 Read-only. Only when the business published trips with a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
 
+How the plug-in's instructions tell the assistant to use it: Pass the code exactly as the traveller typed it. Never guess, suggest or repeat a code.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
@@ -579,6 +611,8 @@ Read-only. Only when the business published trips with a code (trips.csv), from 
 
 Read-only. Only when the business published its member businesses (members.csv). Industries: Coworking & Offices, Chambers of Commerce & Business Associations.
 
+How the plug-in's instructions tell the assistant to use it: Share only what the business lists for a member.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `query` | string |  | Optional free text: a member's name, a kind of business, or what the person needs or can offer. Omit to list the members by industry. |
@@ -590,6 +624,8 @@ Read-only. Only when the business published its member businesses (members.csv).
 ### `write_to_member` (Write to a member)
 
 Read-only. Only when the business published its member businesses (members.csv). Industries: Coworking & Offices, Chambers of Commerce & Business Associations.
+
+How the plug-in's instructions tell the assistant to use it: Use it when the person wants to contact a member they found with find_members.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -605,6 +641,8 @@ Read-only. Only when the business published its member businesses (members.csv).
 
 Read-only. Only when the business published its locations (locations.csv). Industries: Coworking & Offices.
 
+How the plug-in's instructions tell the assistant to use it: Use it for any question about tours, day passes or their prices.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
@@ -615,6 +653,8 @@ Read-only. Only when the business published its locations (locations.csv). Indus
 ### `book_tour` (Book a tour)
 
 Sends something to the business: once sent, it cannot be taken back. Only when the business published its locations (locations.csv). Industries: Coworking & Offices.
+
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has chosen the location and the day and wants to go ahead. Never invent a location or tour hours.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -633,6 +673,8 @@ Sends something to the business: once sent, it cannot be taken back. Only when t
 ### `request_day_pass` (Day pass)
 
 Sends something to the business: once sent, it cannot be taken back. Only when the business published its locations (locations.csv). Industries: Coworking & Offices.
+
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has chosen the location and the day and wants to go ahead. Never invent a price or a location.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
@@ -662,6 +704,8 @@ Read-only. Industries: SaaS & Software.
 
 Read-only. Industries: SaaS & Software.
 
+How the plug-in's instructions tell the assistant to use it: Never quote a price that is not returned, and never start a subscription or an upgrade.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
@@ -683,6 +727,8 @@ Read-only. Industries: SaaS & Software.
 ### `request_support` (Support request)
 
 Sends something to the business: once sent, it cannot be taken back. Industries: SaaS & Software.
+
+How the plug-in's instructions tell the assistant to use it: Use only once the customer has given the details and agrees to send it.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
