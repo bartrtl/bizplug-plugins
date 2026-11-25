@@ -19456,8 +19456,10 @@
         {
           "name": "get_itinerary",
           "title": "Itinerary day by day",
-          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code.",
-          "rules": [],
+          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only.",
+          "rules": [
+            "A traveller's own trip is not found here: use open_my_trip with their code."
+          ],
           "readOnly": true,
           "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
           "inputSchema": {
@@ -19871,8 +19873,10 @@
         {
           "name": "get_itinerary",
           "title": "Itinerary day by day",
-          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code.",
-          "rules": [],
+          "description": "One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only.",
+          "rules": [
+            "A traveller's own trip is not found here: use open_my_trip with their code."
+          ],
           "readOnly": true,
           "when": "Only when the business published itineraries without a code (trips.csv), from version 0.50.0.",
           "inputSchema": {

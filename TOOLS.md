@@ -585,6 +585,8 @@ How the plug-in's instructions tell the assistant to use it: Use it when the cus
 
 Read-only. Only when the business published itineraries without a code (trips.csv), from version 0.50.0. Industries: Tour Operators, Destination Management Companies.
 
+How the plug-in's instructions tell the assistant to use it: A traveller's own trip is not found here: use open_my_trip with their code.
+
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
