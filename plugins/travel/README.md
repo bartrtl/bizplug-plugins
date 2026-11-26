@@ -1,6 +1,6 @@
 # BizPlug Travel & Tourism
 
-Version 0.55.0. Tour and trip availability with price per traveller for travel & tourism businesses.
+Version 0.56.0. Tour and trip availability with price per traveller for travel & tourism businesses.
 
 - Main function: Tour and trip availability with price per traveller
 - MCP server URL: `https://mcp.bizplug.ai/plugin/travel` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.55.0. Tour and trip availability with price per traveller for travel &
 
 ## Changes
 
+- **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.
 - **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.

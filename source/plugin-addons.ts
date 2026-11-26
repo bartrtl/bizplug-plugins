@@ -415,6 +415,21 @@ const DIRECT_OFFERS: Addon = {
 };
 
 // Ticket Tailor (plug-in 0.54.0, ticket-tailor.ts): events plug-ins only, under Event-specific tools (shown only there).
+// Humanitix (plug-in 0.56.0, humanitix.ts): events plug-ins only, under Event-specific tools.
+const HUMANITIX: Addon = {
+  id: "humanitix", name: "Humanitix", group: "ticketing", status: "included",
+  what: "Your plug-in shows your upcoming Humanitix events and tickets with your page to buy them, and your Registrations page lists your tickets, where you can check people in and correct an attendee.",
+  needs: ["A Humanitix account, and an API key made in its console under Account > Advanced > API keys (account owners only), with Events, Orders and Tickets read, and Check in tickets and Transfer tickets allowed."],
+  steps: [
+    "In the Humanitix console, open Account > Advanced > API keys and create a named key. Give it read access to events, orders and tickets, and allow Check in tickets and Transfer tickets. Copy the key (it starts with hx_live_).",
+    "Paste it here and press Check and save. BizPlug asks Humanitix for your events with it and saves it, encrypted, only if Humanitix accepts it. It is never shown again.",
+    "Your plug-in then shows your published, public, upcoming events and ticket types with your Humanitix page to buy them, from plug-in version 0.56.0; if your plug-in runs an older version, press Upgrade on its Overview tab.",
+    "Open Registrations to see your tickets per event, check people in or out, and correct an attendee (Humanitix transfers the ticket and emails it). Creating events, changing tickets and refunds stay in Humanitix.",
+    "To disconnect, clear the field and save, then revoke the key in Humanitix.",
+  ],
+  link: { label: "How Humanitix works with your plug-in", href: "/how-to/plug-in/humanitix" },
+};
+
 const TICKET_TAILOR: Addon = {
   id: "ticket-tailor", name: "Ticket Tailor", group: "ticketing", status: "included",
   what: "Your plug-in shows your upcoming Ticket Tailor events and tickets with your page to buy them, and your Registrations page lists who registered, where you can correct details, check people in and void tickets.",
@@ -440,7 +455,7 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM, DIBSY] : [];
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
-  const ticketing = show ? [TICKET_TAILOR] : [];
+  const ticketing = show ? [TICKET_TAILOR, HUMANITIX] : [];
   const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }

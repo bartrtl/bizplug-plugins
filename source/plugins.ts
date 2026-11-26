@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.55.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.56.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -384,7 +384,7 @@ export function buildPlugin(i: Industry): IndustryPlugin {
     // 0.54.0, events: the business's own Ticket Tailor box office (ticket-tailor.ts). Offered only where one is connected.
     ...(fn.show
       ? [
-          { name: TICKETS_TOOL, title: "Tickets", description: "List this business's upcoming events from its own Ticket Tailor box office, each with its dates, place, ticket types, prices, whether tickets are on sale and, where the business shows it, how many are left, with the event's Ticket Tailor page to buy them; optionally only events matching words. Read-only: it reads nothing about buyers, and tickets are bought and paid for on Ticket Tailor, not here. Use it when the customer asks about tickets, prices, dates or how to buy.", readOnly: true },
+          { name: TICKETS_TOOL, title: "Tickets", description: "List this business's upcoming events from its own ticketing account (Ticket Tailor or Humanitix), each with its dates, place, ticket types, prices, whether tickets are on sale and, where the business shows it, how many are left, with the event's own ticketing page to buy them; optionally only events matching words. Read-only: it reads nothing about buyers, and tickets are bought and paid for on that page, not here. Use it when the customer asks about tickets, prices, dates or how to buy.", readOnly: true },
         ]
       : []),
   ];

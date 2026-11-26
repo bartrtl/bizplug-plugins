@@ -1,6 +1,6 @@
 # BizPlug Beauty & Salons
 
-Version 0.55.0. Book salon services with a stylist for beauty & salons businesses.
+Version 0.56.0. Book salon services with a stylist for beauty & salons businesses.
 
 - Main function: Book salon services with a stylist
 - MCP server URL: `https://mcp.bizplug.ai/plugin/beauty` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.55.0. Book salon services with a stylist for beauty & salons businesse
 
 ## Changes
 
+- **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.
 - **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.

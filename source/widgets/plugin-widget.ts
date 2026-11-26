@@ -2210,7 +2210,9 @@ function ticketsView() {
     return '<div class="it"><div class="nm"><b>' + esc(e.name) + "</b></div>" +
       '<div class="bl">' + esc([e.start, e.venue].filter(Boolean).join(" · ")) + "</div>" + types + buy + "</div>";
   }).join("");
-  return head + '<div class="list">' + rows + "</div>" + '<div class="note">Tickets are bought and paid for on Ticket Tailor, not here.</div>' + errLine() + links("tickets");
+  // 0.56.0: the provider the business connected (Ticket Tailor or Humanitix); each sentence is in the card's languages.
+  const where = d.provider === "Humanitix" ? "Tickets are bought and paid for on Humanitix, not here." : "Tickets are bought and paid for on Ticket Tailor, not here.";
+  return head + '<div class="list">' + rows + "</div>" + '<div class="note">' + where + "</div>" + errLine() + links("tickets");
 }
 function enquiryView() {
   const o = opt("enquiry");
