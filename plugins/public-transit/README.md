@@ -1,6 +1,6 @@
 # BizPlug Public Transit & Mobility
 
-Version 0.54.0. Service alerts and issue reports for public transit & mobility businesses.
+Version 0.55.0. Service alerts and issue reports for public transit & mobility businesses.
 
 - Main function: Service alerts and issue reports
 - MCP server URL: `https://mcp.bizplug.ai/plugin/public-transit` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.54.0. Service alerts and issue reports for public transit & mobility b
 
 ## Changes
 
+- **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.
 - **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.
 - **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.

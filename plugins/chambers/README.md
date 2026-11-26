@@ -1,6 +1,6 @@
 # BizPlug Chambers of Commerce & Business Associations
 
-Version 0.54.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
+Version 0.55.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
@@ -36,6 +36,7 @@ Version 0.54.0. Chamber information, membership enquiries and member businesses 
 
 ## Changes
 
+- **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.
 - **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.
 - **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.

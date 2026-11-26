@@ -95,6 +95,7 @@ const ICONS: Record<string, string> = {
   speakers: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
   exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
   enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
+  tickets: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
   form: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   committees: '<circle cx="12" cy="6" r="2.5"/><circle cx="5" cy="17" r="2.5"/><circle cx="19" cy="17" r="2.5"/><path d="M12 8.5v3M12 11.5l-5 3.5M12 11.5l5 3.5"/>',
@@ -994,7 +995,7 @@ function contactBar() {
     (c.email ? '<button class="btn" data-href="' + esc(c.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>";
 }
 // ---- 0.31.0: the business's menu layout (card-layouts.ts, layouts/<id>/) ----
-const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", contact: "Contact", committees: "Committees", news: "News", social: "Social", agenda: "Agenda", speakers: "Speakers", exhibitors: "Exhibitors", features: "Features", pricing: "Pricing", guides: "Help", support: "Support", enquiry: "Enquire", tour: "Tour", daypass: "Day pass", account: "Account" };
+const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", contact: "Contact", committees: "Committees", news: "News", social: "Social", agenda: "Agenda", speakers: "Speakers", exhibitors: "Exhibitors", features: "Features", pricing: "Pricing", guides: "Help", support: "Support", enquiry: "Enquire", tickets: "Tickets", tour: "Tour", daypass: "Day pass", account: "Account" };
 // A short label for tabs, round buttons and chapters.
 function shortOf(o) {
   if (o.short) return o.short;
@@ -2192,6 +2193,25 @@ function exhibitorView() {
     (more && state.fly === state.sel ? companyFly(x, biz, [label, x.category].filter(Boolean).join(" · "), x.stand ? "Stand " + x.stand : "", "exhibitor and sponsor list") : "");
 }
 const TOPICS = ["Exhibiting", "Sponsoring", "Visiting", "Speaking", "Other"];
+// ---- Tickets (version 0.55.0, ticket-tailor.ts) ----
+// The business's upcoming events from its own Ticket Tailor box office: each with its date, place and ticket types.
+// Buy tickets opens the event's own Ticket Tailor checkout (through the site's /tickets address); nothing is sold here.
+const TT_STATUS = { on_sale: "On sale", sold_out: "Sold out", unavailable: "Not on sale now", locked: "Needs an access code" };
+function ticketsView() {
+  const d = state.data.tickets || { events: [] };
+  const o = opt("tickets");
+  const head = top(o ? o.title : "Tickets");
+  const events = d.events || [];
+  if (!events.length) return head + '<div class="empty">' + (d.query ? 'No event matches "' + esc(d.query) + '".' : "No upcoming events with tickets right now.") + "</div>" + errLine() + links("tickets");
+  const rows = events.map((e) => {
+    const types = (e.tickets || []).map((t) => '<div class="nm" style="margin-top:4px"><span>' + esc(t.name) + '</span><b>' + esc(t.price) + "</b></div>" +
+      '<div class="bl">' + esc(TT_STATUS[t.status] || t.status) + (t.left != null && t.status === "on_sale" ? " · " + esc(String(t.left)) + " left" : "") + "</div>").join("");
+    const buy = e.buyUrl && e.onSale && (e.tickets || []).some((t) => t.status === "on_sale") ? '<div class="actions" style="margin-top:10px"><button class="primary" data-href="' + esc(e.buyUrl) + '">Buy tickets</button></div>' : e.availableAt ? '<div class="note">' + esc(e.availableAt) + "</div>" : '<div class="note">Tickets are not on sale now.</div>';
+    return '<div class="it"><div class="nm"><b>' + esc(e.name) + "</b></div>" +
+      '<div class="bl">' + esc([e.start, e.venue].filter(Boolean).join(" · ")) + "</div>" + types + buy + "</div>";
+  }).join("");
+  return head + '<div class="list">' + rows + "</div>" + '<div class="note">Tickets are bought and paid for on Ticket Tailor, not here.</div>' + errLine() + links("tickets");
+}
 function enquiryView() {
   const o = opt("enquiry");
   return '<div class="form">' + top(o ? o.title : "Send an enquiry") + '<div class="hint">' + esc((o && o.description) || "") + "</div>" +
@@ -2459,6 +2479,8 @@ function openOption(i) {
   if (o.kind === "support") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } state.view = "support"; render(); return; }
   // 0.18.0, event guide: Agenda, Speakers and Exhibitors open with their lists; an enquiry opens its form.
   if (o.kind === "agenda" || o.kind === "speakers" || o.kind === "exhibitors") { state.f.aq = ""; state.f.pq = ""; state.f.xq = ""; run(o.tool, {}, o.example); return; }
+  // 0.55.0: Tickets opens with the business's upcoming events.
+  if (o.kind === "tickets") { run(o.tool, {}, o.example); return; }
   if (o.kind === "enquiry") { if (!inCard()) { state.open = i; state.view = "form"; render(); return; } if (!v("etopic")) state.f.etopic = "Exhibiting"; state.view = "enquiry"; render(); return; }
   // 0.48.0, the rental concierge: lists open with their results, Plan my stay and Which home fits with their forms.
   if (conc() && inCard()) {
@@ -2508,7 +2530,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView, tickets: ticketsView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
