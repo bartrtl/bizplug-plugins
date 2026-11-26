@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.53.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.54.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -76,6 +76,12 @@ export const isSoftwareTool = (name: string) => (Object.values(SOFTWARE_TOOLS) a
 /** Events (`show` in industry-functions.ts), from plug-in version 0.18.0: the event guide (event-guide.ts). */
 export const SHOW_TOOLS = { agenda: "get_agenda", speakers: "find_speakers", exhibitors: "find_exhibitors", enquiry: "send_event_enquiry" } as const;
 export const isShowTool = (name: string) => (Object.values(SHOW_TOOLS) as string[]).includes(name);
+/**
+ * Events (`show` in industry-functions.ts), from plug-in version 0.54.0 (`ticketTailor`, ticket-tailor.ts): the upcoming
+ * events and tickets of the business's own Ticket Tailor box office. plugin-mcp.ts lists it only for a business that
+ * connected one under Integrations.
+ */
+export const TICKETS_TOOL = "find_tickets";
 /**
  * Industries whose businesses may publish their locations with tours and day passes (`visits` in industry-functions.ts;
  * coworking), from plug-in version 0.22.0 (visits.ts). The server (plugin-mcp.ts) lists the tools only on a version
@@ -373,6 +379,12 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           { name: SHOW_TOOLS.speakers, title: "Speakers", description: "Find the speakers the event published, by name, company or topic, each with their role, published bio and the sessions they speak in. Creates nothing.", readOnly: true },
           { name: SHOW_TOOLS.exhibitors, title: "Exhibitors & sponsors", description: "Find the exhibitors and sponsors the event published, by name, what they do or a category, each with its published website and company contact details. Creates nothing and sends nothing: the customer contacts a company directly, and nobody introduces or forwards.", readOnly: true },
           { name: SHOW_TOOLS.enquiry, title: "Event enquiry", description: "Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid.", readOnly: false },
+        ]
+      : []),
+    // 0.54.0, events: the business's own Ticket Tailor box office (ticket-tailor.ts). Offered only where one is connected.
+    ...(fn.show
+      ? [
+          { name: TICKETS_TOOL, title: "Tickets", description: "List this business's upcoming events from its own Ticket Tailor box office, each with its dates, place, ticket types, prices, whether tickets are on sale and, where the business shows it, how many are left, with the event's Ticket Tailor page to buy them; optionally only events matching words. Read-only: it reads nothing about buyers, and tickets are bought and paid for on Ticket Tailor, not here. Use it when the customer asks about tickets, prices, dates or how to buy.", readOnly: true },
         ]
       : []),
   ];

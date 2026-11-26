@@ -1,6 +1,6 @@
 # BizPlug Insurance
 
-Version 0.53.0. Quote request intake for insurance businesses.
+Version 0.54.0. Quote request intake for insurance businesses.
 
 - Main function: Quote request intake
 - MCP server URL: `https://mcp.bizplug.ai/plugin/insurance` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.53.0. Quote request intake for insurance businesses.
 
 ## Changes
 
+- **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.
 - **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.
 - **0.51.0** (25 November 2026): Vacation rentals: name your local picks yourself, such as "Harrison's Suggestions", in place of Explore the area.

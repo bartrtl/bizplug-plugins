@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.53.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.54.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -476,6 +476,19 @@ How the plug-in's instructions tell the assistant to use it: Use only once the c
 | `name` | string | yes | Customer's name. |
 | `email` | string | yes | Email the organisers can reply to. |
 | `phone` | string |  | Optional phone number. |
+
+### `find_tickets` (Tickets)
+
+Read-only. Only on events plug-ins whose business connected its Ticket Tailor box office, from version 0.54.0. Industries: Events & Conferences.
+
+How the plug-in's instructions tell the assistant to use it: Use it when the customer asks about tickets, prices, dates or how to buy.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `adults` | integer |  | Number of adults. Use with children instead of guests. |
+| `children` | integer |  | Number of children (default 0). |
+| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `query` | string |  | Optional words to look for in the event names, places and ticket types. |
 
 ### `explore_area` (Explore the area)
 

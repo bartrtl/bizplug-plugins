@@ -1,6 +1,6 @@
 # BizPlug Events & Conferences
 
-Version 0.53.0. Venue availability, pricing and date holds for events & conferences businesses.
+Version 0.54.0. Venue availability, pricing and date holds for events & conferences businesses.
 
 - Main function: Venue availability, pricing and date holds
 - MCP server URL: `https://mcp.bizplug.ai/plugin/events` (streamable HTTP, no sign-in)
@@ -30,9 +30,11 @@ Version 0.53.0. Venue availability, pricing and date holds for events & conferen
 | `find_speakers` | Find the speakers the event published, by name, company or topic, each with their role, published bio and the sessions they speak in. Creates nothing. |
 | `find_exhibitors` | Find the exhibitors and sponsors the event published, by name, what they do or a category, each with its published website and company contact details. Creates nothing and sends nothing: the customer contacts a company directly, and nobody introduces or forwards. |
 | `send_event_enquiry` | Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid. |
+| `find_tickets` | List this business's upcoming events from its own Ticket Tailor box office, each with its dates, place, ticket types, prices, whether tickets are on sale and, where the business shows it, how many are left, with the event's Ticket Tailor page to buy them; optionally only events matching words. Read-only: it reads nothing about buyers, and tickets are bought and paid for on Ticket Tailor, not here. Use it when the customer asks about tickets, prices, dates or how to buy. |
 
 ## Changes
 
+- **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.
 - **0.53.0** (25 November 2026): Tool descriptions say only what each tool does; how to use them is in the plug-in's instructions, as Claude's connector directory asks.
 - **0.52.0** (25 November 2026): Every tool's title is also in its annotations, as Claude's connector directory asks.
 - **0.51.0** (25 November 2026): Vacation rentals: name your local picks yourself, such as "Harrison's Suggestions", in place of Explore the area.

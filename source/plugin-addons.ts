@@ -7,7 +7,7 @@ import type { Engine, Span } from "@/lib/industry-functions";
 import { CUSTOMER_LINKS, type CustomerLinkKey } from "@/lib/customer-links";
 
 export type AddonStatus = "included" | "setup" | "custom";
-export type AddonGroup = "requests" | "chat" | "website" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
+export type AddonGroup = "requests" | "chat" | "website" | "ticketing" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
 
 export type Addon = {
   id: string;
@@ -54,6 +54,7 @@ export const ADDON_GROUP_LABEL: Record<AddonGroup, string> = {
   requests: "Where your requests go",
   chat: "Chat with your customers",
   website: "Booking from your website",
+  ticketing: "Event-specific tools",
   forms: "Forms",
   payments: "Payment pages",
   calendars: "Calendars and booking pages",
@@ -399,17 +400,34 @@ const DIRECT_OFFERS: Addon = {
   link: { label: "How direct offers work", href: "/how-to/plug-in/direct-offers" },
 };
 
+// Ticket Tailor (plug-in 0.54.0, ticket-tailor.ts): events plug-ins only, under Event-specific tools (shown only there).
+const TICKET_TAILOR: Addon = {
+  id: "ticket-tailor", name: "Ticket Tailor", group: "ticketing", status: "included",
+  what: "Your plug-in shows your upcoming Ticket Tailor events and tickets with your page to buy them, and your Registrations page lists who registered, where you can correct details, check people in and void tickets.",
+  needs: ["A Ticket Tailor box office, and an API key made in it under Settings > API. To use Registrations, give the key access to orders, issued tickets and check-ins, and to customer data to search by name or email."],
+  steps: [
+    "In Ticket Tailor, open Settings > API and create an API key. Ticket Tailor shows it once: copy it.",
+    "Paste it here and press Check and save. BizPlug asks Ticket Tailor for your events with it and saves it, encrypted, only if Ticket Tailor accepts it. It is never shown again, here or anywhere.",
+    "Your plug-in then answers questions about your upcoming published events: dates, ticket types, prices, whether they are on sale and what is left when you show that to buyers, with your Ticket Tailor page to buy them. Tickets are bought and paid for on Ticket Tailor. This works on test and production at once, from plug-in version 0.54.0; if your plug-in runs an older version, press Upgrade on its Overview tab.",
+    "Open Registrations (the link below the key) to see who registered for each event, search them, correct a buyer's details, check people in or out, and void a ticket. Each page asks Ticket Tailor live; BizPlug keeps none of it.",
+    "To disconnect, clear the field and save, then delete the key in Ticket Tailor.",
+  ],
+  link: { label: "How Ticket Tailor works with your plug-in", href: "/how-to/plug-in/ticket-tailor" },
+};
+
 export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
-export function addonsFor(engine: Engine, span?: Span): Addon[] {
+export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] {
   // Slack, the WhatsApp button and the msg2ai assistant's number and join code are set up by the client alone. Ordering and booking on WhatsApp (msg2ai) already
   // runs for pickup orders and room nights; for other plug-in types it needs building.
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
+  const ticketing = show ? [TICKET_TAILOR] : [];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 
