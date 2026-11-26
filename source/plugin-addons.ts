@@ -320,7 +320,7 @@ const CALENDARS: Addon[] = [
 // list them.
 const CHECKOUT_COMMON = [
   "After a customer sends an order or booking with a price, your plug-in opens a checkout page in your business's name, with the price from your published files. You are the merchant: the money goes to your account, never through BizPlug.",
-  "Your plug-in confirms the payment with the provider: on the page the customer returns to, when the customer asks for the status with their reference, and (for Stripe) from Stripe's own notifications. You get an email when an order is paid. You still confirm the request itself.",
+  "Your plug-in confirms the payment with the provider: on the page the customer returns to, when the customer asks for the status with their reference, and (for Stripe and Dibsy) from the provider's own notifications. You get an email when an order is paid. You still confirm the request itself.",
   "Paid orders are listed under Payments on your plug-in page, where you can refund one in full or in part.",
   "It starts in test mode: no real money. Live payments are switched on per business once BizPlug has approved yours; then connect your live account the same way.",
   "Checkout shows from plug-in version 0.9.0. If your plug-in runs an older version, press Upgrade on your plug-in page.",
@@ -346,6 +346,20 @@ const CHECKOUT_COM: Addon = {
     "If Stripe is connected too, choose Checkout.com as your payment provider when you add or open the plug-in.",
     ...CHECKOUT_COMMON,
     "Test it with Checkout.com's test card 4242 4242 4242 4242, any future date and CVC 100.",
+  ],
+  link: { label: "How checkout works", href: "/how-to/requests/stripe-checkout" },
+};
+
+const DIBSY: Addon = {
+  id: "dibsy", name: "Dibsy", group: "payments", status: "included",
+  what: "Customers pay for an order or booking on a Dibsy payment page, on your own Dibsy account. For businesses in Qatar, with prices in Qatari riyals.",
+  needs: ["A Dibsy account in your business's name.", "A test secret key (sk_test_) from your Dibsy dashboard."],
+  steps: [
+    "In your Dibsy dashboard, find your API keys and copy the test secret key (it starts with sk_test_).",
+    "Paste it and press Save. The key is stored encrypted and not shown again; save the field empty to disconnect.",
+    "If Stripe or Checkout.com is connected too, choose Dibsy as your payment provider when you add or open the plug-in.",
+    ...CHECKOUT_COMMON,
+    "Keep your published prices in Qatari riyals (QAR), and ask Dibsy before using another currency.",
   ],
   link: { label: "How checkout works", href: "/how-to/requests/stripe-checkout" },
 };
@@ -415,7 +429,7 @@ const TICKET_TAILOR: Addon = {
   link: { label: "How Ticket Tailor works with your plug-in", href: "/how-to/plug-in/ticket-tailor" },
 };
 
-export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
+export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] {
@@ -423,7 +437,7 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   // runs for pickup orders and room nights; for other plug-in types it needs building.
   const concierge = engine === "order" || (engine === "stay" && span === "nights") ? WHATSAPP_READY : MSG2AI_ASSISTANT;
   // Checkout where a request carries a firm price: an order, a booked service, or a stay (stripe-checkout.ts).
-  const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM] : [];
+  const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM, DIBSY] : [];
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
   const ticketing = show ? [TICKET_TAILOR] : [];

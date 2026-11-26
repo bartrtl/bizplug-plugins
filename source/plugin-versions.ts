@@ -1035,7 +1035,7 @@ export const versionsAfter = (v: string) => PLUGIN_VERSIONS.filter((x) => compar
 export type UpgradeContext = {
   /** The industry has members (industry-functions.ts `members`). */
   members: boolean;
-  /** A Stripe or Checkout.com account is connected and payments are not switched off. */
+  /** A Stripe, Checkout.com or Dibsy account is connected and payments are not switched off. */
   checkout: boolean;
   /** A software product (industry-functions.ts `software`). */
   software: boolean;
