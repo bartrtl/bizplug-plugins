@@ -155,7 +155,7 @@ const WHATSAPP_READY: Addon = {
   steps: [
     "Open WhatsApp ordering and booking under Integrations, press Request, and request your deploy.",
     "BizPlug contacts you to connect your business's WhatsApp number through msg2ai, the WhatsApp service of the company behind BizPlug.",
-    "Once it is connected, the plug-in gives your customer a WhatsApp link to finish the order or booking with your business there. ChatGPT then asks for no name or email.",
+    "Once it is connected, the plug-in gives your customer a WhatsApp link to finish the order or booking with your business there. The assistant then asks for no name or email.",
     "Try it on your test plug-in before you request production.",
   ],
   prepare: WHATSAPP_PREPARE,
@@ -197,7 +197,7 @@ const HUBSPOT: Addon = {
   id: "hubspot", name: "HubSpot", group: "requests", status: "included",
   what: "Every request sent to HubSpot as a form submission, which creates or updates the customer's contact.",
   needs: ["A HubSpot account (the free one is enough).", "A form in it with the fields Email, First name, Last name, Phone number and Message, and CAPTCHA off."],
-  value: "Every customer who asks through ChatGPT becomes a contact in your CRM, so follow-up starts from a complete list.",
+  value: "Every customer who asks through ChatGPT or Claude becomes a contact in your CRM, so follow-up starts from a complete list.",
   steps: [
     "In HubSpot, make a form with the fields Email, First name, Last name, Phone number and Message, and switch CAPTCHA off for it. The form does not need to be on a page.",
     "Open the form's embed code and copy the two values in it: portalId (your Hub ID) and formId.",
@@ -253,7 +253,7 @@ const LINK_VALUE: Record<string, (name: string) => string> = {
   payments: (n) => `A customer who is ready can pay a deposit or the full amount right after the request, on your own ${n} page.`,
   calendars: (n) => `Customers who want a confirmed slot go straight to your ${n} page, instead of waiting for a reply.`,
   reviews: (n) => (n === "Google Maps" ? "Customers find their way to you in one tap." : `Happy customers are one tap from leaving you a review on ${n}.`),
-  social: (n) => `Customers can open your ${n} from ChatGPT in one tap, and follow what you post.`,
+  social: (n) => `Customers can open your ${n} from ChatGPT or Claude in one tap, and follow what you post.`,
 };
 const LINK_NOTE: Record<string, string> = {
   payments: "The button shows after a customer sends a request. BizPlug takes no payment and is not told whether the customer paid: check payments in your payment tool, and confirm the request yourself.",
@@ -352,16 +352,16 @@ const CHECKOUT_COM: Addon = {
 // Customer sign-in with the business's own Clerk application (customer-sign-in.ts, plug-in version 0.16.0).
 const CLERK_SIGN_IN: Addon = {
   id: "clerk-sign-in", name: "Clerk sign-in", group: "access", status: "included",
-  what: "Only your own customers or members can use your plug-in: ChatGPT asks them to sign in with your Clerk application first.",
+  what: "Only your own customers or members can use your plug-in: ChatGPT or Claude asks them to sign in with your Clerk application first.",
   value: "Keep a plug-in for your members or existing customers only, with the sign-in you already run on Clerk.",
   needs: ["A Clerk application of your own (clerk.com), with the customers or members who may use the plug-in as its users.", "Your plug-in live on test, on version 0.16.0 or later."],
   steps: [
     "In the Clerk Dashboard, open your application and the instance your customers sign in to: Production for real customers, Development to try it first.",
-    "Open Agents, then MCP servers, and press Add MCP server. Enter your plug-in's test address and press Add server; do the same for its production address. Both addresses are shown on this panel. Tick Allow public clients to connect, so ChatGPT can register itself.",
+    "Open Agents, then MCP servers, and press Add MCP server. Enter your plug-in's test address and press Add server; do the same for its production address. Both addresses are shown on this panel. Tick Allow public clients to connect, so ChatGPT and Claude can register themselves.",
     "Open API keys and copy the publishable key (pk_…). That is enough: sign-ins are checked with your instance's public keys and nothing secret is stored. Copy the secret key (sk_…) of the same instance too only if you switched Clerk to opaque access tokens.",
     "Paste the key (or both keys) here and press Save. BizPlug checks them with Clerk before saving. A secret key is stored encrypted and not shown again; save both fields empty to switch sign-in off.",
     "Press Check sign-in. It checks your Clerk instance, your keys and your plug-in's version, and says what is still missing. It sends nothing to anyone.",
-    "Add your plug-in again in ChatGPT (remove the old connector first): ChatGPT now opens your Clerk sign-in page. Sign in with a user of your application, and the plug-in answers as before.",
+    "Add your plug-in again in ChatGPT or Claude (remove the old connector first): it now opens your Clerk sign-in page. Sign in with a user of your application, and the plug-in answers as before.",
     "From the moment you save, your plug-in answers only signed-in customers, on test and in production. Customers who added it before must add it again and sign in.",
     "BizPlug checks each customer's sign-in with your Clerk application on every request. It keeps none of their account details, and requests reach you as before. Who may sign in is up to you, in Clerk.",
   ],
