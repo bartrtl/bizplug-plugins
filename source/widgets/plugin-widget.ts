@@ -234,6 +234,7 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .sent b{display:block;margin-bottom:4px}
 .sent p{color:var(--muted);font-size:13px}
 .note{color:var(--muted);font-size:12px;margin-top:10px}
+label.check{display:flex;gap:8px;align-items:flex-start;font-size:13px;margin:6px 0}label.check input{width:auto;min-height:0;margin:2px 0 0;flex:none}
 .list{display:grid;gap:10px}
 .cat{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:4px}
 .it{padding:13px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
@@ -2264,6 +2265,9 @@ function myregView() {
         (editing
           ? '<div class="form" style="margin-top:8px"><label><span>First name</span><input id="mr-first" value="' + esc(t.firstName) + '"></label><label><span>Last name</span><input id="mr-last" value="' + esc(t.lastName) + '"></label>' +
             '<label><span>Email</span><input id="mr-mail" type="email" value="' + esc(t.email) + '"></label><label><span>Phone <small>(optional)</small></span><input id="mr-phone" type="tel"></label>' +
+            // 0.59.0: a LinkedIn address, and the attendee's own tick before the public profile is looked up and shared.
+            (m.linkedin ? '<label><span>LinkedIn profile <small>(optional)</small></span><input id="mr-linkedin" type="url" placeholder="https://www.linkedin.com/in/your-name"></label>' +
+              (m.lookup ? '<label class="check"><input type="checkbox" id="mr-consent"> <span>' + "Look up my public LinkedIn profile and share it with the organiser of this event." + "</span></label>" : "") : "") +
             '<div class="note" style="margin-top:0">' + esc(m.provider === "Humanitix" ? "Humanitix sends the ticket again to the email you give." : t.buyer ? "Your contact details on the order change at once. A new name on the ticket itself is passed to the organiser." : "You did not buy this ticket yourself, so the organiser is asked to make the change.") + "</div>" +
             errLine() + '<div class="actions">' + primary("Save changes", "mrsave", ' data-mrt="' + esc(t.id) + '"') + '<button class="link" data-act="mrcancel">Cancel</button></div></div>'
           : '<div class="actions" style="margin-top:8px"><button class="btn" data-mredit="' + esc(t.id) + '">Change details</button></div>') + "</div>";
@@ -2801,7 +2805,7 @@ function render() {
   on('[data-act="mrreset"]', () => { state.mr = { step: "email" }; state.error = ""; render(); });
   on("[data-mredit]", (b) => { mr().edit = b.dataset.mredit; state.error = ""; render(); });
   on('[data-act="mrcancel"]', () => { mr().edit = ""; state.error = ""; render(); });
-  on('[data-act="mrsave"]', (b) => mrCall({ action: "change", session: mr().token || "", ticket: b.dataset.mrt, first_name: mrVal("mr-first"), last_name: mrVal("mr-last"), new_email: mrVal("mr-mail"), phone: mrVal("mr-phone") }));
+  on('[data-act="mrsave"]', (b) => mrCall({ action: "change", session: mr().token || "", ticket: b.dataset.mrt, first_name: mrVal("mr-first"), last_name: mrVal("mr-last"), new_email: mrVal("mr-mail"), phone: mrVal("mr-phone"), linkedin: mrVal("mr-linkedin"), consent: Boolean((document.getElementById("mr-consent") || {}).checked) }));
   on("[data-spk]", (b) => { if (evPanel()) { state.fly = "spk:" + b.dataset.spk; render(); return; } state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
   on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
   on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });

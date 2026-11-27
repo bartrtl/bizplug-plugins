@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.58.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.59.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -98,6 +98,8 @@ Sends something to the business: once sent, it cannot be taken back. Only where 
 | `last_name` | string |  |  |
 | `new_email` | string |  |  |
 | `phone` | string |  |  |
+| `linkedin` | string |  | 0.59.0: the attendee's LinkedIn profile address (change). |
+| `consent` | boolean |  | 0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change). |
 
 ## The three tools of each engine
 

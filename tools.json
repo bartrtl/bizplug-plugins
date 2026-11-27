@@ -1,5 +1,5 @@
 {
-  "version": "0.58.0",
+  "version": "0.59.0",
   "note": "Inputs of the industry-wide plug-in (https://mcp.bizplug.ai/plugin/<industry>). A business's own plug-in (https://mcp.bizplug.ai/plugin/<industry>/<business>) takes the same inputs without \"business\". Generated from the BizPlug plug-in server; see TOOLS.md.",
   "industries": {
     "events": {
@@ -595,6 +595,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -1090,6 +1098,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -1435,6 +1451,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -1776,6 +1800,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -2313,6 +2345,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -2658,6 +2698,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -3029,6 +3077,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -3400,6 +3456,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -3745,6 +3809,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -4094,6 +4166,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -4439,6 +4519,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -4825,6 +4913,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -5167,6 +5263,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -5512,6 +5616,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -5857,6 +5969,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -6202,6 +6322,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -6551,6 +6679,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -6900,6 +7036,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -7249,6 +7393,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -7591,6 +7743,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -7940,6 +8100,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -8289,6 +8457,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -8638,6 +8814,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -8987,6 +9171,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -9336,6 +9528,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -9688,6 +9888,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -10032,6 +10240,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -10381,6 +10597,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -10730,6 +10954,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -11079,6 +11311,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -11450,6 +11690,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -11836,6 +12084,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -12178,6 +12434,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -12549,6 +12813,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -12920,6 +13192,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -13291,6 +13571,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -13662,6 +13950,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -14033,6 +14329,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -14404,6 +14708,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -14775,6 +15087,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -15146,6 +15466,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -15517,6 +15845,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -15892,6 +16228,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -16263,6 +16607,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -16605,6 +16957,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -16947,6 +17307,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -17289,6 +17657,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -17631,6 +18007,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -17973,6 +18357,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -18315,6 +18707,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -18657,6 +19057,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -19003,6 +19411,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -19340,6 +19756,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -19689,6 +20113,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -20038,6 +20470,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -20387,6 +20827,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -20736,6 +21184,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -21183,6 +21639,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -21528,6 +21992,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -21873,6 +22345,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -22222,6 +22702,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -22567,6 +23055,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -22904,6 +23400,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -23290,6 +23794,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -24134,6 +24646,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -24672,6 +25192,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -25166,6 +25694,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -25560,6 +26096,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -25946,6 +26490,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -26332,6 +26884,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -26787,6 +27347,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -27173,6 +27741,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -27559,6 +28135,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -27904,6 +28488,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -28241,6 +28833,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -28578,6 +29178,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -28920,6 +29528,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -29265,6 +29881,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -29602,6 +30226,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -29947,6 +30579,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -30292,6 +30932,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -30637,6 +31285,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -30981,6 +31637,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -31318,6 +31982,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -32005,6 +32677,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -32398,6 +33078,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -32750,6 +33438,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [
@@ -33211,6 +33907,14 @@
               },
               "phone": {
                 "type": "string"
+              },
+              "linkedin": {
+                "type": "string",
+                "description": "0.59.0: the attendee's LinkedIn profile address (change)."
+              },
+              "consent": {
+                "type": "boolean",
+                "description": "0.59.0: the attendee ticked that their public LinkedIn profile may be looked up and shared with the business (change)."
               }
             },
             "required": [

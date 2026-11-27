@@ -1,6 +1,6 @@
 # BizPlug Destination Management Companies
 
-Version 0.58.0. Tailor-made packages with a price breakdown, and proposals day by day for destination management companies businesses.
+Version 0.59.0. Tailor-made packages with a price breakdown, and proposals day by day for destination management companies businesses.
 
 - Main function: Tailor-made packages with a price breakdown, and proposals day by day
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dmc` (streamable HTTP, no sign-in)
@@ -37,6 +37,7 @@ Version 0.58.0. Tailor-made packages with a price breakdown, and proposals day b
 
 ## Changes
 
+- **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.
 - **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.

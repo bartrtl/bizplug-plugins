@@ -207,6 +207,19 @@ const HUBSPOT: Addon = {
   ],
   link: destLink,
 };
+const TWENTY: Addon = {
+  id: "twenty", name: "Twenty CRM", group: "requests", status: "included",
+  what: "Every request filed in your own Twenty CRM: the customer as a person (found by email, else added) and a note with the request, tagged with the event or plug-in and the date and time.",
+  needs: ["A Twenty workspace (cloud or self-hosted) and an API key from Settings, APIs & Webhooks."],
+  value: "Every customer who asks through ChatGPT or Claude lands in your CRM with the event and the time, ready to follow up.",
+  steps: [
+    "In Twenty, open Settings, APIs & Webhooks, and create an API key. Copy it.",
+    `Paste it here; leave the address empty for Twenty's cloud, or give your own https address if you host Twenty yourself. Press Save: BizPlug checks the key with Twenty first. ${DEST_END}`,
+    "Press Add a test person and look for BizPlug test in your People, with a note on it.",
+    "From then on each request adds or finds the person by email and adds a note titled with the event or plug-in, the request and the date and time. Attendees who share their LinkedIn profile (My registration) get it on their person and in a note.",
+  ],
+  link: destLink,
+};
 const NOTION: Addon = {
   id: "notion", name: "Notion", group: "requests", status: "included",
   what: "Every request added as a page in a Notion database.",
@@ -431,6 +444,21 @@ const MY_REGISTRATION: Addon = {
   link: { label: "How My registration works", href: "/how-to/plug-in/my-registration" },
 };
 
+// 0.59.0 (linkedin-apify.ts): attendees' LinkedIn profiles, looked up on the business's own Apify account.
+const LINKEDIN_APIFY: Addon = {
+  id: "linkedin-apify", name: "LinkedIn profiles (Apify)", group: "ticketing", status: "included",
+  what: "Attendees can add their LinkedIn address in My registration. When they agree, their public profile (headline, location, about, experience, education, skills) is looked up on your own Apify account and sent to your CRM and inbox, tagged with the event and the date and time.",
+  needs: ["My registration switched on.", "An Apify account and its API token (Settings > API & Integrations). Apify charges you about $4 per 1,000 profiles."],
+  steps: [
+    "In Apify, open Settings > API & Integrations and copy your API token (it starts with apify_api_).",
+    "Paste it here and press Check and save. BizPlug checks it with Apify and saves it, encrypted. It is never shown again.",
+    "From plug-in version 0.59.0, My registration offers a LinkedIn address field and a box the attendee ticks to agree. Nothing is looked up without the tick.",
+    "Each profile goes to your channels under Integrations: with Twenty CRM connected, onto the person and in a note; otherwise to your requests inbox. BizPlug keeps none of it.",
+    "To disconnect, clear the field and save, then revoke the token in Apify.",
+  ],
+  link: { label: "How My registration works", href: "/how-to/plug-in/my-registration" },
+};
+
 const HUMANITIX: Addon = {
   id: "humanitix", name: "Humanitix", group: "ticketing", status: "included",
   what: "Your plug-in shows your upcoming Humanitix events and tickets with your page to buy them, and your Registrations page lists your tickets, where you can check people in and correct an attendee.",
@@ -459,7 +487,7 @@ const TICKET_TAILOR: Addon = {
   link: { label: "How Ticket Tailor works with your plug-in", href: "/how-to/plug-in/ticket-tailor" },
 };
 
-export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
+export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, twenty: TWENTY, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] {
@@ -470,8 +498,8 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM, DIBSY] : [];
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
-  const ticketing = show ? [TICKET_TAILOR, HUMANITIX, MY_REGISTRATION] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  const ticketing = show ? [TICKET_TAILOR, HUMANITIX, MY_REGISTRATION, LINKEDIN_APIFY] : [];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, TWENTY, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 
