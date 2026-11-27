@@ -1,6 +1,6 @@
 # BizPlug Meal Kits & Subscriptions
 
-Version 0.56.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
+Version 0.57.0. Pick a plan and order a weekly box for meal kits & subscriptions businesses.
 
 - Main function: Pick a plan and order a weekly box
 - MCP server URL: `https://mcp.bizplug.ai/plugin/meal-kits` (streamable HTTP, no sign-in)
@@ -31,6 +31,7 @@ Version 0.56.0. Pick a plan and order a weekly box for meal kits & subscriptions
 
 ## Changes
 
+- **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.
 - **0.54.0** (26 November 2026): Events: connect your Ticket Tailor box office, and your plug-in shows your upcoming events and tickets with the link to buy them.

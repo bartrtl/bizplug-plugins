@@ -2115,6 +2115,31 @@ function supportView() {
 // contacts a company directly; an enquiry goes to the organisers.
 const pastNote = (d) => (d && d.past && d.when ? '<div class="sum"><div><b>Took place ' + esc(d.when) + "</b><span>This is the programme as it was published.</span></div></div>" : "");
 const runShow = (kind, args) => { const o = opt(kind); run(o && o.tool, clean(args), (o && o.example) || ""); };
+// 0.57.0: on a computer a speaker or a session opens in the panel beside its list (the .fly sheet), like a member or an
+// exhibitor. A session's panel can ask the chat about it; a speaker's cannot, since speakers are people.
+const evPanel = () => Boolean(p().eventPanels) && listPanel();
+const evPaneSheet = (kind, label, inner) => '<div class="fly" data-act="mflyx"><div class="sheet" role="dialog" aria-label="' + esc(label) + '">' +
+  '<div class="bar-top"><span class="kd">' + kind + '</span><button class="link" data-act="mflyx">Close ✕</button></div>' + inner + "</div></div>";
+function sessionFly(x, biz) {
+  const when = [x.day, [x.start, x.end].filter(Boolean).join("–")].filter(Boolean).join(" · ");
+  const ask = listMode() !== "off";
+  const prompt = "Tell me more about the session \"" + x.title + "\" at " + biz + (when ? ", " + when : "") + ": what it covers and who it suits. Use what " + biz + " published; tell me which parts are not from its agenda.";
+  return evPaneSheet("Session", x.title,
+    '<div class="mhero" style="margin-top:8px"><div><b>' + esc(x.title) + "</b><span>" + esc(when) + "</span>" + (x.format ? '<div style="margin-top:6px"><span class="lvl" style="margin:0">' + esc(x.format) + "</span></div>" : "") + "</div></div>" +
+    (x.stage ? '<div class="qlabel" style="margin-top:12px">Where</div><div class="bl" style="margin-top:3px">' + esc(x.stage) + "</div>" : "") +
+    (x.speakers ? '<div class="qlabel" style="margin-top:12px">Speakers</div><div class="bl" style="margin-top:3px">' + esc(x.speakers) + "</div>" : "") +
+    (x.description ? '<p class="about">' + esc(x.description) + "</p>" : "") +
+    (ask ? '<div class="actions" style="margin-top:14px"><button class="primary" data-own="1" data-ask="' + esc(prompt) + '">Ask about this session</button></div><div class="note"><b>The answer appears in the chat below this card.</b></div>' : '<div class="note">As published in ' + esc(biz) + "&rsquo;s agenda.</div>"));
+}
+function speakerFly(x, biz) {
+  const sessions = x.sessions || [];
+  return evPaneSheet("Speaker", x.name,
+    '<div class="mhero" style="margin-top:8px"><div><b>' + esc(x.name) + "</b><span>" + esc([x.title, x.company].filter(Boolean).join(", ")) + "</span></div></div>" +
+    (x.bio ? '<p class="about">' + esc(x.bio) + "</p>" : "") +
+    (sessions.length ? '<div class="qlabel" style="margin-top:12px">Speaks in</div><div class="list" style="margin-top:6px">' + sessions.map((s) => '<div class="it"><div class="nm"><b>' + esc(s.title) + '</b><span class="qlabel">' + esc([s.day, s.start].filter(Boolean).join(" · ")) + "</span></div></div>").join("") + "</div>" : "") +
+    (/^https:\/\//.test(x.linkedin || "") ? '<div class="actions" style="margin-top:14px"><button class="btn" data-href="' + esc(x.linkedin) + '">LinkedIn</button></div>' : "") +
+    '<div class="note">As published by ' + esc(biz) + ".</div>");
+}
 function agendaView() {
   const d = state.data.agenda || { items: [] };
   const o = opt("agenda");
@@ -2132,7 +2157,9 @@ function agendaView() {
     return sub + '<div class="it"><button class="rowb" data-ses="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.title) + '</b><span class="qlabel">' + esc([x.start, x.end].filter(Boolean).join("–")) + "</span></div>" +
       '<div class="bl' + (open ? "" : " clamp") + '">' + esc([x.format, x.stage, x.speakers].filter(Boolean).join(" · ")) + "</div>" + (open && x.description ? '<div class="bl">' + esc(x.description) + "</div>" : "") + "</button></div>";
   }).join("");
-  return head + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: choose a day or search.</div>" : "") + errLine() + links("agenda");
+  const flyS = evPanel() && String(state.fly || "").indexOf("ses:") === 0 ? items.filter((x) => "ses:" + x.id === state.fly)[0] : null;
+  return head + '<div class="list">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: choose a day or search.</div>" : "") + errLine() + links("agenda") +
+    (flyS ? sessionFly(flyS, d.business || "the event") : "");
 }
 function speakersView() {
   const d = state.data.speakers || { items: [] };
@@ -2142,7 +2169,8 @@ function speakersView() {
   if (!items.length) return head + '<div class="empty">' + (d.query ? 'No speaker matches "' + esc(d.query) + '".' : "No speakers are published here yet.") + "</div>" + errLine() + links("speakers");
   return head + '<div class="list">' + items.map((x) => '<div class="it"><button class="rowb" data-spk="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.name) + "</b></div>" +
     '<div class="bl clamp">' + esc([x.title, x.company].filter(Boolean).join(", ")) + "</div></button></div>").join("") + "</div>" +
-    (d.more ? '<div class="note">' + d.more + " more: search to narrow the list.</div>" : "") + errLine() + links("speakers");
+    (d.more ? '<div class="note">' + d.more + " more: search to narrow the list.</div>" : "") + errLine() + links("speakers") +
+    (evPanel() && String(state.fly || "").indexOf("spk:") === 0 && state.spk[state.fly.slice(4)] ? speakerFly(state.spk[state.fly.slice(4)], d.business || "the event") : "");
 }
 function speakerView() {
   const x = state.spk[state.sel];
@@ -2714,9 +2742,9 @@ function render() {
   // ---- Event guide (version 0.18.0) ----
   on('[data-act="afind"]', () => runShow("agenda", { query: v("aq"), date: (state.data.agenda || {}).date || "" }));
   on("[data-aday]", (b) => { state.f.aq = ""; runShow("agenda", { date: b.dataset.aday }); });
-  on("[data-ses]", (b) => { state.ses = state.ses === b.dataset.ses ? "" : b.dataset.ses; render(); });
+  on("[data-ses]", (b) => { if (evPanel()) { state.fly = "ses:" + b.dataset.ses; render(); return; } state.ses = state.ses === b.dataset.ses ? "" : b.dataset.ses; render(); });
   on('[data-act="pfind"]', () => runShow("speakers", { query: v("pq") }));
-  on("[data-spk]", (b) => { state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
+  on("[data-spk]", (b) => { if (evPanel()) { state.fly = "spk:" + b.dataset.spk; render(); return; } state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
   on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
   on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });
   on("[data-exh]", (b) => { state.sel = b.dataset.exh; if (listPanel()) { state.fly = state.sel; render(); return; } state.fly = ""; state.view = "exhibitor"; state.error = ""; render(); });
