@@ -1015,6 +1015,9 @@ function layoutCtx() {
     business: { name: name, subtitle: d.subtitle || "", logo: d.logo || null, logoWide: Boolean(d.logoWide), banner: d.banner || null, initials: name.split(/\s+/).filter((w) => /^[A-Z0-9]/.test(w)).slice(0, 3).map((w) => w[0]).join("") || name.slice(0, 2).toUpperCase(), engine: d.engine || "", span: d.span || "" },
     options: opts.map((o, i) => ({ index: state.options.indexOf(o), kind: o.kind, title: o.title, short: shortOf(o), description: o.description || "", example: o.example || "", icon: layoutIcon(o), start: i === 0 })),
     contact: c.whatsapp || c.email ? { title: c.title || "", description: c.description || "", whatsapp: c.whatsapp || null, email: c.email || null } : null,
+    // The business's own buttons (WhatsApp, booking pages and the like) and, for an event guide, its facts and days.
+    actions: (d.actions || []).filter((a) => /^https:/.test(a.href || "")).map((a) => ({ key: a.key, label: a.label, href: a.href })),
+    event: d.event ? { when: d.event.when || "", past: Boolean(d.event.past), hours: d.event.hours || "", venue: d.event.venue || "", days: (d.event.days || []).map((x) => ({ date: x.date, label: x.label })) } : null,
     ui: Object.assign({}, state.lay || {}),
     mode: document.documentElement.dataset.theme === "light" ? "light" : "dark",
     h: esc,

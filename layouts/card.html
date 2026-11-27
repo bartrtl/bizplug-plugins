@@ -511,7 +511,10 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .lay-event .lay-event-kicker{color:color-mix(in srgb,var(--a1) 70%,#fff);font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
 .lay-event .lay-event-strip h1{margin-top:2px;font-size:21px;line-height:1.15;color:#fff}
 .lay-event .lay-event-pad{padding:14px 16px 16px}
-.lay-event .lay-event-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin:0 0 6px}
+.lay-event .lay-event-facts{display:grid;gap:6px;margin:2px 0 12px}
+.lay-event .lay-event-fact{display:grid;grid-template-columns:92px 1fr;gap:8px;font-size:14px;color:var(--fg)}
+.lay-event .lay-event-k{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding-top:2px}
+.lay-event .lay-event-label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin:4px 0 6px}
 .lay-event .lay-event-btn{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:600;line-height:1.2;padding:9px 14px;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);transition:border-color .15s,transform .05s}
 .lay-event .lay-event-btn:hover{border-color:var(--a1)}
 .lay-event .lay-event-btn:active{transform:translateY(1px)}
@@ -519,16 +522,18 @@ html,body{background:var(--bg);color:var(--fg);font:15px/1.4 ui-sans-serif,syste
 .lay-event .lay-event-g3.lay-event-n2{grid-template-columns:repeat(2,1fr)}
 .lay-event .lay-event-g3.lay-event-n1{grid-template-columns:1fr}
 .lay-event .lay-event-top{justify-content:center;text-align:center;min-height:52px;border-color:color-mix(in srgb,var(--a1) 45%,var(--line))}
+.lay-event .lay-event-top small{display:block;margin-top:2px;font-size:12px;font-weight:500;color:var(--muted)}
 .lay-event .lay-event-g2{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .lay-event .lay-event-g2>:last-child:nth-child(odd){grid-column:1/-1}
-.lay-event .lay-event-tile{justify-content:flex-start;text-align:left}
-.lay-event .lay-event-ico{display:grid;place-items:center;color:var(--atext)}
+.lay-event .lay-event-tile{justify-content:flex-start;text-align:left;box-shadow:0 1px 2px rgba(0,0,0,.12)}
 .lay-event .lay-event-wide-btn{display:flex;justify-content:center;text-align:center;width:100%;margin-top:10px}
 .lay-event .lay-event-primary{background:var(--a1);border-color:var(--a1);color:var(--ink)}
 .lay-event .lay-event-primary:hover{filter:brightness(1.05)}
-.lay-event .lay-event-contact{color:#fff;background:color-mix(in srgb,var(--a2) 28%,#1a1719);border-color:color-mix(in srgb,var(--a2) 40%,#1a1719)}
-.lay-event .lay-event-contact svg{color:color-mix(in srgb,var(--a1) 70%,#fff)}
-@media (max-width:380px){.lay-event .lay-event-g2{grid-template-columns:1fr}}
+.lay-event .lay-event-wa{color:#fff;background:color-mix(in srgb,var(--a2) 28%,#1a1719);border-color:color-mix(in srgb,var(--a2) 40%,#1a1719)}
+.lay-event .lay-event-wa svg{color:#3ddc84}
+.lay-event .lay-event-contact{color:var(--fg);background:var(--card)}
+.lay-event .lay-event-contact svg{color:var(--atext)}
+@media (max-width:380px){.lay-event .lay-event-g2{grid-template-columns:1fr}.lay-event .lay-event-fact{grid-template-columns:72px 1fr}}
 @media (prefers-reduced-motion:reduce){.lay-event .lay-event-btn{transition:none}}
 .lay-story{display:block}
 .lay-story svg{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -943,19 +948,26 @@ return { render: render, own: true };
 })();
 LAYOUTS["event"] = (function () {
 "use strict";
-// Event: the menu of the Qatar Event Show 2026 card (msg2ai). The banner shown whole across the top (it may carry
-// its own logo and dates) with an accent rule under it, a dark title strip, the first three options as centred
-// tiles, the others in two columns, then wide buttons: one that asks the first example question, one for contact.
+// Event: the menu of the Qatar Event Show 2026 card (msg2ai), in the business's own colours. The banner shown whole
+// across the top with an accent rule under it and a dark title strip; for an event guide its dates, hours and venue,
+// then "Agenda" with one tile per day; the other options as tiles in two columns; then wide buttons: one that asks
+// the first example question, the business's own WhatsApp, and contact. Without a published agenda the first three
+// options stand in for the days under "Start here".
 function render(ctx) {
   const h = ctx.h;
   const b = ctx.business;
   const opts = ctx.options;
   if (!opts.length) return "";
+  const ev = ctx.event || null;
+  const acts = ctx.actions || [];
   const contact = opts.filter((o) => o.kind === "contact")[0];
-  const rest = opts.filter((o) => o !== contact);
-  const lead = rest.slice(0, 3);
-  const more = rest.slice(3);
+  const agenda = opts.filter((o) => o.kind === "agenda")[0];
+  const days = agenda && ev && ev.days && ev.days.length ? ev.days.slice(0, 6) : [];
+  const rest = opts.filter((o) => o !== contact && !(days.length && o === agenda));
+  const lead = days.length ? [] : rest.slice(0, 3);
+  const more = days.length ? rest : rest.slice(3);
   const ask = rest.filter((o) => o.example)[0];
+  const wa = acts.filter((a) => a.key === "whatsapp")[0];
 
   const art = b.banner
     ? '<img class="lay-event-img" src="' + h(b.banner) + '" alt="">'
@@ -965,20 +977,31 @@ function render(ctx) {
     '<header class="lay-event-hero">' + art + '<div class="lay-event-strip">' + logo + '<div class="lay-event-name">' +
     (b.subtitle ? '<div class="lay-event-kicker">' + h(b.subtitle) + "</div>" : "") + "<h1>" + h(b.name) + "</h1></div></div></header>";
 
-  const tile = (o, cls) =>
-    '<button class="lay-event-btn ' + cls + '" data-open="' + o.index + '" title="' + h(o.description) + '">' +
-    (cls === "lay-event-tile" ? '<span class="lay-event-ico">' + o.icon + "</span>" : "") + "<span>" + h(cls === "lay-event-top" ? o.short : o.title) + "</span></button>";
+  const fact = (k, v) => (v ? '<div class="lay-event-fact"><span class="lay-event-k">' + h(k) + '</span><span class="lay-event-v">' + h(v) + "</span></div>" : "");
+  const facts = ev && (ev.when || ev.hours || ev.venue)
+    ? '<div class="lay-event-facts">' + fact(ev.past ? "Took place" : "Dates", ev.when) + fact("Hours", ev.hours) + fact("Venue", ev.venue) + "</div>"
+    : "";
 
-  const first = lead.length ? '<div class="lay-event-label">Start here</div><div class="lay-event-g3 lay-event-n' + lead.length + '">' + lead.map((o) => tile(o, "lay-event-top")).join("") + "</div>" : "";
+  const tile = (o, cls) =>
+    '<button class="lay-event-btn ' + cls + '" data-open="' + o.index + '" title="' + h(o.description) + '"><span>' + h(cls === "lay-event-top" ? o.short : o.title) + "</span></button>";
+  const n = (k) => " lay-event-n" + Math.min(k, 3);
+
+  const first = days.length
+    ? '<div class="lay-event-label">' + h(agenda.title) + '</div><div class="lay-event-g3' + n(days.length) + '">' +
+      days.map((d, i) => '<button class="lay-event-btn lay-event-top" data-aday="' + h(d.date) + '"><span>Day ' + (i + 1) + '<small>' + h(d.label) + "</small></span></button>").join("") + "</div>"
+    : lead.length ? '<div class="lay-event-label">Start here</div><div class="lay-event-g3' + n(lead.length) + '">' + lead.map((o) => tile(o, "lay-event-top")).join("") + "</div>" : "";
   const grid = more.length ? '<div class="lay-event-g2">' + more.map((o) => tile(o, "lay-event-tile")).join("") + "</div>" : "";
   const askBtn = ask
-    ? '<button class="lay-event-btn lay-event-primary lay-event-wide-btn" data-ask="' + h(ask.example) + '">' + ctx.icon("spark") + "<span>Ask: " + h(ask.example) + "</span></button>"
+    ? '<button class="lay-event-btn lay-event-primary lay-event-wide-btn" data-ask="' + h(ask.example) + '">' + ctx.icon("spark") + "<span>" + h(ask.example) + "</span></button>"
+    : "";
+  const waBtn = wa
+    ? '<button class="lay-event-btn lay-event-wa lay-event-wide-btn" data-href="' + h(wa.href) + '">' + ctx.icon("whatsapp") + "<span>Continue on WhatsApp</span></button>"
     : "";
   const contactBtn = contact
     ? '<button class="lay-event-btn lay-event-contact lay-event-wide-btn" data-open="' + contact.index + '">' + contact.icon + "<span>" + h(contact.title) + "</span></button>"
     : "";
 
-  return hero + '<div class="lay-event-pad">' + first + grid + askBtn + contactBtn + "</div>";
+  return hero + '<div class="lay-event-pad">' + facts + first + grid + askBtn + waBtn + contactBtn + "</div>";
 }
 return { render: render, own: true };
 })();
@@ -1397,6 +1420,9 @@ function layoutCtx() {
     business: { name: name, subtitle: d.subtitle || "", logo: d.logo || null, logoWide: Boolean(d.logoWide), banner: d.banner || null, initials: name.split(/\s+/).filter((w) => /^[A-Z0-9]/.test(w)).slice(0, 3).map((w) => w[0]).join("") || name.slice(0, 2).toUpperCase(), engine: d.engine || "", span: d.span || "" },
     options: opts.map((o, i) => ({ index: state.options.indexOf(o), kind: o.kind, title: o.title, short: shortOf(o), description: o.description || "", example: o.example || "", icon: layoutIcon(o), start: i === 0 })),
     contact: c.whatsapp || c.email ? { title: c.title || "", description: c.description || "", whatsapp: c.whatsapp || null, email: c.email || null } : null,
+    // The business's own buttons (WhatsApp, booking pages and the like) and, for an event guide, its facts and days.
+    actions: (d.actions || []).filter((a) => /^https:/.test(a.href || "")).map((a) => ({ key: a.key, label: a.label, href: a.href })),
+    event: d.event ? { when: d.event.when || "", past: Boolean(d.event.past), hours: d.event.hours || "", venue: d.event.venue || "", days: (d.event.days || []).map((x) => ({ date: x.date, label: x.label })) } : null,
     ui: Object.assign({}, state.lay || {}),
     mode: document.documentElement.dataset.theme === "light" ? "light" : "dark",
     h: esc,

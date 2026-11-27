@@ -11,7 +11,7 @@
  * - layout.js: `function render(ctx) { ... return html; }`: a pure function from the card's data to an HTML string
  *
  * A layout never runs code of its own in the card: no events, timers, network or page access. It interacts through
- * the attributes the card handles (data-open, data-ask, data-href, data-lay, data-lay-filter and friends), and the
+ * the attributes the card handles (data-open, data-ask, data-href, data-aday, data-lay, data-lay-filter and friends), and the
  * card removes scripts and inline event handlers from what it returns.
  */
 export type LayoutMeta = { id: string; name: string; author: { name: string; url?: string; github?: string }; summary: string; suits: string; ownHeader?: boolean; sample?: string };
