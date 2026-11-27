@@ -1,6 +1,6 @@
 # BizPlug Utilities & Energy
 
-Version 0.57.0. Outage and service-request status for utilities & energy businesses.
+Version 0.58.0. Outage and service-request status for utilities & energy businesses.
 
 - Main function: Outage and service-request status
 - MCP server URL: `https://mcp.bizplug.ai/plugin/utilities` (streamable HTTP, no sign-in)
@@ -28,9 +28,11 @@ Version 0.57.0. Outage and service-request status for utilities & energy busines
 | `get_business_info` | Answer a general question about this utilities & energy business using only its published profile: how to report outages, service setup and billing questions. Creates nothing. If the profile does not cover the question, say so and use get_contact. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `open_form` | Open one of this utilities & energy business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

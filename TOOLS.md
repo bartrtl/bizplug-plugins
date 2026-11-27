@@ -1,6 +1,6 @@
 # Tools
 
-Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.57.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
+Every tool a BizPlug plug-in can offer, with its inputs. It is generated from the plug-in server's own code with the rest of this repository (plug-in version 0.58.0), so it always matches what the server answers. Please do not edit it by hand. The same list for every industry, machine readable, is [tools.json](tools.json).
 
 ## How a plug-in is called
 
@@ -82,6 +82,22 @@ How the plug-in's instructions tell the assistant to use it: Use it when the cus
 | `adults` | integer |  | Number of adults. Use with children instead of guests. |
 | `children` | integer |  | Number of children (default 0). |
 | `rooms` | integer |  | How many rooms of the same type (default 1). |
+
+### `my_registration` (My registration)
+
+Sends something to the business: once sent, it cannot be taken back. Only where the business connected Ticket Tailor or Humanitix and switched on My registration, from version 0.58.0. The card calls it; the assistant does not see it.
+
+| Input | Type | Required | What it is |
+| --- | --- | --- | --- |
+| `action` | `send_code` or `open` or `list` or `change` | yes | send_code: email a code; open: check the code; list: the tickets again; change: change one ticket. |
+| `email` | string |  | The email the customer registered with (send_code, open). |
+| `code` | string |  | The 6-digit code from the email (open). |
+| `session` | string |  | The session the open step returned (list, change). |
+| `ticket` | string |  | The ticket to change (change). |
+| `first_name` | string |  |  |
+| `last_name` | string |  |  |
+| `new_email` | string |  |  |
+| `phone` | string |  |  |
 
 ## The three tools of each engine
 

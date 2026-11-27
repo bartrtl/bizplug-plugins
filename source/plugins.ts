@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.57.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.58.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -31,7 +31,7 @@ export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: bo
 
 /** One option of a plug-in's menu: what show_menu returns in ChatGPT and what the plug-in pages list. */
 /** `kind` tells the ChatGPT card (widgets/plugin-widget.ts) which inputs the option asks for. */
-export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer" | "explore" | "plan" | "area" | "house" | "match" | "trips" | "mytrip" | "tickets";
+export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" | "members" | "features" | "pricing" | "guides" | "support" | "agenda" | "speakers" | "exhibitors" | "enquiry" | "account" | "tour" | "daypass" | "committees" | "news" | "social" | "forms" | "customform" | "directoffer" | "explore" | "plan" | "area" | "house" | "match" | "trips" | "mytrip" | "tickets" | "myreg";
 /**
  * `only`: on a software plug-in (industry-functions.ts `software`), the option belongs to the menu from plug-in
  * 0.15.0 ("software") or to the menu before it ("legacy"); plugin-mcp.ts shows the one a business's version has.
@@ -82,6 +82,8 @@ export const isShowTool = (name: string) => (Object.values(SHOW_TOOLS) as string
  * connected one under Integrations.
  */
 export const TICKETS_TOOL = "find_tickets";
+/** 0.58.0 (registration-self-service.ts): an attendee's own registration, opened with a code sent to their email. The card's alone. */
+export const SELF_SERVICE_TOOL = "my_registration";
 /**
  * Industries whose businesses may publish their locations with tours and day passes (`visits` in industry-functions.ts;
  * coworking), from plug-in version 0.22.0 (visits.ts). The server (plugin-mcp.ts) lists the tools only on a version
@@ -381,6 +383,8 @@ export function buildPlugin(i: Industry): IndustryPlugin {
           { name: SHOW_TOOLS.enquiry, title: "Event enquiry", description: "Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid.", readOnly: false },
         ]
       : []),
+    // 0.58.0, any industry: My registration, for a business whose Ticket Tailor or Humanitix is connected and that switched it on.
+    { name: SELF_SERVICE_TOOL, title: "My registration", description: "Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only.", readOnly: false },
     // 0.54.0, events: the business's own Ticket Tailor box office (ticket-tailor.ts). Offered only where one is connected.
     ...(fn.show
       ? [

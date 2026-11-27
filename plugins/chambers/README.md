@@ -1,6 +1,6 @@
 # BizPlug Chambers of Commerce & Business Associations
 
-Version 0.57.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
+Version 0.58.0. Chamber information, membership enquiries and member businesses for chambers of commerce & business associations businesses.
 
 - Main function: Chamber information, membership enquiries and member businesses
 - MCP server URL: `https://mcp.bizplug.ai/plugin/chambers` (streamable HTTP, no sign-in)
@@ -33,9 +33,11 @@ Version 0.57.0. Chamber information, membership enquiries and member businesses 
 | `open_form` | Open one of this chambers of commerce & business associations business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 | `find_members` | Find the member businesses of this chambers of commerce & business associations business, from the member list it published. Search by a name, a kind of business, or what the person needs or offers, optionally narrowed to an industry or a location; with no query it lists the members by industry. Returns each match with its description, what it is looking for, what it offers and its published contact details. Creates nothing and sends nothing. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. Share only what the business lists for a member. |
 | `write_to_member` | Draft a first message from the person to one member business, in their own words and signed with their own name, and return the member's own published ways to receive it: an email link with the draft filled in, WhatsApp on the member's number, its website. Nothing is sent: the person reads the draft and sends it themselves. Use it when the person wants to contact a member they found with find_members. Contact is direct: the person writes or calls the member themselves, and neither the chamber or association nor BizPlug introduces, forwards or vouches. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

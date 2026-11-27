@@ -27,7 +27,7 @@ Every tool with its inputs, engine by engine, and how to call a plug-in yourself
 
 Every industry runs on one of 5 engines. The engine decides the plug-in's three main tools (a look-up, a request and a status check), its menu and the data a business provides. An industry adds its own words: its name, the tool names, what is ordered, booked or requested, a sample customer question, and what the plug-in covers.
 
-Every plug-in also has `show_menu`, `get_business_info`, `get_contact`, and its data files always include `business.csv`, `services.csv`, `faqs.csv`, `social.csv`. A business that publishes forms of its own (a Google Form, for example) also gets `open_form`, which offers those forms with what the customer already said filled in; without forms, the tool is not listed. A customer's request is always sent to the business, which confirms it; nothing is charged in the chat.
+Every plug-in also has `show_menu`, `get_business_info`, `get_contact`, `my_registration`, and its data files always include `business.csv`, `services.csv`, `faqs.csv`, `social.csv`. A business that publishes forms of its own (a Google Form, for example) also gets `open_form`, which offers those forms with what the customer already said filled in; without forms, the tool is not listed. A customer's request is always sent to the business, which confirms it; nothing is charged in the chat.
 
 ### `order`
 

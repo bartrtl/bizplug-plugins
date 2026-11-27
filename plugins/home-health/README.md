@@ -1,6 +1,6 @@
 # BizPlug Home Health & Hospice
 
-Version 0.57.0. Request a care assessment for home health & hospice businesses.
+Version 0.58.0. Request a care assessment for home health & hospice businesses.
 
 - Main function: Request a care assessment
 - MCP server URL: `https://mcp.bizplug.ai/plugin/home-health` (streamable HTTP, no sign-in)
@@ -28,9 +28,11 @@ Version 0.57.0. Request a care assessment for home health & hospice businesses.
 | `get_business_info` | Answer a general question about this home health & hospice business using only its published profile: services, coverage areas and intake enquiries. Creates nothing. If the profile does not cover the question, say so and use get_contact. Scheduling and information only: never give medical, mental-health or clinical advice, and never ask for symptoms or records. |
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `open_form` | Open one of this home health & hospice business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

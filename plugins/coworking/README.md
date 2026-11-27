@@ -1,6 +1,6 @@
 # BizPlug Coworking & Offices
 
-Version 0.57.0. Desk and office availability and rates for coworking & offices businesses.
+Version 0.58.0. Desk and office availability and rates for coworking & offices businesses.
 
 - Main function: Desk and office availability and rates
 - MCP server URL: `https://mcp.bizplug.ai/plugin/coworking` (streamable HTTP, no sign-in)
@@ -36,9 +36,11 @@ Version 0.57.0. Desk and office availability and rates for coworking & offices b
 | `get_visit_options` | List this coworking & offices business's locations from what it published: where tours are given and their tour hours, and where a day pass is sold, with its rate per person per day and what it includes; optionally one location. Creates nothing and sends nothing. Use it for any question about tours, day passes or their prices. |
 | `book_tour` | Ask for a tour of one of the business's published locations on a date. Use only once the customer has chosen the location and the day and wants to go ahead. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message for the customer to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms the tour; nothing is booked here. Never invent a location or tour hours. |
 | `request_day_pass` | Ask for a day pass at one of the business's published locations that sells one, for a date and a number of people. Use only once the customer has chosen the location and the day and wants to go ahead; for the price alone use the tours and day passes look-up. It returns the published rate times the people, or says the business confirms the price when no rate is published. Where the business takes these on WhatsApp, it returns the WhatsApp link and the exact message to send there, and sends nothing itself; otherwise it sends the request to the business with the customer's name and email and returns a reference. The business confirms; nothing is booked or paid here. Never invent a price or a location. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

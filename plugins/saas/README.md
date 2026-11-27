@@ -1,6 +1,6 @@
 # BizPlug SaaS & Software
 
-Version 0.57.0. Book a product demo for saas & software businesses.
+Version 0.58.0. Book a product demo for saas & software businesses.
 
 - Main function: Book a product demo
 - MCP server URL: `https://mcp.bizplug.ai/plugin/saas` (streamable HTTP, no sign-in)
@@ -32,9 +32,11 @@ Version 0.57.0. Book a product demo for saas & software businesses.
 | `get_pricing` | Return the product's plans as it published them, or only its pricing page when the product shows no plans here. Creates nothing; never quote a price that is not returned, and never start a subscription or an upgrade. |
 | `search_help` | Search the product's published help articles and guides by words or topic, and return each with its link. Creates nothing. |
 | `request_support` | Send the customer's question or problem to the product's support team, with a reference to check it later. Use only once the customer has given the details and agrees to send it. The team replies by email. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

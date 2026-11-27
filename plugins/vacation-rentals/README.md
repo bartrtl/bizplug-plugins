@@ -1,6 +1,6 @@
 # BizPlug Vacation Rentals
 
-Version 0.57.0. Home availability, nightly rates and booking for vacation rentals businesses.
+Version 0.58.0. Home availability, nightly rates and booking for vacation rentals businesses.
 
 - Main function: Home availability, nightly rates and booking
 - MCP server URL: `https://mcp.bizplug.ai/plugin/vacation-rentals` (streamable HTTP, no sign-in)
@@ -40,9 +40,11 @@ Version 0.57.0. Home availability, nightly rates and booking for vacation rental
 | `match_home` | Which of the host's homes fits a group: adults, children, dogs and what they want (needs, e.g. "pool table, near the beach"), with the reasons from the published details and, with dates, the price for the stay. Read-only; check_rental_availability confirms the dates. |
 | `plan_stay` | A day-by-day plan for the guest's dates (start, end) and group (adults, children, dogs), from the host's own local picks, shaped by interests and pace, with the events on those dates, rainy-day options, partner offers, and the homes that fit priced for the stay. Optional picks (names the guest saved) and home. Read-only: nothing is booked or held. Afterwards offer to check availability and book, or to continue on WhatsApp. |
 | `continue_on_whatsapp` | Hand the guest's trip (dates, group, home, saved picks, a note) to the host's WhatsApp concierge, which also answers during the stay. Returns the WhatsApp link and the exact message to send; sends nothing itself. Use it when the guest wants to continue with the host on WhatsApp. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

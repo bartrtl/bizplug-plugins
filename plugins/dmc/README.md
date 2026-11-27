@@ -1,6 +1,6 @@
 # BizPlug Destination Management Companies
 
-Version 0.57.0. Tailor-made packages with a price breakdown, and proposals day by day for destination management companies businesses.
+Version 0.58.0. Tailor-made packages with a price breakdown, and proposals day by day for destination management companies businesses.
 
 - Main function: Tailor-made packages with a price breakdown, and proposals day by day
 - MCP server URL: `https://mcp.bizplug.ai/plugin/dmc` (streamable HTTP, no sign-in)
@@ -33,9 +33,11 @@ Version 0.57.0. Tailor-made packages with a price breakdown, and proposals day b
 | `find_itineraries` | List the itineraries this destination management companies business published for anyone to browse, each with its days, route, summary and published "from" price. Optional query (a place, a kind of trip). Read-only. Use it when the customer asks what trips there are. |
 | `get_itinerary` | One published itinerary day by day: each day's place, highlights, meals and where the night is, with its flights, hotels, transfers, trains and activities by the hour, their websites and directions, what is included and the price. itinerary is its id or name; optional day for one day. Read-only. A traveller's own trip is not found here: use open_my_trip with their code. |
 | `open_my_trip` | Open a traveller's own trip or proposal with the code the business gave them: the same day-by-day view with their dates, flights, hotels and booking references, and the proposal's price breakdown, and their trip contact. Pass the code exactly as the traveller typed it; never guess, suggest or repeat a code. Optional day. Read-only. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

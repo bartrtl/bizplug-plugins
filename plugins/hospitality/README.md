@@ -1,6 +1,6 @@
 # BizPlug Hospitality & Hotels
 
-Version 0.57.0. Room availability, rates and booking requests for hospitality & hotels businesses.
+Version 0.58.0. Room availability, rates and booking requests for hospitality & hotels businesses.
 
 - Main function: Room availability, rates and booking requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/hospitality` (streamable HTTP, no sign-in)
@@ -29,9 +29,11 @@ Version 0.57.0. Room availability, rates and booking requests for hospitality & 
 | `get_contact` | Return the business's published contact details and opening hours for anything the other tools cannot do. |
 | `open_form` | Open one of this hospitality & hotels business's own forms (an application, registration, survey or intake form it published in Google Forms, Typeform, Jotform, Tally or another form tool) as a link with what the customer already said filled in. Use it when the customer wants to apply, register, sign up, give feedback or do what one of the forms is for. Nothing is submitted: the customer checks the form and submits it on the form tool's page. |
 | `check_direct_offer` | Ask this hospitality & hotels business's own website for its signed offer for one stay (Vacation Rental Protocol): whether it is free, the exact total, the price of each night, check-in and check-out times, house rules, the cancellation refund terms and the host's own booking link. BizPlug checks the offer before it is returned: signed with the keys the website publishes, for exactly these dates and guests, and not expired; an offer that cannot be checked is returned as unknown and nothing from it may be quoted. Only the dates and the number of guests are sent to the website. Creates nothing: the customer books on the returned link. Use it when the customer gives dates and a guest count and asks whether the home is free, what it costs or how to book. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

@@ -1,6 +1,6 @@
 # BizPlug Events & Conferences
 
-Version 0.57.0. Venue availability, pricing and date holds for events & conferences businesses.
+Version 0.58.0. Venue availability, pricing and date holds for events & conferences businesses.
 
 - Main function: Venue availability, pricing and date holds
 - MCP server URL: `https://mcp.bizplug.ai/plugin/events` (streamable HTTP, no sign-in)
@@ -30,10 +30,12 @@ Version 0.57.0. Venue availability, pricing and date holds for events & conferen
 | `find_speakers` | Find the speakers the event published, by name, company or topic, each with their role, published bio and the sessions they speak in. Creates nothing. |
 | `find_exhibitors` | Find the exhibitors and sponsors the event published, by name, what they do or a category, each with its published website and company contact details. Creates nothing and sends nothing: the customer contacts a company directly, and nobody introduces or forwards. |
 | `send_event_enquiry` | Send the customer's enquiry about exhibiting, sponsoring, visiting, speaking or anything else to the event's organisers, with a reference. Use only once the customer has given the details and agrees to send it. The organisers reply by email; nothing is booked or paid. |
+| `my_registration` | Open the customer's own registration with this business in its Ticket Tailor or Humanitix account, after a 6-digit code sent to the email they registered with, and change the name, email or phone on it. Called by the card only. |
 | `find_tickets` | List this business's upcoming events from its own ticketing account (Ticket Tailor or Humanitix), each with its dates, place, ticket types, prices, whether tickets are on sale and, where the business shows it, how many are left, with the event's own ticketing page to buy them; optionally only events matching words. Read-only: it reads nothing about buyers, and tickets are bought and paid for on that page, not here. Use it when the customer asks about tickets, prices, dates or how to buy. |
 
 ## Changes
 
+- **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.
 - **0.56.0** (26 November 2026): Events: connect your Humanitix account, and your plug-in shows your upcoming Humanitix events and tickets with the page to buy them.
 - **0.55.0** (26 November 2026): Events with Ticket Tailor: a Tickets button in the card, with each event's tickets and a Buy tickets button.

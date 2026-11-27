@@ -416,6 +416,21 @@ const DIRECT_OFFERS: Addon = {
 
 // Ticket Tailor (plug-in 0.54.0, ticket-tailor.ts): events plug-ins only, under Event-specific tools (shown only there).
 // Humanitix (plug-in 0.56.0, humanitix.ts): events plug-ins only, under Event-specific tools.
+// 0.58.0 (registration-self-service.ts): attendees open and correct their own registration from the card.
+const MY_REGISTRATION: Addon = {
+  id: "my-registration", name: "My registration", group: "ticketing", status: "included",
+  what: "Attendees open their own registration from your card with a code sent to their email, and correct their name, email or phone. You are told of every change.",
+  needs: ["Ticket Tailor or Humanitix connected here."],
+  steps: [
+    "Connect Ticket Tailor or Humanitix first (the tiles next to this one).",
+    "Switch My registration on. From plug-in version 0.58.0 your card offers it; if your plug-in runs an older version, press Upgrade on its Overview tab.",
+    "An attendee types the email they registered with and gets a 6-digit code there. Nothing is shown before the right code, and the card answers the same way whether or not the email has a registration.",
+    "They then see only their own tickets and can change the name, email or phone. Humanitix transfers the ticket and emails it; Ticket Tailor changes the order's buyer details when they bought it, and anything else comes to you as a request.",
+    "Every change and request reaches you through your requests inbox and the other channels you set up here.",
+  ],
+  link: { label: "How My registration works", href: "/how-to/plug-in/my-registration" },
+};
+
 const HUMANITIX: Addon = {
   id: "humanitix", name: "Humanitix", group: "ticketing", status: "included",
   what: "Your plug-in shows your upcoming Humanitix events and tickets with your page to buy them, and your Registrations page lists your tickets, where you can check people in and correct an attendee.",
@@ -455,7 +470,7 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   const checkout = engine === "order" || engine === "appt" || engine === "stay" ? [STRIPE_CHECKOUT, CHECKOUT_COM, DIBSY] : [];
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
-  const ticketing = show ? [TICKET_TAILOR, HUMANITIX] : [];
+  const ticketing = show ? [TICKET_TAILOR, HUMANITIX, MY_REGISTRATION] : [];
   const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }

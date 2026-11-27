@@ -96,6 +96,7 @@ const ICONS: Record<string, string> = {
   exhibitors: '<path d="M3 21V8l9-5 9 5v13"/><path d="M8 21v-7h8v7M3 21h18"/>',
   enquiry: '<path d="M4 4h16v12H7l-3 3z"/><path d="M8 9h8M8 12h5"/>',
   tickets: '<path d="M3 8a2 2 0 0 0 2-2h14a2 2 0 0 0 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 0-2 2H5a2 2 0 0 0-2-2v-2a2 2 0 0 0 0-4z"/><path d="M14 6v12" stroke-dasharray="2 2"/>',
+  myreg: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M17 4l2 2 3-3"/>',
   form: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h3"/>',
   tour: '<path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/>',
   committees: '<circle cx="12" cy="6" r="2.5"/><circle cx="5" cy="17" r="2.5"/><circle cx="19" cy="17" r="2.5"/><path d="M12 8.5v3M12 11.5l-5 3.5M12 11.5l5 3.5"/>',
@@ -995,7 +996,7 @@ function contactBar() {
     (c.email ? '<button class="btn" data-href="' + esc(c.email) + '">' + icon("mail") + "Email</button>" : "") + "</div>";
 }
 // ---- 0.31.0: the business's menu layout (card-layouts.ts, layouts/<id>/) ----
-const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", contact: "Contact", committees: "Committees", news: "News", social: "Social", agenda: "Agenda", speakers: "Speakers", exhibitors: "Exhibitors", features: "Features", pricing: "Pricing", guides: "Help", support: "Support", enquiry: "Enquire", tickets: "Tickets", tour: "Tour", daypass: "Day pass", account: "Account" };
+const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", contact: "Contact", committees: "Committees", news: "News", social: "Social", agenda: "Agenda", speakers: "Speakers", exhibitors: "Exhibitors", features: "Features", pricing: "Pricing", guides: "Help", support: "Support", enquiry: "Enquire", tickets: "Tickets", myreg: "My ticket", tour: "Tour", daypass: "Day pass", account: "Account" };
 // A short label for tabs, round buttons and chapters.
 function shortOf(o) {
   if (o.short) return o.short;
@@ -2228,6 +2229,54 @@ const TOPICS = ["Exhibiting", "Sponsoring", "Visiting", "Speaking", "Other"];
 // The business's upcoming events from its own Ticket Tailor box office: each with its date, place and ticket types.
 // Buy tickets opens the event's own Ticket Tailor checkout (through the site's /tickets address); nothing is sold here.
 const TT_STATUS = { on_sale: "On sale", sold_out: "Sold out", unavailable: "Not on sale now", locked: "Needs an access code" };
+// ---- My registration (version 0.58.0, registration-self-service.ts) ----
+// The attendee types their email, gets a 6-digit code there, then sees and changes only their own tickets. What they
+// type is read from the inputs when they press, never kept in state.f, and nothing of it is saved to the widget state
+// (which the assistant can read): the session lives in this card only.
+const mr = () => state.mr || (state.mr = { step: "email" });
+const mrVal = (id) => { const el = document.getElementById(id); return el ? String(el.value || "").trim() : ""; };
+async function mrCall(args) {
+  const o = opt("myreg");
+  if (!o || !inCard()) { state.mr = { step: "email", message: "Open this in the card to use it: it cannot be done in the chat." }; state.view = "myreg"; render(); return; }
+  state.busy = true; state.error = ""; render();
+  try {
+    const sc = pickStructured(await oa().callTool(o.tool, Object.assign({}, biz(), args)));
+    state.busy = false;
+    if (sc && sc.myreg) state.mr = Object.assign({ edit: "" }, sc.myreg);
+  } catch (e) {
+    state.busy = false;
+    state.error = (e && e.message) || "That did not work. Try again in a moment.";
+  }
+  state.view = "myreg"; render();
+}
+function myregView() {
+  const o = opt("myreg"), m = mr();
+  const head = top(o ? o.title : "My registration") + (m.message ? '<div class="note" style="margin-top:0">' + esc(m.message) + "</div>" : "");
+  if (m.step === "code")
+    return head + '<div class="form"><label><span>Code</span><input id="mr-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"></label>' + errLine() +
+      '<div class="actions">' + primary("Open my registration", "mropen") + '<button class="btn" data-act="mrsend"' + (state.busy ? " disabled" : "") + '>Send a new code</button><button class="link" data-act="mrreset">Use another email</button></div></div>';
+  if (m.step === "list") {
+    const ts = m.tickets || [];
+    const rows = ts.map((t) => {
+      const editing = m.edit === t.id;
+      return '<div class="it"><div class="nm"><b>' + esc(t.event || "Your ticket") + '</b><span class="qlabel">' + esc(t.when || "") + "</span></div>" +
+        '<div class="bl">' + esc([t.ticket, [t.firstName, t.lastName].filter(Boolean).join(" "), t.email].filter(Boolean).join(" · ")) + (t.checkedIn ? " · Checked in" : "") + "</div>" +
+        (editing
+          ? '<div class="form" style="margin-top:8px"><label><span>First name</span><input id="mr-first" value="' + esc(t.firstName) + '"></label><label><span>Last name</span><input id="mr-last" value="' + esc(t.lastName) + '"></label>' +
+            '<label><span>Email</span><input id="mr-mail" type="email" value="' + esc(t.email) + '"></label><label><span>Phone <small>(optional)</small></span><input id="mr-phone" type="tel"></label>' +
+            '<div class="note" style="margin-top:0">' + esc(m.provider === "Humanitix" ? "Humanitix sends the ticket again to the email you give." : t.buyer ? "Your contact details on the order change at once. A new name on the ticket itself is passed to the organiser." : "You did not buy this ticket yourself, so the organiser is asked to make the change.") + "</div>" +
+            errLine() + '<div class="actions">' + primary("Save changes", "mrsave", ' data-mrt="' + esc(t.id) + '"') + '<button class="link" data-act="mrcancel">Cancel</button></div></div>'
+          : '<div class="actions" style="margin-top:8px"><button class="btn" data-mredit="' + esc(t.id) + '">Change details</button></div>') + "</div>";
+    }).join("");
+    return head + (ts.length ? '<div class="list">' + rows + "</div>" : '<div class="empty">No registrations on this email for upcoming events.</div>') +
+      '<div class="note">Only you see this, in this card. Your registration is not shown in the chat.</div>';
+  }
+  if (m.step === "done")
+    return head + '<div class="actions"><button class="btn" data-act="mrreset">Done</button></div>';
+  return head + '<div class="form"><div class="hint">Type the email you registered with. A 6-digit code is sent there; nothing is shown before you enter it.</div>' +
+    '<label><span>Email</span><input id="mr-email" type="email" autocomplete="email" placeholder="you@example.com"></label>' + errLine() +
+    '<div class="actions">' + primary("Send me a code", "mrsend") + "</div></div>";
+}
 function ticketsView() {
   const d = state.data.tickets || { events: [] };
   const o = opt("tickets");
@@ -2502,6 +2551,8 @@ function openOption(i) {
   // 0.33.0: one of the business's own forms. Where the card cannot run tools, the chat fills it in.
   if (o.kind === "customform") { if (!inCard() || !cform(o.key)) { ask(o.example); return; } state.cf = o.key; state.view = "cform"; render(); return; }
   if (o.kind === "contact") { run(o.tool, {}, o.example); return; }
+  // 0.58.0: My registration opens on its own screen; it never goes to the chat.
+  if (o.kind === "myreg") { if (!state.mr || state.mr.step === "done") state.mr = { step: "email" }; state.view = "myreg"; render(); return; }
   // 0.42.0: a list of events opens on this month's events.
   if (o.kind === "lookup" && p().events && inCard()) { state.f.ecat = ""; state.f.eq = ""; run(o.tool, {}, o.example); return; }
   // 0.27.0: a hotel's Availability and price opens the booking screen on this month's calendar.
@@ -2563,7 +2614,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView, tickets: ticketsView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView, tickets: ticketsView, myreg: myregView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -2744,6 +2795,13 @@ function render() {
   on("[data-aday]", (b) => { state.f.aq = ""; runShow("agenda", { date: b.dataset.aday }); });
   on("[data-ses]", (b) => { if (evPanel()) { state.fly = "ses:" + b.dataset.ses; render(); return; } state.ses = state.ses === b.dataset.ses ? "" : b.dataset.ses; render(); });
   on('[data-act="pfind"]', () => runShow("speakers", { query: v("pq") }));
+  // 0.58.0: My registration.
+  on('[data-act="mrsend"]', () => { const e = mrVal("mr-email") || mr().email || ""; mrCall({ action: "send_code", email: e }); });
+  on('[data-act="mropen"]', () => mrCall({ action: "open", email: mr().email || "", code: mrVal("mr-code") }));
+  on('[data-act="mrreset"]', () => { state.mr = { step: "email" }; state.error = ""; render(); });
+  on("[data-mredit]", (b) => { mr().edit = b.dataset.mredit; state.error = ""; render(); });
+  on('[data-act="mrcancel"]', () => { mr().edit = ""; state.error = ""; render(); });
+  on('[data-act="mrsave"]', (b) => mrCall({ action: "change", session: mr().token || "", ticket: b.dataset.mrt, first_name: mrVal("mr-first"), last_name: mrVal("mr-last"), new_email: mrVal("mr-mail"), phone: mrVal("mr-phone") }));
   on("[data-spk]", (b) => { if (evPanel()) { state.fly = "spk:" + b.dataset.spk; render(); return; } state.sel = b.dataset.spk; state.view = "speaker"; state.error = ""; render(); });
   on('[data-act="xfind"]', () => runShow("exhibitors", { query: v("xq"), category: (state.data.exhibitors || {}).category || "" }));
   on("[data-xcat]", (b) => { state.f.xq = ""; runShow("exhibitors", { category: b.dataset.xcat }); });
