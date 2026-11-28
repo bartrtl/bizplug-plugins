@@ -64,6 +64,7 @@
     "Never promise a berth for a boat longer or deeper than the marina publishes."
   ],
   "cardTheme": "ocean",
+  "nouns": { "host": "marina", "home": "berth", "homes": "berths", "houseGuide": "berth guide" },
   "forms": [
     {
       "key": "order_fuel",
