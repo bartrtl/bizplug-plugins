@@ -372,7 +372,7 @@ Not on GitHub, or not sure of the engine? Open the [Propose a new industry](http
 | Rules | Anything the plug-in must never do or say in this industry | Never give safety advice on a repair |
 | Who would use it | Kinds of businesses, or a business you know (optional) | Independent bike shops |
 
-A good proposal fits one of the 5 engines. If it needs something no engine does, say what in the form: the team then decides whether it needs a new option, which takes longer.
+A good proposal fits one of the 5 engines. Options, collections, your own words and request forms can all be written in the file itself (see [Add a new industry](#add-a-new-industry)). If it needs something none of them does, say what in the form: the team then decides whether it needs a new option, which takes longer.
 
 Please do not put customers' personal data, passwords or other secrets in a proposal: issues and pull requests are public.
 

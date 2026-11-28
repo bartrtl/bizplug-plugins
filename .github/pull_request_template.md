@@ -29,6 +29,7 @@
 - [ ] The industry is not already in [INDUSTRIES.md](https://github.com/msg2ai/bizplug-plugins/blob/main/INDUSTRIES.md), and no existing industry fits it: a business that fits one uses that industry's plug-in under its own name
 - The closest existing industry, and what a customer does in mine that it cannot: <!-- e.g. Fitness & Gyms (fitness): ... -->
 - [ ] Everything the file says is true of the plug-in (it answers from the business's profile and sends requests the business confirms)
+- [ ] If the file has `collections` or `forms`: the sample rows are made up, a list holds things and not people's details, and I tried each one in the preview
 - [ ] I understand that merging publishes this industry on BizPlug, and BizPlug may publish it
 
 ## Plug-in: `community/plugins/<name>/`
