@@ -1135,7 +1135,7 @@ export type UpgradeContext = {
  * plug-in when at least one feature it turns on applies to it; one that does not is not offered as an upgrade.
  */
 const APPLIES: Partial<Record<keyof PluginFeatures, (c: UpgradeContext) => boolean>> = {
-  // Set in a profile file by the team only: it changes nothing for a plug-in published from the portal.
+  // Set in a profile by the team only (a profile file, or a team account's push): nothing a client can switch on.
   claudeVersion: () => false,
   members: (c) => c.members,
   stripeCheckout: (c) => c.checkout,
