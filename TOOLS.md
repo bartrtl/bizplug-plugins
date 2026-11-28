@@ -59,11 +59,7 @@ How the plug-in's instructions tell the assistant to use it: If the profile does
 
 Read-only.
 
-| Input | Type | Required | What it is |
-| --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
+No inputs.
 
 ### `open_form` (Open a form)
 
@@ -79,9 +75,6 @@ How the plug-in's instructions tell the assistant to use it: Use it when the cus
 | `phone` | string |  | The customer's phone, when they gave it. |
 | `date` | string |  | A date the form asks for, as YYYY-MM-DD, when the customer gave it. |
 | `details` | string |  | What the customer said the form is about, in their words. |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 
 ### `my_registration` (My registration)
 
@@ -448,9 +441,6 @@ Read-only. Only for a show or conference that published its programme (sessions.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `date` | string |  | Optional: one day of the event, YYYY-MM-DD, to show only that day. |
 | `query` | string |  | Optional words to search the sessions for: a topic, a speaker or a format. |
 
@@ -460,9 +450,6 @@ Read-only. Only for a show or conference that published its programme (sessions.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional: a speaker's name, a company or a topic. Omit to list them. |
 
 ### `find_exhibitors` (Exhibitors & sponsors)
@@ -471,9 +458,6 @@ Read-only. Only for a show or conference that published its programme (sessions.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional: a company's name or what the customer is looking for, e.g. stage lighting. |
 | `category` | string |  | Optional: one of the event's exhibitor categories, or "Sponsors". |
 
@@ -485,9 +469,6 @@ How the plug-in's instructions tell the assistant to use it: Use only once the c
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `topic` | `Exhibiting` or `Sponsoring` or `Visiting` or `Speaking` or `Other` | yes | What the enquiry is about. |
 | `message` | string | yes | The enquiry, in the customer's words. |
 | `company` | string |  | Optional: the customer's company. |
@@ -503,9 +484,6 @@ How the plug-in's instructions tell the assistant to use it: Use it when the cus
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional words to look for in the event names, places and ticket types. |
 
 ### `explore_area` (Explore the area)
@@ -516,9 +494,6 @@ How the plug-in's instructions tell the assistant to use it: Use it for any ques
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `category` | `groceries` or `eat` or `drink` or `beach` or `outdoors` or `activities` or `shopping` or `culture` or `wellness` or `services` |  | Optional: one category of the host's picks. |
 | `good_for` | `kids` or `dogs` or `rainy` or `couples` or `groups` or `sunset` or `free` |  | Optional: only picks the host marked good for this. |
 | `query` | string |  | Optional: words to look for, such as pizza or kayak. |
@@ -529,9 +504,6 @@ Read-only. Only when the host published an area guide or events (area.csv, event
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `topic` | string |  | Optional: one topic (about, history, map, arrival, around, seasons, rules, essentials, safety) or words to look for. |
 | `start` | string |  | Arrival date, YYYY-MM-DD. |
 | `end` | string |  | Departure date, YYYY-MM-DD. |
@@ -544,9 +516,6 @@ How the plug-in's instructions tell the assistant to use it: Never guess how an 
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `home` | string |  | Optional: the home the guest stays in, by id or name. |
 | `query` | string |  | Optional: what they ask about, such as grill, washer, oven or Wi-Fi. |
 
@@ -556,9 +525,8 @@ Read-only. Only on vacation rental plug-ins from version 0.48.0. Industries: Vac
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer | yes | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
+| `adults` | integer | yes | How many adults. |
+| `children` | integer |  | How many children. |
 | `dogs` | integer |  | How many dogs come along. |
 | `needs` | string |  | Optional: what the group wants, in their words (pool table, near the beach, bunk beds). |
 | `start` | string |  | Arrival date, YYYY-MM-DD. |
@@ -570,11 +538,10 @@ Read-only. Only on vacation rental plug-ins from version 0.48.0. Industries: Vac
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer | yes | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `start` | string | yes | Arrival date, YYYY-MM-DD. |
 | `end` | string | yes | Departure date, YYYY-MM-DD. |
+| `adults` | integer | yes | How many adults. |
+| `children` | integer |  | How many children. |
 | `dogs` | integer |  | How many dogs come along. |
 | `interests` | array of string |  | Optional: what they enjoy most. |
 | `pace` | `relaxed` or `balanced` or `packed` |  | Optional: how full the days should be. Defaults to balanced. |
@@ -589,11 +556,10 @@ How the plug-in's instructions tell the assistant to use it: Use it when the gue
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `start` | string |  | Arrival date, YYYY-MM-DD. |
 | `end` | string |  | Departure date, YYYY-MM-DD. |
+| `adults` | integer |  | How many adults. |
+| `children` | integer |  | How many children. |
 | `dogs` | integer |  | How many dogs come along. |
 | `home` | string |  | Optional: the home they chose. |
 | `picks` | array of string |  | Optional: the picks the guest saved. |
@@ -607,9 +573,6 @@ How the plug-in's instructions tell the assistant to use it: Use it when the cus
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional: words to look for, such as a place or a kind of trip. |
 
 ### `get_itinerary` (Itinerary day by day)
@@ -620,9 +583,6 @@ How the plug-in's instructions tell the assistant to use it: A traveller's own t
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `itinerary` | string | yes | The itinerary's id or name, from the itineraries list. |
 | `day` | integer |  | Optional: one day of the trip, 1 for the first day. |
 
@@ -634,9 +594,6 @@ How the plug-in's instructions tell the assistant to use it: Pass the code exact
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `code` | string | yes | The trip code exactly as the traveller typed it. Never guess, suggest or invent one. |
 | `day` | integer |  | Optional: one day of the trip, 1 for the first day. |
 
@@ -651,8 +608,6 @@ How the plug-in's instructions tell the assistant to use it: Share only what the
 | `query` | string |  | Optional free text: a member's name, a kind of business, or what the person needs or can offer. Omit to list the members by industry. |
 | `industry` | string |  | Optional: one of the industries in the business's member list, to show only those members. |
 | `location` | string |  | Optional: a site or floor from the business's member list, to show only the members there. |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
 
 ### `write_to_member` (Write to a member)
 
@@ -667,8 +622,6 @@ How the plug-in's instructions tell the assistant to use it: Use it when the per
 | `company` | string |  | Optional: the person's company, as they gave it. |
 | `email` | string |  | Optional: the person's email, to sign the message. |
 | `message` | string | yes | What the person wants to say or discuss, in their words. |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
 
 ### `get_visit_options` (Tours and day passes)
 
@@ -678,9 +631,6 @@ How the plug-in's instructions tell the assistant to use it: Use it for any ques
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `location` | string |  | Optional: one of the business's published locations, to show only that one. |
 
 ### `book_tour` (Book a tour)
@@ -691,9 +641,6 @@ How the plug-in's instructions tell the assistant to use it: Use only once the c
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `location` | string |  | One of the business's published locations that gives tours, by name. Required when the business has more than one; never a location it did not publish. |
 | `date` | string | yes | The day of the tour, as YYYY-MM-DD. |
 | `time` | string |  | Optional: the preferred time as HH:MM (24h), or morning, midday, afternoon or evening. |
@@ -711,9 +658,6 @@ How the plug-in's instructions tell the assistant to use it: Use only once the c
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `location` | string |  | One of the business's published locations that sells a day pass, by name. Required when the business has more than one; never a location it did not publish. |
 | `date` | string | yes | The day the pass is for, as YYYY-MM-DD. |
 | `people` | integer |  | How many people need a day pass. Defaults to 1. |
@@ -728,9 +672,6 @@ Read-only. Industries: SaaS & Software.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional words to search the features for, e.g. a feature name or what the customer wants to do. Omit to list them. |
 
 ### `get_pricing` (Pricing)
@@ -739,11 +680,7 @@ Read-only. Industries: SaaS & Software.
 
 How the plug-in's instructions tell the assistant to use it: Never quote a price that is not returned, and never start a subscription or an upgrade.
 
-| Input | Type | Required | What it is |
-| --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
+No inputs.
 
 ### `search_help` (Help & guides)
 
@@ -751,9 +688,6 @@ Read-only. Industries: SaaS & Software.
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `query` | string |  | Optional words to search the help articles for. |
 | `topic` | string |  | Optional: one of the topics the help articles are filed under. |
 
@@ -765,9 +699,6 @@ How the plug-in's instructions tell the assistant to use it: Use only once the c
 
 | Input | Type | Required | What it is |
 | --- | --- | --- | --- |
-| `adults` | integer |  | Number of adults. Use with children instead of guests. |
-| `children` | integer |  | Number of children (default 0). |
-| `rooms` | integer |  | How many rooms of the same type (default 1). |
 | `topic` | string | yes | A short subject for the question or problem. |
 | `message` | string | yes | The question or problem, in the customer's words. |
 | `name` | string | yes | Customer's name. |
