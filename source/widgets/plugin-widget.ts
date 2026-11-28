@@ -1002,7 +1002,7 @@ const LAYOUT_SHORT = { question: "Ask", status: "Status", members: "Members", co
 function shortOf(o) {
   if (o.short) return o.short;
   const e = p().engine;
-  if (o.kind === "lookup") return e === "stay" ? (p().span === "nights" ? "Rooms" : "Dates") : e === "order" ? "Menu" : e === "appt" ? "Times" : e === "quote" ? "Prices" : "Look up";
+  if (o.kind === "lookup") return e === "stay" ? (p().span === "nights" && !p().homeWords ? "Rooms" : "Dates") : e === "order" ? "Menu" : e === "appt" ? "Times" : e === "quote" ? "Prices" : "Look up";
   if (o.kind === "request") return e === "stay" || e === "appt" ? "Book" : e === "order" ? "Order" : "Request";
   return LAYOUT_SHORT[o.kind] || o.title;
 }
@@ -1191,13 +1191,15 @@ function stayWords(sp) {
   const plural = (x) => (/(s|x|ch|sh)$/.test(x) ? x + "es" : x + "s");
   if (sp === "days") return { title: "Choose your dates", pick: ["Tap the first day.", "Now tap the last day."], unit: "day", units: "days", per: "avg per day", list: plural(noun), breakdown: "Day by day", none: "Nothing is free on every day you chose. Try other dates." };
   if (sp === "single") return { title: "Choose your date", pick: ["Tap the date.", ""], unit: "", units: "", per: "per person", list: plural(noun), breakdown: "", none: "Nothing is available on that date. Try another day." };
+  // 0.61.0: a home booked by the night (vacation rentals) is a home, not a room.
+  if (p().homeWords) return { title: "Book your stay", pick: ["Tap your check-in day.", "Now tap your check-out day."], unit: "night", units: "nights", per: "avg per night", list: plural(noun), breakdown: "Night by night", none: "Nothing is free on every night for your party. Try other dates." };
   return { title: "Book your stay", pick: ["Tap your check-in day.", "Now tap your check-out day."], unit: "night", units: "nights", per: "avg per night", list: "Rooms", breakdown: "Night by night", none: "No room is free on every night for your party. Try other dates." };
 }
 function stayScreen() {
   const s = state.data.availability.stay, q = stayQ(), pol = s.policies || {}, cal = s.calendar || { days: [] };
   const lookup = opt("lookup"), request = opt("request");
   const sp = s.span || "nights", w = stayWords(sp);
-  const homes = false;
+  const homes = Boolean(p().homeWords);
   const intro = '<div class="sum"><div><b>' + esc(w.title) + "</b><span>" + (pol.ratePlan ? esc(pol.ratePlan) + " · " : "") + esc(pol.tax || "") +
     (s.checkout && s.checkout.testMode ? '<span class="testtag">' + esc(s.checkout.label) + " TEST</span>" : "") + "</span></div></div>";
   // Calendar: the first tap is check-in, the next one after it check-out.
@@ -1236,10 +1238,10 @@ function stayScreen() {
   }
   const how = s.book === "pay" ? "Book & pay opens " + (s.checkout ? s.checkout.label : "the hotel") + "'s secure page; the room is held for 30 minutes while you pay. Card details are never entered here."
     : s.book === "whatsapp" ? (sp === "nights" && !s.rooms.some((r) => r.per) ? "Book on WhatsApp opens the hotel's concierge with your visit code; nothing is booked until you pay there." : "Book on WhatsApp opens a chat with " + (p().businessName || "the business") + "; nothing is booked or paid until it is confirmed there.")
-    : (sp === "nights" ? "The hotel" : (p().businessName || "The business")) + " confirms your request by email; nothing is held or charged here." + (sp !== "nights" ? " Prices can differ by day." : "");
+    : (sp === "nights" && !homes ? "The hotel" : (p().businessName || "The business")) + " confirms your request by email; nothing is held or charged here." + (sp !== "nights" ? " Prices can differ by day." : "");
   const policies = '<div class="pol">' + (pol.checkIn ? "Check-in from " + esc(pol.checkIn) + " · check-out by " + esc(pol.checkOut) + ". " : "") + (pol.cancellation ? esc(pol.cancellation) + " " : "") + esc(how) + "</div>";
   const concierge = s.concierge ? '<div class="actions" style="margin-top:12px"><button class="btn wa" data-href="' + esc(s.concierge) + '">' + icon("whatsapp") + "Questions? Chat with the concierge</button></div>" : "";
-  return top(lookup ? lookup.title : w.title) + '<div class="stay">' + intro + calendar + guests + (state.busy ? '<div class="note">Checking ' + (sp === "nights" ? "rooms" : "availability") + " and prices…</div>" : "") + errLine() + rooms + policies + concierge + "</div>";
+  return top(lookup ? lookup.title : w.title) + '<div class="stay">' + intro + calendar + guests + (state.busy ? '<div class="note">Checking ' + (sp === "nights" && !homes ? "rooms" : "availability") + " and prices…</div>" : "") + errLine() + rooms + policies + concierge + "</div>";
 }
 function availabilityView() {
   const a = state.data.availability || { options: [] };

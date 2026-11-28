@@ -1,6 +1,6 @@
 # BizPlug Casinos & Gaming
 
-Version 0.60.0. Hotel rooms and show tickets (no wagering) for casinos & gaming businesses.
+Version 0.61.0. Hotel rooms and show tickets (no wagering) for casinos & gaming businesses.
 
 - Main function: Hotel rooms and show tickets (no wagering)
 - MCP server URL: `https://mcp.bizplug.ai/plugin/casinos` (streamable HTTP, no sign-in)
@@ -33,6 +33,7 @@ Version 0.60.0. Hotel rooms and show tickets (no wagering) for casinos & gaming 
 
 ## Changes
 
+- **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.
 - **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.
 - **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.
 - **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
