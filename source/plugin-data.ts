@@ -4,6 +4,7 @@
 // The client portal (/portal) and the plug-in packages (plugins/<slug>/data/, written by build-plugins.ts)
 // both render from this file. Per-industry differences come from industry-functions.ts (engine, noun, note),
 // plugin-examples.ts (the example row in each template) and INDUSTRY_NOTES below.
+import type { CollectionDef } from "@/lib/collections";
 import { industries, getIndustry } from "@/lib/industries";
 import { getFunction, type Engine } from "@/lib/industry-functions";
 import { exampleFor, type IndustryExample } from "@/lib/plugin-examples";
@@ -817,6 +818,23 @@ const BASE_NEVER = [
   "Customers' personal data (names, phone numbers, addresses, health or financial details).",
 ];
 
+/** A collection's data file (collections.ts): its own columns, with the file's example row; only the name is required. */
+export function collectionDataset(c: CollectionDef): Dataset {
+  const type = (t: CollectionDef["columns"][number]["type"]): ColumnType => (t === "number" ? "number" : t === "date" ? "date" : t === "link" || t === "image" ? "url" : "text");
+  const help = (x: CollectionDef["columns"][number]) =>
+    x.type === "choice" ? "Use the same words for the same value: people filter by it." : x.type === "image" ? "An https image address (PNG, JPEG or WebP)." : x.type === "link" ? "A full https address." : x.type === "date" ? "YYYY-MM-DD." : x.type === "longtext" ? "A few sentences." : "";
+  return {
+    id: c.key,
+    file: `${c.key}.csv`,
+    title: c.title,
+    why: `${c.description} One row per ${c.noun}; people search them in the plug-in.`,
+    required: false,
+    maxRows: 500,
+    columns: c.columns.map((x) => col(x.key, x.label, x.key === "name", type(x.type), x.example, help(x))),
+    collect: [`List each ${c.noun} you publish, one per row, with the columns above.`, "Only what you would publish on your own website: nothing about a person that they did not agree to share."],
+  };
+}
+
 export function dataSpec(industry: string): PluginDataSpec | null {
   const ind = getIndustry(industry);
   const fn = getFunction(industry);
@@ -841,6 +859,8 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       ...(fn.infoFirst ? [committeesDataset, newsDataset, newsletterDataset] : []),
       ...(fn.software ? [featuresDataset, plansDataset, guidesDataset] : []),
       ...(fn.show ? [sessionsDataset, speakersDataset, exhibitorsDataset, sponsorsDataset] : []),
+      // 0.62.0: the collections the industry defines in its file, one data file each.
+      ...(fn.collections ?? []).map(collectionDataset),
       socialDataset,
     ],
     never: [...BASE_NEVER, ...(INDUSTRY_NOTES[industry] ?? []), ...(fn.note ? [`The plug-in's own rule: ${fn.note}`] : [])],

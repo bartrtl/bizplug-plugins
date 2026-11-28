@@ -31,6 +31,12 @@ type IndustryFileRules = {
   accents: string[];
   /** Options a file may switch on: each adds tools, menu options and data files already built into the plug-in, on the engines (and stay spans) it was built for. */
   options: { id: string; adds: string; engines: string[]; spans?: string[] }[];
+  /** Tool names the plug-in may already use (every engine's, every option's): a collection's tool may not take one. */
+  reservedTools: string[];
+  /** Data file names (without .csv) the plug-in already uses: a collection's key may not take one. */
+  reservedFiles: string[];
+  /** The column types a collection may use. */
+  columnTypes: string[];
 };
 
 function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRules, fileName?: string): string[] {
@@ -154,7 +160,81 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
       for (const k of Object.keys(c)) if (!["business", "ask", "answer", "confirm", "sent"].includes(k)) out.push(`chat has an unknown key: ${k}.`);
     }
   }
-  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options"];
+  // Collections: searchable lists the industry defines (a data file, a read-only tool, a menu option, a card screen).
+  if (p.collections !== undefined) {
+    const cs = p.collections;
+    if (!Array.isArray(cs) || cs.length < 1 || cs.length > 3) out.push("collections must be a list of 1 to 3 collections.");
+    else {
+      const keys = new Set<string>(), toolNames = new Set<string>([...names.map(String)]);
+      cs.forEach((raw, i) => {
+        const at = `collections[${i}]`;
+        if (!raw || typeof raw !== "object" || Array.isArray(raw)) { out.push(`${at} must be an object.`); return; }
+        const c = raw as Record<string, unknown>;
+        const txt = (k: string, max: number, required = true) => {
+          const v = c[k];
+          if (v === undefined || v === "") { if (required) out.push(`${at}.${k} is missing.`); return; }
+          if (!isText(v)) out.push(`${at}.${k} must be text.`);
+          else if (v.length > max) out.push(`${at}.${k} must be at most ${max} characters (it has ${v.length}).`);
+        };
+        const key = String(c.key ?? "");
+        if (!/^[a-z][a-z0-9_]{1,20}$/.test(key)) out.push(`${at}.key must be 2 to 21 lower-case letters, digits or underscores, starting with a letter: it is the data file's name (key.csv).`);
+        else if (rules.reservedFiles.includes(key)) out.push(`${at}.key ${key} is already a data file of the plug-in: choose another.`);
+        else if (keys.has(key)) out.push(`${at}.key ${key} is used twice.`);
+        keys.add(key);
+        const tool = String(c.tool ?? "");
+        if (!/^[a-z][a-z0-9_]{2,40}$/.test(tool)) out.push(`${at}.tool must be a tool name: lower case, digits and underscores, 3 to 41 characters.`);
+        else if (rules.commonTools.includes(tool) || rules.reservedTools.includes(tool) || toolNames.has(tool)) out.push(`${at}.tool ${tool} is already a tool name: choose another.`);
+        toolNames.add(tool);
+        txt("title", 30);
+        txt("noun", 30);
+        txt("description", 200);
+        txt("ask", 120);
+        if (typeof c.ask === "string" && !c.ask.trim().endsWith("?")) out.push(`${at}.ask must be a question a customer would ask, ending with ?.`);
+        if (c.layout !== undefined && c.layout !== "list" && c.layout !== "grid") out.push(`${at}.layout must be list or grid.`);
+        const cols = c.columns;
+        if (!Array.isArray(cols) || cols.length < 2 || cols.length > 12) { out.push(`${at}.columns must be a list of 2 to 12 columns.`); return; }
+        // Contact and personal details stay out of a collection: a list of people's details needs their agreement and its own rules.
+        const PERSONAL = /\b(e-?mail|phone|mobile|whatsapp|password|card|iban|account|ssn|passport|birth|national id|health|diagnosis)\b/i;
+        const colKeys = new Set<string>();
+        cols.forEach((rc, j) => {
+          const ca = `${at}.columns[${j}]`;
+          if (!rc || typeof rc !== "object") { out.push(`${ca} must be an object.`); return; }
+          const col = rc as Record<string, unknown>;
+          const ck = String(col.key ?? "");
+          if (!/^[a-z][a-z0-9_]{0,30}$/.test(ck)) out.push(`${ca}.key must be lower-case letters, digits or underscores, starting with a letter.`);
+          else if (colKeys.has(ck)) out.push(`${ca}.key ${ck} is used twice.`);
+          colKeys.add(ck);
+          if (!isText(col.label) || col.label.length > 30) out.push(`${ca}.label must be text of at most 30 characters.`);
+          if (!rules.columnTypes.includes(String(col.type))) out.push(`${ca}.type must be one of: ${rules.columnTypes.join(", ")}.`);
+          if (PERSONAL.test(`${ck.replace(/_/g, " ")} ${String(col.label ?? "")}`)) out.push(`${ca} looks like contact or personal details (${ck}): a collection lists things, not people's details.`);
+          if (col.search !== undefined && (typeof col.search !== "boolean" || !["text", "longtext", "choice"].includes(String(col.type)))) out.push(`${ca}.search is true or false, and only for text, longtext or choice columns.`);
+          if (col.filter !== undefined && (typeof col.filter !== "boolean" || col.type !== "choice")) out.push(`${ca}.filter is true or false, and only for choice columns.`);
+          if (!isText(col.example) || col.example.length > 200) out.push(`${ca}.example must be text of at most 200 characters: it is the template's example row.`);
+          else if ((col.type === "link" || col.type === "image") && !/^https:\/\/[^\s"'<>]+$/.test(col.example)) out.push(`${ca}.example must be an https address for a ${String(col.type)} column.`);
+          for (const k of Object.keys(col)) if (!["key", "label", "type", "search", "filter", "example"].includes(k)) out.push(`${ca} has an unknown key: ${k}.`);
+        });
+        const first = cols[0] as Record<string, unknown> | undefined;
+        if (!first || first.key !== "name" || first.type !== "text") out.push(`${at}.columns: the first column must be { "key": "name", "type": "text" }, the entry's name.`);
+        if (cols.filter((x) => (x as Record<string, unknown>)?.filter === true).length > 2) out.push(`${at}.columns: at most 2 filter columns.`);
+        if (c.sample !== undefined) {
+          if (!Array.isArray(c.sample) || c.sample.length < 1 || c.sample.length > 8) out.push(`${at}.sample must be a list of 1 to 8 made-up rows.`);
+          else c.sample.forEach((row, j) => {
+            if (!row || typeof row !== "object" || Array.isArray(row)) { out.push(`${at}.sample[${j}] must be an object.`); return; }
+            const r = row as Record<string, unknown>;
+            if (!isText(r.name)) out.push(`${at}.sample[${j}] needs a name.`);
+            for (const [k, v] of Object.entries(r)) {
+              const col = (cols as Record<string, unknown>[]).find((x) => x?.key === k);
+              if (!col) out.push(`${at}.sample[${j}].${k} is not one of the collection's columns.`);
+              else if (typeof v !== "string" || v.length > 300) out.push(`${at}.sample[${j}].${k} must be text of at most 300 characters.`);
+              else if ((col.type === "link" || col.type === "image") && v && !/^https:\/\/[^\s"'<>]+$/.test(v)) out.push(`${at}.sample[${j}].${k} must be an https address.`);
+            }
+          });
+        }
+        for (const k of Object.keys(c)) if (!["key", "tool", "title", "noun", "description", "ask", "columns", "layout", "sample"].includes(k)) out.push(`${at} has an unknown key: ${k}.`);
+      });
+    }
+  }
+  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options", "collections"];
   for (const k of Object.keys(p)) if (!known.includes(k)) out.push(`unknown field: ${k}.`);
   if (/(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)/.test(JSON.stringify(p))) out.push("the file looks like it holds a secret: remove it.");
   return out;
@@ -1099,6 +1179,243 @@ const RULES: IndustryFileRules = {
         "quote"
       ]
     }
+  ],
+  "reservedTools": [
+    "book_tour",
+    "browse_bouquets",
+    "browse_brand_menus",
+    "browse_collection",
+    "browse_menu",
+    "check_date_availability",
+    "check_direct_offer",
+    "check_rental_availability",
+    "check_room_availability",
+    "check_sailings",
+    "check_seat_availability",
+    "check_space_availability",
+    "check_table_availability",
+    "check_ticket_availability",
+    "check_tour_departures",
+    "check_trip_availability",
+    "check_vehicle_availability",
+    "check_venue_availability",
+    "continue_on_whatsapp",
+    "explore_area",
+    "find_appointment_slots",
+    "find_assessment_slots",
+    "find_call_slots",
+    "find_class_slots",
+    "find_consult_slots",
+    "find_demo_slots",
+    "find_event_slots",
+    "find_exam_slots",
+    "find_exhibitors",
+    "find_intake_slots",
+    "find_itineraries",
+    "find_meeting_slots",
+    "find_members",
+    "find_pet_appointment_slots",
+    "find_salon_slots",
+    "find_service_slots",
+    "find_session_slots",
+    "find_shoot_slots",
+    "find_showing_slots",
+    "find_speakers",
+    "find_tickets",
+    "find_tour_slots",
+    "find_treatment_slots",
+    "find_visit_slots",
+    "get_agenda",
+    "get_appointment_status",
+    "get_area_guide",
+    "get_booking_status",
+    "get_box_status",
+    "get_business_info",
+    "get_call_status",
+    "get_callback_status",
+    "get_catering_estimate",
+    "get_cleaning_estimate",
+    "get_consult_status",
+    "get_contact",
+    "get_delivery_status",
+    "get_demo_status",
+    "get_enquiry_status",
+    "get_exam_status",
+    "get_features",
+    "get_fee_estimate",
+    "get_flower_order_status",
+    "get_hold_status",
+    "get_house_guide",
+    "get_issue_status",
+    "get_itinerary",
+    "get_job_status",
+    "get_landscaping_estimate",
+    "get_meeting_status",
+    "get_menu",
+    "get_move_status",
+    "get_moving_estimate",
+    "get_order_status",
+    "get_package_estimate",
+    "get_pickup_status",
+    "get_plan_estimate",
+    "get_pricing",
+    "get_proposal_status",
+    "get_quote_requirements",
+    "get_quote_status",
+    "get_request_status",
+    "get_reservation_status",
+    "get_rsvp_status",
+    "get_service_estimate",
+    "get_session_status",
+    "get_shipping_estimate",
+    "get_shoot_status",
+    "get_showing_status",
+    "get_signup_status",
+    "get_solar_estimate",
+    "get_subscription_status",
+    "get_survey_status",
+    "get_ticket_request_status",
+    "get_tour_status",
+    "get_treatment_estimate",
+    "get_treatment_status",
+    "get_visit_options",
+    "get_visit_status",
+    "list_boxes",
+    "list_plans_and_meals",
+    "lookup_case_status",
+    "lookup_flight_status",
+    "lookup_membership_reference",
+    "lookup_membership_status",
+    "lookup_refill_status",
+    "lookup_request_status",
+    "lookup_service_alerts",
+    "lookup_service_status",
+    "lookup_signup_status",
+    "match_home",
+    "my_registration",
+    "open_form",
+    "open_my_trip",
+    "order_flowers",
+    "place_delivery_order",
+    "place_order",
+    "place_pickup_order",
+    "plan_stay",
+    "report_issue",
+    "request_appointment",
+    "request_assessment",
+    "request_assessment_call",
+    "request_booking",
+    "request_box_order",
+    "request_cabin_hold",
+    "request_callback",
+    "request_catering_quote",
+    "request_class_spot",
+    "request_cleaning",
+    "request_consultation",
+    "request_custom_proposal",
+    "request_day_pass",
+    "request_demo",
+    "request_discovery_call",
+    "request_electrician_visit",
+    "request_exam",
+    "request_furniture_order",
+    "request_intake",
+    "request_intro_call",
+    "request_meeting",
+    "request_move",
+    "request_onboarding",
+    "request_pet_appointment",
+    "request_pickup",
+    "request_plumber_visit",
+    "request_quote",
+    "request_reservation",
+    "request_rsvp",
+    "request_salon_appointment",
+    "request_service",
+    "request_service_appointment",
+    "request_service_visit",
+    "request_session",
+    "request_shoot",
+    "request_showing",
+    "request_site_survey",
+    "request_site_visit",
+    "request_space_booking",
+    "request_strategy_call",
+    "request_subscription",
+    "request_support",
+    "request_table",
+    "request_tickets",
+    "request_tour",
+    "request_tour_booking",
+    "request_treatment",
+    "request_trip_booking",
+    "request_venue_hold",
+    "request_visit",
+    "request_wedding_consultation",
+    "reserve_for_pickup",
+    "reserve_for_tryon",
+    "reserve_gadget",
+    "reserve_item",
+    "search_apparel",
+    "search_beauty_products",
+    "search_gadgets",
+    "search_help",
+    "search_items",
+    "search_products",
+    "send_chamber_enquiry",
+    "send_event_enquiry",
+    "show_menu",
+    "submit_maintenance_request",
+    "submit_membership_request",
+    "submit_service_request",
+    "submit_support_request",
+    "submit_volunteer_or_donation_request",
+    "submit_volunteer_signup",
+    "track_shipment",
+    "write_to_member"
+  ],
+  "reservedFiles": [
+    "area",
+    "blocked",
+    "bookable",
+    "business",
+    "catalog",
+    "committees",
+    "events",
+    "exhibitors",
+    "faqs",
+    "features",
+    "guides",
+    "hours",
+    "house",
+    "inventory",
+    "locations",
+    "members",
+    "news",
+    "newsletter",
+    "places",
+    "plans",
+    "prices",
+    "rates",
+    "records",
+    "services",
+    "sessions",
+    "social",
+    "speakers",
+    "sponsors",
+    "trip_days",
+    "trip_items",
+    "trip_prices",
+    "trips"
+  ],
+  "columnTypes": [
+    "text",
+    "longtext",
+    "choice",
+    "number",
+    "date",
+    "link",
+    "image"
   ]
 };
 

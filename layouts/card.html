@@ -721,6 +721,7 @@ function receive(sc) {
     if (sc.view === "agenda" && sc.agenda) { state.ses = ""; state.f.aq = sc.agenda.query || ""; }
     // 0.50.0: a trip asked for one day opens on that day.
     if (sc.view === "itinerary" && sc.itinerary) state.texp = sc.itinerary.day || 0;
+    if (sc.view === "collection" && sc.collection) { state.f.cq = sc.collection.query || ""; if (sc.collection.open) { state.sel = sc.collection.open; sc.view = "collitem"; } }
     if (sc.view === "members" && sc.members) { (sc.members.items || []).forEach((x) => { state.mem[x.id] = x; }); state.f.mq = sc.members.query || ""; }
     state.view = sc.view;
   }
@@ -1743,6 +1744,42 @@ function infoView() {
   return top(d.name ? "About " + d.name : q ? q.title : "Questions") + about + list +
     '<div class="form" style="margin-top:14px">' + field("question", faqs.length ? "Something else?" : "Your question", { type: "textarea", placeholder: (q && q.example) || "" }) + errLine() +
     '<div class="actions">' + primary("Ask in the chat", "askq") + '</div><div class="note" style="margin-top:0">What you see here is the information the business has published. Other questions are answered in the chat from the same information.</div></div>' + links("question");
+}
+// ---- Collections (version 0.62.0): a list the industry defines (collections.ts) ----
+// A search, the business's own values as filter chips, rows or tiles, and an entry on its own screen with its columns.
+// Every value is drawn as text; links open through data-href, images were made safe by the server (tripImage).
+const colArgs = (over) => { const d = state.data.collection || {}; const f = {}; (d.filters || []).forEach((x) => { if (x.selected) f[x.key] = x.selected; }); return clean(Object.assign({ query: v("cq") }, f, over || {})); };
+const findCollection = (over) => { const d = state.data.collection || {}; const a = colArgs(over); run(d.tool, a, (a.query ? "Which " + (d.title || "").toLowerCase() + " match " + a.query + "?" : "Show me the " + (d.title || "").toLowerCase() + ".")); };
+const colImage = (d, x) => { const c = (d.columns || []).find((k) => k.type === "image" && x.values[k.key]); return c ? x.values[c.key] : ""; };
+const colLine = (d, x) => (d.columns || []).filter((c) => c.key !== "name" && x.values[c.key] && (c.type === "choice" || c.type === "number" || c.type === "date")).slice(0, 2).map((c) => x.values[c.key]).join(" · ");
+const colText = (d, x) => { const c = (d.columns || []).find((k) => (k.type === "longtext" || k.type === "text") && k.key !== "name" && x.values[k.key]); return c ? x.values[c.key] : ""; };
+function collectionView() {
+  const d = state.data.collection || { items: [], filters: [] };
+  const chips = (f) => '<div class="qlabel" style="margin-top:8px">' + esc(f.label) + '</div><div class="qs">' + chip("All", "data-cfil", f.key + ":", !f.selected) + (f.values || []).map((x) => chip(esc(x.name) + " <small>" + x.count + "</small>", "data-cfil", f.key + ":" + x.name, x.name === f.selected)).join("") + "</div>";
+  const head = top(d.title || "List") + (d.sample ? '<div class="note">Sample data, not a real business.</div>' : "") +
+    '<div class="find"><input type="search" data-f="cq" data-enter="cfind" value="' + esc(state.f.cq || "") + '" placeholder="Search"><button class="btn" data-act="cfind">Search</button></div>' +
+    (d.filters || []).filter((f) => (f.values || []).length > 1).map(chips).join("");
+  const items = d.items || [];
+  if (!items.length) return head + '<div class="empty">Nothing matches' + (d.query ? ' "' + esc(d.query) + '"' : "") + ". Try other words or another filter.</div>" + errLine();
+  const grid = d.layout === "grid";
+  const rows = grid
+    ? items.map((x) => { const img = colImage(d, x); return '<button class="ltile" data-citem="' + esc(x.id) + '">' + (img ? '<span class="lg"><img src="' + esc(img) + '" alt="" loading="lazy" data-fallback="' + esc(initials(x.values.name)) + '"></span>' : '<span class="lg mono">' + esc(initials(x.values.name)) + "</span>") + "<b>" + esc(x.values.name) + '</b><span class="lcat">' + esc(colLine(d, x)) + "</span></button>"; }).join("")
+    : items.map((x) => '<div class="it"><button class="rowb" data-citem="' + esc(x.id) + '"><div class="nm"><b>' + esc(x.values.name) + '</b><span class="qlabel">' + esc(colLine(d, x)) + "</span></div>" + (colText(d, x) ? '<div class="bl clamp">' + esc(colText(d, x)) + "</div>" : "") + "</button></div>").join("");
+  return head + '<div class="' + (grid ? "lgrid" : "list") + '">' + rows + "</div>" + (d.more ? '<div class="note">' + d.more + " more: search or choose a filter to narrow the list.</div>" : "") + errLine() +
+    '<div class="note">This is what ' + esc(d.business || "the business") + " lists.</div>";
+}
+function collectionItemView() {
+  const d = state.data.collection || { items: [], columns: [] };
+  const x = (d.items || []).find((i) => i.id === state.sel);
+  if (!x) return collectionView();
+  const cols = d.columns || [];
+  const img = colImage(d, x);
+  const facts = cols.filter((c) => c.key !== "name" && x.values[c.key] && c.type !== "image" && c.type !== "link" && c.type !== "longtext").map((c) => "<tr><td>" + esc(c.label) + "</td><td>" + esc(x.values[c.key]) + "</td></tr>").join("");
+  const long = cols.filter((c) => c.type === "longtext" && x.values[c.key]).map((c) => '<p class="about" style="margin:8px 0 0">' + esc(x.values[c.key]) + "</p>").join("");
+  const links = cols.filter((c) => c.type === "link" && /^https:\/\//.test(x.values[c.key] || "")).map((c) => '<button class="btn go" data-href="' + esc(x.values[c.key]) + '">' + esc(c.label) + "</button>").join("");
+  return top(x.values.name) + (img ? '<img class="cimg" src="' + esc(img) + '" alt="">' : "") + long + (facts ? '<table class="tbl">' + facts + "</table>" : "") +
+    (links ? '<div class="actions" style="margin-top:14px">' + links + "</div>" : "") +
+    '<button class="tile wide morebtn" data-own="1" data-ask="' + esc("Tell me more about " + x.values.name + " from " + (d.business || "the business") + ". Tell me which parts are not from " + (d.business || "the business") + "'s list.") + '">Ask for more</button>';
 }
 // ---- Members (version 0.12.0, coworking) ----
 // The business's published member businesses: a search box, its own industries and sites as filters, a member
@@ -2995,6 +3032,8 @@ function openOption(i) {
   if ((o.kind === "tour" || o.kind === "daypass") && inCard() && vlocs(o.kind).length) { openVisit(o.kind, ""); return; }
   // 0.12.0: the member list opens unfiltered, by industry.
   if (o.kind === "members") { state.f.mq = ""; run(o.tool, {}, o.example); return; }
+  // 0.62.0: a collection opens unfiltered.
+  if (o.kind === "collection") { state.f.cq = ""; run(o.tool, {}, o.example); return; }
   // 0.25.0: committees, and news, events and newsletter, each on its own screen.
   if (o.kind === "forms") { state.formSel = ""; state.data.forms = { items: p().forms || [] }; state.view = "forms"; render(); return; }
   if (o.kind === "committees" || o.kind === "news" || o.kind === "social") { state.socNet = ""; run(o.tool, { section: o.kind }, o.example); return; }
@@ -3026,7 +3065,7 @@ function render() {
   // 0.35.0: a video that is playing is left alone when the card is drawn again for something else (a new theme).
   const playing = app.querySelector(".player iframe");
   if (state.view === "video" && state.vid && !state.vidBlocked && playing && playing.dataset.vid === (videoOf(state.vid) || {}).id) return;
-  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView, tickets: ticketsView, myreg: myregView };
+  const views = { cform: cformView, mwrite: mwriteView, memberMessage: memberMessageView, aform: aformView, alist: alistView, adetail: adetailView, adone: adoneView, await: awaitView, item: itemView, option: optionView, info: infoView, events: eventsScreen, menu: menuView, form: formView, asked: askedView, catalog: catalogView, availability: availabilityView, slots: slotsView, estimate: estimateView, status: statusView, contact: contactView, request: requestView, sent: sentView, whatsapp: whatsappView, members: membersView, member: memberView, collection: collectionView, collitem: collectionItemView, committees: committeesView, news: newsView, social: socialView, video: videoView, forms: formsView, collab: collabView, visitform: visitFormView, visit: visitView, directOffer: directOfferView, visits: visitsView, places: placesView, area: areaView, house: houseView, plan: planView, planform: planFormView, match: matchView, matchform: matchFormView, trip: tripView, trips: () => (tripLayout() === "cards" ? tripsViewC() : tripsView()), tripcode: tripCodeView, itinerary: () => (tripLayout() === "cards" ? itineraryViewC() : itineraryView()), tday: () => (tripLayout() === "cards" ? tripDayViewC() : itineraryView()), tprices: () => (tripLayout() === "cards" ? tripPricesViewC() : tripPricesView()), features: featuresView, pricing: pricingView, guides: guidesView, support: supportView, agenda: agendaView, speakers: speakersView, speaker: speakerView, exhibitors: exhibitorsView, exhibitor: exhibitorView, enquiry: enquiryView, tickets: ticketsView, myreg: myregView };
   const body = state.view === "loading" || !state.plugin ? '<div class="empty">Loading…</div>' : (views[state.view] || menuView)();
   const ownHead = state.view === "menu" && p().bound && activeLayout() && LAYOUTS[activeLayout()].own && !picker();
   // A tool run from the menu (Availability and price on a hotel, Members, Agenda…) stays on the menu while it works and
@@ -3299,6 +3338,9 @@ function render() {
   on('[data-act="mfind"]', () => findMembers());
   on("[data-mind]", (b) => findMembers({ industry: b.dataset.mind }));
   on("[data-mloc]", (b) => findMembers({ location: b.dataset.mloc }));
+  on('[data-act="cfind"]', () => findCollection());
+  on("[data-cfil]", (b) => { const [k, ...rest] = b.dataset.cfil.split(":"); findCollection({ [k]: rest.join(":") }); });
+  on("[data-citem]", (b) => { state.sel = b.dataset.citem; state.view = "collitem"; state.error = ""; render(); });
   on("[data-member]", (b) => { state.sel = b.dataset.member; if (listPanel()) { state.fly = state.sel; render(); return; } state.fly = ""; state.view = "member"; state.error = ""; render(); });
   on('[data-act="collab"]', () => { state.view = "collab"; state.error = ""; render(); });
   on('[data-act="mwrite"]', () => { state.fly = ""; state.view = "mwrite"; state.error = ""; render(); });

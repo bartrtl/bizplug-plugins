@@ -1,6 +1,6 @@
 # BizPlug Plumbing
 
-Version 0.61.0. Estimate and book a plumber for plumbing businesses.
+Version 0.62.0. Estimate and book a plumber for plumbing businesses.
 
 - Main function: Estimate and book a plumber
 - MCP server URL: `https://mcp.bizplug.ai/plugin/plumbing` (streamable HTTP, no sign-in)
@@ -32,6 +32,7 @@ Version 0.61.0. Estimate and book a plumber for plumbing businesses.
 
 ## Changes
 
+- **0.62.0** (28 November 2026): Collections: searchable lists an industry defines, such as climbing routes or recipes, each with its own data file and card screen.
 - **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.
 - **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.
 - **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.

@@ -8,6 +8,7 @@
 //   track : look up a reference, submit a request, check status
 import { contributions, functionOf } from "@/lib/contributed-industries";
 import { isPreviewSlug, previewFunctions } from "@/lib/preview-registry";
+import type { CollectionDef } from "@/lib/collections";
 export type Engine = "order" | "stay" | "appt" | "quote" | "track";
 export type Span = "nights" | "days" | "single";
 
@@ -41,6 +42,8 @@ export type IndustryFunction = {
   visits?: boolean; // the business may publish its locations with tours and day passes: from 0.22.0 get_visit_options, book_tour and request_day_pass, and locations.csv (plugins.ts, plugin-data.ts, visits.ts)
   concierge?: boolean; // vacation rentals: from 0.48.0 the concierge (local picks, area guide and events, house guide, Which home fits, Plan my stay, Continue on WhatsApp; concierge.ts) and places.csv, area.csv, events.csv, house.csv
   itinerary?: "tour" | "dmc"; // tour operators and DMCs: from 0.50.0 trips day by day (Itineraries, My trip by code, a DMC proposal's price breakdown; itinerary.ts) and trips.csv, trip_days.csv, trip_items.csv, trip_prices.csv
+  /** 0.62.0 (`collections`): searchable lists the industry defines in its file, each a data file, a read-only tool, a menu option and a card screen (collections.ts). Contributed industries only. */
+  collections?: CollectionDef[];
   show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 

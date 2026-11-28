@@ -138,6 +138,42 @@ Add `"options": [...]` to your file to switch on capabilities the plug-in alread
 
 A business in your industry fills in the option's data files like any other; an option whose files are empty shows nothing.
 
+### Collections in your file
+
+A collection is a searchable list your industry defines: climbing routes, recipes, courses, wines, trails. You describe it in your file; BizPlug turns each one into a data file the business fills in (`<key>.csv`), a read-only tool that searches it, a menu option and a screen in the card (search, filter chips, rows or tiles, one entry on its own screen). No code: every value is shown as text, and links and pictures must be https. From plug-in version 0.62.0; at most 3 collections.
+
+```json
+"collections": [{
+  "key": "routes", "tool": "find_routes", "title": "Climbing routes", "noun": "route",
+  "description": "The routes on the walls now, with their grade and wall.",
+  "ask": "Which 6a routes are on the cave wall?",
+  "layout": "list",
+  "columns": [
+    { "key": "name",  "label": "Route",      "type": "text",     "search": true, "example": "Blue Monday" },
+    { "key": "grade", "label": "Grade",      "type": "choice",   "filter": true, "example": "6a" },
+    { "key": "wall",  "label": "Wall",       "type": "choice",   "filter": true, "example": "Cave" },
+    { "key": "notes", "label": "About it",   "type": "longtext", "search": true, "example": "A steep start, then big holds." },
+    { "key": "video", "label": "Beta video", "type": "link",     "example": "https://www.example.com/blue-monday" }
+  ],
+  "sample": [
+    { "name": "Blue Monday", "grade": "6a", "wall": "Cave", "notes": "A steep start, then big holds." },
+    { "name": "Slab Happy",  "grade": "5b", "wall": "Slab", "notes": "Balance and small feet." }
+  ]
+}]
+```
+
+| Field | What it holds |
+| --- | --- |
+| `key` | The data file's name (`key.csv`), lower case; not a file the plug-in already has |
+| `tool` | The search tool's name, lower case with underscores; not a tool the plug-in already has |
+| `title`, `noun` | The menu option's title (30 characters) and one entry in the singular |
+| `description`, `ask` | What the list is (200 characters) and a question a customer would ask about it |
+| `layout` | `list` (rows) or `grid` (tiles with the first `image` column) |
+| `columns` | 2 to 12; the first is always `{ "key": "name", "type": "text" }`. `type`: `text`, `longtext`, `choice`, `number`, `date`, `link`, `image`. `search` on text, longtext or choice columns; `filter` on up to 2 choice columns (they become chips). Every column has an `example`: the template's example row |
+| `sample` | Optional: 1 to 8 made-up rows for your pull request's preview and the sample business |
+
+A collection lists things, not people: the check refuses columns for contact or personal details (email, phone, ID or account numbers, health). Your pull request's preview fills each collection with your `sample` rows (or the example row), so you can try the search in ChatGPT.
+
 ### First: does an existing industry fit?
 
 Most businesses already have their industry here, often under another name. An industry is a kind of plug-in, not a business: every business that uses one gets its own plug-in, with its own name, summary, services, prices, hours, colours and menu layout, built from its own profile. So a dog groomer uses Veterinary & Pet Care or Beauty & Salons, a yoga studio uses Fitness & Gyms, and a vegan restaurant uses Restaurants & Food Service; none of them needs a new industry.
@@ -268,6 +304,7 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `rule` | Optional: what the plug-in must never do or say in this industry |
 | `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
 | `options` | Optional: capabilities to switch on, from [Options in your file](#options-in-your-file) |
+| `collections` | Optional: searchable lists your industry defines, from [Collections in your file](#collections-in-your-file) |
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
 | `author` | Who the industry is credited to: your name or your company's |

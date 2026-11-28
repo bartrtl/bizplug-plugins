@@ -1,6 +1,6 @@
 # BizPlug Beauty & Salons
 
-Version 0.61.0. Book salon services with a stylist for beauty & salons businesses.
+Version 0.62.0. Book salon services with a stylist for beauty & salons businesses.
 
 - Main function: Book salon services with a stylist
 - MCP server URL: `https://mcp.bizplug.ai/plugin/beauty` (streamable HTTP, no sign-in)
@@ -32,6 +32,7 @@ Version 0.61.0. Book salon services with a stylist for beauty & salons businesse
 
 ## Changes
 
+- **0.62.0** (28 November 2026): Collections: searchable lists an industry defines, such as climbing routes or recipes, each with its own data file and card screen.
 - **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.
 - **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.
 - **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.
