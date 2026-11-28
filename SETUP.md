@@ -124,6 +124,7 @@ A published plug-in keeps the version it was published with until you press Upgr
 | 0.61.0 | 2026-11-28 | On a plug-in for homes booked by the night, the booking screen lists Homes instead of Rooms, has no Rooms counter, and says your business confirms the request, not "the hotel". Hotels are unchanged. |
 | 0.62.0 | 2026-11-28 | Your industry may define its own lists (for example routes, recipes or courses). Fill in each list's data file, publish, and customers search it in the card: filters, pictures and links, an entry on its own screen. Only industries that define a list get this. |
 | 0.63.0 | 2026-11-28 | Your industry may name its menu options in its own words (for example "Find a session" instead of "Availability and price") and give the assistant more of its own rules. Only industries that define them change. |
+| 0.64.0 | 2026-11-28 | Your industry may come with request forms of its own (for example a warranty claim or a group enquiry). They show on your card next to your own forms and are sent only to your own channels: your requests inbox, webhook, Slack or another destination. Without a channel set up they are not offered. |
 
 ## Testing
 

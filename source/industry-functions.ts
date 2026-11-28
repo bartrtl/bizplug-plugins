@@ -9,6 +9,7 @@
 import { contributions, functionOf } from "@/lib/contributed-industries";
 import { isPreviewSlug, previewFunctions } from "@/lib/preview-registry";
 import type { CollectionDef } from "@/lib/collections";
+import type { CustomForm } from "@/lib/custom-forms";
 export type Engine = "order" | "stay" | "appt" | "quote" | "track";
 export type Span = "nights" | "days" | "single";
 
@@ -50,6 +51,8 @@ export type IndustryFunction = {
   rules?: string[];
   /** A card theme suggested for the industry's businesses with no colours of their own (cardExtras). Contributed industries only. */
   cardTheme?: string;
+  /** 0.64.0 (`industryForms`): request forms every business in the industry gets, in the Form Tool's format, sent to the business's own channels only (plugin-mcp.ts formsFor). Contributed industries only. */
+  forms?: CustomForm[];
   show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 

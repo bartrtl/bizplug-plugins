@@ -39,6 +39,8 @@ type IndustryFileRules = {
   columnTypes: string[];
   /** The kinds of menu option whose title an industry may give in its own words (menuTitles). */
   menuKinds: string[];
+  /** Request forms (the Form Tool's format): its limits, field types, names a field may not take, and what a form may not ask for. */
+  forms: { max: number; fields: number; options: number; title: number; when: number; label: number; option: number; done: number; fieldTypes: string[]; reservedFieldKeys: string[]; blocked: { pattern: string; flags: string; what: string }[] };
 };
 
 function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRules, fileName?: string): string[] {
@@ -250,7 +252,54 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
     else p.rules.forEach((r, i) => { if (!isText(r) || r.length > 300) out.push(`rules[${i}] must be text of at most 300 characters.`); });
   }
   if (p.cardTheme !== undefined && !(typeof p.cardTheme === "string" && /^[a-z][a-z0-9-]{1,40}$/.test(p.cardTheme))) out.push("cardTheme must be a theme's id, as in themes/<id>.json or THEMES.md.");
-  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options", "collections", "menuTitles", "rules", "cardTheme"];
+  // Request forms every business in the industry gets (sent to the business's own channels only).
+  if (p.forms !== undefined) {
+    const F = rules.forms;
+    if (!Array.isArray(p.forms) || p.forms.length < 1 || p.forms.length > F.max) out.push(`forms must be a list of 1 to ${F.max} forms.`);
+    else {
+      const used = new Set<string>([...names.map(String), ...(Array.isArray(p.collections) ? (p.collections as Record<string, unknown>[]).map((c) => String(c?.tool)) : [])]);
+      const blocked = F.blocked.map((b) => ({ re: new RegExp(b.pattern, b.flags), what: b.what }));
+      const asks = (t: string) => blocked.find((b) => b.re.test(t))?.what;
+      (p.forms as unknown[]).forEach((raw, i) => {
+        const at = `forms[${i}]`;
+        if (!raw || typeof raw !== "object" || Array.isArray(raw)) { out.push(`${at} must be an object.`); return; }
+        const f = raw as Record<string, unknown>;
+        const key = String(f.key ?? "");
+        if (!/^[a-z][a-z0-9_]{2,39}$/.test(key)) out.push(`${at}.key must be a tool name: 3 to 40 lower-case letters, digits or underscores, starting with a letter.`);
+        else if (rules.commonTools.includes(key) || rules.reservedTools.includes(key) || used.has(key)) out.push(`${at}.key ${key} is already a tool name: choose another.`);
+        used.add(key);
+        for (const [k, max] of [["title", F.title], ["when", F.when]] as const) if (!isText(f[k]) || (f[k] as string).length > max) out.push(`${at}.${k} must be text of at most ${max} characters.`);
+        if (f.done !== undefined && (!isText(f.done) || f.done.length > F.done)) out.push(`${at}.done must be text of at most ${F.done} characters.`);
+        if ([f.key, f.title, f.when, f.done].some((t) => /bizplug/i.test(String(t ?? "")))) out.push(`${at}: a form speaks for the business, so it does not say "BizPlug".`);
+        const fields = f.fields;
+        if (!Array.isArray(fields) || fields.length < 1 || fields.length > F.fields) { out.push(`${at}.fields must be a list of 1 to ${F.fields} fields.`); return; }
+        const seen = new Set<string>();
+        fields.forEach((rf, j) => {
+          const fa = `${at}.fields[${j}]`;
+          if (!rf || typeof rf !== "object") { out.push(`${fa} must be an object.`); return; }
+          const x = rf as Record<string, unknown>;
+          const fk = String(x.key ?? "");
+          if (!/^[a-z][a-z0-9_]{0,29}$/.test(fk)) out.push(`${fa}.key must be lower-case letters, digits or underscores, starting with a letter.`);
+          else if (F.reservedFieldKeys.includes(fk)) out.push(`${fa}.key ${fk} is a name the plug-in uses itself: choose another.`);
+          else if (seen.has(fk)) out.push(`${fa}.key ${fk} is used twice.`);
+          seen.add(fk);
+          if (!isText(x.label) || x.label.length > F.label) out.push(`${fa}.label must be text of at most ${F.label} characters.`);
+          if (!F.fieldTypes.includes(String(x.type))) out.push(`${fa}.type must be one of: ${F.fieldTypes.join(", ")}.`);
+          if (x.required !== undefined && typeof x.required !== "boolean") out.push(`${fa}.required must be true or false.`);
+          const opts = Array.isArray(x.options) ? x.options : [];
+          if (x.type === "select") {
+            if (opts.length < 2 || opts.length > F.options || opts.some((o) => !isText(o) || (o as string).length > F.option)) out.push(`${fa}.options must be 2 to ${F.options} choices of at most ${F.option} characters.`);
+            else if (new Set(opts.map((o) => String(o).toLowerCase())).size !== opts.length) out.push(`${fa}.options has the same choice twice.`);
+          } else if (x.options !== undefined) out.push(`${fa}.options is only for a select field.`);
+          const what = asks([x.label, ...opts].map((v) => String(v ?? "")).join(" · "));
+          if (what) out.push(`${fa}: a form may not ask for ${what}.`);
+          for (const k of Object.keys(x)) if (!["key", "label", "type", "required", "options"].includes(k)) out.push(`${fa} has an unknown key: ${k}.`);
+        });
+        for (const k of Object.keys(f)) if (!["key", "title", "when", "fields", "done"].includes(k)) out.push(`${at} has an unknown key: ${k}.`);
+      });
+    }
+  }
+  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options", "collections", "menuTitles", "rules", "cardTheme", "forms"];
   for (const k of Object.keys(p)) if (!known.includes(k)) out.push(`unknown field: ${k}.`);
   if (/(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)/.test(JSON.stringify(p))) out.push("the file looks like it holds a secret: remove it.");
   return out;
@@ -1462,7 +1511,77 @@ const RULES: IndustryFileRules = {
     "social",
     "forms",
     "tickets"
-  ]
+  ],
+  "forms": {
+    "max": 3,
+    "fields": 10,
+    "options": 12,
+    "title": 40,
+    "when": 200,
+    "label": 60,
+    "option": 40,
+    "done": 200,
+    "fieldTypes": [
+      "text",
+      "textarea",
+      "select",
+      "number",
+      "date",
+      "time",
+      "boolean"
+    ],
+    "reservedFieldKeys": [
+      "business",
+      "business",
+      "category",
+      "country",
+      "email",
+      "exclude",
+      "industry",
+      "limit",
+      "name",
+      "notes",
+      "offset",
+      "phone",
+      "prefer_countries",
+      "prefer_programmes",
+      "priorities",
+      "programme",
+      "q",
+      "query",
+      "reference",
+      "startup",
+      "startups",
+      "thesis"
+    ],
+    "blocked": [
+      {
+        "pattern": "\\b(card|credit card|debit card)\\s*(number|no\\.?|#|details)\\b|\\bcvv\\b|\\bcvc\\b|\\bsecurity code\\b|\\bexpir(y|ation) date\\b",
+        "flags": "i",
+        "what": "payment card details"
+      },
+      {
+        "pattern": "\\bpass ?word\\b|\\bpass ?code\\b|\\bpin( code| number)?\\b",
+        "flags": "i",
+        "what": "a password or PIN"
+      },
+      {
+        "pattern": "\\bsocial security\\b|\\bssn\\b|\\bnational (id|identity|insurance)\\b|\\bpassport (number|no\\.?|#)\\b|\\bdriv(er|ing)'?s? licen[cs]e (number|no\\.?|#)\\b|\\btax (id|number)\\b",
+        "flags": "i",
+        "what": "an identity number"
+      },
+      {
+        "pattern": "\\bbank account\\b|\\biban\\b|\\brouting number\\b|\\bsort code\\b|\\baccount number\\b",
+        "flags": "i",
+        "what": "bank details"
+      },
+      {
+        "pattern": "\\bmedical (history|condition|record)s?\\b|\\bhealth (condition|issue|problem|history|record)s?\\b|\\bdiagnos[ei]s\\b|\\bmedications?\\b|\\bprescriptions?\\b",
+        "flags": "i",
+        "what": "health details"
+      }
+    ]
+  }
 };
 
 const file = process.argv[2];

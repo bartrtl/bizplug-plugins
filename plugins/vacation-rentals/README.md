@@ -1,6 +1,6 @@
 # BizPlug Vacation Rentals
 
-Version 0.63.0. Home availability, nightly rates and booking for vacation rentals businesses.
+Version 0.64.0. Home availability, nightly rates and booking for vacation rentals businesses.
 
 - Main function: Home availability, nightly rates and booking
 - MCP server URL: `https://mcp.bizplug.ai/plugin/vacation-rentals` (streamable HTTP, no sign-in)
@@ -44,6 +44,7 @@ Version 0.63.0. Home availability, nightly rates and booking for vacation rental
 
 ## Changes
 
+- **0.64.0** (28 November 2026): Industry forms: request forms your industry gives every business, such as a warranty claim, sent to your own inbox.
 - **0.63.0** (28 November 2026): Industry words: an industry's menu speaks its own language, with its own titles and rules.
 - **0.62.0** (28 November 2026): Collections: searchable lists an industry defines, such as climbing routes or recipes, each with its own data file and card screen.
 - **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.

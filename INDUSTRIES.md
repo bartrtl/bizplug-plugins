@@ -190,6 +190,26 @@ The engine and the options name things in general words ("Availability and price
 | `rules` | 1 to 5 more rules the assistant always follows, at most 300 characters each, after `rule` |
 | `cardTheme` | A theme from [THEMES.md](THEMES.md) for the industry's businesses that chose no colours of their own |
 
+### Request forms in your file
+
+Your industry can give every business a few request forms of its own, such as a warranty claim, a group enquiry or a trade-in. They use the same format as the Form Tool a business uses for its own forms: a tool name (`key`), a `title`, `when` to offer it, up to 10 `fields` and an optional `done` sentence. From plug-in version 0.64.0; at most 3.
+
+```json
+"forms": [{
+  "key": "send_warranty_claim", "title": "Warranty claim",
+  "when": "When a bike or part bought from the shop broke within its warranty.",
+  "fields": [
+    { "key": "bike", "label": "Bike or part", "type": "text", "required": true },
+    { "key": "bought", "label": "When you bought it", "type": "date" },
+    { "key": "problem", "label": "What went wrong", "type": "textarea", "required": true },
+    { "key": "receipt", "label": "Do you have the receipt?", "type": "boolean" }
+  ],
+  "done": "The workshop replies within two working days."
+}]
+```
+
+Field types: `text`, `textarea`, `select`, `number`, `date`, `time`, `boolean`; a `select` has 2 to 12 `options`. A form goes only to the business's own channels (its inbox, webhook, Slack or another destination), never to BizPlug, and is offered only to a business that has set one up; your pull request's sample business shows it and sends nothing. The check refuses a form that asks for payment card details, passwords, identity or bank numbers, or health details, or that says "BizPlug".
+
 ### First: does an existing industry fit?
 
 Most businesses already have their industry here, often under another name. An industry is a kind of plug-in, not a business: every business that uses one gets its own plug-in, with its own name, summary, services, prices, hours, colours and menu layout, built from its own profile. So a dog groomer uses Veterinary & Pet Care or Beauty & Salons, a yoga studio uses Fitness & Gyms, and a vegan restaurant uses Restaurants & Food Service; none of them needs a new industry.
@@ -322,6 +342,7 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `options` | Optional: capabilities to switch on, from [Options in your file](#options-in-your-file) |
 | `collections` | Optional: searchable lists your industry defines, from [Collections in your file](#collections-in-your-file) |
 | `menuTitles`, `rules`, `cardTheme` | Optional: your industry's own words, from [Your industry's own words](#your-industrys-own-words) |
+| `forms` | Optional: request forms every business gets, from [Request forms in your file](#request-forms-in-your-file) |
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
 | `author` | Who the industry is credited to: your name or your company's |

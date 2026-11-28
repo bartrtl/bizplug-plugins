@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.63.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.64.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -484,6 +484,12 @@ export const plugins: IndustryPlugin[] = industries.map(buildPlugin);
 /** The menu a customer sees on the current plug-in version, as the public pages and the portal list it. */
 // An events plug-in lists the venue menu here: the event guide is per business, for a show that published its programme.
 export const currentMenu = (p: IndustryPlugin) => p.menu.filter((o) => o.only !== "legacy" && o.only !== "show" && !o.hidden);
+
+/**
+ * The tool names a business's own Form Tool form may not take: the plug-in's tools and, from 0.64.0, its industry's
+ * forms (industry-functions.ts `forms`). The portal, the data API and profile-check.ts check against this.
+ */
+export const takenFormNames = (industry: string): string[] => [...(getPlugin(industry)?.tools.map((t) => t.name) ?? []), ...(getFunction(industry)?.forms?.map((f) => f.key) ?? [])];
 
 export function getPlugin(slug: string) {
   return plugins.find((p) => p.slug === slug) ?? (isPreviewSlug(slug) ? previewPlugins.get(slug) : undefined);
