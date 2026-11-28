@@ -1,6 +1,6 @@
 # BizPlug Events & Conferences
 
-Version 0.59.0. Venue availability, pricing and date holds for events & conferences businesses.
+Version 0.60.0. Venue availability, pricing and date holds for events & conferences businesses.
 
 - Main function: Venue availability, pricing and date holds
 - MCP server URL: `https://mcp.bizplug.ai/plugin/events` (streamable HTTP, no sign-in)
@@ -35,6 +35,7 @@ Version 0.59.0. Venue availability, pricing and date holds for events & conferen
 
 ## Changes
 
+- **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.
 - **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.
 - **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.

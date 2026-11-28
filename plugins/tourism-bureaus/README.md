@@ -1,6 +1,6 @@
 # BizPlug Tourism Bureaus & Destinations
 
-Version 0.59.0. Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.
+Version 0.60.0. Places to stay and things to do, with booking requests for tourism bureaus & destinations businesses.
 
 - Main function: Places to stay and things to do, with booking requests
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tourism-bureaus` (streamable HTTP, no sign-in)
@@ -33,6 +33,7 @@ Version 0.59.0. Places to stay and things to do, with booking requests for touri
 
 ## Changes
 
+- **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.
 - **0.59.0** (27 November 2026): My registration: attendees can add their LinkedIn profile, which, with their agreement, is looked up and sent to your CRM.
 - **0.58.0** (27 November 2026): Events: attendees can open and correct their own registration from the card, after a code sent to their email.
 - **0.57.0** (27 November 2026): Events: on a computer, a speaker or an agenda session opens in a panel beside the list, with its details, as exhibitors already do.

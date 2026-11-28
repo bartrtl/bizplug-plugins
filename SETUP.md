@@ -120,6 +120,7 @@ A published plug-in keeps the version it was published with until you press Upgr
 | 0.57.0 | 2026-11-27 | For event plug-ins: on a computer, tapping a speaker or a session in the agenda opens it in a panel on the right of the card, beside the list, so people can go through the programme without losing their place. A session's panel has Ask about this session, which continues in the chat. On a phone they open as before. |
 | 0.58.0 | 2026-11-27 | For event plug-ins with Ticket Tailor or Humanitix: when you switch it on, on your Registrations page, the card offers My registration. An attendee types the email they registered with, gets a 6-digit code at that address, and then sees only their own tickets and can correct their name, email or phone. You are told of every change. Nobody sees a registration without the code. |
 | 0.59.0 | 2026-11-27 | My registration takes an attendee's LinkedIn address. When they tick that they agree, and you connected your Apify account, their public LinkedIn profile is looked up and sent to your Twenty CRM or your inbox, tagged with the event and the date and time. Nothing is looked up without the tick. |
+| 0.60.0 | 2026-11-27 | Your plug-in can leave chosen tools out in Claude, with their menu options, while ChatGPT keeps them all. The BizPlug team sets it up with you; until then nothing changes. |
 
 ## Testing
 
