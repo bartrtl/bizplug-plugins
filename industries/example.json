@@ -57,5 +57,129 @@
     ],
     "confirm": "15:30, please.",
     "sent": "Flat tyre repair · Today 15:30 · $15.00"
-  }
+  },
+  "collections": [
+    {
+      "key": "bikes",
+      "tool": "find_bikes",
+      "title": "Bikes for sale",
+      "noun": "bike",
+      "description": "The bikes the shop has in stock, with their type, size and price.",
+      "ask": "Do you have a hybrid bike in size M?",
+      "layout": "grid",
+      "columns": [
+        {
+          "key": "name",
+          "label": "Bike",
+          "type": "text",
+          "search": true,
+          "example": "Trailmaster Hybrid 3"
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "type": "choice",
+          "filter": true,
+          "example": "Hybrid"
+        },
+        {
+          "key": "size",
+          "label": "Frame size",
+          "type": "choice",
+          "filter": true,
+          "example": "M"
+        },
+        {
+          "key": "price",
+          "label": "Price",
+          "type": "number",
+          "example": "649"
+        },
+        {
+          "key": "about",
+          "label": "About it",
+          "type": "longtext",
+          "search": true,
+          "example": "An upright hybrid for commuting, with mudguards and a rack."
+        },
+        {
+          "key": "photo",
+          "label": "Photo",
+          "type": "image",
+          "example": "https://www.example.com/bikes/trailmaster-3.jpg"
+        },
+        {
+          "key": "page",
+          "label": "Product page",
+          "type": "link",
+          "example": "https://www.example.com/bikes/trailmaster-3"
+        }
+      ],
+      "sample": [
+        {
+          "name": "Trailmaster Hybrid 3",
+          "type": "Hybrid",
+          "size": "M",
+          "price": "649",
+          "about": "An upright hybrid for commuting, with mudguards and a rack."
+        },
+        {
+          "name": "Swift Road 105",
+          "type": "Road",
+          "size": "L",
+          "price": "1199",
+          "about": "A light road bike with 22 gears."
+        },
+        {
+          "name": "Little Rider 20",
+          "type": "Kids",
+          "size": "S",
+          "price": "289",
+          "about": "A 20-inch bike for ages 6 to 9."
+        }
+      ]
+    }
+  ],
+  "menuTitles": {
+    "lookup": "Repair times",
+    "request": "Book a repair",
+    "status": "Repair status"
+  },
+  "rules": [
+    "Never promise a repair is finished by a time; the workshop confirms it.",
+    "Bikes for sale are as the shop lists them; the shop confirms stock and the price."
+  ],
+  "cardTheme": "forest",
+  "forms": [
+    {
+      "key": "send_warranty_claim",
+      "title": "Warranty claim",
+      "when": "When a bike or part bought from the shop broke within its warranty.",
+      "fields": [
+        {
+          "key": "bike",
+          "label": "Bike or part",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "bought",
+          "label": "When you bought it",
+          "type": "date"
+        },
+        {
+          "key": "problem",
+          "label": "What went wrong",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "key": "receipt",
+          "label": "Do you have the receipt?",
+          "type": "boolean"
+        }
+      ],
+      "done": "The workshop replies within two working days."
+    }
+  ]
 }

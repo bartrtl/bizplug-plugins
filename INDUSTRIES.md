@@ -140,26 +140,93 @@ A business in your industry fills in the option's data files like any other; an 
 
 ### Collections in your file
 
-A collection is a searchable list your industry defines: climbing routes, recipes, courses, wines, trails. You describe it in your file; BizPlug turns each one into a data file the business fills in (`<key>.csv`), a read-only tool that searches it, a menu option and a screen in the card (search, filter chips, rows or tiles, one entry on its own screen). No code: every value is shown as text, and links and pictures must be https. From plug-in version 0.62.0; at most 3 collections.
+The examples in this and the next two sections come from [`industries/example.json`](industries/example.json), a bike shop that uses each of them.
+
+A collection is a searchable list your industry defines: bikes for sale, climbing routes, recipes, courses, wines, trails. You describe it in your file; BizPlug turns each one into a data file the business fills in (`<key>.csv`), a read-only tool that searches it, a menu option and a screen in the card (search, filter chips, rows or tiles, one entry on its own screen). No code: every value is shown as text, and links and pictures must be https. From plug-in version 0.62.0; at most 3 collections.
 
 ```json
-"collections": [{
-  "key": "routes", "tool": "find_routes", "title": "Climbing routes", "noun": "route",
-  "description": "The routes on the walls now, with their grade and wall.",
-  "ask": "Which 6a routes are on the cave wall?",
-  "layout": "list",
-  "columns": [
-    { "key": "name",  "label": "Route",      "type": "text",     "search": true, "example": "Blue Monday" },
-    { "key": "grade", "label": "Grade",      "type": "choice",   "filter": true, "example": "6a" },
-    { "key": "wall",  "label": "Wall",       "type": "choice",   "filter": true, "example": "Cave" },
-    { "key": "notes", "label": "About it",   "type": "longtext", "search": true, "example": "A steep start, then big holds." },
-    { "key": "video", "label": "Beta video", "type": "link",     "example": "https://www.example.com/blue-monday" }
-  ],
-  "sample": [
-    { "name": "Blue Monday", "grade": "6a", "wall": "Cave", "notes": "A steep start, then big holds." },
-    { "name": "Slab Happy",  "grade": "5b", "wall": "Slab", "notes": "Balance and small feet." }
-  ]
-}]
+"collections": [
+  {
+    "key": "bikes",
+    "tool": "find_bikes",
+    "title": "Bikes for sale",
+    "noun": "bike",
+    "description": "The bikes the shop has in stock, with their type, size and price.",
+    "ask": "Do you have a hybrid bike in size M?",
+    "layout": "grid",
+    "columns": [
+      {
+        "key": "name",
+        "label": "Bike",
+        "type": "text",
+        "search": true,
+        "example": "Trailmaster Hybrid 3"
+      },
+      {
+        "key": "type",
+        "label": "Type",
+        "type": "choice",
+        "filter": true,
+        "example": "Hybrid"
+      },
+      {
+        "key": "size",
+        "label": "Frame size",
+        "type": "choice",
+        "filter": true,
+        "example": "M"
+      },
+      {
+        "key": "price",
+        "label": "Price",
+        "type": "number",
+        "example": "649"
+      },
+      {
+        "key": "about",
+        "label": "About it",
+        "type": "longtext",
+        "search": true,
+        "example": "An upright hybrid for commuting, with mudguards and a rack."
+      },
+      {
+        "key": "photo",
+        "label": "Photo",
+        "type": "image",
+        "example": "https://www.example.com/bikes/trailmaster-3.jpg"
+      },
+      {
+        "key": "page",
+        "label": "Product page",
+        "type": "link",
+        "example": "https://www.example.com/bikes/trailmaster-3"
+      }
+    ],
+    "sample": [
+      {
+        "name": "Trailmaster Hybrid 3",
+        "type": "Hybrid",
+        "size": "M",
+        "price": "649",
+        "about": "An upright hybrid for commuting, with mudguards and a rack."
+      },
+      {
+        "name": "Swift Road 105",
+        "type": "Road",
+        "size": "L",
+        "price": "1199",
+        "about": "A light road bike with 22 gears."
+      },
+      {
+        "name": "Little Rider 20",
+        "type": "Kids",
+        "size": "S",
+        "price": "289",
+        "about": "A 20-inch bike for ages 6 to 9."
+      }
+    ]
+  }
+]
 ```
 
 | Field | What it holds |
@@ -176,12 +243,15 @@ A collection lists things, not people: the check refuses columns for contact or 
 
 ### Your industry's own words
 
-The engine and the options name things in general words ("Availability and price", "Which home fits?"). Your file can name them in your customers' words, add rules, and suggest a card theme. From plug-in version 0.63.0 for the titles and rules; the theme needs no version.
+The engine and the options name things in general words ("Open times", "Request the appointment"). Your file can name them in your customers' words, add rules, and suggest a card theme. From plug-in version 0.63.0 for the titles and rules; the theme needs no version.
 
 ```json
-"menuTitles": { "lookup": "Find a tent", "match": "Which tent fits?", "house": "Tent guide" },
-"rules": ["Never promise a pitch with a sea view; the host confirms the pitch.", "Campfires only where the host allows them."],
-"cardTheme": "south-carolina-beaches"
+"menuTitles": {"lookup":"Repair times","request":"Book a repair","status":"Repair status"},
+"rules": [
+  "Never promise a repair is finished by a time; the workshop confirms it.",
+  "Bikes for sale are as the shop lists them; the shop confirms stock and the price."
+],
+"cardTheme": "forest"
 ```
 
 | Field | What it holds |
@@ -195,17 +265,38 @@ The engine and the options name things in general words ("Availability and price
 Your industry can give every business a few request forms of its own, such as a warranty claim, a group enquiry or a trade-in. They use the same format as the Form Tool a business uses for its own forms: a tool name (`key`), a `title`, `when` to offer it, up to 10 `fields` and an optional `done` sentence. From plug-in version 0.64.0; at most 3.
 
 ```json
-"forms": [{
-  "key": "send_warranty_claim", "title": "Warranty claim",
-  "when": "When a bike or part bought from the shop broke within its warranty.",
-  "fields": [
-    { "key": "bike", "label": "Bike or part", "type": "text", "required": true },
-    { "key": "bought", "label": "When you bought it", "type": "date" },
-    { "key": "problem", "label": "What went wrong", "type": "textarea", "required": true },
-    { "key": "receipt", "label": "Do you have the receipt?", "type": "boolean" }
-  ],
-  "done": "The workshop replies within two working days."
-}]
+"forms": [
+  {
+    "key": "send_warranty_claim",
+    "title": "Warranty claim",
+    "when": "When a bike or part bought from the shop broke within its warranty.",
+    "fields": [
+      {
+        "key": "bike",
+        "label": "Bike or part",
+        "type": "text",
+        "required": true
+      },
+      {
+        "key": "bought",
+        "label": "When you bought it",
+        "type": "date"
+      },
+      {
+        "key": "problem",
+        "label": "What went wrong",
+        "type": "textarea",
+        "required": true
+      },
+      {
+        "key": "receipt",
+        "label": "Do you have the receipt?",
+        "type": "boolean"
+      }
+    ],
+    "done": "The workshop replies within two working days."
+  }
+]
 ```
 
 Field types: `text`, `textarea`, `select`, `number`, `date`, `time`, `boolean`; a `select` has 2 to 12 `options`. A form goes only to the business's own channels (its inbox, webhook, Slack or another destination), never to BizPlug, and is offered only to a business that has set one up; your pull request's sample business shows it and sends nothing. The check refuses a form that asks for payment card details, passwords, identity or bank numbers, or health details, or that says "BizPlug".
@@ -322,7 +413,131 @@ It lists the tools and checks each step: the tool list and definitions, the menu
     ],
     "confirm": "15:30, please.",
     "sent": "Flat tyre repair · Today 15:30 · $15.00"
-  }
+  },
+  "collections": [
+    {
+      "key": "bikes",
+      "tool": "find_bikes",
+      "title": "Bikes for sale",
+      "noun": "bike",
+      "description": "The bikes the shop has in stock, with their type, size and price.",
+      "ask": "Do you have a hybrid bike in size M?",
+      "layout": "grid",
+      "columns": [
+        {
+          "key": "name",
+          "label": "Bike",
+          "type": "text",
+          "search": true,
+          "example": "Trailmaster Hybrid 3"
+        },
+        {
+          "key": "type",
+          "label": "Type",
+          "type": "choice",
+          "filter": true,
+          "example": "Hybrid"
+        },
+        {
+          "key": "size",
+          "label": "Frame size",
+          "type": "choice",
+          "filter": true,
+          "example": "M"
+        },
+        {
+          "key": "price",
+          "label": "Price",
+          "type": "number",
+          "example": "649"
+        },
+        {
+          "key": "about",
+          "label": "About it",
+          "type": "longtext",
+          "search": true,
+          "example": "An upright hybrid for commuting, with mudguards and a rack."
+        },
+        {
+          "key": "photo",
+          "label": "Photo",
+          "type": "image",
+          "example": "https://www.example.com/bikes/trailmaster-3.jpg"
+        },
+        {
+          "key": "page",
+          "label": "Product page",
+          "type": "link",
+          "example": "https://www.example.com/bikes/trailmaster-3"
+        }
+      ],
+      "sample": [
+        {
+          "name": "Trailmaster Hybrid 3",
+          "type": "Hybrid",
+          "size": "M",
+          "price": "649",
+          "about": "An upright hybrid for commuting, with mudguards and a rack."
+        },
+        {
+          "name": "Swift Road 105",
+          "type": "Road",
+          "size": "L",
+          "price": "1199",
+          "about": "A light road bike with 22 gears."
+        },
+        {
+          "name": "Little Rider 20",
+          "type": "Kids",
+          "size": "S",
+          "price": "289",
+          "about": "A 20-inch bike for ages 6 to 9."
+        }
+      ]
+    }
+  ],
+  "menuTitles": {
+    "lookup": "Repair times",
+    "request": "Book a repair",
+    "status": "Repair status"
+  },
+  "rules": [
+    "Never promise a repair is finished by a time; the workshop confirms it.",
+    "Bikes for sale are as the shop lists them; the shop confirms stock and the price."
+  ],
+  "cardTheme": "forest",
+  "forms": [
+    {
+      "key": "send_warranty_claim",
+      "title": "Warranty claim",
+      "when": "When a bike or part bought from the shop broke within its warranty.",
+      "fields": [
+        {
+          "key": "bike",
+          "label": "Bike or part",
+          "type": "text",
+          "required": true
+        },
+        {
+          "key": "bought",
+          "label": "When you bought it",
+          "type": "date"
+        },
+        {
+          "key": "problem",
+          "label": "What went wrong",
+          "type": "textarea",
+          "required": true
+        },
+        {
+          "key": "receipt",
+          "label": "Do you have the receipt?",
+          "type": "boolean"
+        }
+      ],
+      "done": "The workshop replies within two working days."
+    }
+  ]
 }
 ```
 
