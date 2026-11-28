@@ -5,6 +5,7 @@
 // quoted before anything is built.
 import type { Engine, Span } from "@/lib/industry-functions";
 import { CUSTOMER_LINKS, type CustomerLinkKey } from "@/lib/customer-links";
+import { SUPABASE_SQL, SUPABASE_TABLE } from "@/lib/supabase-table";
 
 export type AddonStatus = "included" | "setup" | "custom";
 export type AddonGroup = "requests" | "chat" | "website" | "ticketing" | "forms" | "payments" | "calendars" | "reviews" | "social" | "access";
@@ -217,6 +218,33 @@ const TWENTY: Addon = {
     `Paste it here; leave the address empty for Twenty's cloud, or give your own https address if you host Twenty yourself. Press Save: BizPlug checks the key with Twenty first. ${DEST_END}`,
     "Press Add a test person and look for BizPlug test in your People, with a note on it.",
     "From then on each request adds or finds the person by email and adds a note titled with the event or plug-in, the request and the date and time. Attendees who share their LinkedIn profile (My registration) get it on their person and in a note.",
+  ],
+  link: destLink,
+};
+const SUPABASE: Addon = {
+  id: "supabase", name: "Supabase", group: "requests", status: "included",
+  what: "Every request added as a row in a table of your own Supabase database.",
+  needs: [`A Supabase project with the table ${SUPABASE_TABLE} (the SQL is on this card).`, "The project URL and an API key: a publishable key with the insert policy, or a secret key."],
+  value: "Each request lands in your own Postgres database, where your app, your agents and your reports can read it.",
+  steps: [
+    `In Supabase, open the SQL editor of your project and run: ${SUPABASE_SQL.replace(/\n/g, " ")} It makes the table and lets the publishable key add rows only, never read or change them.`,
+    "Open Project Settings: copy the Project URL (Data API) and the publishable key (API Keys). A secret key also works without the policy, but it can read and change your whole database.",
+    `Paste them here; name another table if you made one with the same columns. Press Save: BizPlug checks the key and the table with Supabase first. ${DEST_END}`,
+    `Press Add a test row and look for it in the Table editor, in ${SUPABASE_TABLE}.`,
+  ],
+  link: destLink,
+};
+const OBSIDIAN: Addon = {
+  id: "obsidian", name: "Obsidian", group: "requests", status: "included",
+  what: "Every request added as a note in your Obsidian vault, with its details in the note's properties.",
+  needs: ["Obsidian with the community plug-in Local REST API, on a computer that stays on.", "A tunnel (Cloudflare Tunnel, ngrok or Tailscale Funnel) that gives the plug-in a public https address."],
+  value: "Each request becomes a note next to the rest of your notes, ready to link, tag and follow up.",
+  steps: [
+    "In Obsidian, open Settings, Community plug-ins, Browse, and install and enable Local REST API. Copy the API key from its settings.",
+    "Obsidian runs on your computer, so BizPlug can only reach it through a tunnel. Point Cloudflare Tunnel, ngrok or Tailscale Funnel at the plug-in (https://127.0.0.1:27124, or the non-encrypted http://127.0.0.1:27123 if you switch it on) and copy the https address the tunnel gives you.",
+    `Paste the address and the key, and name a folder or leave it empty for BizPlug requests. Press Save: BizPlug checks with the plug-in that the key is accepted. ${DEST_END}`,
+    "Press Add a test note and look for it in the folder.",
+    "A note is added only while that computer, Obsidian and the tunnel are running. A request at another time is not added there, so keep your requests inbox or another channel on as well.",
   ],
   link: destLink,
 };
@@ -487,7 +515,7 @@ const TICKET_TAILOR: Addon = {
   link: { label: "How Ticket Tailor works with your plug-in", href: "/how-to/plug-in/ticket-tailor" },
 };
 
-export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, twenty: TWENTY, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, calendarLimit };
+export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, twenty: TWENTY, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, supabase: SUPABASE, obsidian: OBSIDIAN, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] {
@@ -499,7 +527,7 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
   const ticketing = show ? [TICKET_TAILOR, HUMANITIX, MY_REGISTRATION, LINKEDIN_APIFY] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, TWENTY, NOTION, TRELLO, AIRTABLE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, TWENTY, NOTION, TRELLO, AIRTABLE, SUPABASE, OBSIDIAN, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 
