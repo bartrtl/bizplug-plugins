@@ -29,6 +29,8 @@ type IndustryFileRules = {
   existing: { slug: string; name: string; group: string; engine: string; /** What it covers and a customer question. */ about: string }[];
   icons: string[];
   accents: string[];
+  /** Options a file may switch on: each adds tools, menu options and data files already built into the plug-in, on the engines (and stay spans) it was built for. */
+  options: { id: string; adds: string; engines: string[]; spans?: string[] }[];
 };
 
 function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRules, fileName?: string): string[] {
@@ -75,6 +77,19 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
   });
   if (new Set(names).size !== 3) out.push("the three tool names must be different.");
   for (const k of Object.keys(tools)) if (!["lookup", "request", "status"].includes(k)) out.push(`tools has an unknown key: ${k}.`);
+  // Options: capabilities the plug-in already has (members, an event guide, a rental concierge...), switched on by name.
+  if (p.options !== undefined) {
+    if (!Array.isArray(p.options) || p.options.some((o) => typeof o !== "string")) out.push(`options must be a list of option names: ${rules.options.map((o) => o.id).join(", ")}.`);
+    else {
+      if (new Set(p.options).size !== p.options.length) out.push("options lists an option twice.");
+      for (const id of p.options as string[]) {
+        const o = rules.options.find((x) => x.id === id);
+        if (!o) out.push(`options: ${id} is not an option. Options: ${rules.options.map((x) => x.id).join(", ")}.`);
+        else if (!o.engines.includes(String(p.engine)) || (o.spans && p.engine === "stay" && !o.spans.includes(String(p.span))))
+          out.push(`options: ${id} works on ${o.engines.map((e) => (e === "stay" && o.spans ? `stay (span ${o.spans.join(" or ")})` : e)).join(" or ")} only, not on ${String(p.engine)}${p.engine === "stay" ? ` with span ${String(p.span)}` : ""}.`);
+      }
+    }
+  }
   if (p.example !== undefined) {
     const e = p.example as Record<string, unknown> | null;
     if (!e || typeof e !== "object" || !isText(e.business) || !isText(e.item)) out.push("example needs business and item (and optionally price).");
@@ -139,7 +154,7 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
       for (const k of Object.keys(c)) if (!["business", "ask", "answer", "confirm", "sent"].includes(k)) out.push(`chat has an unknown key: ${k}.`);
     }
   }
-  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat"];
+  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options"];
   for (const k of Object.keys(p)) if (!known.includes(k)) out.push(`unknown field: ${k}.`);
   if (/(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)/.test(JSON.stringify(p))) out.push("the file looks like it holds a secret: remove it.");
   return out;
@@ -1013,6 +1028,77 @@ const RULES: IndustryFileRules = {
     "aqua",
     "amber",
     "sky"
+  ],
+  "options": [
+    {
+      "id": "members",
+      "adds": "The business may publish its member businesses (members.csv): people search them and write to one directly. Tools find_members, write_to_member.",
+      "engines": [
+        "stay",
+        "track"
+      ]
+    },
+    {
+      "id": "infoFirst",
+      "adds": "The menu starts with Ask a question; Committees and News & events when the business publishes them (committees.csv, news.csv, newsletter.csv).",
+      "engines": [
+        "track"
+      ]
+    },
+    {
+      "id": "software",
+      "adds": "A software product: the menu is Features, Pricing, Help & guides, Support and Book a demo (features.csv, plans.csv, guides.csv). Tools get_features, get_pricing, search_help, request_support.",
+      "engines": [
+        "appt"
+      ]
+    },
+    {
+      "id": "visits",
+      "adds": "Locations with tours and day passes (locations.csv). Tools get_visit_options, book_tour, request_day_pass.",
+      "engines": [
+        "stay"
+      ],
+      "spans": [
+        "days"
+      ]
+    },
+    {
+      "id": "show",
+      "adds": "A show or conference that publishes its programme gets an event guide: agenda, speakers, exhibitors and sponsors, enquiries (sessions.csv, speakers.csv, exhibitors.csv, sponsors.csv).",
+      "engines": [
+        "stay"
+      ],
+      "spans": [
+        "days"
+      ]
+    },
+    {
+      "id": "concierge",
+      "adds": "A rental concierge: the host's local picks, area guide and events, house guide, which home fits, a day-by-day stay plan (places.csv, area.csv, events.csv, house.csv).",
+      "engines": [
+        "stay"
+      ],
+      "spans": [
+        "nights"
+      ]
+    },
+    {
+      "id": "tourItineraries",
+      "adds": "Trips day by day: published itineraries, and a traveller's own trip by its code (trips.csv, trip_days.csv, trip_items.csv).",
+      "engines": [
+        "stay"
+      ],
+      "spans": [
+        "single"
+      ]
+    },
+    {
+      "id": "dmcItineraries",
+      "adds": "Tailor-made programmes day by day with a price breakdown, and a client's proposal by its code (trips.csv, trip_days.csv, trip_items.csv, trip_prices.csv).",
+      "engines": [
+        "quote"
+      ]
+    }
   ]
 };
 

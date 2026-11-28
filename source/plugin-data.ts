@@ -833,7 +833,8 @@ export function dataSpec(industry: string): PluginDataSpec | null {
       ...engineDatasets(fn.engine, fn.noun, ex).map((d) => (fn.show && d.id === "inventory" ? { ...d, unless: SHOW_FILES } : d)),
       servicesDataset(ex),
       faqDataset(ex),
-      ...(fn.members ? [industry === "chambers" ? chamberMembersDataset : membersDataset] : []),
+      // A member list is spread over a city or region, except in one building of a coworking business (as membersSchemaFor in plugin-mcp.ts).
+      ...(fn.members ? [industry === "coworking" ? membersDataset : chamberMembersDataset] : []),
       ...(fn.visits ? [locationsDataset] : []),
       ...(fn.concierge ? [placesDataset, areaDataset, eventsDataset, houseDataset] : []),
       ...(fn.itinerary ? [tripsDataset(fn.itinerary === "dmc"), tripDaysDataset, tripItemsDataset, ...(fn.itinerary === "dmc" ? [tripPricesDataset] : [])] : []),

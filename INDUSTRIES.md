@@ -76,7 +76,7 @@ Look up a reference the customer already has, send a new request, check its stat
 
 ### Options
 
-A few industries switch on an option that adds tools, menu options and data files. Options are added by the BizPlug team, because each one needs work on the plug-in server and its own plug-in version.
+A few industries switch on an option that adds tools, menu options and data files. Each option is built by the BizPlug team with its own plug-in version; once it exists, a contributed industry can switch it on too (see [Options in your file](#options-in-your-file)).
 
 | Option | What it adds | Tools | Data files | Industries |
 | --- | --- | --- | --- | --- |
@@ -119,7 +119,24 @@ Added by pull request in this repository; each file in [`community/industries/`]
 
 A new industry is one file in this repository, `community/industries/<slug>.json`. You open a pull request that adds it; when the pull request is merged, the file is the industry: BizPlug serves its plug-in, gives it a page on the website and offers it to businesses in the portal. Nobody rebuilds it by hand, and the file stays here as its source: a later pull request that changes the file changes the industry.
 
-An industry added this way runs on one of the engines above, with no option. If it needs something no engine does (a new tool, menu option or data file), say so in an issue instead: that is built by the BizPlug team.
+An industry added this way runs on one of the engines above, and may switch on options that already exist (below). If it needs something no engine or option does (a new tool, menu option or data file), say so in an issue instead: that is built by the BizPlug team.
+
+### Options in your file
+
+Add `"options": [...]` to your file to switch on capabilities the plug-in already has, each on the engine it was built for. The check refuses an option on another engine, and your pull request's preview shows each option with made-up sample data.
+
+| Option | What it adds | Engine | Built in on |
+| --- | --- | --- | --- |
+| `members` | The business may publish its member businesses (members.csv): people search them and write to one directly. Tools find_members, write_to_member. | stay or track | Coworking & Offices, Chambers of Commerce |
+| `infoFirst` | The menu starts with Ask a question; Committees and News & events when the business publishes them (committees.csv, news.csv, newsletter.csv). | track | Chambers of Commerce |
+| `software` | A software product: the menu is Features, Pricing, Help & guides, Support and Book a demo (features.csv, plans.csv, guides.csv). Tools get_features, get_pricing, search_help, request_support. | appt | SaaS & Software |
+| `visits` | Locations with tours and day passes (locations.csv). Tools get_visit_options, book_tour, request_day_pass. | stay (span `days`) | Coworking & Offices |
+| `show` | A show or conference that publishes its programme gets an event guide: agenda, speakers, exhibitors and sponsors, enquiries (sessions.csv, speakers.csv, exhibitors.csv, sponsors.csv). | stay (span `days`) | Events & Conferences |
+| `concierge` | A rental concierge: the host's local picks, area guide and events, house guide, which home fits, a day-by-day stay plan (places.csv, area.csv, events.csv, house.csv). | stay (span `nights`) | Vacation Rentals |
+| `tourItineraries` | Trips day by day: published itineraries, and a traveller's own trip by its code (trips.csv, trip_days.csv, trip_items.csv). | stay (span `single`) | Tour Operators |
+| `dmcItineraries` | Tailor-made programmes day by day with a price breakdown, and a client's proposal by its code (trips.csv, trip_days.csv, trip_items.csv, trip_prices.csv). | quote | Destination Management Companies |
+
+A business in your industry fills in the option's data files like any other; an option whose files are empty shows nothing.
 
 ### First: does an existing industry fit?
 
@@ -250,6 +267,7 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `covers` | The topics the plug-in answers from the business's profile |
 | `rule` | Optional: what the plug-in must never do or say in this industry |
 | `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
+| `options` | Optional: capabilities to switch on, from [Options in your file](#options-in-your-file) |
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
 | `author` | Who the industry is credited to: your name or your company's |
