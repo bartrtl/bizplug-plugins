@@ -50,6 +50,7 @@
     "listingGrid": true,
     "eventPanels": true,
     "askMore": true,
+    "slug": "demo-shop",
     "quick": {
       "categories": [
         {

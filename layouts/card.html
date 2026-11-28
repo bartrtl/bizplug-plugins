@@ -641,7 +641,9 @@ function load() { const ws = oa() && oa().widgetState; if (ws && ws.f) state.f =
 const opt = (kind) => state.options.find((o) => o.kind === kind) || null;
 // The card runs tools itself from version 0.3.0, once it knows which business it is working for.
 const inCard = () => Boolean(p().inCard && oa() && oa().callTool && (p().bound || state.business));
-const biz = () => (p().bound || !state.business ? {} : { business: state.business });
+// Always named when known, also on a business's own plug-in (which ignores it): ChatGPT checks a card's calls against the tool list it
+// kept when the connector was added, and lists kept before 0.59.0's fix still require business on my_registration and find_tickets.
+const biz = () => { const b = state.business || (p().bound && p().slug) || ""; return b ? { business: b } : {}; };
 // From 0.4.0 the card is browsed by tapping (see the top of this file).
 const nav = () => Boolean(p().nav);
 const quick = () => (nav() && p().quick) || {};
