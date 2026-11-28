@@ -8,7 +8,7 @@ import { pricing } from "@/lib/pricing";
 import { siteConfig } from "@/lib/seo";
 import { directoryPath, type DirectoryDef } from "@/lib/directory-store";
 
-export const PLUGIN_VERSION = "0.62.0"; // versions and their notes: plugin-versions.ts
+export const PLUGIN_VERSION = "0.63.0"; // versions and their notes: plugin-versions.ts
 export const MCP_HOST = "https://mcp.bizplug.ai";
 /** Where plug-ins published to test from the client portal answer: the same app, on its test host. */
 export const MCP_TEST_HOST = "https://mcp-test.bizplug.ai";
@@ -25,6 +25,8 @@ export type PluginTool = {
   title: string;
   description: string;
   readOnly: boolean;
+  /** 0.63.0: the engine's title, kept when the industry gives its own (`menuTitles`), for plug-ins on an older version. */
+  defaultTitle?: string;
 };
 
 export type PluginTestCase = { prompt: string; expect: string; shouldTrigger: boolean };
@@ -39,7 +41,7 @@ export type MenuKind = "lookup" | "request" | "question" | "status" | "contact" 
  * published its programme (from 0.18.0), and "venue" options the menu of a venue; plugin-mcp.ts shows one of the two.
  * `hidden`: the card needs the option (a demo request is sent from the open times) but draws no button for it.
  */
-export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean; /** 0.19.0, kind "account": which entry of the business's account menu this is, and its icon. 0.32.0, kind "form": the form's tool name. */ key?: string; icon?: string };
+export type MenuOption = { tool: string; kind: MenuKind; title: string; description: string; example: string; only?: "software" | "legacy" | "show" | "venue"; hidden?: boolean; /** 0.19.0, kind "account": which entry of the business's account menu this is, and its icon. 0.32.0, kind "form": the form's tool name. */ key?: string; icon?: string; /** 0.63.0: the engine's title, kept when the industry gives its own (`menuTitles`). */ defaultTitle?: string };
 
 export type IndustryPlugin = {
   slug: string;
@@ -276,6 +278,31 @@ function buildMenu(i: Industry, fn: IndustryFunction): MenuOption[] {
   ];
 }
 
+/**
+ * 0.63.0: the industry's own titles (`menuTitles` in a contributed industry's file), on the menu option of that kind
+ * and on the tool it calls when the tool carried the same title. Each keeps the engine's title as `defaultTitle`, which
+ * plugin-mcp.ts serves to a plug-in on an older version.
+ */
+function withIndustryTitles(fn: IndustryFunction, tools: PluginTool[], menu: MenuOption[]): { tools: PluginTool[]; menu: MenuOption[] } {
+  const own = fn.menuTitles;
+  if (!own) return { tools, menu };
+  const renamed = new Map<string, { from: string; to: string }>();
+  const outMenu = menu.map((o) => {
+    const to = own[o.kind];
+    if (!to || o.kind === "collection" || to === o.title) return o;
+    renamed.set(o.tool, { from: o.title, to });
+    return { ...o, title: to, defaultTitle: o.title };
+  });
+  const outTools = tools.map((t) => {
+    const r = renamed.get(t.name);
+    // A tool's title may be the option's without its question mark ("Which home fits"): it follows the same way.
+    const bare = (x: string) => x.replace(/\?$/, "");
+    if (!r || bare(t.title) !== bare(r.from)) return t;
+    return { ...t, title: t.title.endsWith("?") ? r.to : bare(r.to), defaultTitle: t.title };
+  });
+  return { tools: outTools, menu: outMenu };
+}
+
 export function buildPlugin(i: Industry): IndustryPlugin {
   const noun = lower(i.name);
   const fn = getFunction(i.slug);
@@ -410,8 +437,7 @@ export function buildPlugin(i: Industry): IndustryPlugin {
     shortDescription: `${fn.title} for ${noun} businesses.`,
     longDescription: `The ${noun} plug-in from BizPlug. Main function: ${lower(fn.title)}. It works from the business's own published profile, covering ${i.covers}, and sends requests to the business to confirm. It never takes payment and only shares what the business has published.${rule} Provided by ${siteConfig.name}: ${siteConfig.url}, ${siteConfig.email}.`,
     defaultPrompts: [fn.title, i.ask, "How do I contact the business?"],
-    tools,
-    menu: buildMenu(i, fn),
+    ...withIndustryTitles(fn, tools, buildMenu(i, fn)),
     testCases: [
       { prompt: "What can this plug-in do?", expect: "Calls show_menu, which shows the menu card; does not list the options again, or lists them exactly as returned where there is no card.", shouldTrigger: true },
       { prompt: fn.title, expect: `Calls ${fn.infoFirst ? "get_business_info" : fn.tools[0]} and answers from the published profile.`, shouldTrigger: true },

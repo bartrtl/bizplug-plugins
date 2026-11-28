@@ -37,6 +37,8 @@ type IndustryFileRules = {
   reservedFiles: string[];
   /** The column types a collection may use. */
   columnTypes: string[];
+  /** The kinds of menu option whose title an industry may give in its own words (menuTitles). */
+  menuKinds: string[];
 };
 
 function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRules, fileName?: string): string[] {
@@ -234,7 +236,21 @@ function industryFileProblems(p: Record<string, unknown>, rules: IndustryFileRul
       });
     }
   }
-  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options", "collections"];
+  // Words: the industry's own titles for menu options, more rules, and a suggested card theme.
+  if (p.menuTitles !== undefined) {
+    const t = p.menuTitles;
+    if (!t || typeof t !== "object" || Array.isArray(t)) out.push(`menuTitles must be an object: a menu option's kind and its title, for example { "lookup": "Find a session" }.`);
+    else for (const [k, v] of Object.entries(t as Record<string, unknown>)) {
+      if (!rules.menuKinds.includes(k)) out.push(`menuTitles: ${k} is not a menu option. Kinds: ${rules.menuKinds.join(", ")}.`);
+      else if (!isText(v) || v.length > 30) out.push(`menuTitles.${k} must be text of at most 30 characters.`);
+    }
+  }
+  if (p.rules !== undefined) {
+    if (!Array.isArray(p.rules) || p.rules.length < 1 || p.rules.length > 5) out.push("rules must be a list of 1 to 5 rules.");
+    else p.rules.forEach((r, i) => { if (!isText(r) || r.length > 300) out.push(`rules[${i}] must be text of at most 300 characters.`); });
+  }
+  if (p.cardTheme !== undefined && !(typeof p.cardTheme === "string" && /^[a-z][a-z0-9-]{1,40}$/.test(p.cardTheme))) out.push("cardTheme must be a theme's id, as in themes/<id>.json or THEMES.md.");
+  const known = ["slug", "name", "group", "engine", "title", "tools", "noun", "ask", "covers", "rule", "span", "perGuest", "example", "who", "author", "authorUrl", "github", "icon", "accent", "added", "page", "chat", "options", "collections", "menuTitles", "rules", "cardTheme"];
   for (const k of Object.keys(p)) if (!known.includes(k)) out.push(`unknown field: ${k}.`);
   if (/(sk_live_|sk_test_|ghp_[A-Za-z0-9]{20}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY)/.test(JSON.stringify(p))) out.push("the file looks like it holds a secret: remove it.");
   return out;
@@ -1416,6 +1432,36 @@ const RULES: IndustryFileRules = {
     "date",
     "link",
     "image"
+  ],
+  "menuKinds": [
+    "lookup",
+    "request",
+    "status",
+    "question",
+    "contact",
+    "members",
+    "explore",
+    "plan",
+    "match",
+    "area",
+    "house",
+    "trips",
+    "mytrip",
+    "tour",
+    "daypass",
+    "agenda",
+    "speakers",
+    "exhibitors",
+    "enquiry",
+    "features",
+    "pricing",
+    "guides",
+    "support",
+    "committees",
+    "news",
+    "social",
+    "forms",
+    "tickets"
   ]
 };
 

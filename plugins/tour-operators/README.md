@@ -1,6 +1,6 @@
 # BizPlug Tour Operators
 
-Version 0.62.0. Tour departures, price per traveller and trips day by day for tour operators businesses.
+Version 0.63.0. Tour departures, price per traveller and trips day by day for tour operators businesses.
 
 - Main function: Tour departures, price per traveller and trips day by day
 - MCP server URL: `https://mcp.bizplug.ai/plugin/tour-operators` (streamable HTTP, no sign-in)
@@ -37,6 +37,7 @@ Version 0.62.0. Tour departures, price per traveller and trips day by day for to
 
 ## Changes
 
+- **0.63.0** (28 November 2026): Industry words: an industry's menu speaks its own language, with its own titles and rules.
 - **0.62.0** (28 November 2026): Collections: searchable lists an industry defines, such as climbing routes or recipes, each with its own data file and card screen.
 - **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.
 - **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.

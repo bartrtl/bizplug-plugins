@@ -123,6 +123,7 @@ A published plug-in keeps the version it was published with until you press Upgr
 | 0.60.0 | 2026-11-27 | Your plug-in can leave chosen tools out in Claude, with their menu options, while ChatGPT keeps them all. The BizPlug team sets it up with you; until then nothing changes. |
 | 0.61.0 | 2026-11-28 | On a plug-in for homes booked by the night, the booking screen lists Homes instead of Rooms, has no Rooms counter, and says your business confirms the request, not "the hotel". Hotels are unchanged. |
 | 0.62.0 | 2026-11-28 | Your industry may define its own lists (for example routes, recipes or courses). Fill in each list's data file, publish, and customers search it in the card: filters, pictures and links, an entry on its own screen. Only industries that define a list get this. |
+| 0.63.0 | 2026-11-28 | Your industry may name its menu options in its own words (for example "Find a session" instead of "Availability and price") and give the assistant more of its own rules. Only industries that define them change. |
 
 ## Testing
 

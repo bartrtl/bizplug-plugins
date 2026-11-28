@@ -44,6 +44,12 @@ export type IndustryFunction = {
   itinerary?: "tour" | "dmc"; // tour operators and DMCs: from 0.50.0 trips day by day (Itineraries, My trip by code, a DMC proposal's price breakdown; itinerary.ts) and trips.csv, trip_days.csv, trip_items.csv, trip_prices.csv
   /** 0.62.0 (`collections`): searchable lists the industry defines in its file, each a data file, a read-only tool, a menu option and a card screen (collections.ts). Contributed industries only. */
   collections?: CollectionDef[];
+  /** 0.63.0 (`industryWords`): the industry's own titles for menu options by kind; a plug-in on an older version keeps the engine's (plugin-mcp.ts). Contributed industries only. */
+  menuTitles?: Record<string, string>;
+  /** 0.63.0 (`industryWords`): more rules for the assistant, in the server's instructions. Contributed industries only. */
+  rules?: string[];
+  /** A card theme suggested for the industry's businesses with no colours of their own (cardExtras). Contributed industries only. */
+  cardTheme?: string;
   show?: boolean; // events: from 0.18.0 a show or conference that published its programme gets the event guide (Agenda, Speakers, Exhibitors & sponsors, Enquiry; event-guide.ts)
 };
 

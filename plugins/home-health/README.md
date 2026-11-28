@@ -1,6 +1,6 @@
 # BizPlug Home Health & Hospice
 
-Version 0.62.0. Request a care assessment for home health & hospice businesses.
+Version 0.63.0. Request a care assessment for home health & hospice businesses.
 
 - Main function: Request a care assessment
 - MCP server URL: `https://mcp.bizplug.ai/plugin/home-health` (streamable HTTP, no sign-in)
@@ -32,6 +32,7 @@ Version 0.62.0. Request a care assessment for home health & hospice businesses.
 
 ## Changes
 
+- **0.63.0** (28 November 2026): Industry words: an industry's menu speaks its own language, with its own titles and rules.
 - **0.62.0** (28 November 2026): Collections: searchable lists an industry defines, such as climbing routes or recipes, each with its own data file and card screen.
 - **0.61.0** (28 November 2026): Vacation rentals: the booking screen speaks of homes and the host, not rooms and the hotel.
 - **0.60.0** (27 November 2026): A plug-in can offer Claude a shorter list of tools than ChatGPT, at the same address.

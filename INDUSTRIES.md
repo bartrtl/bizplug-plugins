@@ -174,6 +174,22 @@ A collection is a searchable list your industry defines: climbing routes, recipe
 
 A collection lists things, not people: the check refuses columns for contact or personal details (email, phone, ID or account numbers, health). Your pull request's preview fills each collection with your `sample` rows (or the example row), so you can try the search in ChatGPT.
 
+### Your industry's own words
+
+The engine and the options name things in general words ("Availability and price", "Which home fits?"). Your file can name them in your customers' words, add rules, and suggest a card theme. From plug-in version 0.63.0 for the titles and rules; the theme needs no version.
+
+```json
+"menuTitles": { "lookup": "Find a tent", "match": "Which tent fits?", "house": "Tent guide" },
+"rules": ["Never promise a pitch with a sea view; the host confirms the pitch.", "Campfires only where the host allows them."],
+"cardTheme": "south-carolina-beaches"
+```
+
+| Field | What it holds |
+| --- | --- |
+| `menuTitles` | A menu option's kind and its title in your words, at most 30 characters each. Kinds: `lookup`, `request`, `status` (the engine's three steps) and those of the options (`match`, `house`, `explore`, `members`…); the check lists them all. The tool the option calls takes the same title |
+| `rules` | 1 to 5 more rules the assistant always follows, at most 300 characters each, after `rule` |
+| `cardTheme` | A theme from [THEMES.md](THEMES.md) for the industry's businesses that chose no colours of their own |
+
 ### First: does an existing industry fit?
 
 Most businesses already have their industry here, often under another name. An industry is a kind of plug-in, not a business: every business that uses one gets its own plug-in, with its own name, summary, services, prices, hours, colours and menu layout, built from its own profile. So a dog groomer uses Veterinary & Pet Care or Beauty & Salons, a yoga studio uses Fitness & Gyms, and a vegan restaurant uses Restaurants & Food Service; none of them needs a new industry.
@@ -305,6 +321,7 @@ It lists the tools and checks each step: the tool list and definitions, the menu
 | `span`, `perGuest` | Only for `stay`: how it is booked (`nights`, `days`, `single`) and whether it is priced per guest |
 | `options` | Optional: capabilities to switch on, from [Options in your file](#options-in-your-file) |
 | `collections` | Optional: searchable lists your industry defines, from [Collections in your file](#collections-in-your-file) |
+| `menuTitles`, `rules`, `cardTheme` | Optional: your industry's own words, from [Your industry's own words](#your-industrys-own-words) |
 | `example` | Optional: a made-up business and one thing it offers, with a price if it has one. It is the example row in the data templates and the first item of the sample business |
 | `who` | Optional: who would use it |
 | `author` | Who the industry is credited to: your name or your company's |
