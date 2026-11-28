@@ -248,6 +248,36 @@ const OBSIDIAN: Addon = {
   ],
   link: destLink,
 };
+// A text message to the business's own phone for every request, through its own Twilio or Vonage account
+// (sms-destinations.ts). The business pays its provider for each message; BizPlug sends from its saved number.
+const smsLink = { label: "How to get requests by text message", href: "/how-to/requests/text-messages" };
+const SMS_END = "Each message is sent from your own account and paid by it at your provider's price.";
+const TWILIO: Addon = {
+  id: "twilio", name: "Twilio", group: "requests", status: "included",
+  what: "Every request sent as a text message to your phone, by SMS from a number on your own Twilio account, or by RCS from your approved RCS sender.",
+  needs: ["A Twilio account with a phone number that can send SMS, or an approved RCS sender.", "For US numbers, A2P 10DLC registration or toll-free verification in Twilio."],
+  value: "A new request reaches your phone as a text the moment it arrives, so you can answer the customer quickly, even away from your inbox.",
+  steps: [
+    "In the Twilio Console, copy your Account SID and Auth Token from Account Info on the home page.",
+    "Under Phone Numbers, pick the number that sends the texts (it needs SMS). For RCS, use the Messaging Service that holds your approved RCS sender (its SID starts with MG), or the RCS sender ID.",
+    `Enter them with the mobile numbers that receive the requests (up to three) and press Save. BizPlug checks the Account SID and Auth Token with Twilio and that the number is on your account. ${DEST_END}`,
+    `Press Send a test text and look for it on your phone. With an RCS sender saved, the text goes by RCS, and by SMS when Twilio refuses RCS. ${SMS_END}`,
+  ],
+  link: smsLink,
+};
+const VONAGE: Addon = {
+  id: "vonage", name: "Vonage", group: "requests", status: "included",
+  what: "Every request sent as a text message to your phone, by SMS from a number on your own Vonage account, or by RCS from your approved RCS agent.",
+  needs: ["A Vonage API account with a number that can send SMS, or an approved RCS agent.", "For US numbers, 10DLC registration or toll-free verification in Vonage."],
+  value: "A new request reaches your phone as a text the moment it arrives, so you can answer the customer quickly, even away from your inbox.",
+  steps: [
+    "In the Vonage API Dashboard, copy your API key and API secret from the top of the page.",
+    "Under Numbers, pick the number that sends the texts (it needs SMS). For RCS, copy the ID of your approved RCS agent.",
+    `Enter them with the mobile numbers that receive the requests (up to three) and press Save. BizPlug checks the API key and secret with Vonage and that the number is on your account. ${DEST_END}`,
+    `Press Send a test text and look for it on your phone. With an RCS agent saved, the text goes by RCS, and by SMS when Vonage refuses RCS. ${SMS_END}`,
+  ],
+  link: smsLink,
+};
 const NOTION: Addon = {
   id: "notion", name: "Notion", group: "requests", status: "included",
   what: "Every request added as a page in a Notion database.",
@@ -515,7 +545,7 @@ const TICKET_TAILOR: Addon = {
   link: { label: "How Ticket Tailor works with your plug-in", href: "/how-to/plug-in/ticket-tailor" },
 };
 
-export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, twenty: TWENTY, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, supabase: SUPABASE, obsidian: OBSIDIAN, calendarLimit };
+export const GUIDED_ADDONS = { passwordSignIn: PASSWORD_SIGN_IN, clerkSignIn: CLERK_SIGN_IN, stripeCheckout: STRIPE_CHECKOUT, checkoutCom: CHECKOUT_COM, dibsy: DIBSY, slack: SLACK, whatsapp: WHATSAPP, whatsappReady: WHATSAPP_READY, msg2aiAssistant: MSG2AI_ASSISTANT, googleCalendar: CALENDARS[0], teams: TEAMS, hubspot: HUBSPOT, twenty: TWENTY, notion: NOTION, trello: TRELLO, airtable: AIRTABLE, supabase: SUPABASE, obsidian: OBSIDIAN, twilio: TWILIO, vonage: VONAGE, calendarLimit };
 
 /** The add-ons offered for a plug-in, by what its engine does. */
 export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] {
@@ -527,7 +557,7 @@ export function addonsFor(engine: Engine, span?: Span, show?: boolean): Addon[] 
   const direct = engine === "stay" && span === "nights" ? [DIRECT_OFFERS] : [];
   // Events (industry-functions.ts \`show\`): their own Ticket Tailor box office.
   const ticketing = show ? [TICKET_TAILOR, HUMANITIX, MY_REGISTRATION, LINKEDIN_APIFY] : [];
-  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, TWENTY, NOTION, TRELLO, AIRTABLE, SUPABASE, OBSIDIAN, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
+  const base = [...ALWAYS, SLACK, TEAMS, HUBSPOT, TWENTY, NOTION, TRELLO, AIRTABLE, SUPABASE, OBSIDIAN, TWILIO, VONAGE, WHATSAPP, concierge, ...direct, ...ticketing, FORMS, ...checkout, ...LINK_ADDONS, PASSWORD_SIGN_IN, CLERK_SIGN_IN];
   return engine === "appt" || engine === "stay" ? [...base, ...CALENDARS] : base;
 }
 
