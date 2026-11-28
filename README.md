@@ -8,6 +8,29 @@ The standard BizPlug plug-in for each of 88 industries. A plug-in is an MCP (Mod
 
 This repository holds the plug-in **packages**: what each plug-in is called, what its tools do, where its server lives and what data a business provides to get its own copy. It is generated from the BizPlug website's data files on every release, so please do not edit it by hand. It also holds the source files those packages are generated from (see below). The server that answers the tools and all business data are not part of this repository.
 
+## Start here: create a new plug-in
+
+Everyone who builds a plug-in for BizPlug starts in this repository. First decide which kind yours is:
+
+| Your idea | What you do here |
+| --- | --- |
+| **A business** that fits one of the 88 industries below (a yoga studio is Fitness & Gyms, a vegan restaurant is Restaurants & Food Service) | Nothing here: the business signs up at https://www.bizplug.ai/portal, picks its industry and gets its own plug-in |
+| **A new industry**: what its customers do, or the words its plug-in needs, fit none of the industries | **One JSON file**, `community/industries/<slug>.json`. No code: the file defines the plug-in, and BizPlug serves it. Steps below |
+| **Your own MCP server or tool** (open source, or one you host) | A package in `community/plugins/<name>/`: see [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+**A new industry, step by step**
+
+1. **Start the file.** [**Create it in your browser**](https://github.com/msg2ai/bizplug-plugins/new/main?filename=community%2Findustries%2Fmy-industry.json&value=%7B%0A%20%20%22slug%22%3A%20%22my-industry%22%2C%0A%20%20%22name%22%3A%20%22My%20Industry%22%2C%0A%20%20%22group%22%3A%20%22Retail%20%26%20food%22%2C%0A%20%20%22engine%22%3A%20%22appt%22%2C%0A%20%20%22title%22%3A%20%22What%20the%20plug-in%20mainly%20does%22%2C%0A%20%20%22tools%22%3A%20%7B%0A%20%20%20%20%22lookup%22%3A%20%22find_open_times%22%2C%0A%20%20%20%20%22request%22%3A%20%22request_a_booking%22%2C%0A%20%20%20%20%22status%22%3A%20%22get_booking_status%22%0A%20%20%7D%2C%0A%20%20%22noun%22%3A%20%22booking%22%2C%0A%20%20%22ask%22%3A%20%22A%20question%20a%20customer%20would%20ask%3F%22%2C%0A%20%20%22covers%22%3A%20%22what%20customers%20ask%20about%2C%20such%20as%20services%2C%20prices%20and%20opening%20hours%22%2C%0A%20%20%22example%22%3A%20%7B%0A%20%20%20%20%22business%22%3A%20%22A%20made-up%20business%22%2C%0A%20%20%20%20%22item%22%3A%20%22One%20thing%20it%20offers%22%2C%0A%20%20%20%20%22price%22%3A%20%2220.00%22%0A%20%20%7D%2C%0A%20%20%22author%22%3A%20%22Your%20name%20or%20company%22%2C%0A%20%20%22github%22%3A%20%22your-github-username%22%0A%7D%0A): GitHub opens its editor with a starter file, makes your own copy of this repository (a fork) and, when you commit, offers to open the pull request. Or, with Git and Node.js, fork, clone, and copy [`industries/example.json`](industries/example.json).
+2. **Write what your plug-in does.** Pick the engine (what customers mainly do: order, book dates, book a time, ask for a quote, follow a request), name its three tools and the words customers use. Then, optionally, make it richer with no code: switch on existing **options**, define your own searchable **collections** (a shop's bikes for sale), name the menu in your **own words**, and give every business **request forms** (a warranty claim). [`industries/example.json`](industries/example.json), a bike shop, uses each of them; [INDUSTRIES.md](INDUSTRIES.md#add-a-new-industry) explains every field.
+3. **Open the pull request** against `main`, adding only your file. Its checklist asks which existing industry is closest and why it does not fit.
+4. **Read what the checks say.** **Check contributions** runs the same check as `npx tsx industries/check-industry.ts community/industries/<slug>.json` and lists what to fix. **Test industry proposals** builds your industry as a working plug-in for a made-up sample business at `https://mcp-test.bizplug.ai/plugin/proposal/<pull request number>` and comments the address on your pull request. Each new commit updates both.
+5. **Try your plug-in** at that address in ChatGPT (developer mode, a connector) or Claude (a custom connector): ask your customer question, open your lists and forms. A sample business never sends anything.
+6. **Merge is the release.** Once the team approves and merges it, your industry is live within minutes: its plug-in at `https://mcp.bizplug.ai/plugin/<slug>`, its page on www.bizplug.ai, credited to you, and offered to businesses in the portal. A comment on the pull request says when.
+
+Prefer not to write the file? Describe the industry in the [Propose a new industry](https://github.com/msg2ai/bizplug-plugins/issues/new?template=new-industry.yml) form instead.
+
+## About this repository
+
 - Website: https://www.bizplug.ai
 - Every plug-in on one page: https://www.bizplug.ai/plugins
 - Blog: https://www.bizplug.ai/blog
